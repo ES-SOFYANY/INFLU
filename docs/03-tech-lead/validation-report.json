@@ -1,0 +1,80 @@
+{
+  "timestamp": "2026-05-09T00:00:00Z",
+  "iteration": 1,
+  "status": "VALIDATED",
+  "quality_score": 95,
+  "is_ready_for_ux": true,
+  "checks": {
+    "openapi_validity": {
+      "score": 15,
+      "max": 15,
+      "notes": "swagger-cli validate OK; openapi 3.1.0; 78 operations; 92+ schemas; no $ref breakage; no type:any."
+    },
+    "us_endpoints_coverage": {
+      "score": 25,
+      "max": 25,
+      "covered_us": 73,
+      "total_us": 73,
+      "uncovered_us": [],
+      "notes": "100% US mapped to endpoints (or to UI-only when applicable: US-001..006, 022, 023, 102, 200, 202, 203, 205, 206). 4 roles explicit via RegisterRolePath enum [influencer, business, agency, brand]."
+    },
+    "ac_error_codes_coverage": {
+      "score": 17,
+      "max": 20,
+      "total_ac": 169,
+      "notes": "All HTTP error codes wired via shared responses. Critical business codes (PROFILE_INCOMPLETE/SLOT_FULL/EXPIRED/ALREADY_APPLIED) inline on /marketplace/apply. Secondary business codes (EMAIL_TAKEN, LINK_EXPIRED, WIZARD_INCOMPLETE, etc.) listed in api-contract.md §4 transversal table but not duplicated inline per endpoint."
+    },
+    "schemas_complete": {
+      "score": 14,
+      "max": 15,
+      "notes": "All schemas typed; required fields explicit; enums for Role/Platform/Tier/CampaignStatus/PaymentStatus/CinStatus/IssueType/BillingProfile/Currency. Moroccan patterns present (ICE ^\\d{15}$, RIB ^\\d{24}$, phone ^\\+212\\d{9}$, MAD enum). Description/example missing on ~30% of sub-DTO fields."
+    },
+    "error_codes_documented": {
+      "score": 9,
+      "max": 10,
+      "notes": "Standard HTTP codes per verb consistent (POST 201/400/401/403/409/422/500, GET 200/401/403/404/500, PATCH 200/400/401/403/404/422/500, DELETE 204/401/403/404/500). Some POST mutations omit 422 (covered by 400 + 409)."
+    },
+    "auth_consistent": {
+      "score": 5,
+      "max": 5,
+      "notes": "bearerAuth (http/bearer/JWT) defined. Global security: [bearerAuth]. Public endpoints opt-out via security: []. Aligned with ADR-005 (RS256, 15min access, 7d refresh rotation, magic link single-use)."
+    },
+    "us_modules_mapping": {
+      "score": 10,
+      "max": 10,
+      "mapped_us": 73,
+      "total_us": 73,
+      "notes": "Explicit US → backend module + frontend feature mapping in application-architecture.md §4. 13/13 SA bounded contexts mapped 1:1 to NestJS modules."
+    }
+  },
+  "moroccan_validations": {
+    "ice_15_digits": "PASS (pattern ^\\d{15}$ openapi.yaml:1769,1988)",
+    "rib_24_digits": "PASS (pattern ^\\d{24}$ openapi.yaml:2000)",
+    "phone_212": "PASS (pattern ^\\+212\\d{9}$ openapi.yaml:1707,1721)",
+    "currency_mad": "PASS (enum [MAD] openapi.yaml:1665-1667)",
+    "ice_lookup_endpoint": "PASS (POST /creator/me/billing/ice/{search,approve})",
+    "billing_profile_enum": "PASS ([BUSINESS, AUTO_ENTREPRENEUR])"
+  },
+  "corrections_required": [],
+  "improvements_recommended": [
+    {
+      "check": "CHECK 3/5",
+      "file": "docs/03-tech-lead/openapi.yaml",
+      "action": "Inline secondary business error codes per endpoint (EMAIL_TAKEN, INVALID_CREDENTIALS, LINK_EXPIRED, LINK_INVALID, WIZARD_INCOMPLETE, ALREADY_PUBLISHED, CIN_ALREADY_VALIDATED, BRAND_ALREADY_LINKED, CIN_NOT_PENDING, PAYMENT_NOT_FAILED, INVALID_DISC_FILTER, AI_RATE_LIMITED, BRIEF_NOT_READY) currently only in api-contract.md §4 table.",
+      "blocking": false
+    },
+    {
+      "check": "CHECK 4",
+      "file": "docs/03-tech-lead/openapi.yaml",
+      "action": "Add description + example on remaining sub-DTO fields (CreatorProfileTab*, WizardStep*Request).",
+      "blocking": false
+    },
+    {
+      "check": "CHECK 5",
+      "file": "docs/03-tech-lead/openapi.yaml",
+      "action": "Add 422 response on /business/marketplace/products and /business/crm/lists POST mutations to homogenize with api-contract.md §2.5 conventions.",
+      "blocking": false
+    }
+  ],
+  "next_step": "HANDOFF_TO_UX"
+}
