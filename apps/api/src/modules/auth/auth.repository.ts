@@ -45,6 +45,19 @@ export interface SessionRecord {
   expiresAt: number;
 }
 
+export interface BusinessLegalRecord {
+  userId: string;
+  juridicalForm: string;
+  ice: string;
+  companyName: string;
+  companyAddress: string;
+  if: string;
+  rc: string;
+  tva: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 @Injectable()
 export class AuthRepository {
   constructor(protected readonly db: DynamoDbService) {}
@@ -78,6 +91,79 @@ export class AuthRepository {
                 ...user,
                 GSI1PK: emailKey,
                 GSI1SK: DynamoDbService.userPk(user.id),
+              },
+              ConditionExpression: 'attribute_not_exists(PK)',
+            },
+          },
+        ],
+      }),
+    );
+  }
+
+  /**
+   * Atomic creation of a business user + its BusinessLegalEntity, with
+   * sentinels guaranteeing both EMAIL and ICE uniqueness in one transaction.
+   */
+  async createBusinessAccount(
+    user: UserRecord,
+    legal: BusinessLegalRecord,
+  ): Promise<void> {
+    const table = this.db.mainTable;
+    const emailKey = DynamoDbService.emailGsi2Pk(user.email);
+    const iceKey = `ICE#${legal.ice}`;
+
+    await this.db.client.send(
+      new TransactWriteCommand({
+        TransactItems: [
+          {
+            Put: {
+              TableName: table,
+              Item: {
+                PK: emailKey,
+                SK: 'SENTINEL',
+                entity: 'EmailSentinel',
+                userId: user.id,
+              },
+              ConditionExpression: 'attribute_not_exists(PK)',
+            },
+          },
+          {
+            Put: {
+              TableName: table,
+              Item: {
+                PK: iceKey,
+                SK: 'SENTINEL',
+                entity: 'IceSentinel',
+                userId: user.id,
+                ice: legal.ice,
+              },
+              ConditionExpression: 'attribute_not_exists(PK)',
+            },
+          },
+          {
+            Put: {
+              TableName: table,
+              Item: {
+                PK: DynamoDbService.userPk(user.id),
+                SK: DynamoDbService.profileSk(),
+                entity: 'User',
+                ...user,
+                GSI1PK: emailKey,
+                GSI1SK: DynamoDbService.userPk(user.id),
+              },
+              ConditionExpression: 'attribute_not_exists(PK)',
+            },
+          },
+          {
+            Put: {
+              TableName: table,
+              Item: {
+                PK: DynamoDbService.userPk(user.id),
+                SK: 'BUSINESS#LEGAL',
+                entity: 'BusinessLegalEntity',
+                ...legal,
+                GSI4PK: iceKey,
+                GSI4SK: DynamoDbService.userPk(user.id),
               },
               ConditionExpression: 'attribute_not_exists(PK)',
             },
@@ -176,6 +262,37 @@ export class AuthRepository {
       new DeleteCommand({
         TableName: this.db.sessionsTable,
         Key: { PK: tokenHash, SK: 'META' },
+      }),
+    );
+  }
+
+  async markSessionUsed(tokenHash: string, usedAt: string): Promise<void> {
+    await this.db.client.send(
+      new UpdateCommand({
+        TableName: this.db.sessionsTable,
+        Key: { PK: tokenHash, SK: 'META' },
+        UpdateExpression: 'SET usedAt = :u',
+        ConditionExpression: 'attribute_not_exists(usedAt)',
+        ExpressionAttributeValues: { ':u': usedAt },
+      }),
+    );
+  }
+
+  async setPasswordAndActivate(userId: string, passwordHash: string): Promise<void> {
+    const ts = new Date().toISOString();
+    await this.db.client.send(
+      new UpdateCommand({
+        TableName: this.db.mainTable,
+        Key: { PK: DynamoDbService.userPk(userId), SK: DynamoDbService.profileSk() },
+        UpdateExpression:
+          'SET passwordHash = :h, #st = :st, updatedAt = :ts, emailVerified = :ev',
+        ExpressionAttributeNames: { '#st': 'status' },
+        ExpressionAttributeValues: {
+          ':h': passwordHash,
+          ':st': 'ACTIVE',
+          ':ts': ts,
+          ':ev': true,
+        },
       }),
     );
   }

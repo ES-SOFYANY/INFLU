@@ -72,6 +72,57 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/auth/magic-link/consume": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-013] Consume a magic link token + set the new password */
+        readonly post: operations["AuthController_consumeMagicLink"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/auth/magic-link/request": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-013] Request a magic link to set/reset the creator password */
+        readonly post: operations["AuthController_requestMagicLink"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/auth/onboard/business": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-018] Onboard a business / agency / small-business account */
+        readonly post: operations["AuthController_onboardBusiness"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/api/auth/register/{role}": {
         readonly parameters: {
             readonly query?: never;
@@ -106,6 +157,23 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/creator/me/social-accounts/{platform}/link": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-017] Link a social account (mock OAuth) */
+        readonly post: operations["CreatorProfileController_linkSocial"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -132,6 +200,13 @@ export interface components {
             /** @description CSRF state token (optional in MVP) */
             readonly state?: string;
         };
+        readonly LinkSocialAccountDto: {
+            /**
+             * @description OAuth code returned by the social provider. In dev/test, use `mock-success-<handle>`.
+             * @example mock-success-janedoe
+             */
+            readonly oauthCode: string;
+        };
         readonly LoginDto: {
             /**
              * Format: email
@@ -144,6 +219,50 @@ export interface components {
         readonly LogoutDto: {
             /** @description Refresh token to invalidate (rotation) */
             readonly refreshToken?: string;
+        };
+        readonly MagicLinkConsumeDto: {
+            /** @description New password — ≥ 8 chars, 1 uppercase, 1 digit */
+            readonly newPassword: string;
+            /** @description Magic link JWT token (signed HS256) */
+            readonly token: string;
+        };
+        readonly MagicLinkRequestDto: {
+            /** Format: email */
+            readonly email: string;
+            /** @enum {string} */
+            readonly locale?: "fr" | "en" | "ar";
+        };
+        readonly OnboardBusinessDto: {
+            /** @description Must be true (legal mentions & privacy) */
+            readonly acceptLegal: boolean;
+            /** @enum {string} */
+            readonly accountType: "small_business" | "brand" | "agency";
+            readonly address: string;
+            readonly companyAddress: string;
+            readonly companyName: string;
+            /** @description ISO-3166-1 alpha-2 */
+            readonly country?: string;
+            /** Format: email */
+            readonly email: string;
+            readonly fullName: string;
+            /** @enum {string} */
+            readonly gender?: "M" | "F";
+            /** @example 000153226000012 */
+            readonly ice: string;
+            readonly if: string;
+            /**
+             * @description Juridical form (SARL, SA, SAS, AE, …)
+             * @example SARL
+             */
+            readonly juridicalForm: string;
+            /** @enum {string} */
+            readonly locale?: "fr" | "en" | "ar";
+            /** @description Password — ≥ 8 chars, 1 uppercase, 1 digit */
+            readonly password: string;
+            /** @example +212600000000 */
+            readonly phone: string;
+            readonly rc: string;
+            readonly tva: string;
         };
         readonly RegisterCreatorDto: {
             /** @description Must be true (legal mentions & privacy) */
@@ -177,6 +296,20 @@ export interface components {
         readonly RoleOptionsResponseDto: {
             readonly roles: readonly components["schemas"]["RoleOptionDto"][];
         };
+        readonly SocialAccountDto: {
+            /** @description Engagement rate in percent (0–100) */
+            readonly engagementRate: number;
+            readonly followers: number;
+            /** @description Growth rate in percent (last 30 days) */
+            readonly growthRate: number;
+            readonly handle: string;
+            /** Format: date-time */
+            readonly linkedAt: string;
+            /** @enum {string} */
+            readonly platform: "INSTAGRAM" | "YOUTUBE" | "TIKTOK" | "TWITTER";
+            /** @enum {string} */
+            readonly tier: "NANO" | "MICRO" | "MID" | "MACRO" | "MEGA" | "CELEBRITY";
+        };
         readonly UserPublicDto: {
             /** Format: email */
             readonly email: string;
@@ -206,11 +339,16 @@ export type SchemaAuthSessionDto = components['schemas']['AuthSessionDto'];
 export type SchemaAuthTokensDto = components['schemas']['AuthTokensDto'];
 export type SchemaEmailLocaleDto = components['schemas']['EmailLocaleDto'];
 export type SchemaGoogleCallbackDto = components['schemas']['GoogleCallbackDto'];
+export type SchemaLinkSocialAccountDto = components['schemas']['LinkSocialAccountDto'];
 export type SchemaLoginDto = components['schemas']['LoginDto'];
 export type SchemaLogoutDto = components['schemas']['LogoutDto'];
+export type SchemaMagicLinkConsumeDto = components['schemas']['MagicLinkConsumeDto'];
+export type SchemaMagicLinkRequestDto = components['schemas']['MagicLinkRequestDto'];
+export type SchemaOnboardBusinessDto = components['schemas']['OnboardBusinessDto'];
 export type SchemaRegisterCreatorDto = components['schemas']['RegisterCreatorDto'];
 export type SchemaRoleOptionDto = components['schemas']['RoleOptionDto'];
 export type SchemaRoleOptionsResponseDto = components['schemas']['RoleOptionsResponseDto'];
+export type SchemaSocialAccountDto = components['schemas']['SocialAccountDto'];
 export type SchemaUserPublicDto = components['schemas']['UserPublicDto'];
 export type $defs = Record<string, never>;
 export interface operations {
@@ -325,6 +463,102 @@ export interface operations {
             };
         };
     };
+    readonly AuthController_consumeMagicLink: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["MagicLinkConsumeDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["AuthSessionDto"];
+                };
+            };
+            /** @description Validation failed (weak password) */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Magic link invalid / expired / already used */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly AuthController_requestMagicLink: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["MagicLinkRequestDto"];
+            };
+        };
+        readonly responses: {
+            /** @description Accepted (always — no email enumeration) */
+            readonly 202: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly AuthController_onboardBusiness: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["OnboardBusinessDto"];
+            };
+        };
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["AuthSessionDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description EMAIL_ALREADY_USED or ICE_ALREADY_USED */
+            readonly 409: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     readonly AuthController_register: {
         readonly parameters: {
             readonly query?: never;
@@ -380,6 +614,59 @@ export interface operations {
                 content: {
                     readonly "application/json": components["schemas"]["RoleOptionsResponseDto"];
                 };
+            };
+        };
+    };
+    readonly CreatorProfileController_linkSocial: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly platform: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["LinkSocialAccountDto"];
+            };
+        };
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["SocialAccountDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description OAuth exchange failed */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description SOCIAL_ALREADY_LINKED */
+            readonly 409: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

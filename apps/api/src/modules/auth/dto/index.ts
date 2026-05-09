@@ -5,3 +5,6 @@ export * from './email-locale.dto';
 export * from './logout.dto';
 export * from './auth-session.dto';
 export * from './role-options.dto';
+export * from './magic-link-request.dto';
+export * from './magic-link-consume.dto';
+export * from './onboard-business.dto';

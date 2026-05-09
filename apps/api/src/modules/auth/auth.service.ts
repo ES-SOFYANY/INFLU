@@ -9,12 +9,15 @@ import { AuditService } from '../../shared/audit/audit.module';
 import { BusinessException } from '../../shared/errors/business.exception';
 import { ERROR_CODES } from '../../shared/errors/error-codes';
 
-import { AuthRepository, type UserRecord } from './auth.repository';
+import { AuthRepository, type BusinessLegalRecord, type UserRecord } from './auth.repository';
 import type {
   AuthSessionDto,
   EmailLocaleDto,
   GoogleCallbackDto,
   LoginDto,
+  MagicLinkConsumeDto,
+  MagicLinkRequestDto,
+  OnboardBusinessDto,
   RegisterCreatorDto,
   RoleOptionsResponseDto,
   UserPublicDto,
@@ -25,6 +28,7 @@ import type { Role } from '@my-app/shared-types';
 
 const ACCESS_TTL_SECONDS = 15 * 60;
 const REFRESH_TTL_SECONDS = 7 * 24 * 60 * 60;
+const MAGIC_LINK_TTL_SECONDS = 30 * 60; // US-013 — 30 min
 
 @Injectable()
 export class AuthService {
@@ -260,17 +264,7 @@ export class AuthService {
       throw err;
     }
 
-    const magicToken = randomBytes(32).toString('hex');
-    const magicHash = sha256(magicToken);
-    const nowMs = Date.now();
-    await this.repo.putSession({
-      tokenHash: magicHash,
-      kind: 'MAGIC_LINK',
-      userId: user.id,
-      createdAt: new Date(nowMs).toISOString(),
-      expiresAt: Math.floor((nowMs + 60 * 60 * 1000) / 1000),
-      payload: { reason: 'CREATOR_INITIAL_PASSWORD' },
-    });
+    const magic = await this.issueMagicLink(user.id, dto.locale ?? 'fr', 'CREATOR_INITIAL_PASSWORD');
     await this.audit.append({
       actorUserId: user.id,
       action: 'AUTH_REGISTER_CREATOR',
@@ -278,14 +272,260 @@ export class AuthService {
       details: {
         email,
         magicLinkIssued: true,
-        magicTokenPreview: magicToken.slice(0, 6),
+        magicTokenPreview: magic.token.slice(0, 6),
       },
     });
     this.logger.log(
-      `[email-stub] would send magic link to ${email} (token=${magicToken.slice(0, 6)}…)`,
+      `[email-stub] would send magic link to ${email} (token=${magic.token.slice(0, 6)}…)`,
     );
 
     return this.toPublic(user);
+  }
+
+  // ============ US-013: Magic link ============
+
+  /**
+   * Internal helper — issues a JWT magic-link token (HS256, 30 min) and
+   * persists a single-use session row in `influ_sessions`.
+   * Public so unit tests can fetch the actual token without parsing logs.
+   */
+  async issueMagicLink(
+    userId: string,
+    locale: 'fr' | 'en' | 'ar',
+    reason: string,
+  ): Promise<{ token: string; expiresAt: number }> {
+    const token = await this.jwt.signAsync(
+      { sub: userId, kind: 'magic', reason },
+      { expiresIn: MAGIC_LINK_TTL_SECONDS },
+    );
+    const tokenHash = sha256(token);
+    const nowMs = Date.now();
+    const expiresAt = Math.floor((nowMs + MAGIC_LINK_TTL_SECONDS * 1000) / 1000);
+    await this.repo.putSession({
+      tokenHash,
+      kind: 'MAGIC_LINK',
+      userId,
+      createdAt: new Date(nowMs).toISOString(),
+      expiresAt,
+      payload: { reason, locale },
+    });
+    return { token, expiresAt };
+  }
+
+  async requestMagicLink(dto: MagicLinkRequestDto): Promise<void> {
+    const email = dto.email.toLowerCase();
+    const user = await this.repo.findByEmail(email);
+    if (user) {
+      const magic = await this.issueMagicLink(
+        user.id,
+        dto.locale ?? user.locale,
+        'MAGIC_LINK_REQUEST',
+      );
+      await this.audit.append({
+        actorUserId: user.id,
+        action: 'AUTH_MAGIC_LINK_REQUEST',
+        resource: `USER#${user.id}`,
+        details: { email, tokenPreview: magic.token.slice(0, 6) },
+      });
+      this.logger.log(
+        `[email-stub] would send magic link to ${email} (token=${magic.token.slice(0, 6)}…)`,
+      );
+    } else {
+      // No-enumeration: silently succeed.
+      this.logger.log(`[email-stub] magic-link requested for unknown email ${email}`);
+    }
+  }
+
+  async consumeMagicLink(dto: MagicLinkConsumeDto): Promise<AuthSessionDto> {
+    let payload: { sub: string; kind?: string };
+    try {
+      payload = await this.jwt.verifyAsync<{ sub: string; kind?: string }>(dto.token);
+    } catch (err) {
+      const e = err as { name?: string };
+      if (e.name === 'TokenExpiredError') {
+        throw new BusinessException(
+          ERROR_CODES.LINK_EXPIRED,
+          'Magic link has expired. Please request a new one.',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+      throw new BusinessException(
+        ERROR_CODES.LINK_INVALID,
+        'Magic link is invalid.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    if (payload.kind !== 'magic') {
+      throw new BusinessException(
+        ERROR_CODES.LINK_INVALID,
+        'Magic link is invalid.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    const tokenHash = sha256(dto.token);
+    const session = await this.repo.getSession(tokenHash);
+    if (!session || session.kind !== 'MAGIC_LINK' || session.userId !== payload.sub) {
+      throw new BusinessException(
+        ERROR_CODES.LINK_INVALID,
+        'Magic link is invalid.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    if (session.usedAt) {
+      throw new BusinessException(
+        ERROR_CODES.LINK_ALREADY_USED,
+        'Magic link has already been used.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    if (Date.now() / 1000 > session.expiresAt) {
+      throw new BusinessException(
+        ERROR_CODES.LINK_EXPIRED,
+        'Magic link has expired. Please request a new one.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    const user = await this.repo.findById(payload.sub);
+    if (!user) {
+      throw new BusinessException(
+        ERROR_CODES.LINK_INVALID,
+        'Magic link is invalid.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    try {
+      await this.repo.markSessionUsed(tokenHash, new Date().toISOString());
+    } catch (err) {
+      const e = err as { name?: string };
+      if (e.name === 'ConditionalCheckFailedException') {
+        throw new BusinessException(
+          ERROR_CODES.LINK_ALREADY_USED,
+          'Magic link has already been used.',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+      throw err;
+    }
+
+    const passwordHash = await bcrypt.hash(dto.newPassword, 10);
+    await this.repo.setPasswordAndActivate(user.id, passwordHash);
+
+    user.passwordHash = passwordHash;
+    user.status = 'ACTIVE';
+    user.emailVerified = true;
+
+    await this.audit.append({
+      actorUserId: user.id,
+      action: 'AUTH_MAGIC_LINK_CONSUME',
+      resource: `USER#${user.id}`,
+    });
+    return this.issueSession(user);
+  }
+
+  // ============ US-018: Business onboarding ============
+
+  async onboardBusiness(dto: OnboardBusinessDto): Promise<AuthSessionDto> {
+    const email = dto.email.toLowerCase();
+    const existing = await this.repo.findByEmail(email);
+    if (existing) {
+      throw new BusinessException(
+        ERROR_CODES.EMAIL_ALREADY_USED,
+        'Email already registered',
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    const role: Role = dto.accountType === 'agency' ? 'AGENCY' : 'BUSINESS';
+    const accountType = dto.accountType;
+
+    const passwordHash = await bcrypt.hash(dto.password, 10);
+    const now = new Date().toISOString();
+    const id = uuidv4();
+    const user: UserRecord = {
+      id,
+      email,
+      emailVerified: false,
+      passwordHash,
+      role,
+      accountType,
+      status: 'ACTIVE',
+      fullName: dto.fullName,
+      gender: dto.gender,
+      country: (dto.country ?? 'MA').toUpperCase(),
+      address: dto.address,
+      phone: dto.phone,
+      locale: dto.locale ?? 'fr',
+      acceptedLegalAt: now,
+      ageOver18: true,
+      failedLoginAttempts: 0,
+      createdAt: now,
+      updatedAt: now,
+    };
+    const legal: BusinessLegalRecord = {
+      userId: id,
+      juridicalForm: dto.juridicalForm,
+      ice: dto.ice,
+      companyName: dto.companyName,
+      companyAddress: dto.companyAddress,
+      if: dto.if,
+      rc: dto.rc,
+      tva: dto.tva,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    try {
+      await this.repo.createBusinessAccount(user, legal);
+    } catch (err) {
+      const e = err as { name?: string; CancellationReasons?: { Code?: string }[] };
+      if (e.name === 'TransactionCanceledException') {
+        const reasons = e.CancellationReasons ?? [];
+        // Order in createBusinessAccount: [emailSentinel, iceSentinel, user, legal]
+        const emailFailed = reasons[0]?.Code === 'ConditionalCheckFailed';
+        const iceFailed = reasons[1]?.Code === 'ConditionalCheckFailed';
+        if (iceFailed && !emailFailed) {
+          throw new BusinessException(
+            ERROR_CODES.ICE_ALREADY_USED,
+            'ICE already registered',
+            HttpStatus.CONFLICT,
+          );
+        }
+        if (emailFailed) {
+          throw new BusinessException(
+            ERROR_CODES.EMAIL_ALREADY_USED,
+            'Email already registered',
+            HttpStatus.CONFLICT,
+          );
+        }
+        // Fallback if reasons are not exposed by DynamoDB Local
+        const conflictUser = await this.repo.findByEmail(email);
+        if (conflictUser) {
+          throw new BusinessException(
+            ERROR_CODES.EMAIL_ALREADY_USED,
+            'Email already registered',
+            HttpStatus.CONFLICT,
+          );
+        }
+        throw new BusinessException(
+          ERROR_CODES.ICE_ALREADY_USED,
+          'ICE already registered',
+          HttpStatus.CONFLICT,
+        );
+      }
+      throw err;
+    }
+
+    await this.audit.append({
+      actorUserId: user.id,
+      action: 'AUTH_ONBOARD_BUSINESS',
+      resource: `USER#${user.id}`,
+      details: { email, accountType, role, ice: dto.ice },
+    });
+    await this.repo.touchLastLogin(user.id, new Date().toISOString());
+    return this.issueSession(user);
   }
 
   // ============ Helpers ============

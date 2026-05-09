@@ -30,6 +30,9 @@ import {
   GoogleCallbackDto,
   LoginDto,
   LogoutDto,
+  MagicLinkConsumeDto,
+  MagicLinkRequestDto,
+  OnboardBusinessDto,
   RegisterCreatorDto,
   RoleOptionsResponseDto,
   UserPublicDto,
@@ -128,5 +131,48 @@ export class AuthController {
     }
     void req;
     return this.service.registerCreator(dto);
+  }
+
+  // ----- US-013: Magic link request -----
+  @Post('magic-link/request')
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiOperation({
+    summary: '[US-013] Request a magic link to set/reset the creator password',
+  })
+  @ApiBody({ type: MagicLinkRequestDto })
+  @ApiResponse({ status: 202, description: 'Accepted (always — no email enumeration)' })
+  async requestMagicLink(
+    @Body() dto: MagicLinkRequestDto,
+  ): Promise<{ message: string }> {
+    await this.service.requestMagicLink(dto);
+    return { message: 'If an account exists, a magic link has been sent.' };
+  }
+
+  // ----- US-013: Magic link consume -----
+  @Post('magic-link/consume')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: '[US-013] Consume a magic link token + set the new password',
+  })
+  @ApiBody({ type: MagicLinkConsumeDto })
+  @ApiResponse({ status: 200, type: AuthSessionDto })
+  @ApiResponse({ status: 400, description: 'Validation failed (weak password)' })
+  @ApiResponse({ status: 401, description: 'Magic link invalid / expired / already used' })
+  consumeMagicLink(@Body() dto: MagicLinkConsumeDto): Promise<AuthSessionDto> {
+    return this.service.consumeMagicLink(dto);
+  }
+
+  // ----- US-018: Business onboarding -----
+  @Post('onboard/business')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: '[US-018] Onboard a business / agency / small-business account',
+  })
+  @ApiBody({ type: OnboardBusinessDto })
+  @ApiResponse({ status: 201, type: AuthSessionDto })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 409, description: 'EMAIL_ALREADY_USED or ICE_ALREADY_USED' })
+  onboardBusiness(@Body() dto: OnboardBusinessDto): Promise<AuthSessionDto> {
+    return this.service.onboardBusiness(dto);
   }
 }

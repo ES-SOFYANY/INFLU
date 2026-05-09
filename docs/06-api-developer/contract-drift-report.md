@@ -56,6 +56,39 @@ must be either **resolved** (implementation aligned to contract) or
 | **Reason** | The frontend needs to distinguish a creator awaiting magic link from a fully active user (different post-auth routing). |
 | **Resolution plan** | Tech Lead to add `status` to `UserPublic` in `openapi.yaml`. |
 
+### DRIFT-005 — `POST /auth/magic-link/consume` request + response shape (US-013)
+
+| Field | Status |
+|---|---|
+| **Endpoint** | `POST /auth/magic-link/consume` |
+| **Contract** | Request `TokenRequest { token }` → Response `MagicLinkConsumeResponse { resetSession, userId }`. A separate `POST /auth/set-password` is then expected. |
+| **Implementation** | Request `{ token, newPassword }` → Response `AuthSession { user, tokens }`. The single endpoint validates the magic link, sets the new password (bcrypt) and issues access/refresh tokens. |
+| **Severity** | High — request and response are incompatible |
+| **Reason** | Parent agent instruction (Wave 2 brief): collapse the verify+set-password flow into a single `consume` call to reduce round-trips and avoid having to manage a `resetSession` cookie/state. The token is a HS256 JWT (`exp = 30 min`) cross-checked against `influ_sessions` (`used` flag → single-use). |
+| **Resolution plan** | Tech Lead to revise `openapi.yaml`: drop `MagicLinkConsumeResponse` and `POST /auth/set-password`, change `magic-link/consume` request to `{ token, newPassword }` and response to `AuthSession`. |
+
+### DRIFT-006 — `POST /auth/onboard/business` instead of `POST /auth/onboard` (US-018)
+
+| Field | Status |
+|---|---|
+| **Endpoint** | `POST /auth/onboard/business` (implementation) vs `POST /auth/onboard` (contract) |
+| **Contract** | `POST /auth/onboard` (authenticated) — completes business onboarding for an existing user with `OnboardBusinessRequest { juridicalForm, ice, companyName, companyAddress, if, rc, tva }`. |
+| **Implementation** | `POST /auth/onboard/business` (public) — atomic create-user + create-legal-entity in one call. Request adds account information (`accountType`, `email`, `password`, `fullName`, `phone`, `address`, …) on top of the legal fields. Response is `AuthSession`. |
+| **Severity** | High — endpoint path, auth requirement and request body all differ |
+| **Reason** | Parent agent instruction (Wave 2 brief, US-018): single-step onboarding for business / brand / small_business / agency. There is no prior "create account without legal info" step — the wireframe collects everything in one form. ICE uniqueness is enforced via DynamoDB sentinel (`ICE#<ice>`) inside the same `TransactWriteCommand` as the email sentinel + user item + `BusinessLegalEntity` item. |
+| **Resolution plan** | Tech Lead to revise `openapi.yaml`: add public `POST /auth/onboard/business` returning `AuthSession`, deprecate the authenticated two-step `/auth/onboard`. |
+
+### DRIFT-007 — `POST /creator/me/social-accounts/{platform}/link` request + response (US-017)
+
+| Field | Status |
+|---|---|
+| **Endpoint** | `POST /creator/me/social-accounts/{platform}/link` |
+| **Contract** | No request body. Returns `OAuthAuthorizeResponse { url, state }` to start a redirect-based OAuth dance. |
+| **Implementation** | Request body `{ oauthCode }`. Returns `SocialAccount { platform, handle, followers, engagementRate, growthRate, tier, linkedAt }`. The mock `SocialModule` accepts `oauthCode === "mock-success-<handle>"` and derives deterministic metrics from the handle. Tier is auto-computed (`computeTier(followers)`). Re-linking the same `(userId, platform)` returns 409 `SOCIAL_ALREADY_LINKED`. Failed exchange → 401 `SOCIAL_OAUTH_FAILED`. |
+| **Severity** | High — completely different OAuth model (server-side `code` exchange vs frontend-driven popup that returns a `code`) |
+| **Reason** | Parent agent instruction (Wave 2 brief, US-017): MVP runs against a **mock** OAuth provider (no real Instagram/YouTube/TikTok/Twitter app yet). The frontend simulates the popup and forwards the `oauthCode` to the backend. This avoids hosting a `/social/{platform}/callback` redirect URL during MVP. |
+| **Resolution plan** | Tech Lead to revise `openapi.yaml`: change `link` to `POST` with body `{ oauthCode }` returning `SocialAccount`. When real providers are wired, add the optional `OAuthAuthorizeResponse` flow as `POST /creator/me/social-accounts/{platform}/link/start`. |
+
 ---
 
 ## Resolved entries
