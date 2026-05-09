@@ -1,7 +1,7 @@
 ---
 name: PO Validator
 description: Sub-agent. Validates Product Owner deliverables against 7 criteria (CHECK 0-6, score /100). CHECK 0 (spec coverage) is a blocker. Returns GO or a correction list to the PO.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search]
 ---
 

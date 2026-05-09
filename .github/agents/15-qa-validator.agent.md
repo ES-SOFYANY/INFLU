@@ -1,7 +1,7 @@
 ---
 name: QA Validator
 description: Sub-agent. Objectively verifies that QA agents (Backend, Frontend, Manual) have done their complete job before authorizing handoff. Compares Must US / personas / pages / endpoints against actual test and report coverage. Mode 'backend', 'frontend', or 'manual' passed as parameter.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search]
 user-invocable: false
 ---

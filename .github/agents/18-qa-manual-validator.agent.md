@@ -1,7 +1,7 @@
 ---
 name: QA Manual Validator
 description: Deep validator for QA Manual outputs. Inspects screenshot content (rejects 404/403/blank), censuses all app forms and buttons from source code, verifies all acceptance-criteria scenarios were covered, and loops with QA Manual until 95% coverage (max 5 iterations). Can escalate to Bug Fixer General for unfixed bugs.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web, browser, 'playwright/*']
 user-invocable: false
 ---

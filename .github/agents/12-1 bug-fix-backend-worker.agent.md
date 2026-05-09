@@ -1,7 +1,7 @@
 ---
 name: Bug Fix Backend Worker
 description: Sub-agent. Fixes ONE backend bug (or a small independent group) + test + commit.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, agent, edit, search, web, browser]
 user-invocable: false
 ---

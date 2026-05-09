@@ -1,7 +1,7 @@
 ---
 name: API Story Implementer
 description: Sub-agent. Implements ONE NestJS US + shared-types sync + commit.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, agent, edit, search, web, browser]
 user-invocable: false
 ---

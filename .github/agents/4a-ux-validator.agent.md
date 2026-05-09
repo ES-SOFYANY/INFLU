@@ -1,7 +1,7 @@
 ---
 name: UX Validator
 description: Sub-agent. Validates UX/UI deliverables against 6 criteria (CHECK 1-6, score /100). Checks wireframe modernity (anti-admin), US coverage, mandatory states, accessibility tokens, glossary vocabulary, standard surfaces. Returns GO or correction list.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search]
 user-invocable: false
 ---

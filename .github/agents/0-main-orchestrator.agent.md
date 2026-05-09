@@ -1,7 +1,7 @@
 ---
 name: Main Orchestrator
 description: Orchestrates the entire production pipeline — from initial business requirement to QA Frontend. Runs each agent sequentially with their prompts and commits. Single orchestration layer — no agent delegates to a sub-agent.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, agent, edit, search, web, browser]
 agents:
   - Product Owner V2

@@ -1,7 +1,7 @@
 ---
 name: Database Seeder
 description: Generates and injects a rich seed into DynamoDB Local. Invoked INTERNALLY by Infrastructure & Deploy.
-model: ['Claude Sonnet 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, agent, edit, search, web, browser]
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: Tech Lead Validator
 description: Sub-agent. Validates Tech Lead deliverables against 7 criteria (CHECK 1-7, score /100). Verifies OpenAPI validity, US → endpoints coverage, AC → error codes, US → modules mapping. Returns GO or correction list to Tech Lead.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search]
 user-invocable: false
 ---

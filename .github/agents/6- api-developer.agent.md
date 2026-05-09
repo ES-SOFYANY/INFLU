@@ -1,7 +1,7 @@
 ---
 name: API Developer
 description: NestJS backend packaged for Lambda. Scaffolds the monorepo and cross-cutting modules. US implementation is delegated by Main Orchestrator to API Story Implementer.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web, browser, 'aws-knowledge/*', 'context7/*']
 handoffs:
   - label: ➡️ Proceed to Frontend Developer

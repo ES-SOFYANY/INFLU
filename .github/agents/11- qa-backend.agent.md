@@ -1,7 +1,7 @@
 ---
 name: QA Backend
 description: Tests the NestJS API with Supertest + Jest. Systematic DB reset between tests. Produces the test and bug reports. The Main Orchestrator orchestrates the QA↔Fix loop with Bug Fixer Backend.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web]
 handoffs:
   - label: ✅ QA Backend complete — proceed to QA Frontend

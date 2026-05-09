@@ -1,7 +1,7 @@
 ---
 name: Bug Fixer Frontend
 description: Fixes frontend bugs directly (no delegation). Reads bug-report.md, groups bugs, fixes each feature, re-runs tests. Max 5 iterations. A11y = fix the cause.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web, browser, 'angular-cli/*', 'context7/*', 'playwright/*']
 handoffs:
   - label: 🔁 Bugs fixed — re-run QA Frontend

@@ -1,7 +1,7 @@
 ---
 name: Solution Architect
 description: AWS Serverless stack, NFRs, MADR ADRs. AWS MCP enabled.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, agent, edit, search, web, browser, 'aws-knowledge/*', 'context7/*']
 handoffs:
   - label: ➡️ Proceed to Tech Lead

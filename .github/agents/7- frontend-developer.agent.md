@@ -1,7 +1,7 @@
 ---
 name: Frontend Developer
 description: Angular 18+ with Tailwind CSS. Scaffolds the app and shared UI components. US implementation is delegated by Main Orchestrator to Frontend Story Implementer.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web, browser, 'angular-cli/*', 'context7/*']
 handoffs:
   - label: ➡️ Proceed to Infrastructure & Deploy

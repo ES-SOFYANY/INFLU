@@ -1,7 +1,7 @@
 ---
 name: Frontend Story Implementer
 description: Sub-agent. Implements ONE Angular US (container + components + service + tests + commit).
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, agent, edit, search, web, browser, 'angular-cli/*']
 user-invocable: false
 ---

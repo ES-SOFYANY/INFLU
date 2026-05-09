@@ -1,7 +1,7 @@
 ---
 name: Coverage Validator
 description: Sub-agent. Verifies implementation completeness for API or Frontend after Story Implementer waves. Compares actual code against api-contract.md / wireframes-manifest.json / acceptance-criteria.json. Lists missing endpoints, routes, AC. Mode 'api' or 'frontend' passed as parameter.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search]
 user-invocable: false
 ---

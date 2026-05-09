@@ -1,7 +1,7 @@
 ---
 name: Integration Validator
 description: Validates complete env post-seed (smoke-tests, API consistency). Fixes detected application bugs directly. Invoked by the Main Orchestrator after Database Seeder and Seed Login Verifier.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web, browser, 'context7/*']
 handoffs:
   - label: OK Valid env - proceed to QA Backend

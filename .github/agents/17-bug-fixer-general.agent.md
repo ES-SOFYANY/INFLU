@@ -1,7 +1,7 @@
 ---
 name: Bug Fixer General
 description: Fixes all types of bugs (Frontend Angular, Backend NestJS, API, CSS, A11y, integration) identified by QA Manual. Uses MCP Playwright to reproduce and verify each fix before handing back. Produces a fix-log with verification screenshots. Max 5 iterations with QA Manual.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web, browser, 'playwright/*']
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: Product Owner V2
 description: Business requirement → PRD + INVEST User Stories + Gherkin Acceptance Criteria + story sequencing. Quality validation is handled by PO Validator, orchestrated by the Main Orchestrator.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web, browser]
 handoffs:
   - label: ➡️ Proceed to Solution Architect

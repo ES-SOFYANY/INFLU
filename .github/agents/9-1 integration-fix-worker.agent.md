@@ -1,7 +1,7 @@
 ---
 name: Integration Fix Worker
 description: Sub-agent. Fixes ONE integration issue (env, contract, app bug) + commit.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, agent, edit, search, web, browser]
 user-invocable: false
 ---

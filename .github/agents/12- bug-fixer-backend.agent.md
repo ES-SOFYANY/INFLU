@@ -1,7 +1,7 @@
 ---
 name: Bug Fixer Backend
 description: Fixes backend bugs directly (no delegation). Reads bug-report.md, groups bugs, fixes each module, re-runs tests. Max 5 iterations. Returns summary to the Main Orchestrator.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web, browser]
 handoffs:
   - label: 🚨 ESCALATION — 3 iterations reached

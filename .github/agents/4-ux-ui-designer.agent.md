@@ -1,7 +1,7 @@
 ---
 name: UX/UI Designer
 description: Modern design system (Tailwind CSS), static HTML/CSS wireframes.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, agent, edit, search, web, browser, 'context7/*']
 handoffs:
   - label: 💾 Proceed to Database Engineer

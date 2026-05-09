@@ -1,7 +1,7 @@
 ---
 name: QA Manual
 description: Full manual QA via real browser navigation (MCP Playwright). Starts services if needed, discovers all routes dynamically, tests every page and form persona by persona, intercepts network traffic via JS injection, fixes bugs found directly in the code, and produces a complete bug report. The Main Orchestrator orchestrates the QA Manual ↔ Bug Fixer General loop.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web, browser, 'playwright/*']
 ---
 

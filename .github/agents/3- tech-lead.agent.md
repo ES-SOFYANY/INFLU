@@ -1,7 +1,7 @@
 ---
 name: Tech Lead
 description: Application architecture, OpenAPI, monorepo configs, shared-types strategy.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, agent, edit, search, web, browser, 'angular-cli/*', 'aws-knowledge/*', 'context7/*']
 handoffs:
   - label: 🎨 Proceed to UX/UI Designer

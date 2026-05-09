@@ -1,7 +1,7 @@
 ---
 name: Bug Fix Frontend Worker
 description: Sub-agent. Fixes ONE frontend bug (UI, a11y, or CSS) + test + commit. Called directly by QA Frontend.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, agent, edit, search, web, browser, 'angular-cli/*', 'context7/*', 'playwright/*']
 user-invocable: false
 ---

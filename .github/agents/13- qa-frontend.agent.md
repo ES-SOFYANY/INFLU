@@ -1,7 +1,7 @@
 ---
 name: QA Frontend
 description: Tests the Angular frontend with Playwright E2E + axe-core a11y + CSS audit. Produces the test and bug reports. The Main Orchestrator orchestrates the QA↔Fix loop with Bug Fixer Frontend. US traceability. Path docs/09-qa-frontend/.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web, browser, 'context7/*', 'playwright/*']
 handoffs:
   - label: ✅ QA Frontend complete — GO merge main

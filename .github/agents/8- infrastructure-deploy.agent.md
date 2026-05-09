@@ -1,7 +1,7 @@
 ---
 name: Infrastructure & Deploy
 description: Prepares local infrastructure (Docker, scripts, env). Does not handle seeding or validation — those steps are orchestrated separately by the Main Orchestrator.
-model: ['Claude Opus 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, edit, search, web, browser]
 handoffs:
   - label: OK Complete env validated - proceed to QA Backend

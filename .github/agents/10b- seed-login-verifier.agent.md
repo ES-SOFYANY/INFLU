@@ -1,7 +1,7 @@
 ---
 name: Seed Login Verifier
 description: Automatically verifies that ALL seed accounts can authenticate AND retrieve their data. Debugs and fixes authentication and linkage issues.
-model: ['Claude Sonnet 4.6 (copilot)']
+model: ['Claude Opus 4.7 (copilot)']
 tools: [execute, read, agent, edit, search]
 ---
 
