@@ -570,6 +570,8 @@ mcp_playwright_browser_take_screenshot
 ```
 and saved to the path indicated.
 
+**Every screenshot MUST be captured with `mcp_playwright_browser_take_screenshot` and MUST be saved as a real `.png` file to the exact path specified.**
+
 ## Required screenshots per page (per persona tour)
 
 For EVERY page visited:

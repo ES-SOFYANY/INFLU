@@ -44,6 +44,60 @@ cat docs/10-qa-manual/qa-validator-iterations.md 2>/dev/null || echo "Iteration 
 If this is iteration ≥ 5 → **STOP. Return escalation to Main Orchestrator.**
 
 ```markdown
+
+---
+
+# STEP 0.5 — Screenshot File Presence Check (BLOCKING — Run Before Anything Else)
+
+**This is the first validation. If it fails, stop immediately — do not proceed to other steps.**
+
+A screenshot is a real binary `.png` image file on disk. `.md` files, `.txt` files, placeholder files, or any non-image file are NOT valid screenshots but we can have them in addition for documentation purposes.
+
+## 0.5.1 — Count actual PNG files on disk
+
+```bash
+ITER_DIR="docs/10-qa-manual/screenshots"
+
+# List all PNG files found
+find "$ITER_DIR" -name "*.png" | sort
+
+# Count them
+PNG_COUNT=$(find "$ITER_DIR" -name "*.png" | wc -l | tr -d ' ')
+echo "PNG image files found on disk: $PNG_COUNT"
+
+```
+
+## 0.5.2 — Decision
+
+**IF `PNG_COUNT = 0`:**
+→ **IMMEDIATE FAIL — BLOCKING**
+→ QA Manual produced zero real screenshot images. All its output is invalid.
+→ Do NOT proceed to other validation steps.
+→ Return immediately to Main Orchestrator:
+
+```
+QA Manual Validator — CRITICAL FAILURE
+Reason: ZERO PNG screenshot files found on disk.
+QA Manual has NOT taken real browser screenshots.
+It has produced .md text files or placeholder files instead of actual images.
+This is NOT acceptable. Visual proof of testing is required.
+
+Action required: Re-run QA Manual with explicit instruction to save every
+screenshot as a .png file using mcp_playwright_browser_take_screenshot with
+a file path ending in .png, and verify each file exists on disk immediately
+after capturing it.
+Verdict: ❌ INVALID — No real screenshots
+```
+```markdown
+## Screenshot File Presence Check
+
+| Check | Expected | Found | Verdict |
+|-------|----------|-------|---------|
+| PNG files on disk | ≥ (pages visited) | N | ✅ / ❌ |
+| Non-PNG files in screenshots/ | 0 | N | ✅ / ❌ |
+| Folder structure correct | iteration-0N/<role>/*.png | [list] | ✅ / ❌ |
+```
+
 ## QA Manual Validator — Iteration Limit Reached
 
 Iteration 5 of 5 exhausted.
