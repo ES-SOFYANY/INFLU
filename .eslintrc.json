@@ -1,0 +1,40 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    "coverage",
+    ".angular",
+    "packages/shared-types/src/generated",
+    "packages/shared-types/dist"
+  ],
+  "overrides": [
+    {
+      "files": ["apps/api/**/*.ts", "packages/shared-types/**/*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["./apps/api/tsconfig.json", "./packages/shared-types/tsconfig.json"],
+        "sourceType": "module"
+      },
+      "plugins": ["@typescript-eslint", "import"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier"
+      ],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-floating-promises": "off",
+        "@typescript-eslint/consistent-type-imports": "error",
+        "no-console": ["warn", { "allow": ["warn", "error"] }]
+      }
+    },
+    {
+      "files": ["**/*.spec.ts", "**/*.test.ts", "tests/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "off"
+      }
+    }
+  ]
+}

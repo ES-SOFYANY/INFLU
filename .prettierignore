@@ -1,0 +1,8 @@
+node_modules
+dist
+coverage
+.angular
+.nx
+packages/shared-types/src/generated
+packages/shared-types/dist
+docs/06-api-developer/openapi.json

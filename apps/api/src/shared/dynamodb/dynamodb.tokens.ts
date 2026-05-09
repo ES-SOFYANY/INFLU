@@ -1,0 +1,1 @@
+export const DYNAMODB_DOC_CLIENT = Symbol('DYNAMODB_DOC_CLIENT');

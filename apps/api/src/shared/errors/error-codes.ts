@@ -1,0 +1,34 @@
+/**
+ * Stable business error codes (SCREAMING_SNAKE_CASE) — exposed to the
+ * frontend via the global error format `{code,message,details,traceId}`.
+ * See `docs/03-tech-lead/coding-standards.md` §7.
+ */
+export const ERROR_CODES = {
+  // Generic
+  VALIDATION_FAILED: 'VALIDATION_FAILED',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+
+  // Auth
+  INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
+  EMAIL_ALREADY_USED: 'EMAIL_ALREADY_USED',
+  TOKEN_EXPIRED: 'TOKEN_EXPIRED',
+  TOKEN_INVALID: 'TOKEN_INVALID',
+
+  // Marketplace / business
+  PROFILE_INCOMPLETE: 'PROFILE_INCOMPLETE',
+  SLOT_FULL: 'SLOT_FULL',
+  EXPIRED: 'EXPIRED',
+  ALREADY_APPLIED: 'ALREADY_APPLIED',
+
+  // Brand
+  BRAND_ALREADY_LINKED: 'BRAND_ALREADY_LINKED',
+  BRAND_NOT_FOUND: 'BRAND_NOT_FOUND',
+
+  // Documents
+  CIN_ALREADY_VALIDATED: 'CIN_ALREADY_VALIDATED',
+} as const;
+
+export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

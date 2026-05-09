@@ -1,0 +1,38 @@
+{
+  "name": "influ-ai",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=20.11.1",
+    "npm": ">=10.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "npm -w apps/api run start:dev",
+    "build": "npm-run-all build:shared-types build:api",
+    "build:shared-types": "npm -w packages/shared-types run build",
+    "build:api": "npm -w apps/api run build",
+    "test": "npm -w apps/api run test",
+    "test:api": "npm -w apps/api run test",
+    "lint": "eslint . --max-warnings 0 --ext .ts",
+    "lint:fix": "eslint . --fix --ext .ts",
+    "format": "prettier --write \"**/*.{ts,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,json,md}\"",
+    "generate:shared-types": "bash scripts/generate-shared-types.sh",
+    "openapi:export": "npm -w apps/api run openapi:export"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "npm-run-all": "^4.1.5",
+    "openapi-typescript": "^7.0.0",
+    "prettier": "^3.3.0",
+    "typescript": "~5.4.5"
+  }
+}

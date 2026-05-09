@@ -1,0 +1,16 @@
+{
+  "name": "@my-app/shared-types",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "test": "echo 'no runtime tests — type-only package'"
+  },
+  "devDependencies": {
+    "typescript": "~5.4.5"
+  }
+}

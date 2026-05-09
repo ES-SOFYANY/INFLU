@@ -1,1 +1,17 @@
 **/.DS_Store
+node_modules/
+dist/
+coverage/
+.angular/
+.nx/
+.env
+.env.local
+.env.*.local
+*.log
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+packages/shared-types/dist/
+docs/06-api-developer/openapi.json
+*.tsbuildinfo
