@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Support</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="creator-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a><span class="avatar avatar-sm">A</span></header>
+<div style="display:flex;">
+<aside class="app-sidebar">
+<div class="sidebar-section"><a href="creator-dashboard.html" class="sidebar-item">📊 Dashboard</a></div>
+<div class="sidebar-section"><a href="creator-marketplace-list.html" class="sidebar-item">🛍 Marketplace</a></div>
+<div class="sidebar-section"><a href="creator-my-account.html" class="sidebar-item">👤 My Account</a></div>
+<div class="sidebar-section"><a href="creator-support.html" class="sidebar-item active">❓ Support</a></div>
+</aside>
+<main id="main" role="main" style="flex:1;padding:var(--space-8);max-width:880px;">
+  <h1 style="font-size:var(--text-h1);font-weight:700;">Support</h1>
+  <p style="color:var(--text-secondary);margin-bottom:2rem;">Report an issue or browse answers to common questions.</p>
+
+  <!-- My reports -->
+  <section class="card" style="margin-bottom:2rem;">
+    <h2 style="font-weight:600;font-size:var(--text-h3);margin-bottom:0.5rem;">My reports <span class="badge badge-muted">0 report(s)</span></h2>
+    <div class="empty-state" role="status" style="padding:2rem 0;">
+      <div class="empty-illust" style="width:80px;height:80px;font-size:2rem;">📋</div>
+      <p class="empty-desc">No reports yet — Use the button in the bottom-right corner to report an issue.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <h2 style="font-weight:600;font-size:var(--text-h3);margin-bottom:1rem;">Frequently asked questions</h2>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+      <details class="card" style="padding:0;"><summary style="padding:1rem 1.25rem;cursor:pointer;font-weight:500;">What is INFLU?</summary><div style="padding:0 1.25rem 1rem;color:var(--text-secondary);font-size:var(--text-small);">INFLU.ai is an AI-powered influencer marketing platform connecting creators and brands in MENA.</div></details>
+      <details class="card" style="padding:0;"><summary style="padding:1rem 1.25rem;cursor:pointer;font-weight:500;">How does INFLU help with influencer marketing?</summary><div style="padding:0 1.25rem 1rem;color:var(--text-secondary);font-size:var(--text-small);">We generate briefs, scripts, and matching profiles automatically.</div></details>
+      <details class="card" style="padding:0;"><summary style="padding:1rem 1.25rem;cursor:pointer;font-weight:500;">Can I track campaign performance in real time?</summary><div style="padding:0 1.25rem 1rem;color:var(--text-secondary);font-size:var(--text-small);">Yes, dashboards update as data flows in.</div></details>
+      <details class="card" style="padding:0;"><summary style="padding:1rem 1.25rem;cursor:pointer;font-weight:500;">Does INFLU support multiple social media platforms?</summary><div style="padding:0 1.25rem 1rem;color:var(--text-secondary);font-size:var(--text-small);">Instagram, TikTok, YouTube, Twitter.</div></details>
+      <details class="card" style="padding:0;"><summary style="padding:1rem 1.25rem;cursor:pointer;font-weight:500;">Is INFLU suitable for small businesses?</summary><div style="padding:0 1.25rem 1rem;color:var(--text-secondary);font-size:var(--text-small);">Yes — dedicated Small Business onboarding flow.</div></details>
+    </div>
+  </section>
+
+  <!-- Floating button -->
+  <button class="btn btn-primary" aria-label="Report an issue" style="position:fixed;bottom:1.5rem;inset-inline-end:1.5rem;border-radius:9999px;padding:1rem 1.5rem;box-shadow:var(--glow-primary-hover);">⚠ Report an issue</button>
+</main></div></body></html>

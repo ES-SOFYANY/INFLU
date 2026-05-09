@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Create marketplace product</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="business-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a><span class="avatar avatar-sm">B</span></header>
+<div style="display:flex;">
+<aside class="app-sidebar">
+<div class="sidebar-section"><a href="business-dashboard.html" class="sidebar-item">📊 Dashboard</a></div>
+<div class="sidebar-section"><div class="sidebar-title">Marketplace</div><a href="business-marketplace-create.html" class="sidebar-item active">➕ Add Product</a><a href="business-my-marketplace.html" class="sidebar-item">🛍 My Marketplace</a></div>
+</aside>
+
+<main id="main" role="main" style="flex:1;padding:var(--space-8);max-width:980px;">
+  <h1 style="font-size:var(--text-h1);font-weight:700;">Create marketplace product</h1>
+  <p style="color:var(--text-secondary);margin-bottom:2rem;">Create a new product to offer in the marketplace.</p>
+
+  <ol class="stepper" role="list" aria-label="Wizard steps">
+    <li class="step active" aria-current="step"><span class="step-num">A</span><div><div class="step-label">Brand Information</div><div class="step-desc">Select brand &amp; description</div></div></li>
+    <li class="step"><span class="step-num">B</span><div><div class="step-label">Product Details</div></div></li>
+    <li class="step"><span class="step-num">C</span><div><div class="step-label">Acceptance criteria</div></div></li>
+    <li class="step"><span class="step-num">D</span><div><div class="step-label">Deliverables</div></div></li>
+    <li class="step"><span class="step-num">E</span><div><div class="step-label">Dates</div></div></li>
+  </ol>
+
+  <!-- Step A example shown -->
+  <section class="card" style="margin-bottom:1.5rem;">
+    <h2 style="font-weight:600;font-size:var(--text-h3);margin-bottom:1rem;">A — Brand Information</h2>
+    <form style="display:flex;flex-direction:column;gap:1rem;">
+      <div><label class="label label-required" for="brand">Select Brand</label><select id="brand" required class="select"><option value="">Select a brand…</option><option>Eucerin</option><option>Yassir.ma</option></select></div>
+      <div><label class="label label-required" for="bdesc">Brand description</label><textarea id="bdesc" required class="textarea" rows="4" placeholder="Describe the brand context, values, target market…"></textarea></div>
+    </form>
+  </section>
+
+  <!-- Step D preview (deliverables) — shows complex enforcement -->
+  <section class="card" style="margin-bottom:1.5rem;border-style:dashed;opacity:0.85;">
+    <h2 style="font-weight:600;font-size:var(--text-h3);margin-bottom:0.5rem;color:var(--text-secondary);">D — Deliverables (preview)</h2>
+    <button class="btn btn-secondary btn-sm" style="margin-bottom:1rem;">+ Add a product delivery</button>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.75rem;">
+      <div><label class="label label-required" for="plat">Your platform</label><select id="plat" required class="select"><option value="">Select…</option><option>Instagram</option><option>YouTube</option><option>TikTok</option></select></div>
+      <div><label class="label label-required" for="ctype">Content type</label><select id="ctype" required class="select"><option value="">Select…</option><option>Reel</option><option>Story</option><option>Post</option><option>Carousel</option><option>Live</option></select></div>
+      <div><label class="label label-required" for="qty">Quantity</label><input id="qty" type="number" min="1" required class="input" value="1"></div>
+      <div><label class="label label-required" for="price">Unite price</label><div class="input-mad"><input id="price" type="number" min="0" required value="4000"><span class="input-mad-suffix">Dhs</span></div></div>
+      <div><label class="label label-required" for="tag">Tagged account</label><div class="input-tagged"><span class="input-tagged-prefix">@</span><input id="tag" type="text" required value="eucerin_ma"></div></div>
+    </div>
+  </section>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+    <button class="btn btn-ghost">← Previous</button>
+    <div style="display:flex;gap:0.5rem;">
+      <button class="btn btn-secondary" aria-disabled="true" disabled aria-describedby="dates-disabled">Specify dates</button>
+      <button class="btn btn-primary">Next: Describe product →</button>
+    </div>
+  </div>
+  <p id="dates-disabled" class="help-text" style="text-align:end;">Complete deliverable to enable.</p>
+</main></div></body></html>

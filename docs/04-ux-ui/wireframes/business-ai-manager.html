@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI Manager</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="business-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a><span class="avatar avatar-sm">B</span></header>
+<div style="display:flex;">
+<aside class="app-sidebar">
+<div class="sidebar-section"><a href="business-dashboard.html" class="sidebar-item">📊 Dashboard</a></div>
+<div class="sidebar-section"><div class="sidebar-title">INFLU AI</div><a href="business-ai-campaign.html" class="sidebar-item">✨ New AI Campaign</a><a href="business-ai-manager.html" class="sidebar-item active">🤖 AI Manager</a></div>
+<div class="sidebar-section"><a href="business-discovery.html" class="sidebar-item">🔍 Discovery</a></div>
+</aside>
+<main id="main" role="main" style="flex:1;padding:var(--space-8);">
+  <h1 style="font-size:var(--text-h1);font-weight:700;">AI Manager</h1>
+  <p style="color:var(--text-secondary);margin-bottom:1.5rem;">Manage your AI-powered marketing campaigns.</p>
+
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+    <input type="search" class="input" placeholder="Search…" style="max-width:280px;">
+    <select class="select" style="max-width:200px;"><option>Select status</option></select>
+    <button class="btn btn-ghost btn-sm">Clear</button>
+  </div>
+
+  <div class="card" style="padding:0;">
+    <div class="empty-state" role="status">
+      <div class="empty-illust">🤖</div>
+      <h2 class="empty-title">No AI campaigns created yet</h2>
+      <p class="empty-desc">Get started by creating your first AI-powered marketing campaign to boost your brand's reach and engagement.</p>
+      <a href="business-ai-campaign.html" class="btn btn-primary" style="margin-top:1rem;">✨ Create AI campaign</a>
+    </div>
+  </div>
+</main></div></body></html>

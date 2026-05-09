@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Documents management</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="creator-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a><span class="avatar avatar-sm">A</span></header>
+<div style="display:flex;">
+<aside class="app-sidebar">
+<div class="sidebar-section"><a href="creator-dashboard.html" class="sidebar-item">📊 Dashboard</a></div>
+<div class="sidebar-section"><a href="creator-my-account.html" class="sidebar-item">👤 My Account</a></div>
+<div class="sidebar-section"><a href="creator-support.html" class="sidebar-item">❓ Support</a></div>
+</aside>
+<main id="main" role="main" style="flex:1;padding:var(--space-8);max-width:920px;">
+  <h1 style="font-size:var(--text-h1);font-weight:700;margin-bottom:1.5rem;">Account Settings</h1>
+  <div class="tabs" role="tablist">
+    <a class="tab" href="creator-account-settings.html">Account management</a>
+    <a class="tab" href="creator-account-pricing.html">Pricing</a>
+    <a class="tab active" href="creator-account-documents.html" aria-current="page">Documents management</a>
+  </div>
+
+  <!-- CIN -->
+  <section class="card" style="margin-bottom:1.5rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+      <h2 style="font-weight:600;font-size:var(--text-h3);">CIN <span style="color:var(--color-danger);">*</span></h2>
+      <span class="badge badge-warning">⏳ Pending Validation</span>
+    </div>
+    <form style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div><label class="label label-required" for="cin">CIN number</label><input id="cin" class="input" value="J123456" pattern="[A-Z]{1,2}\d{5,6}" style="text-transform:uppercase;"></div>
+      <div><label class="label label-required" for="exp">Date of expiry</label><input id="exp" type="text" class="input" value="18/04/2026" placeholder="dd/mm/yyyy"></div>
+    </form>
+    <p style="color:var(--text-muted);font-size:var(--text-xs);margin-top:0.5rem;">Expires at: 29/09/2028</p>
+    <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1rem;">
+      <button class="btn btn-ghost">Cancel Validation</button>
+      <button class="btn btn-primary">Submit CIN details</button>
+    </div>
+  </section>
+
+  <!-- Attestation -->
+  <section class="card" style="margin-bottom:1.5rem;">
+    <h2 style="font-weight:600;font-size:var(--text-h3);margin-bottom:0.25rem;">Attestation de régularité fiscale</h2>
+    <p style="color:var(--text-secondary);font-size:var(--text-small);margin-bottom:1rem;">You do not need to provide this document if you are not a company.</p>
+    <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+      <button class="btn btn-secondary">Choose file</button>
+      <span style="color:var(--text-muted);font-size:var(--text-small);">No file chosen</span>
+      <button class="btn btn-primary" style="margin-inline-start:auto;">Upload File</button>
+    </div>
+  </section>
+
+  <!-- RIB -->
+  <section class="card">
+    <h2 style="font-weight:600;font-size:var(--text-h3);margin-bottom:0.5rem;">Bank account details (RIB)</h2>
+    <p style="color:var(--text-secondary);font-size:var(--text-small);margin-bottom:1rem;">Required to receive payments. PDF or image, max 5MB.</p>
+    <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+      <button class="btn btn-secondary">Choose file</button>
+      <span style="color:var(--text-muted);font-size:var(--text-small);">No file chosen</span>
+      <button class="btn btn-primary" style="margin-inline-start:auto;">Upload File</button>
+    </div>
+  </section>
+</main></div></body></html>

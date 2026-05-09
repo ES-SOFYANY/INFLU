@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My collaborations</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="creator-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a><span class="avatar avatar-sm">A</span></header>
+<div style="display:flex;">
+<aside class="app-sidebar"><div class="sidebar-section"><a href="creator-dashboard.html" class="sidebar-item">📊 Dashboard</a></div>
+<div class="sidebar-section"><div class="sidebar-title">Opportunities</div><a href="#" class="sidebar-item disabled">🎯 Matchings</a><a href="creator-collaborations.html" class="sidebar-item active">🤝 Collaboration</a><a href="creator-marketplace-list.html" class="sidebar-item">🛍 Marketplace</a></div>
+<div class="sidebar-section"><a href="creator-my-account.html" class="sidebar-item">👤 My Account</a><a href="creator-ai-coach.html" class="sidebar-item">🤖 My AI coach</a></div>
+<div class="sidebar-section"><a href="creator-messaging.html" class="sidebar-item">💬 Messaging</a></div>
+<div class="sidebar-section"><a href="creator-support.html" class="sidebar-item">❓ Support</a></div>
+</aside>
+<main id="main" role="main" style="flex:1;padding:var(--space-8);">
+  <h1 style="font-size:var(--text-h1);font-weight:700;margin-bottom:1.5rem;">Collaborations</h1>
+
+  <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+    <input type="search" class="input" placeholder="Search…" style="max-width:280px;">
+    <select class="select" style="max-width:200px;"><option>Select brand…</option></select>
+    <select class="select" style="max-width:200px;"><option>Select status</option></select>
+    <button class="btn btn-ghost btn-sm">Clear</button>
+  </div>
+
+  <table class="table">
+    <thead><tr><th>Brand</th><th>Campaign</th><th>Status</th><th>Start Date</th><th>End Date</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td><div style="display:flex;gap:0.5rem;align-items:center;"><span class="avatar avatar-sm">E</span> Eucerin</div></td><td>Oil Control Serum</td><td><span class="badge badge-warning">Pending</span></td><td>21/04/2026</td><td>24/04/2026</td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>
+      <tr><td><div style="display:flex;gap:0.5rem;align-items:center;"><span class="avatar avatar-sm">Y</span> Yassir.ma</div></td><td>Ride Promo</td><td><span class="badge badge-success">Active</span></td><td>15/03/2026</td><td>30/03/2026</td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>
+    </tbody>
+  </table>
+  <p style="color:var(--text-muted);text-align:center;margin-top:2rem;font-size:var(--text-small);">No more collaborations to show.</p>
+</main></div></body></html>

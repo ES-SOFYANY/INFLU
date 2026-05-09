@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Assign your social account — Step 2</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="hero-bg" style="min-height:100vh;">
+<header class="app-header" style="background:transparent;border:none;"><a href="index.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a></header>
+<main id="main" role="main" style="max-width:720px;margin:0 auto;padding:2rem var(--space-6) 4rem;">
+  <h1 class="gradient-text" style="font-size:var(--text-h1);font-weight:700;text-align:center;margin-bottom:0.5rem;">Assign your account</h1>
+  <p style="color:var(--text-secondary);text-align:center;margin-bottom:2rem;">Link at least one social account so brands can discover your reach.</p>
+
+  <ol class="stepper" role="list">
+    <li class="step done"><span class="step-num">✓</span><div><div class="step-label">Personal information</div></div></li>
+    <li class="step active" aria-current="step"><span class="step-num">2</span><div><div class="step-label">Assign account</div><div class="step-desc">At least one is required</div></div></li>
+  </ol>
+
+  <div class="card" style="display:flex;flex-direction:column;gap:0.75rem;">
+    <button class="btn btn-secondary" style="justify-content:flex-start;padding:1rem;"><span style="font-size:1.25rem;">📷</span> Connect Instagram <span class="badge badge-muted" style="margin-inline-start:auto;">Recommended</span></button>
+    <button class="btn btn-secondary" style="justify-content:flex-start;padding:1rem;"><span style="font-size:1.25rem;">🎵</span> Connect TikTok</button>
+    <button class="btn btn-secondary" style="justify-content:flex-start;padding:1rem;"><span style="font-size:1.25rem;">▶</span> Connect YouTube</button>
+    <button class="btn btn-secondary" style="justify-content:flex-start;padding:1rem;"><span style="font-size:1.25rem;">𝕏</span> Connect Twitter</button>
+
+    <div class="alert alert-success" style="margin-top:1rem;display:none;" id="connected-alert">
+      <span>✅</span><div>Instagram connected — @yourhandle (12.3k followers detected)</div>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;margin-top:1.5rem;">
+    <a href="auth-register-influencer-step1.html" class="btn btn-ghost">← Back</a>
+    <button class="btn btn-primary" aria-disabled="true" disabled aria-describedby="next-disabled-reason">Finish registration →</button>
+  </div>
+  <p id="next-disabled-reason" class="help-text" style="text-align:end;margin-top:0.5rem;">Connect at least one social account to continue.</p>
+</main>
+</body></html>

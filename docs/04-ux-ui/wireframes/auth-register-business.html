@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Create your business account</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="hero-bg" style="min-height:100vh;">
+<header class="app-header" style="background:transparent;border:none;"><a href="index.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a></header>
+<main id="main" role="main" style="max-width:720px;margin:0 auto;padding:2rem var(--space-6) 4rem;">
+  <h1 class="gradient-text" style="font-size:var(--text-h1);font-weight:700;text-align:center;margin-bottom:0.5rem;">Join INFLU as a Business</h1>
+  <p style="color:var(--text-secondary);text-align:center;margin-bottom:2rem;">Set up your business workspace.</p>
+
+  <form class="card" style="display:flex;flex-direction:column;gap:1.25rem;">
+    <h2 style="font-weight:600;border-bottom:1px solid var(--border-subtle);padding-bottom:0.5rem;">Account Information</h2>
+    <div><label class="label label-required" for="email">Email</label><input id="email" type="email" required class="input"></div>
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:1rem;">
+      <div><label class="label label-required" for="gender">Gender</label><select id="gender" required class="select"><option value="">Select gender</option><option>Male</option><option>Female</option></select></div>
+      <div><label class="label label-required" for="fullname">Full name</label><input id="fullname" type="text" required class="input"></div>
+    </div>
+    <div><label class="label label-required" for="phone">Phone number</label>
+      <div class="input-phone"><span class="input-phone-prefix" aria-hidden="true">+212</span><input id="phone" type="tel" required></div>
+    </div>
+    <div><label class="label" for="address">Address</label><input id="address" type="text" class="input"></div>
+
+    <h2 style="font-weight:600;border-bottom:1px solid var(--border-subtle);padding-bottom:0.5rem;margin-top:1rem;">Business Information</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div><label class="label label-required" for="juridical">Juridical Form</label><select id="juridical" required class="select"><option value="">Select…</option><option>SARL</option><option>SA</option><option>SAS</option><option>SNC</option><option>Auto-entrepreneur</option></select></div>
+      <div><label class="label label-required" for="company">Company Name</label><input id="company" type="text" required class="input"></div>
+    </div>
+    <div><label class="label" for="caddress">Company Address</label><input id="caddress" type="text" class="input"></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;">
+      <div><label class="label label-required" for="ice">ICE</label><input id="ice" type="text" required pattern="\d{15}" class="input" placeholder="15 digits" maxlength="15"><p class="help-text">15 chiffres</p></div>
+      <div><label class="label" for="if">IF (Identifiant Fiscal)</label><input id="if" type="text" pattern="\d{7,9}" class="input"></div>
+      <div><label class="label" for="rc">RC (Registre de Commerce)</label><input id="rc" type="text" class="input"></div>
+      <div><label class="label" for="tva">TVA</label><input id="tva" type="text" class="input"></div>
+    </div>
+
+    <label style="display:flex;gap:0.625rem;align-items:flex-start;font-size:var(--text-small);"><input type="checkbox" required> <span>I agree to the <a href="legal-brand.html">legal mentions</a> &amp; <a href="legal-privacy.html">privacy policy</a> *</span></label>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem;flex-wrap:wrap;gap:1rem;">
+      <a href="auth-register-roles.html" style="font-size:var(--text-small);">← Choose another role</a>
+      <a href="auth-onboard.html" class="btn btn-primary">Create account →</a>
+    </div>
+  </form>
+</main>
+</body></html>

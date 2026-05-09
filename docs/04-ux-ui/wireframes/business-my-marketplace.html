@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My Marketplace</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="business-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a><span class="avatar avatar-sm">B</span></header>
+<div style="display:flex;">
+<aside class="app-sidebar">
+<div class="sidebar-section"><a href="business-dashboard.html" class="sidebar-item">📊 Dashboard</a></div>
+<div class="sidebar-section"><div class="sidebar-title">Marketplace</div><a href="business-marketplace-create.html" class="sidebar-item">➕ Add Product</a><a href="business-my-marketplace.html" class="sidebar-item active">🛍 My Marketplace</a></div>
+</aside>
+<main id="main" role="main" style="flex:1;padding:var(--space-8);">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+    <h1 style="font-size:var(--text-h1);font-weight:700;">My Marketplace</h1>
+    <a href="business-marketplace-create.html" class="btn btn-primary">+ Add Product</a>
+  </div>
+
+  <table class="table">
+    <thead><tr><th>Product</th><th>Brand</th><th>Tier</th><th>Slots</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td>Oil Control Serum</td><td>Eucerin</td><td>Micro Nano</td><td>22 / 30</td><td><span class="badge badge-success">Active</span></td><td>24/04/2026</td><td><button class="btn btn-ghost btn-sm" aria-label="Actions">⋯</button></td></tr>
+      <tr><td>Ride Promo</td><td>Yassir.ma</td><td>Mid</td><td>5 / 10</td><td><span class="badge badge-success">Active</span></td><td>30/03/2026</td><td><button class="btn btn-ghost btn-sm" aria-label="Actions">⋯</button></td></tr>
+      <tr><td>Old Product</td><td>Brand X</td><td>Nano</td><td>0 / 20</td><td><span class="badge badge-danger">Expired</span></td><td>—</td><td><button class="btn btn-ghost btn-sm" aria-label="Actions">⋯</button></td></tr>
+    </tbody>
+  </table>
+</main></div></body></html>

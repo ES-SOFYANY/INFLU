@@ -1,0 +1,17 @@
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+const us = require(path.join(root,'docs/01-product-owner/user-stories.json')).map(s => s.id);
+const m = require(path.join(root,'docs/04-ux-ui/wireframes-manifest.json'));
+const covered = Object.keys(m.us_coverage);
+const missing = us.filter(id => !covered.includes(id));
+const extra = covered.filter(id => !us.includes(id));
+const fs = require('fs');
+const all = new Set();
+Object.values(m.us_coverage).forEach(arr => arr.forEach(f => all.add(f)));
+const broken = [...all].filter(f => !fs.existsSync(path.join(root,'docs/04-ux-ui',f)));
+console.log('US total:', us.length);
+console.log('Covered:', covered.length);
+console.log('Missing US:', missing);
+console.log('Extra US:', extra);
+console.log('uncovered_us field:', JSON.stringify(m.uncovered_us));
+console.log('Broken file refs:', broken);

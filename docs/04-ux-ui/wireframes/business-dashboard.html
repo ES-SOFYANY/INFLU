@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Business Dashboard — INFLU</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+
+<header class="app-header">
+  <div class="flex items-center gap-6">
+    <a href="business-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a>
+    <!-- Global influencer search -->
+    <div style="position:relative;width:380px;max-width:30vw;">
+      <input type="search" class="input" role="combobox" aria-autocomplete="list" placeholder="Search your best influencer by name or handle" aria-label="Search influencer" style="padding-inline-start:2.25rem;">
+      <span style="position:absolute;inset-inline-start:0.625rem;top:50%;transform:translateY(-50%);color:var(--text-muted);">🔍</span>
+    </div>
+    <button class="btn btn-ghost btn-sm">Show suggestions</button>
+  </div>
+  <div class="flex items-center gap-3">
+    <select class="select" style="width:auto" aria-label="Lang"><option>EN</option></select>
+    <button class="btn btn-ghost btn-sm" aria-label="Notifications">🔔</button>
+    <span class="avatar avatar-sm">B</span>
+  </div>
+</header>
+
+<div style="display:flex;">
+<aside class="app-sidebar" role="navigation" aria-label="Business navigation">
+  <div class="sidebar-section"><a href="business-dashboard.html" class="sidebar-item active">📊 Dashboard</a></div>
+  <div class="sidebar-section"><div class="sidebar-title">INFLU AI</div>
+    <a href="business-ai-campaign.html" class="sidebar-item">✨ New AI Campaign</a>
+    <a href="business-ai-manager.html" class="sidebar-item">🤖 AI Manager</a>
+  </div>
+  <div class="sidebar-section"><div class="sidebar-title">Marketplace</div>
+    <a href="business-marketplace-create.html" class="sidebar-item">➕ Add Product</a>
+    <a href="business-my-marketplace.html" class="sidebar-item">🛍 My Marketplace</a>
+  </div>
+  <div class="sidebar-section"><div class="sidebar-title">Tools</div>
+    <a href="business-discovery.html" class="sidebar-item">🔍 Discovery</a>
+    <a href="business-crm.html" class="sidebar-item">📇 CRM</a>
+    <a href="#" class="sidebar-item disabled" aria-disabled="true">👂 Social Listening</a>
+  </div>
+  <div class="sidebar-section"><div class="sidebar-title">Communication</div>
+    <a href="business-messaging.html" class="sidebar-item">💬 Messaging</a>
+    <a href="business-payments.html" class="sidebar-item">💰 Payments</a>
+  </div>
+  <div class="sidebar-section"><a href="business-support.html" class="sidebar-item">❓ Support</a></div>
+</aside>
+
+<main id="main" role="main" style="flex:1;padding:var(--space-8);">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+    <div><h1 style="font-size:var(--text-h1);font-weight:700;">Business Dashboard</h1><p style="color:var(--text-secondary);font-size:var(--text-small);">Monitor and launch campaigns from one screen.</p></div>
+    <a href="business-ai-campaign.html" class="btn btn-primary">✨ New AI campaign</a>
+  </div>
+
+  <!-- 5 KPI cards -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.875rem;margin-bottom:2rem;">
+    <div class="kpi-card"><span class="kpi-label">Number of campaigns</span><span class="kpi-value">0</span></div>
+    <div class="kpi-card"><span class="kpi-label">Active</span><span class="kpi-value" style="color:var(--color-success);">0</span></div>
+    <div class="kpi-card"><span class="kpi-label">Draft</span><span class="kpi-value">0</span></div>
+    <div class="kpi-card"><span class="kpi-label">On hold</span><span class="kpi-value" style="color:var(--color-warning);">0</span></div>
+    <div class="kpi-card"><span class="kpi-label">Completed</span><span class="kpi-value" style="color:var(--text-secondary);">0</span></div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" role="tab" aria-selected="true">AI Campaigns</button>
+    <button class="tab" role="tab" aria-selected="false">Marketplace</button>
+  </div>
+
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+    <input type="search" class="input" placeholder="Search…" style="max-width:280px;">
+    <select class="select" style="max-width:200px;"><option>Select brand…</option></select>
+    <select class="select" style="max-width:200px;"><option>Select status</option></select>
+    <button class="btn btn-ghost btn-sm">Clear</button>
+  </div>
+
+  <div class="card" style="padding:0;">
+    <div class="empty-state" role="status">
+      <div class="empty-illust">📊</div>
+      <h2 class="empty-title">No campaigns created yet.</h2>
+      <p class="empty-desc">Launch your first AI campaign to start collaborating with creators.</p>
+      <a href="business-ai-campaign.html" class="btn btn-primary" style="margin-top:1rem;">✨ Create AI campaign</a>
+    </div>
+  </div>
+</main></div></body></html>

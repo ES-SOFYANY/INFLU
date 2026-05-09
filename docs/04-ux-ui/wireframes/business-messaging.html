@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Business Messaging</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="business-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a><span class="avatar avatar-sm">B</span></header>
+<div style="display:flex;">
+<aside class="app-sidebar">
+<div class="sidebar-section"><a href="business-dashboard.html" class="sidebar-item">📊 Dashboard</a></div>
+<div class="sidebar-section"><a href="business-discovery.html" class="sidebar-item">🔍 Discovery</a></div>
+<div class="sidebar-section"><div class="sidebar-title">Communication</div><a href="business-messaging.html" class="sidebar-item active">💬 Messaging</a><a href="business-payments.html" class="sidebar-item">💰 Payments</a></div>
+</aside>
+<main id="main" role="main" style="flex:1;padding:var(--space-8);">
+  <h1 style="font-size:var(--text-h1);font-weight:700;">Messaging</h1>
+  <p style="color:var(--text-secondary);margin-bottom:1.5rem;">Chat with creators and follow up on deliverables.</p>
+
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+    <input type="search" class="input" placeholder="Search…" style="max-width:280px;">
+    <select class="select" style="max-width:200px;"><option>Filter by creator</option></select>
+    <select class="select" style="max-width:200px;"><option>Filter by status</option></select>
+  </div>
+
+  <table class="table">
+    <thead><tr><th>Profile</th><th>Campaign</th><th>Last message</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td><div style="display:flex;align-items:center;gap:0.5rem;"><span class="avatar avatar-sm">A</span> Ali</div></td><td>Eucerin Oil Control</td><td style="color:var(--text-secondary);">Brief sent — 2h ago</td><td><button class="btn btn-ghost btn-sm">Open</button></td></tr>
+      <tr><td><div style="display:flex;align-items:center;gap:0.5rem;"><span class="avatar avatar-sm">S</span> Sara</div></td><td>NUXE Reve de Miel</td><td style="color:var(--text-secondary);">Awaiting validation — 1d</td><td><button class="btn btn-ghost btn-sm">Open</button></td></tr>
+    </tbody>
+  </table>
+</main></div></body></html>

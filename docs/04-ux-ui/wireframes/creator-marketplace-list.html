@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Marketplace — INFLU</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="creator-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a>
+<div class="flex items-center gap-3"><select class="select" style="width:auto" aria-label="Lang"><option>FR</option></select><button class="btn btn-ghost btn-sm" aria-label="Notifications">🔔</button><span class="avatar avatar-sm">A</span></div></header>
+<div style="display:flex;">
+<aside class="app-sidebar" role="navigation">
+  <div class="sidebar-section"><a href="creator-dashboard.html" class="sidebar-item">📊 Dashboard</a></div>
+  <div class="sidebar-section"><div class="sidebar-title">Opportunities</div><a href="#" class="sidebar-item disabled">🎯 Matchings</a><a href="creator-collaborations.html" class="sidebar-item">🤝 Collaboration</a><a href="creator-marketplace-list.html" class="sidebar-item active">🛍 Marketplace</a></div>
+  <div class="sidebar-section"><div class="sidebar-title">Assets</div><a href="creator-my-account.html" class="sidebar-item">👤 My Account</a><a href="creator-ai-coach.html" class="sidebar-item">🤖 My AI coach</a></div>
+  <div class="sidebar-section"><div class="sidebar-title">Tools</div><a href="creator-messaging.html" class="sidebar-item">💬 Messaging</a><a href="#" class="sidebar-item disabled">📅 Calendar</a><a href="#" class="sidebar-item disabled">💰 My Payments</a></div>
+  <div class="sidebar-section"><div class="sidebar-title">Support</div><a href="creator-support.html" class="sidebar-item">❓ Support</a></div>
+</aside>
+<main id="main" role="main" style="flex:1;padding:var(--space-8);">
+  <h1 style="font-size:var(--text-h1);font-weight:700;">Marketplace</h1>
+  <p style="color:var(--text-secondary);margin-bottom:1.5rem;">Browse new opportunities in marketplace campaigns.</p>
+
+  <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+    <input type="search" class="input" placeholder="Search…" style="max-width:320px;" aria-label="Search">
+    <button class="btn btn-ghost btn-sm">Clear</button>
+  </div>
+
+  <!-- Grid of opportunity cards -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;">
+
+    <!-- Card 1 -->
+    <a href="creator-marketplace-detail.html" class="card" style="display:flex;flex-direction:column;gap:0.75rem;padding:1.25rem;text-decoration:none;color:inherit;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <span class="badge badge-warning">⏱ Expires in 2 days</span>
+        <span class="badge badge-info">22 Slot(s) Left</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.625rem;margin-top:0.5rem;">
+        <span class="avatar avatar-sm" style="background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;">E</span>
+        <span style="font-weight:600;font-size:var(--text-small);">Eucerin</span>
+      </div>
+      <h3 style="font-weight:600;font-size:var(--text-body);">Eucerin Serum Oil Control <span style="color:var(--text-secondary);font-weight:400;">for Micro Nano</span></h3>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:0.5rem;border-top:1px solid var(--border-subtle);">
+        <span style="color:var(--text-secondary);font-size:var(--text-xs);">📷 Content Instagram</span>
+        <strong style="color:var(--color-success);font-size:var(--text-small);">You will get up 4 000 Dhs</strong>
+      </div>
+    </a>
+
+    <!-- Card 2 -->
+    <a href="creator-marketplace-detail.html" class="card" style="display:flex;flex-direction:column;gap:0.75rem;padding:1.25rem;text-decoration:none;color:inherit;">
+      <div style="display:flex;justify-content:space-between;"><span class="badge badge-warning">⏱ Expires in 5 days</span><span class="badge badge-info">8 Slot(s) Left</span></div>
+      <div style="display:flex;align-items:center;gap:0.625rem;"><span class="avatar avatar-sm" style="background:#1E40AF;color:#fff;">Y</span><span style="font-weight:600;font-size:var(--text-small);">Yassir.ma</span></div>
+      <h3 style="font-weight:600;font-size:var(--text-body);">Yassir Ride Promo <span style="color:var(--text-secondary);font-weight:400;">for Mid</span></h3>
+      <div style="display:flex;justify-content:space-between;padding-top:0.5rem;border-top:1px solid var(--border-subtle);"><span style="color:var(--text-secondary);font-size:var(--text-xs);">🎵 Content TikTok</span><strong style="color:var(--color-success);font-size:var(--text-small);">8 000 Dhs</strong></div>
+    </a>
+
+    <!-- Card 3 -->
+    <a href="creator-marketplace-detail.html" class="card" style="display:flex;flex-direction:column;gap:0.75rem;padding:1.25rem;text-decoration:none;color:inherit;">
+      <div style="display:flex;justify-content:space-between;"><span class="badge badge-warning">⏱ Expires in 12 days</span><span class="badge badge-info">3 Slot(s) Left</span></div>
+      <div style="display:flex;align-items:center;gap:0.625rem;"><span class="avatar avatar-sm" style="background:#000;color:#fff;">N</span><span style="font-weight:600;font-size:var(--text-small);">NUXE Maroc</span></div>
+      <h3 style="font-weight:600;font-size:var(--text-body);">NUXE Reve de Miel <span style="color:var(--text-secondary);font-weight:400;">for Macro</span></h3>
+      <div style="display:flex;justify-content:space-between;padding-top:0.5rem;border-top:1px solid var(--border-subtle);"><span style="color:var(--text-secondary);font-size:var(--text-xs);">📷 + 🎬 Reel/Stories</span><strong style="color:var(--color-success);font-size:var(--text-small);">15 000 Dhs</strong></div>
+    </a>
+
+    <!-- Card expired -->
+    <div class="card" style="display:flex;flex-direction:column;gap:0.75rem;padding:1.25rem;opacity:0.6;">
+      <div style="display:flex;justify-content:space-between;"><span class="badge badge-danger">Expired</span><span class="badge badge-muted">0 Slot(s) Left</span></div>
+      <div style="display:flex;align-items:center;gap:0.625rem;"><span class="avatar avatar-sm">B</span><span style="font-weight:600;font-size:var(--text-small);">Brand X</span></div>
+      <h3 style="font-weight:600;font-size:var(--text-body);">Old Product <span style="color:var(--text-secondary);font-weight:400;">for Nano</span></h3>
+      <div style="padding-top:0.5rem;border-top:1px solid var(--border-subtle);color:var(--text-muted);font-size:var(--text-xs);">Applications closed</div>
+    </div>
+
+    <!-- Loading skeleton card example -->
+    <div class="card" style="padding:1.25rem;display:flex;flex-direction:column;gap:0.75rem;">
+      <div class="skeleton" style="height:24px;width:60%;"></div>
+      <div class="skeleton" style="height:16px;width:40%;"></div>
+      <div class="skeleton" style="height:48px;width:100%;"></div>
+      <div class="skeleton" style="height:16px;width:30%;"></div>
+    </div>
+
+  </div>
+
+  <!-- Pagination -->
+  <nav aria-label="Marketplace pagination" style="margin-top:2rem;display:flex;justify-content:center;gap:0.25rem;">
+    <button class="btn btn-ghost btn-sm">‹</button>
+    <button class="btn btn-secondary btn-sm" aria-current="page">1</button>
+    <button class="btn btn-ghost btn-sm">2</button>
+    <button class="btn btn-ghost btn-sm">3</button>
+    <button class="btn btn-ghost btn-sm">›</button>
+  </nav>
+</main></div></body></html>

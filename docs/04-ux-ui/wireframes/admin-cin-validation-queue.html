@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CIN Validation Queue — Admin</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="#" class="text-lg font-bold gradient-text-brand">INFLU.ai · Admin</a><span class="badge badge-warning">Internal</span><span class="avatar avatar-sm">AD</span></header>
+<div style="display:flex;">
+<aside class="app-sidebar">
+<div class="sidebar-section"><a href="#" class="sidebar-item active">🪪 CIN validation</a></div>
+<div class="sidebar-section"><a href="#" class="sidebar-item">👥 Users</a><a href="#" class="sidebar-item">🏷 Brands</a><a href="#" class="sidebar-item">💰 Payments</a></div>
+</aside>
+
+<main id="main" role="main" style="flex:1;padding:var(--space-8);">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <h1 style="font-size:var(--text-h1);font-weight:700;">CIN Validation Queue</h1>
+      <p style="color:var(--text-secondary);">Review and approve creator CIN documents before they go live.</p>
+    </div>
+    <div style="display:flex;gap:0.5rem;align-items:center;">
+      <span class="badge badge-warning">12 pending</span>
+      <span class="badge badge-success">128 approved</span>
+      <span class="badge badge-danger">3 rejected</span>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+    <input type="search" class="input" placeholder="Search by name, CIN, email…" style="max-width:320px;">
+    <select class="select" style="max-width:180px;"><option>All statuses</option><option>Pending</option><option>Approved</option><option>Rejected</option></select>
+  </div>
+
+  <table class="table">
+    <thead><tr><th>Creator</th><th>CIN number</th><th>Submitted</th><th>Expiry</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><div style="display:flex;gap:0.5rem;align-items:center;"><span class="avatar avatar-sm">A</span><div><strong>Ali</strong><br><span style="color:var(--text-muted);font-size:var(--text-xs);">ali@example.com</span></div></div></td>
+        <td><code>J123456</code></td><td>21/04/2026</td><td>18/04/2032</td>
+        <td><span class="badge badge-warning">⏳ Pending</span></td>
+        <td style="display:flex;gap:0.5rem;">
+          <button class="btn btn-ghost btn-sm">View doc</button>
+          <button class="btn btn-success btn-sm">Approve</button>
+          <button class="btn btn-danger btn-sm">Reject</button>
+        </td>
+      </tr>
+      <tr>
+        <td><div style="display:flex;gap:0.5rem;align-items:center;"><span class="avatar avatar-sm">S</span><div><strong>Sara</strong><br><span style="color:var(--text-muted);font-size:var(--text-xs);">sara@example.com</span></div></div></td>
+        <td><code>BE987654</code></td><td>20/04/2026</td><td>02/12/2030</td>
+        <td><span class="badge badge-warning">⏳ Pending</span></td>
+        <td style="display:flex;gap:0.5rem;"><button class="btn btn-ghost btn-sm">View doc</button><button class="btn btn-success btn-sm">Approve</button><button class="btn btn-danger btn-sm">Reject</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="color:var(--text-muted);font-size:var(--text-xs);margin-top:1rem;">Reject requires a reason (visible to creator); approve sends a confirmation email.</p>
+</main></div></body></html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My Account — Ali</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="creator-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a><span class="avatar avatar-sm">A</span></header>
+<div style="display:flex;">
+<aside class="app-sidebar">
+<div class="sidebar-section"><a href="creator-dashboard.html" class="sidebar-item">📊 Dashboard</a></div>
+<div class="sidebar-section"><div class="sidebar-title">Opportunities</div><a href="#" class="sidebar-item disabled">🎯 Matchings</a><a href="creator-collaborations.html" class="sidebar-item">🤝 Collaboration</a><a href="creator-marketplace-list.html" class="sidebar-item">🛍 Marketplace</a></div>
+<div class="sidebar-section"><div class="sidebar-title">Assets</div><a href="creator-my-account.html" class="sidebar-item active">👤 My Account</a><a href="creator-ai-coach.html" class="sidebar-item">🤖 My AI coach</a></div>
+<div class="sidebar-section"><a href="creator-messaging.html" class="sidebar-item">💬 Messaging</a></div>
+<div class="sidebar-section"><a href="creator-support.html" class="sidebar-item">❓ Support</a></div>
+</aside>
+
+<main id="main" role="main" style="flex:1;padding:var(--space-8);">
+  <!-- Profile header -->
+  <section class="card" style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;margin-bottom:2rem;">
+    <span class="avatar avatar-xl" style="background:linear-gradient(135deg,#7C5CFF,#2D8CFF);color:#fff;">A</span>
+    <div style="flex:1;min-width:240px;">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
+        <h1 style="font-size:var(--text-h1);font-weight:700;">Ali</h1>
+        <button class="btn btn-ghost btn-sm" aria-label="Edit name">✏️</button>
+        <span class="badge badge-success">✓ Verified</span>
+      </div>
+      <p style="color:var(--text-secondary);">Ali The Moroccan Cyclist: Casablanca Routes &amp; Local Rides</p>
+      <div style="display:flex;gap:0.75rem;margin-top:0.75rem;flex-wrap:wrap;">
+        <span class="badge badge-muted">🏷 Motorsports &amp; Biking</span>
+        <span class="badge badge-muted">🇲🇦 Morocco</span>
+        <span class="badge badge-muted">Male</span>
+      </div>
+    </div>
+    <a href="creator-creator-report.html" class="btn btn-secondary">📄 Generate Creator Report</a>
+  </section>
+
+  <!-- Profile overview -->
+  <section class="card" style="margin-bottom:2rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+      <h2 style="font-weight:600;font-size:var(--text-h3);">Profile overview</h2>
+      <button class="btn btn-ghost btn-sm" aria-label="Profile overview actions">⋯</button>
+    </div>
+    <p style="color:var(--text-secondary);font-size:var(--text-small);margin-bottom:1rem;">Cyclist passionné basé à Casablanca. Je partage mes itinéraires, gear, et la culture cycliste marocaine. Disponible pour collaborations dans le sport, l'outdoor, le lifestyle masculin.</p>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <a href="#" class="badge badge-muted">▶ youtube.com/@cyclingforlife…</a>
+      <a href="#" class="badge badge-muted">📷 instagram.com/@ali.cycling</a>
+    </div>
+  </section>
+
+  <!-- Tabs -->
+  <div class="tabs" role="tablist">
+    <button class="tab active" role="tab" aria-selected="true">Social Coverage</button>
+    <button class="tab" role="tab">Creator network</button>
+    <button class="tab" role="tab">Posts</button>
+    <button class="tab" role="tab">My INFLU</button>
+    <button class="tab disabled" role="tab" aria-disabled="true" title="Coming soon — requires more data">Audience insights 🔒</button>
+  </div>
+
+  <table class="table">
+    <thead><tr><th>Platform</th><th>Social media</th><th>Followers</th><th>Engagement rate</th><th>Growth</th><th>Engagement avg.</th><th>Average views</th></tr></thead>
+    <tbody>
+      <tr><td>▶ YouTube</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><span class="avatar avatar-sm">C</span> cycling for life…<br><span style="color:var(--text-muted);font-size:var(--text-xs);">@cyclingforlife….8046</span></div></td><td>1.07K</td><td>0.91%</td><td><span style="color:var(--text-muted);">N/A</span></td><td>19K</td><td>766.5K</td></tr>
+      <tr><td>📷 Instagram</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><span class="avatar avatar-sm">I</span> @ali.cycling</div></td><td>2.4K</td><td><span style="color:var(--text-muted);">--</span></td><td><span style="color:var(--text-muted);">N/A</span></td><td>0</td><td>0</td></tr>
+    </tbody>
+  </table>
+</main></div></body></html>

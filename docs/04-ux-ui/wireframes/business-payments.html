@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Business Payments</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="business-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a><span class="avatar avatar-sm">B</span></header>
+<div style="display:flex;">
+<aside class="app-sidebar">
+<div class="sidebar-section"><a href="business-dashboard.html" class="sidebar-item">📊 Dashboard</a></div>
+<div class="sidebar-section"><div class="sidebar-title">Communication</div><a href="business-messaging.html" class="sidebar-item">💬 Messaging</a><a href="business-payments.html" class="sidebar-item active">💰 Payments</a></div>
+</aside>
+<main id="main" role="main" style="flex:1;padding:var(--space-8);">
+  <h1 style="font-size:var(--text-h1);font-weight:700;">Business Payments</h1>
+  <p style="color:var(--text-secondary);margin-bottom:1.5rem;">Manage and review all your business payment records.</p>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" role="tab" aria-selected="true">Marketplace payments</button>
+    <button class="tab" role="tab" aria-selected="false">Campaign payments</button>
+  </div>
+
+  <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+    <select class="select" style="max-width:200px;"><option>Select brand</option></select>
+    <select class="select" style="max-width:200px;"><option>Select status</option></select>
+    <button class="btn btn-ghost btn-sm">Clear</button>
+  </div>
+
+  <div class="card" style="padding:0;">
+    <div class="empty-state" role="status">
+      <div class="empty-illust">💰</div>
+      <h2 class="empty-title">No payment data found</h2>
+      <p class="empty-desc">Payments will appear here as your campaigns close and content is validated.</p>
+    </div>
+  </div>
+
+  <!-- Sample table for non-empty state (commented for clarity)
+  <table class="table">
+    <thead><tr><th>Creator</th><th>Brand</th><th>Status</th><th>Amount (Dhs)</th><th>Requested At</th><th>Completed At</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td>Ali</td><td>Eucerin</td><td><span class="badge badge-warning">Pending</span></td><td>4 000</td><td>21/04/2026</td><td>—</td><td>⋯</td></tr>
+    </tbody>
+  </table>
+  -->
+</main></div></body></html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Account Settings — Creator</title>
+<link rel="stylesheet" href="../tokens.css"><script src="https://cdn.tailwindcss.com"></script></head>
+<body>
+<header class="app-header"><a href="creator-dashboard.html" class="text-lg font-bold gradient-text-brand">INFLU.ai</a><span class="avatar avatar-sm">A</span></header>
+<div style="display:flex;">
+<aside class="app-sidebar">
+<div class="sidebar-section"><a href="creator-dashboard.html" class="sidebar-item">📊 Dashboard</a></div>
+<div class="sidebar-section"><a href="creator-marketplace-list.html" class="sidebar-item">🛍 Marketplace</a></div>
+<div class="sidebar-section"><a href="creator-my-account.html" class="sidebar-item">👤 My Account</a></div>
+<div class="sidebar-section"><a href="creator-support.html" class="sidebar-item">❓ Support</a></div>
+</aside>
+
+<main id="main" role="main" style="flex:1;padding:var(--space-8);max-width:920px;">
+  <h1 style="font-size:var(--text-h1);font-weight:700;margin-bottom:1.5rem;">Account Settings</h1>
+
+  <div class="tabs" role="tablist">
+    <a class="tab active" role="tab" aria-current="page" href="creator-account-settings.html">Account management</a>
+    <a class="tab" role="tab" href="creator-account-pricing.html">Pricing</a>
+    <a class="tab" role="tab" href="creator-account-documents.html">Documents management</a>
+  </div>
+
+  <!-- Profile card -->
+  <section class="card" style="display:flex;gap:1rem;align-items:center;margin-bottom:1.5rem;">
+    <span class="avatar avatar-lg" style="background:linear-gradient(135deg,#7C5CFF,#2D8CFF);color:#fff;">A</span>
+    <div style="flex:1;"><h2 style="font-weight:700;display:flex;gap:0.5rem;align-items:center;">Ali <span class="badge badge-success">✓ Verified</span></h2><p style="color:var(--text-secondary);font-size:var(--text-small);">Linked: Instagram, YouTube</p></div>
+  </section>
+
+  <!-- Account Information -->
+  <section class="card" style="margin-bottom:1.5rem;">
+    <h2 style="font-weight:600;font-size:var(--text-h3);margin-bottom:1rem;">Account Information</h2>
+    <form style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div><label class="label" for="atype">Account Type</label><select id="atype" class="select"><option>Content Creator</option></select></div>
+      <div><label class="label" for="email">Email Address</label><input id="email" type="email" disabled class="input" value="ali@example.com"><p class="help-text">Email cannot be changed</p></div>
+      <div><label class="label" for="g">Gender</label><select id="g" class="select"><option>M.</option><option>F.</option></select></div>
+      <div><label class="label" for="fn">Full Name</label><input id="fn" class="input" value="Ali"></div>
+      <div><label class="label" for="phone">Phone Number</label><div class="input-phone"><span class="input-phone-prefix" aria-hidden="true">+212</span><input id="phone" type="tel" value="6XXXXXXXX"></div></div>
+      <div><label class="label" for="addr">Address</label><input id="addr" class="input" value="Casablanca"></div>
+    </form>
+    <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem;">
+      <button class="btn btn-ghost">Change password</button>
+      <button class="btn btn-ghost" aria-disabled="true" disabled>Reset</button>
+      <button class="btn btn-primary" aria-disabled="true" disabled aria-describedby="upd-disabled">Update Information</button>
+    </div>
+    <p id="upd-disabled" class="help-text" style="text-align:end;">Modify a field to enable.</p>
+  </section>
+
+  <!-- Billing -->
+  <section class="card" style="margin-bottom:1.5rem;">
+    <h2 style="font-weight:600;font-size:var(--text-h3);margin-bottom:1rem;">Billing information</h2>
+    <p style="color:var(--text-secondary);font-size:var(--text-small);margin-bottom:0.75rem;">I'm a ?</p>
+    <div style="display:flex;gap:1.5rem;margin-bottom:1.5rem;">
+      <label style="display:flex;gap:0.5rem;align-items:center;font-size:var(--text-small);"><input type="radio" name="biltype" checked> Business</label>
+      <label style="display:flex;gap:0.5rem;align-items:center;font-size:var(--text-small);"><input type="radio" name="biltype"> Auto-entrepreneur</label>
+    </div>
+
+    <h3 style="font-weight:600;margin-bottom:0.75rem;font-size:var(--text-small);text-transform:uppercase;color:var(--text-muted);letter-spacing:0.05em;">ICE Information</h3>
+    <div style="display:flex;gap:0.5rem;align-items:flex-end;flex-wrap:wrap;">
+      <div style="flex:1;min-width:240px;"><label class="label" for="ice">ICE</label><input id="ice" pattern="\d{15}" maxlength="15" class="input" placeholder="15 digits"></div>
+      <button class="btn btn-secondary" aria-disabled="true" disabled>Search</button>
+      <button class="btn btn-primary" aria-disabled="true" disabled>Approve</button>
+    </div>
+  </section>
+
+  <!-- Danger zone -->
+  <section class="card" style="border-color:rgba(239,68,68,0.30);">
+    <h2 style="font-weight:600;font-size:var(--text-h3);color:var(--color-danger);margin-bottom:0.5rem;">Danger zone</h2>
+    <p style="color:var(--text-secondary);font-size:var(--text-small);margin-bottom:1rem;">Deleting your account will permanently remove your profile, campaigns, and billing information. This action cannot be undone.</p>
+    <button class="btn btn-danger">Delete my account</button>
+  </section>
+</main></div></body></html>
