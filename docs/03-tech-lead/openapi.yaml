@@ -1,0 +1,2444 @@
+openapi: 3.1.0
+info:
+  title: INFLU.ai API
+  version: 1.0.0
+  description: |
+    Contrat API figé entre Tech Lead et API Developer pour la plateforme INFLU.ai.
+    Base path runtime: `/api/v1`.
+    Toutes les erreurs suivent le schéma `Error` (`{code, message, details?, traceId}`).
+  contact:
+    name: INFLU.ai Tech Lead
+    email: tech@influ.ai
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: https://api.influ.ai/api/v1
+    description: Production
+  - url: https://staging-api.influ.ai/api/v1
+    description: Staging
+  - url: http://localhost:3000/api/v1
+    description: Local development
+
+tags:
+  - name: Auth
+    description: Authentification, inscription, sessions, refresh, OAuth Google, magic link.
+  - name: CreatorProfile
+    description: Profil créateur, dashboard, social coverage, collaborations.
+  - name: BusinessProfile
+    description: Profil business / agency / brand, dashboard.
+  - name: Brand
+    description: Recherche, liaison et gestion des accès aux brands.
+  - name: Marketplace
+    description: Catalogue produits, candidatures créateurs, wizard 5 étapes côté business.
+  - name: AICampaign
+    description: Génération de campagnes assistée par IA (chat + brief).
+  - name: AICoach
+    description: Conseiller IA pour créateurs (chat streaming).
+  - name: Discovery
+    description: Recherche multi-critères de créateurs (URL-bookmarkable).
+  - name: CRM
+    description: Listes CRM créateurs côté business.
+  - name: Messaging
+    description: Conversations et messages (REST + WebSocket).
+  - name: Payments
+    description: Paiements marketplace et campagnes.
+  - name: Notifications
+    description: Notifications in-app (14 types).
+  - name: Support
+    description: FAQ et reports utilisateurs.
+  - name: AdminValidation
+    description: Validation administrative (CIN, paiements, brands).
+
+security:
+  - bearerAuth: []
+
+paths:
+  # ========= AUTH =========
+  /auth/register/{role}:
+    post:
+      tags: [Auth]
+      summary: Register a new user (CREATOR | BUSINESS | AGENCY | BRAND)
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/RegisterRolePath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/RegisterCreatorRequest'
+                - $ref: '#/components/schemas/RegisterBusinessRequest'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSession'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login with email + password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthSession' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /auth/google/callback:
+    post:
+      tags: [Auth]
+      summary: Exchange Google OAuth code for INFLU tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/GoogleCallbackRequest' }
+      responses:
+        '200':
+          description: Authenticated via Google
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthSession' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /auth/magic-link/request:
+    post:
+      tags: [Auth]
+      summary: Request a magic link by email (idempotent)
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EmailLocaleRequest' }
+      responses:
+        '202': { description: 'Accepted, link sent if email exists' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /auth/magic-link/consume:
+    post:
+      tags: [Auth]
+      summary: Consume a magic link token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TokenRequest' }
+      responses:
+        '200':
+          description: Token consumed; reset session issued
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MagicLinkConsumeResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /auth/forgot-password:
+    post:
+      tags: [Auth]
+      summary: Request password reset email
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EmailLocaleRequest' }
+      responses:
+        '202': { description: Accepted }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /auth/reset-password:
+    post:
+      tags: [Auth]
+      summary: Apply new password using reset token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ResetPasswordRequest' }
+      responses:
+        '200':
+          description: Password reset
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthSession' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Rotate refresh token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RefreshRequest' }
+      responses:
+        '200':
+          description: New tokens issued
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthTokens' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Invalidate current session
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RefreshRequest' }
+      responses:
+        '204': { description: Logged out }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /auth/onboard:
+    post:
+      tags: [Auth]
+      summary: Complete business onboarding (juridical info)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OnboardBusinessRequest' }
+      responses:
+        '200':
+          description: Onboarding completed
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessProfile' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= CREATOR PROFILE =========
+  /creator/me:
+    get:
+      tags: [CreatorProfile]
+      summary: Get my creator profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CreatorProfile' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    patch:
+      tags: [CreatorProfile]
+      summary: Update my creator profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateCreatorProfileRequest' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CreatorProfile' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    delete:
+      tags: [CreatorProfile]
+      summary: Soft-delete my creator account
+      responses:
+        '204': { description: Deleted }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/profile-overview:
+    get:
+      tags: [CreatorProfile]
+      summary: Get my profile overview (header + bio + categories)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CreatorProfileOverview' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    patch:
+      tags: [CreatorProfile]
+      summary: Update my profile overview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateCreatorProfileOverviewRequest' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CreatorProfileOverview' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/social-coverage:
+    get:
+      tags: [CreatorProfile]
+      summary: List my linked social accounts + metrics
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/SocialAccount' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/dashboard-kpis:
+    get:
+      tags: [CreatorProfile]
+      summary: Get creator dashboard KPIs (10 cards)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CreatorDashboardKpis' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/creator-report:
+    get:
+      tags: [CreatorProfile]
+      summary: Get signed URL of latest Creator Report PDF
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SignedUrlResponse' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/social-accounts/{platform}/link:
+    post:
+      tags: [CreatorProfile]
+      summary: Link a social account (returns OAuth authorize URL)
+      parameters:
+        - $ref: '#/components/parameters/PlatformPath'
+      responses:
+        '200':
+          description: OAuth authorize URL
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/OAuthAuthorizeResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/collaborations:
+    get:
+      tags: [CreatorProfile]
+      summary: List my marketplace collaborations
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedApplications' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= BUSINESS PROFILE =========
+  /business/me:
+    get:
+      tags: [BusinessProfile]
+      summary: Get my business profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessProfile' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    patch:
+      tags: [BusinessProfile]
+      summary: Update my business account info
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateBusinessProfileRequest' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessProfile' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    delete:
+      tags: [BusinessProfile]
+      summary: Soft-delete my business account
+      responses:
+        '204': { description: Deleted }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/me/dashboard-kpis:
+    get:
+      tags: [BusinessProfile]
+      summary: Get business dashboard KPIs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessDashboardKpis' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= BRAND =========
+  /business/brands:
+    get:
+      tags: [Brand]
+      summary: List brands linked to my org
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Brand' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/brands/search:
+    get:
+      tags: [Brand]
+      summary: Search existing brands by name or social handle
+      parameters:
+        - in: query
+          name: q
+          required: true
+          schema: { type: string, minLength: 2 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/BrandSearchHit' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/brands/link:
+    post:
+      tags: [Brand]
+      summary: Link an existing brand to my org
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LinkBrandRequest' }
+      responses:
+        '201':
+          description: Linked
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Brand' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/brands/{id}/access:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Brand]
+      summary: List members with access to a brand
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/BrandAccess' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    post:
+      tags: [Brand]
+      summary: Grant brand access to a member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/GrantBrandAccessRequest' }
+      responses:
+        '201':
+          description: Access granted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BrandAccess' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= ADMIN VALIDATION (Creator docs side) =========
+  /creator/me/documents/cin:
+    get:
+      tags: [AdminValidation]
+      summary: Get my CIN document status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CinDocument' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    post:
+      tags: [AdminValidation]
+      summary: Submit my CIN (recto + verso s3Keys + metadata)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SubmitCinRequest' }
+      responses:
+        '201':
+          description: CIN submitted (status PENDING)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CinDocument' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/documents/cin/cancel:
+    post:
+      tags: [AdminValidation]
+      summary: Cancel my pending CIN submission
+      responses:
+        '204': { description: Cancelled }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/documents/rib/upload-url:
+    post:
+      tags: [AdminValidation]
+      summary: Request signed S3 PUT URL for RIB upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UploadUrlRequest' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SignedUploadUrlResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/documents/tax-certificate/upload-url:
+    post:
+      tags: [AdminValidation]
+      summary: Request signed S3 PUT URL for tax certificate upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UploadUrlRequest' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SignedUploadUrlResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/billing/ice/search:
+    post:
+      tags: [AdminValidation]
+      summary: Lookup legal entity by ICE
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/IceSearchRequest' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/IceSearchResult' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/billing/ice/approve:
+    post:
+      tags: [AdminValidation]
+      summary: Approve an ICE selection (persists creator billing entity)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/IceApproveRequest' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CreatorBilling' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/pricing:
+    get:
+      tags: [AdminValidation]
+      summary: Get my pricing grid (account × content format)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/PricingRow' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    put:
+      tags: [AdminValidation]
+      summary: Update my pricing grid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdatePricingRequest' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/PricingRow' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /admin/validations/cin:
+    get:
+      tags: [AdminValidation]
+      summary: List pending CIN submissions (admin)
+      parameters:
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/CinStatus' }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedCinSubmissions' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /admin/validations/cin/{id}/approve:
+    post:
+      tags: [AdminValidation]
+      summary: Approve a pending CIN submission
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Approved
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CinDocument' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /admin/validations/cin/{id}/reject:
+    post:
+      tags: [AdminValidation]
+      summary: Reject a pending CIN submission
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RejectReasonRequest' }
+      responses:
+        '200':
+          description: Rejected
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CinDocument' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= MARKETPLACE =========
+  /marketplace/products:
+    get:
+      tags: [Marketplace]
+      summary: Browse published marketplace products
+      security: []
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: tier
+          schema: { $ref: '#/components/schemas/Tier' }
+        - in: query
+          name: platform
+          schema: { $ref: '#/components/schemas/Platform' }
+        - in: query
+          name: category
+          schema: { type: string }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedMarketplaceProducts' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /marketplace/products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Marketplace]
+      summary: Get marketplace product detail
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MarketplaceProductDetail' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /marketplace/products/{id}/apply:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Marketplace]
+      summary: Apply to a marketplace product (creator)
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '201':
+          description: Application created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Application' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409':
+          description: |
+            Conflict — possible codes:
+            - `PROFILE_INCOMPLETE` (`details.missing: ['CIN'|'RIB'|'ICE']`)
+            - `SLOT_FULL`
+            - `EXPIRED`
+            - `ALREADY_APPLIED`
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/marketplace/products:
+    get:
+      tags: [Marketplace]
+      summary: List my marketplace products (My Marketplace)
+      parameters:
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/CampaignStatus' }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedMarketplaceProducts' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    post:
+      tags: [Marketplace]
+      summary: Create a draft marketplace product (wizard step A)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WizardStepARequest' }
+      responses:
+        '201':
+          description: Draft created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MarketplaceProductDetail' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/marketplace/products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Marketplace]
+      summary: Get my marketplace product
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MarketplaceProductDetail' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    patch:
+      tags: [Marketplace]
+      summary: Save a wizard step (A..E) on a draft
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WizardStepRequest' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MarketplaceProductDetail' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    put:
+      tags: [Marketplace]
+      summary: Replace a marketplace product (full edit)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MarketplaceProductDetail' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MarketplaceProductDetail' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    delete:
+      tags: [Marketplace]
+      summary: Delete a marketplace product (if no accepted application)
+      responses:
+        '204': { description: Deleted }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/marketplace/products/{id}/publish:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Marketplace]
+      summary: Publish a draft marketplace product
+      responses:
+        '200':
+          description: Published
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MarketplaceProductDetail' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= AI CAMPAIGN =========
+  /business/ai-campaign/sessions:
+    post:
+      tags: [AICampaign]
+      summary: Start an AI Campaign chat session (multi-select scope)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/StartAiCampaignRequest' }
+      responses:
+        '201':
+          description: Session created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AiCampaign' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/ai-campaign/sessions/{id}/messages:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [AICampaign]
+      summary: Post a chat message (SSE stream)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ChatMessageRequest' }
+      responses:
+        '200':
+          description: text/event-stream of chunks
+          content:
+            text/event-stream:
+              schema: { type: string }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/ai-campaigns:
+    get:
+      tags: [AICampaign]
+      summary: List my AI campaigns (AI Manager)
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/CampaignStatus' }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedAiCampaigns' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/ai-campaigns/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [AICampaign]
+      summary: Get an AI campaign detail
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AiCampaign' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/ai-campaigns/{id}/status:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    patch:
+      tags: [AICampaign]
+      summary: Update campaign status (pause/resume/archive)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateCampaignStatusRequest' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AiCampaign' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= AI COACH =========
+  /creator/me/ai-coach/sessions:
+    post:
+      tags: [AICoach]
+      summary: Start a new AI Coach session
+      responses:
+        '201':
+          description: Session created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AiCoachSession' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/ai-coach/sessions/{id}/messages:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [AICoach]
+      summary: Post a chat message (SSE stream)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ChatMessageRequest' }
+      responses:
+        '200':
+          description: text/event-stream of chunks
+          content:
+            text/event-stream:
+              schema: { type: string }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/ai-coach/sessions/{id}/restart:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [AICoach]
+      summary: Restart (clear) the AI Coach conversation
+      responses:
+        '204': { description: Restarted }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= DISCOVERY =========
+  /business/discovery/creators:
+    get:
+      tags: [Discovery]
+      summary: Search creators (URL-bookmarkable)
+      parameters:
+        - in: query
+          name: platforms
+          style: form
+          explode: true
+          schema:
+            type: array
+            items: { $ref: '#/components/schemas/Platform' }
+        - in: query
+          name: categories
+          style: form
+          explode: true
+          schema:
+            type: array
+            items: { type: string }
+        - in: query
+          name: range
+          style: form
+          explode: true
+          schema:
+            type: array
+            items: { $ref: '#/components/schemas/Tier' }
+        - in: query
+          name: gender
+          style: form
+          explode: true
+          schema:
+            type: array
+            items: { type: string, enum: [M, F] }
+        - in: query
+          name: location
+          schema: { type: string, description: 'ISO-3166-1 alpha-2' }
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: seed
+          schema: { type: string, format: uuid }
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, default: 1 }
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedCreators' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/discovery/creators/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Discovery]
+      summary: Get a public creator profile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PublicCreatorProfile' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= CRM =========
+  /business/crm/lists:
+    get:
+      tags: [CRM]
+      summary: List my CRM lists
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/CrmList' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    post:
+      tags: [CRM]
+      summary: Create a CRM list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateCrmListRequest' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CrmList' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/crm/lists/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [CRM]
+      summary: Get a CRM list with members
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CrmListDetail' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    put:
+      tags: [CRM]
+      summary: Update a CRM list (title/description)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateCrmListRequest' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CrmList' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    delete:
+      tags: [CRM]
+      summary: Delete a CRM list
+      responses:
+        '204': { description: Deleted }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /business/crm/lists/{id}/creators/{creatorId}:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+      - in: path
+        name: creatorId
+        required: true
+        schema: { type: string, format: uuid }
+    post:
+      tags: [CRM]
+      summary: Add a creator to a CRM list
+      responses:
+        '201':
+          description: Added
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CrmMember' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    delete:
+      tags: [CRM]
+      summary: Remove a creator from a CRM list
+      responses:
+        '204': { description: Removed }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= MESSAGING =========
+  /messaging/conversations:
+    get:
+      tags: [Messaging]
+      summary: List my conversations
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedConversations' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /messaging/conversations/{id}/messages:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    get:
+      tags: [Messaging]
+      summary: List messages in a conversation
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedMessages' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    post:
+      tags: [Messaging]
+      summary: Send a message in a conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PostMessageRequest' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Message' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= PAYMENTS =========
+  /business/payments:
+    get:
+      tags: [Payments]
+      summary: List business payments (marketplace or campaign)
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema: { type: string, enum: [marketplace, campaign] }
+        - in: query
+          name: brand
+          schema: { type: string, format: uuid }
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/PaymentStatus' }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedPayments' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /creator/me/payments:
+    get:
+      tags: [Payments]
+      summary: List my payments (creator)
+      parameters:
+        - in: query
+          name: status
+          schema: { $ref: '#/components/schemas/PaymentStatus' }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedPayments' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= NOTIFICATIONS =========
+  /notifications:
+    get:
+      tags: [Notifications]
+      summary: List my notifications
+      parameters:
+        - in: query
+          name: unreadOnly
+          schema: { type: boolean }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedNotifications' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /notifications/{id}/read:
+    parameters:
+      - $ref: '#/components/parameters/IdPath'
+    post:
+      tags: [Notifications]
+      summary: Mark a notification as read
+      responses:
+        '204': { description: Marked as read }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  # ========= SUPPORT =========
+  /support/faq:
+    get:
+      tags: [Support]
+      summary: Get FAQ entries (public)
+      security: []
+      parameters:
+        - in: query
+          name: locale
+          schema: { type: string, enum: [fr, en, ar] }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/FaqEntry' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /support/reports:
+    get:
+      tags: [Support]
+      summary: List my support reports
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaginatedReports' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    post:
+      tags: [Support]
+      summary: Submit a support report
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateReportRequest' }
+      responses:
+        '201':
+          description: Report submitted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SupportReport' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    IdPath:
+      in: path
+      name: id
+      required: true
+      schema: { type: string, format: uuid }
+    PlatformPath:
+      in: path
+      name: platform
+      required: true
+      schema: { $ref: '#/components/schemas/Platform' }
+    RegisterRolePath:
+      in: path
+      name: role
+      required: true
+      schema:
+        type: string
+        enum: [influencer, business, agency, brand]
+    Cursor:
+      in: query
+      name: cursor
+      schema: { type: string }
+    Limit:
+      in: query
+      name: limit
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+    IdempotencyKey:
+      in: header
+      name: Idempotency-Key
+      required: false
+      schema: { type: string, description: 'ULID' }
+
+  responses:
+    BadRequest:
+      description: Validation error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Unauthorized:
+      description: Missing/invalid/expired token
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Forbidden:
+      description: Authenticated but insufficient role
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Conflict:
+      description: Business rule conflict
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Unprocessable:
+      description: Business validation failed
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    TooManyRequests:
+      description: Rate limited
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+  schemas:
+    # ----- Common -----
+    Error:
+      type: object
+      required: [code, message, traceId]
+      properties:
+        code:
+          type: string
+          description: Stable SCREAMING_SNAKE_CASE error code
+          example: PROFILE_INCOMPLETE
+        message:
+          type: string
+          example: 'Cannot apply: missing required documents'
+        details:
+          type: object
+          additionalProperties: true
+        traceId:
+          type: string
+          example: 01JABCXYZDEF456GHJ789
+
+    # ----- Enums -----
+    Role:
+      type: string
+      enum: [CREATOR, BUSINESS, AGENCY, ADMIN]
+    Platform:
+      type: string
+      enum: [INSTAGRAM, YOUTUBE, TIKTOK, TWITTER, FACEBOOK, LINKEDIN]
+    ContentFormat:
+      type: string
+      enum: [POST, REEL, STORY, VIDEO, SHORT, LIVE, CAROUSEL]
+    Tier:
+      type: string
+      enum: [NANO, MICRO, MID, MACRO, MEGA, CELEBRITY]
+    CampaignStatus:
+      type: string
+      enum: [DRAFT, SCHEDULED, ACTIVE, PAUSED, COMPLETED, ARCHIVED, CANCELLED]
+    PaymentStatus:
+      type: string
+      enum: [PENDING, SCHEDULED, PROCESSING, COMPLETED, FAILED]
+    CinStatus:
+      type: string
+      enum: [NONE, PENDING, VALIDATED, REJECTED]
+    IssueType:
+      type: string
+      enum: [BUG, FEATURE_REQUEST, PERFORMANCE, UI_ISSUE, CAMPAIGN_ISSUE, OTHER]
+    BillingProfile:
+      type: string
+      enum: [BUSINESS, AUTO_ENTREPRENEUR]
+    Currency:
+      type: string
+      enum: [MAD]
+    Money:
+      type: object
+      required: [value, currency]
+      properties:
+        value: { type: number, minimum: 0 }
+        currency: { $ref: '#/components/schemas/Currency' }
+
+    # ----- Auth -----
+    AuthTokens:
+      type: object
+      required: [accessToken, refreshToken, expiresIn]
+      properties:
+        accessToken: { type: string }
+        refreshToken: { type: string }
+        expiresIn: { type: integer, description: 'Access token TTL in seconds' }
+    UserPublic:
+      type: object
+      required: [id, email, role]
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string, format: email }
+        role: { $ref: '#/components/schemas/Role' }
+        fullName: { type: string }
+        locale: { type: string, enum: [fr, en, ar] }
+        orgId: { type: string, format: uuid, nullable: true }
+    AuthSession:
+      type: object
+      required: [user, tokens]
+      properties:
+        user: { $ref: '#/components/schemas/UserPublic' }
+        tokens: { $ref: '#/components/schemas/AuthTokens' }
+    RegisterCreatorRequest:
+      type: object
+      required: [email, fullName, gender, country, phone, city, acceptLegal, ageOver18]
+      properties:
+        email: { type: string, format: email }
+        fullName: { type: string, minLength: 2 }
+        gender: { type: string, enum: [M, F] }
+        country: { type: string, minLength: 2, maxLength: 2 }
+        phone: { type: string, pattern: '^\+212\d{9}$' }
+        city: { type: string }
+        address: { type: string }
+        acceptLegal: { type: boolean, enum: [true] }
+        ageOver18: { type: boolean, enum: [true] }
+        locale: { type: string, enum: [fr, en, ar] }
+    RegisterBusinessRequest:
+      type: object
+      required: [email, password, companyName, fullName, phone]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 10 }
+        companyName: { type: string }
+        fullName: { type: string }
+        phone: { type: string, pattern: '^\+212\d{9}$' }
+        locale: { type: string, enum: [fr, en, ar] }
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8 }
+    GoogleCallbackRequest:
+      type: object
+      required: [code, state]
+      properties:
+        code: { type: string }
+        state: { type: string }
+        codeVerifier: { type: string }
+    EmailLocaleRequest:
+      type: object
+      required: [email]
+      properties:
+        email: { type: string, format: email }
+        locale: { type: string, enum: [fr, en, ar] }
+    TokenRequest:
+      type: object
+      required: [token]
+      properties:
+        token: { type: string }
+    MagicLinkConsumeResponse:
+      type: object
+      required: [resetSession, userId]
+      properties:
+        resetSession: { type: string }
+        userId: { type: string, format: uuid }
+    ResetPasswordRequest:
+      type: object
+      required: [token, newPassword]
+      properties:
+        token: { type: string }
+        newPassword: { type: string, minLength: 10 }
+    RefreshRequest:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken: { type: string }
+    OnboardBusinessRequest:
+      type: object
+      required: [juridicalForm, ice, companyName, companyAddress, if, rc, tva]
+      properties:
+        juridicalForm: { type: string }
+        ice: { type: string, pattern: '^\d{15}$' }
+        companyName: { type: string }
+        companyAddress: { type: string }
+        if: { type: string, pattern: '^\d{7,9}$' }
+        rc: { type: string, pattern: '^\d+$' }
+        tva: { type: string, pattern: '^\d+$' }
+
+    # ----- Creator -----
+    CreatorProfile:
+      type: object
+      required: [id, email, fullName]
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string, format: email }
+        fullName: { type: string }
+        gender: { type: string, enum: [M, F] }
+        country: { type: string }
+        city: { type: string }
+        address: { type: string }
+        phone: { type: string }
+        bio: { type: string }
+        category: { type: string }
+        locale: { type: string, enum: [fr, en, ar] }
+        avatarUrl: { type: string, format: uri }
+        cinStatus: { $ref: '#/components/schemas/CinStatus' }
+    UpdateCreatorProfileRequest:
+      type: object
+      properties:
+        fullName: { type: string }
+        gender: { type: string, enum: [M, F] }
+        country: { type: string }
+        city: { type: string }
+        address: { type: string }
+        phone: { type: string }
+        locale: { type: string, enum: [fr, en, ar] }
+    CreatorProfileOverview:
+      type: object
+      required: [id, fullName]
+      properties:
+        id: { type: string, format: uuid }
+        fullName: { type: string }
+        bio: { type: string }
+        category: { type: string }
+        avatarUrl: { type: string, format: uri }
+        coverUrl: { type: string, format: uri }
+        tier: { $ref: '#/components/schemas/Tier' }
+    UpdateCreatorProfileOverviewRequest:
+      type: object
+      properties:
+        bio: { type: string, maxLength: 500 }
+        category: { type: string }
+        avatarUrl: { type: string, format: uri }
+        coverUrl: { type: string, format: uri }
+    SocialAccount:
+      type: object
+      required: [id, platform, handle]
+      properties:
+        id: { type: string, format: uuid }
+        platform: { $ref: '#/components/schemas/Platform' }
+        handle: { type: string }
+        followers: { type: integer }
+        engagementRate: { type: number, format: float }
+        tier: { $ref: '#/components/schemas/Tier' }
+        linkedAt: { type: string, format: date-time }
+    OAuthAuthorizeResponse:
+      type: object
+      required: [url, state]
+      properties:
+        url: { type: string, format: uri }
+        state: { type: string }
+    CreatorDashboardKpis:
+      type: object
+      properties:
+        totalFollowers: { type: integer }
+        avgEngagementRate: { type: number }
+        activeCollaborations: { type: integer }
+        pendingApplications: { type: integer }
+        completedDeliverables: { type: integer }
+        revenueMad: { $ref: '#/components/schemas/Money' }
+        pendingRevenueMad: { $ref: '#/components/schemas/Money' }
+        unreadMessages: { type: integer }
+        unreadNotifications: { type: integer }
+        profileCompletion: { type: integer, minimum: 0, maximum: 100 }
+    SignedUrlResponse:
+      type: object
+      required: [url, expiresAt]
+      properties:
+        url: { type: string, format: uri }
+        expiresAt: { type: string, format: date-time }
+    SignedUploadUrlResponse:
+      allOf:
+        - $ref: '#/components/schemas/SignedUrlResponse'
+        - type: object
+          required: [s3Key]
+          properties:
+            s3Key: { type: string }
+
+    # ----- Business / Brand -----
+    BusinessProfile:
+      type: object
+      required: [id, email, companyName]
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string, format: email }
+        fullName: { type: string }
+        phone: { type: string }
+        address: { type: string }
+        companyName: { type: string }
+        juridicalForm: { type: string }
+        ice: { type: string }
+        if: { type: string }
+        rc: { type: string }
+        tva: { type: string }
+        onboarded: { type: boolean }
+        locale: { type: string, enum: [fr, en, ar] }
+    UpdateBusinessProfileRequest:
+      type: object
+      properties:
+        fullName: { type: string }
+        phone: { type: string }
+        address: { type: string }
+        locale: { type: string, enum: [fr, en, ar] }
+    BusinessDashboardKpis:
+      type: object
+      properties:
+        activeCampaigns: { type: integer }
+        publishedProducts: { type: integer }
+        pendingApplications: { type: integer }
+        validatedDeliverables: { type: integer }
+        totalSpentMad: { $ref: '#/components/schemas/Money' }
+        scheduledPaymentsMad: { $ref: '#/components/schemas/Money' }
+        unreadMessages: { type: integer }
+        unreadNotifications: { type: integer }
+    Brand:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        logoUrl: { type: string, format: uri }
+        category: { type: string }
+        ice: { type: string }
+        verified: { type: boolean }
+    BrandSearchHit:
+      allOf:
+        - $ref: '#/components/schemas/Brand'
+        - type: object
+          properties:
+            socialHandle: { type: string }
+            alreadyLinked: { type: boolean }
+    LinkBrandRequest:
+      type: object
+      required: [brandId]
+      properties:
+        brandId: { type: string, format: uuid }
+    BrandAccess:
+      type: object
+      required: [memberId, email, role]
+      properties:
+        memberId: { type: string, format: uuid }
+        email: { type: string, format: email }
+        role: { type: string, enum: [VIEWER, EDITOR, ADMIN] }
+        invitedAt: { type: string, format: date-time }
+    GrantBrandAccessRequest:
+      type: object
+      required: [email, role]
+      properties:
+        email: { type: string, format: email }
+        role: { type: string, enum: [VIEWER, EDITOR, ADMIN] }
+
+    # ----- Admin Validation / Documents -----
+    CinDocument:
+      type: object
+      required: [status]
+      properties:
+        status: { $ref: '#/components/schemas/CinStatus' }
+        cinNumber: { type: string }
+        expiry: { type: string, format: date }
+        rectoUrl: { type: string, format: uri }
+        versoUrl: { type: string, format: uri }
+        submittedAt: { type: string, format: date-time }
+        validatedAt: { type: string, format: date-time }
+        rejectionReason: { type: string }
+    SubmitCinRequest:
+      type: object
+      required: [cinNumber, expiry, rectoS3Key, versoS3Key]
+      properties:
+        cinNumber: { type: string, pattern: '^[A-Za-z]{1,2}\d{5,6}$' }
+        expiry: { type: string, format: date }
+        rectoS3Key: { type: string }
+        versoS3Key: { type: string }
+    UploadUrlRequest:
+      type: object
+      required: [filename, contentType, size]
+      properties:
+        filename: { type: string }
+        contentType:
+          type: string
+          enum: [image/jpeg, image/png, application/pdf]
+        size: { type: integer, minimum: 1, maximum: 10485760 }
+    IceSearchRequest:
+      type: object
+      required: [q]
+      properties:
+        q: { type: string, minLength: 3 }
+    IceSearchResult:
+      type: object
+      required: [ice, companyName]
+      properties:
+        ice: { type: string }
+        companyName: { type: string }
+        address: { type: string }
+        if: { type: string }
+        rc: { type: string }
+        tva: { type: string }
+    IceApproveRequest:
+      type: object
+      required: [ice, billingProfile]
+      properties:
+        ice: { type: string, pattern: '^\d{15}$' }
+        billingProfile: { $ref: '#/components/schemas/BillingProfile' }
+    CreatorBilling:
+      type: object
+      properties:
+        billingProfile: { $ref: '#/components/schemas/BillingProfile' }
+        ice: { type: string }
+        companyName: { type: string }
+        address: { type: string }
+        if: { type: string }
+        rc: { type: string }
+        tva: { type: string }
+        rib: { type: string, pattern: '^\d{24}$' }
+        approved: { type: boolean }
+    PricingRow:
+      type: object
+      required: [accountId, platform, contentFormat, rateFromMad, rateToMad]
+      properties:
+        accountId: { type: string, format: uuid }
+        platform: { $ref: '#/components/schemas/Platform' }
+        contentFormat: { $ref: '#/components/schemas/ContentFormat' }
+        rateFromMad: { type: number, minimum: 0 }
+        rateToMad: { type: number, minimum: 0 }
+    UpdatePricingRequest:
+      type: object
+      required: [rows]
+      properties:
+        rows:
+          type: array
+          items: { $ref: '#/components/schemas/PricingRow' }
+    CinSubmission:
+      type: object
+      required: [userId, status, submittedAt]
+      properties:
+        userId: { type: string, format: uuid }
+        userFullName: { type: string }
+        cinNumber: { type: string }
+        expiry: { type: string, format: date }
+        rectoUrl: { type: string, format: uri }
+        versoUrl: { type: string, format: uri }
+        status: { $ref: '#/components/schemas/CinStatus' }
+        submittedAt: { type: string, format: date-time }
+    RejectReasonRequest:
+      type: object
+      required: [reason]
+      properties:
+        reason: { type: string, minLength: 5 }
+
+    # ----- Marketplace -----
+    Deliverable:
+      type: object
+      required: [platform, contentType, quantity, unitPriceMad, taggedAccount, tier]
+      properties:
+        id: { type: string, format: uuid }
+        platform: { $ref: '#/components/schemas/Platform' }
+        contentType: { $ref: '#/components/schemas/ContentFormat' }
+        quantity: { type: integer, minimum: 1 }
+        unitPriceMad: { type: number, minimum: 0 }
+        taggedAccount: { type: string, pattern: '^@[a-zA-Z0-9._]{2,30}$' }
+        tier: { $ref: '#/components/schemas/Tier' }
+        receptionDate: { type: string, format: date }
+        publicationDate: { type: string, format: date }
+    MarketplaceProductCard:
+      type: object
+      required: [id, productName, brandId, status]
+      properties:
+        id: { type: string, format: uuid }
+        productName: { type: string }
+        brandId: { type: string, format: uuid }
+        brandName: { type: string }
+        status: { $ref: '#/components/schemas/CampaignStatus' }
+        slotsLeft: { type: integer }
+        slotsTotal: { type: integer }
+        publishedAt: { type: string, format: date-time }
+        expiresAt: { type: string, format: date-time }
+        thumbnailUrl: { type: string, format: uri }
+        budgetMad: { $ref: '#/components/schemas/Money' }
+    MarketplaceProductDetail:
+      allOf:
+        - $ref: '#/components/schemas/MarketplaceProductCard'
+        - type: object
+          properties:
+            brandDescription: { type: string }
+            productDescription: { type: string }
+            requestedContent: { type: string }
+            miniScript: { type: string }
+            acceptanceCriteria:
+              type: array
+              items: { type: string }
+            deliverables:
+              type: array
+              items: { $ref: '#/components/schemas/Deliverable' }
+            hashtags:
+              type: array
+              items: { type: string }
+            callToAction: { type: string }
+            wizardStep: { type: string, enum: [A, B, C, D, E, PUBLISHED] }
+    WizardStepARequest:
+      type: object
+      required: [brandId, brandDescription]
+      properties:
+        brandId: { type: string, format: uuid }
+        brandDescription: { type: string, minLength: 10 }
+    WizardStepBRequest:
+      type: object
+      required: [productName, productDescription, requestedContent, miniScript]
+      properties:
+        productName: { type: string }
+        productDescription: { type: string }
+        requestedContent: { type: string }
+        miniScript: { type: string }
+    WizardStepCRequest:
+      type: object
+      required: [acceptanceCriteria]
+      properties:
+        acceptanceCriteria:
+          type: array
+          minItems: 1
+          items: { type: string }
+    WizardStepDRequest:
+      type: object
+      required: [deliverables, hashtags, callToAction]
+      properties:
+        deliverables:
+          type: array
+          minItems: 1
+          items: { $ref: '#/components/schemas/Deliverable' }
+        hashtags:
+          type: array
+          items: { type: string }
+        callToAction: { type: string }
+    WizardStepERequest:
+      type: object
+      required: [datesByDeliverable]
+      properties:
+        datesByDeliverable:
+          type: array
+          items:
+            type: object
+            required: [deliverableId, receptionDate, publicationDate]
+            properties:
+              deliverableId: { type: string, format: uuid }
+              receptionDate: { type: string, format: date }
+              publicationDate: { type: string, format: date }
+    WizardStepRequest:
+      type: object
+      required: [step, payload]
+      properties:
+        step: { type: string, enum: [A, B, C, D, E] }
+        payload:
+          oneOf:
+            - $ref: '#/components/schemas/WizardStepARequest'
+            - $ref: '#/components/schemas/WizardStepBRequest'
+            - $ref: '#/components/schemas/WizardStepCRequest'
+            - $ref: '#/components/schemas/WizardStepDRequest'
+            - $ref: '#/components/schemas/WizardStepERequest'
+    Application:
+      type: object
+      required: [id, productId, creatorId, status, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        productId: { type: string, format: uuid }
+        creatorId: { type: string, format: uuid }
+        status:
+          type: string
+          enum: [PENDING, ACCEPTED, REJECTED, CONTENT_SUBMITTED, MODIFICATION_REQUESTED, VALIDATED, COMPLETED, CANCELLED]
+        createdAt: { type: string, format: date-time }
+        respondedAt: { type: string, format: date-time }
+        amountMad: { $ref: '#/components/schemas/Money' }
+
+    # ----- AI Campaign / Coach -----
+    AiCampaign:
+      type: object
+      required: [id, scope, status, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        scope:
+          type: array
+          items:
+            type: string
+            enum: [BRANDING, VISIBILITY_AWARENESS, POSITIONING_STORYTELLING, NEW_PRODUCT_LAUNCH, PROMOTIONS, EVENT_PROMOTION, ENGAGEMENT_INTERACTIONS]
+        status: { $ref: '#/components/schemas/CampaignStatus' }
+        briefReady: { type: boolean }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    StartAiCampaignRequest:
+      type: object
+      required: [scope]
+      properties:
+        scope:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            enum: [BRANDING, VISIBILITY_AWARENESS, POSITIONING_STORYTELLING, NEW_PRODUCT_LAUNCH, PROMOTIONS, EVENT_PROMOTION, ENGAGEMENT_INTERACTIONS]
+    UpdateCampaignStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status: { $ref: '#/components/schemas/CampaignStatus' }
+    ChatMessageRequest:
+      type: object
+      required: [content]
+      properties:
+        content: { type: string, minLength: 1, maxLength: 4000 }
+    AiCoachSession:
+      type: object
+      required: [id, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        createdAt: { type: string, format: date-time }
+
+    # ----- Discovery -----
+    PublicCreatorProfile:
+      type: object
+      required: [id, fullName]
+      properties:
+        id: { type: string, format: uuid }
+        fullName: { type: string }
+        bio: { type: string }
+        category: { type: string }
+        country: { type: string }
+        city: { type: string }
+        avatarUrl: { type: string, format: uri }
+        coverUrl: { type: string, format: uri }
+        tier: { $ref: '#/components/schemas/Tier' }
+        socialAccounts:
+          type: array
+          items: { $ref: '#/components/schemas/SocialAccount' }
+
+    # ----- CRM -----
+    CrmList:
+      type: object
+      required: [id, title, description, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        description: { type: string }
+        memberCount: { type: integer }
+        createdAt: { type: string, format: date-time }
+    CrmListDetail:
+      allOf:
+        - $ref: '#/components/schemas/CrmList'
+        - type: object
+          properties:
+            members:
+              type: array
+              items: { $ref: '#/components/schemas/CrmMember' }
+    CrmMember:
+      type: object
+      required: [creatorId, addedAt]
+      properties:
+        creatorId: { type: string, format: uuid }
+        fullName: { type: string }
+        avatarUrl: { type: string, format: uri }
+        tier: { $ref: '#/components/schemas/Tier' }
+        addedAt: { type: string, format: date-time }
+    CreateCrmListRequest:
+      type: object
+      required: [title, description]
+      properties:
+        title: { type: string, minLength: 1, maxLength: 100 }
+        description: { type: string, minLength: 1, maxLength: 500 }
+
+    # ----- Messaging -----
+    Conversation:
+      type: object
+      required: [id, participantIds, lastMessageAt]
+      properties:
+        id: { type: string, format: uuid }
+        participantIds:
+          type: array
+          items: { type: string, format: uuid }
+        lastMessageAt: { type: string, format: date-time }
+        lastMessagePreview: { type: string }
+        unreadCount: { type: integer }
+        brandId: { type: string, format: uuid, nullable: true }
+        productId: { type: string, format: uuid, nullable: true }
+    Message:
+      type: object
+      required: [id, conversationId, authorId, body, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        conversationId: { type: string, format: uuid }
+        authorId: { type: string, format: uuid }
+        body: { type: string }
+        createdAt: { type: string, format: date-time }
+        readAt: { type: string, format: date-time, nullable: true }
+    PostMessageRequest:
+      type: object
+      required: [body]
+      properties:
+        body: { type: string, minLength: 1, maxLength: 4000 }
+
+    # ----- Payments -----
+    Payment:
+      type: object
+      required: [id, type, status, amount, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        type: { type: string, enum: [marketplace, campaign] }
+        status: { $ref: '#/components/schemas/PaymentStatus' }
+        amount: { $ref: '#/components/schemas/Money' }
+        brandId: { type: string, format: uuid, nullable: true }
+        applicationId: { type: string, format: uuid, nullable: true }
+        creatorId: { type: string, format: uuid, nullable: true }
+        scheduledAt: { type: string, format: date-time }
+        completedAt: { type: string, format: date-time }
+        createdAt: { type: string, format: date-time }
+
+    # ----- Notifications -----
+    Notification:
+      type: object
+      required: [id, type, createdAt, read]
+      properties:
+        id: { type: string, format: uuid }
+        type:
+          type: string
+          enum:
+            - APPLICATION_ACCEPTED
+            - APPLICATION_REJECTED
+            - BRIEF_RECEIVED
+            - CONTENT_MODIFICATION_REQUESTED
+            - DELIVERABLE_VALIDATED
+            - PAYMENT_RECEIVED
+            - MESSAGE_RECEIVED
+            - CIN_VALIDATED
+            - OPPORTUNITY_EXPIRING
+            - AI_COACH_RECOMMENDATION
+            - APPLICATION_RECEIVED
+            - DELIVERABLE_SUBMITTED
+            - PAYMENT_COMPLETED_OR_FAILED
+            - NEW_BRAND_LINKED
+        title: { type: string }
+        body: { type: string }
+        link: { type: string }
+        read: { type: boolean }
+        createdAt: { type: string, format: date-time }
+        payload:
+          type: object
+          additionalProperties: true
+
+    # ----- Support -----
+    FaqEntry:
+      type: object
+      required: [id, question, answer]
+      properties:
+        id: { type: string }
+        question: { type: string }
+        answer: { type: string }
+        locale: { type: string, enum: [fr, en, ar] }
+    SupportReport:
+      type: object
+      required: [id, issueType, title, description, status, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        issueType: { $ref: '#/components/schemas/IssueType' }
+        title: { type: string }
+        description: { type: string }
+        status: { type: string, enum: [OPEN, IN_PROGRESS, RESOLVED, CLOSED] }
+        createdAt: { type: string, format: date-time }
+    CreateReportRequest:
+      type: object
+      required: [issueType, title, description]
+      properties:
+        issueType: { $ref: '#/components/schemas/IssueType' }
+        title: { type: string, minLength: 3 }
+        description: { type: string, minLength: 10 }
+
+    # ----- Pagination wrappers -----
+    Paginated:
+      type: object
+      required: [items, nextCursor]
+      properties:
+        items: { type: array, items: {} }
+        nextCursor: { type: string, nullable: true }
+    PaginatedApplications:
+      allOf:
+        - $ref: '#/components/schemas/Paginated'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/Application' }
+    PaginatedMarketplaceProducts:
+      allOf:
+        - $ref: '#/components/schemas/Paginated'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/MarketplaceProductCard' }
+    PaginatedAiCampaigns:
+      allOf:
+        - $ref: '#/components/schemas/Paginated'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/AiCampaign' }
+    PaginatedCreators:
+      allOf:
+        - $ref: '#/components/schemas/Paginated'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/PublicCreatorProfile' }
+    PaginatedConversations:
+      allOf:
+        - $ref: '#/components/schemas/Paginated'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/Conversation' }
+    PaginatedMessages:
+      allOf:
+        - $ref: '#/components/schemas/Paginated'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/Message' }
+    PaginatedPayments:
+      allOf:
+        - $ref: '#/components/schemas/Paginated'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/Payment' }
+    PaginatedNotifications:
+      allOf:
+        - $ref: '#/components/schemas/Paginated'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/Notification' }
+    PaginatedReports:
+      allOf:
+        - $ref: '#/components/schemas/Paginated'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/SupportReport' }
+    PaginatedCinSubmissions:
+      allOf:
+        - $ref: '#/components/schemas/Paginated'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/CinSubmission' }
