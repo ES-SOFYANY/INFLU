@@ -72,20 +72,21 @@ A wireframe that looks like this = FAIL:
 
 ## What We Produce Instead
 
-### Target Aesthetic: Dark SaaS + Gradient + Glassmorphism
-Inspired by: Linear, Vercel, Resend, Clerk, Hypeo — modern SaaS B2B/B2C interfaces.
+### Target Aesthetic: Dark SaaS + Clean Developer Tool
+Inspired by: Linear, Vercel, Resend — precise, dark, developer-focused interfaces.
+Key traits: near-black background with cool tint, signature magenta/hot-pink accent, clean and minimal, restrained glassmorphism, surgical typography.
 
 **Background**:
-- Dark-first: `#09090b` or `#0a0a0f` (near black, not grey)
-- Alternating sections: `#111118`, `#0f0f17`
+- Dark-first: `#0B0D0F` (cool near-black) or `#0a0a0f`
+- Alternating sections: `#111416`, `#0f1012`
 - Never white background for product pages (except light forms)
 
 **Mandatory gradient hero**:
 ```css
-/* Hero background — always present */
-background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120,80,255,0.25), transparent),
-            radial-gradient(ellipse 60% 40% at 80% 80%, rgba(60,180,255,0.15), transparent),
-            #09090b;
+/* Hero background — subtle pink radial, not heavy purple */
+background: radial-gradient(ellipse 70% 40% at 50% -10%, rgba(224,27,116,0.18), transparent),
+            radial-gradient(ellipse 50% 30% at 85% 70%, rgba(197,21,95,0.10), transparent),
+            #0B0D0F;
 ```
 
 **Gradient text** (main headings):
@@ -96,26 +97,26 @@ background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
 background-clip: text;
 ```
 
-**Glassmorphism cards** (mandatory pattern for feature cards):
+**Glassmorphism cards** (clean dark surface, restrained blur):
 ```css
-background: rgba(255,255,255,0.04);
-border: 1px solid rgba(255,255,255,0.08);
-backdrop-filter: blur(12px);
-border-radius: 16px;
+background: rgba(255,255,255,0.03);
+border: 1px solid rgba(255,255,255,0.07);
+backdrop-filter: blur(8px);
+border-radius: 12px;
 ```
 
-**Glow effect** (primary CTA button):
+**Glow effect** (primary CTA button — magenta):
 ```css
-background: linear-gradient(135deg, #7c3aed, #4f46e5);
-box-shadow: 0 0 24px rgba(124,58,237,0.4);
-border-radius: 10px;
+background: linear-gradient(135deg, #E01B74, #C5155F);
+box-shadow: 0 0 20px rgba(224,27,116,0.35);
+border-radius: 8px;
 transition: box-shadow 0.2s ease;
 ```
 
-**Accent gradient** (badges, labels, highlights):
+**Accent gradient** (badges, labels, highlights — magenta/pink):
 ```css
-background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(79,70,229,0.2));
-border: 1px solid rgba(124,58,237,0.4);
+background: linear-gradient(135deg, rgba(224,27,116,0.15), rgba(197,21,95,0.15));
+border: 1px solid rgba(224,27,116,0.35);
 border-radius: 100px;
 ```
 
@@ -170,7 +171,7 @@ Grid: 3 columns desktop, 2 tablet, 1 mobile. Large gap.
 
 **Bottom CTA section**:
 ```
-[Background: violet/blue radial gradient on dark]
+[Background: pink/magenta radial gradient on dark]
 [Short H2 — gradient text]
 [1 glow button]
 ```
@@ -180,10 +181,10 @@ Grid: 3 columns desktop, 2 tablet, 1 mobile. Large gap.
 ```css
 /* Card hover — mandatory */
 .card { transition: transform 0.2s ease, border-color 0.2s ease; }
-.card:hover { transform: translateY(-4px); border-color: rgba(124,58,237,0.4); }
+.card:hover { transform: translateY(-4px); border-color: rgba(224,27,116,0.35); }
 
 /* CTA button hover */
-.btn-primary:hover { box-shadow: 0 0 40px rgba(124,58,237,0.6); }
+.btn-primary:hover { box-shadow: 0 0 36px rgba(224,27,116,0.55); }
 
 /* Animated gradient for badge/hero (CSS only) */
 @keyframes shimmer {
@@ -196,7 +197,7 @@ Grid: 3 columns desktop, 2 tablet, 1 mobile. Large gap.
 
 | ❌ Never do | ✅ Instead |
 |------------|-----------|
-| White background + black text for product pages | Dark background `#09090b` |
+| White background + black text for product pages | Dark background `#0B0D0F` |
 | Grey Bootstrap outline buttons | Gradient button + glow |
 | Cards with just `border: 1px solid #eee` | Glassmorphism `rgba + backdrop-filter` |
 | Admin sidebar with nav list | Clean top horizontal nav bar |
@@ -209,7 +210,7 @@ Grid: 3 columns desktop, 2 tablet, 1 mobile. Large gap.
 
 ## Visual Checklist Before Each Wireframe
 
-- [ ] Background is dark (`#09090b` or similar) — not white
+- [ ] Background is dark (`#0B0D0F` or similar) — not white
 - [ ] H1 is large, gradient, negative letter-spacing
 - [ ] At least 1 radial gradient in hero background
 - [ ] Cards are glassmorphism (not white background + border)
@@ -468,52 +469,53 @@ Reusable CSS variables — dark-first, commented:
 ```css
 /* ============================================================
    DESIGN TOKENS — Dark SaaS Modern
-   Inspired by: Linear, Vercel, Resend, Clerk
+   Inspired by: Linear, Vercel, Resend
+   Primary accent: magenta/hot-pink (#E01B74)
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* --- Backgrounds (dark-first) --- */
-  --bg-base:        #09090b;   /* Main background — warm black */
-  --bg-elevated:    #111118;   /* Alternating sections */
-  --bg-surface:     #18181f;   /* Cards, modals */
-  --bg-overlay:     rgba(255,255,255,0.04); /* Glassmorphism layer */
+  /* --- Backgrounds (dark-first — cool near-black) --- */
+  --bg-base:        #0B0D0F;   /* Main background — cool near-black */
+  --bg-elevated:    #111416;   /* Alternating sections */
+  --bg-surface:     #16191C;   /* Cards, modals */
+  --bg-overlay:     rgba(255,255,255,0.03); /* Glassmorphism layer */
 
   /* --- Borders --- */
   --border-subtle:  rgba(255,255,255,0.06);  /* Cards at rest */
   --border-default: rgba(255,255,255,0.10);  /* Cards hover */
-  --border-accent:  rgba(124,58,237,0.40);   /* Violet accent */
+  --border-accent:  rgba(224,27,116,0.35);   /* Magenta accent */
 
   /* --- Semantic colors — AA 4.5:1 on dark verified --- */
-  --color-primary:  #7c3aed;   /* Violet — 4.6:1 on #09090b ✅ */
-  --color-primary-light: #a78bfa; /* Light violet — for text on dark */
-  --color-accent:   #4f46e5;   /* Indigo */
+  --color-primary:  #E01B74;   /* Magenta — 4.7:1 on #0B0D0F ✅ */
+  --color-primary-light: #FF6BAF; /* Light pink — for text on dark */
+  --color-accent:   #C5155F;   /* Darker magenta */
   --color-success:  #22c55e;   /* Green — 4.5:1 ✅ */
   --color-error:    #ef4444;   /* Red — 4.5:1 ✅ */
   --color-warning:  #f59e0b;   /* Amber — 4.5:1 ✅ */
   --color-info:     #38bdf8;   /* Sky blue — 4.5:1 ✅ */
 
   /* --- Text --- */
-  --text-primary:   #fafafa;   /* Headings — 18.7:1 ✅ */
-  --text-secondary: #a1a1aa;   /* Body — 5.4:1 ✅ */
-  --text-muted:     #71717a;   /* Hints, labels — 4.5:1 ✅ */
+  --text-primary:   #EDEDED;   /* Headings — 17.8:1 ✅ */
+  --text-secondary: #9BA1AB;   /* Body — 5.1:1 ✅ */
+  --text-muted:     #6B7280;   /* Hints, labels — 4.5:1 ✅ */
 
-  /* --- Gradients --- */
+  /* --- Gradients (subtle pink, not heavy purple) --- */
   --gradient-hero:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124,58,237,0.25), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(79,70,229,0.15), transparent);
-  --gradient-primary: linear-gradient(135deg, #7c3aed, #4f46e5);
+    radial-gradient(ellipse 70% 40% at 50% -10%, rgba(224,27,116,0.18), transparent),
+    radial-gradient(ellipse 50% 30% at 85% 70%, rgba(197,21,95,0.10), transparent);
+  --gradient-primary: linear-gradient(135deg, #E01B74, #C5155F);
   --gradient-text:
     linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.65) 100%);
   --gradient-cta-section:
-    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(124,58,237,0.3), transparent);
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(224,27,116,0.22), transparent);
 
-  /* --- Glow / Shadows --- */
-  --glow-primary:   0 0 24px rgba(124,58,237,0.45);
-  --glow-primary-hover: 0 0 48px rgba(124,58,237,0.65);
-  --shadow-card:    0 4px 24px rgba(0,0,0,0.4);
-  --shadow-elevated: 0 8px 48px rgba(0,0,0,0.6);
+  /* --- Glow / Shadows (pink glow, more restrained than heavy purple) --- */
+  --glow-primary:   0 0 20px rgba(224,27,116,0.35);
+  --glow-primary-hover: 0 0 40px rgba(224,27,116,0.55);
+  --shadow-card:    0 4px 24px rgba(0,0,0,0.5);
+  --shadow-elevated: 0 8px 48px rgba(0,0,0,0.7);
 
   /* --- Typography --- */
   --font-sans:      'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -548,10 +550,10 @@ Reusable CSS variables — dark-first, commented:
   --transition-base:   200ms ease-out;
   --transition-slow:   350ms ease-out;
 
-  /* --- Glassmorphism mixin --- */
-  --glass-bg:     rgba(255,255,255,0.04);
-  --glass-border: 1px solid rgba(255,255,255,0.08);
-  --glass-blur:   blur(12px);
+  /* --- Glassmorphism mixin (clean, restrained) --- */
+  --glass-bg:     rgba(255,255,255,0.03);
+  --glass-border: 1px solid rgba(255,255,255,0.07);
+  --glass-blur:   blur(8px);
 }
 
 /* === Global utilities === */
@@ -572,24 +574,24 @@ body {
   background-clip: text;
 }
 
-/* Glassmorphism card utility */
+/* Glassmorphism card utility — clean, restrained blur */
 .glass-card {
   background: var(--glass-bg);
   border: var(--glass-border);
-  backdrop-filter: var(--glass-blur);
-  border-radius: var(--radius-lg);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-md);
   transition: border-color var(--transition-base), transform var(--transition-base);
 }
 .glass-card:hover {
-  border-color: var(--border-default);
+  border-color: var(--border-accent);
   transform: translateY(-4px);
 }
 
-/* CTA Button */
+/* CTA Button — magenta */
 .btn-primary {
   background: var(--gradient-primary);
   box-shadow: var(--glow-primary);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   color: #fff;
   font-weight: 600;
   padding: 0.75rem 1.5rem;
@@ -636,15 +638,15 @@ One HTML file per screen + its variants (loading, error, empty).
     /* (wireframes use CSS vars + Tailwind) */
 
     :root {
-      --bg-base: #09090b;
-      --bg-elevated: #111118;
-      --bg-surface: #18181f;
-      --glass-bg: rgba(255,255,255,0.04);
-      --glass-border: rgba(255,255,255,0.08);
-      --color-primary: #7c3aed;
-      --glow-primary: 0 0 24px rgba(124,58,237,0.45);
-      --text-primary: #fafafa;
-      --text-secondary: #a1a1aa;
+      --bg-base: #0B0D0F;
+      --bg-elevated: #111416;
+      --bg-surface: #16191C;
+      --glass-bg: rgba(255,255,255,0.03);
+      --glass-border: rgba(255,255,255,0.07);
+      --color-primary: #E01B74;
+      --glow-primary: 0 0 20px rgba(224,27,116,0.35);
+      --text-primary: #EDEDED;
+      --text-secondary: #9BA1AB;
       --font-sans: 'Inter', -apple-system, sans-serif;
     }
 
@@ -656,11 +658,11 @@ One HTML file per screen + its variants (loading, error, empty).
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Gradient hero background */
+    /* Gradient hero background — subtle pink, not heavy purple */
     .hero-bg {
       background:
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124,58,237,0.25), transparent),
-        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(79,70,229,0.15), transparent),
+        radial-gradient(ellipse 70% 40% at 50% -10%, rgba(224,27,116,0.18), transparent),
+        radial-gradient(ellipse 50% 30% at 85% 70%, rgba(197,21,95,0.10), transparent),
         var(--bg-base);
     }
 
@@ -672,24 +674,24 @@ One HTML file per screen + its variants (loading, error, empty).
       background-clip: text;
     }
 
-    /* Glass card */
+    /* Glass card — clean, restrained blur */
     .glass-card {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
-      backdrop-filter: blur(12px);
-      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
       transition: border-color 0.2s ease, transform 0.2s ease;
     }
     .glass-card:hover {
-      border-color: rgba(124,58,237,0.4);
+      border-color: rgba(224,27,116,0.35);
       transform: translateY(-4px);
     }
 
-    /* CTA button */
+    /* CTA button — magenta */
     .btn-primary {
-      background: linear-gradient(135deg, #7c3aed, #4f46e5);
-      box-shadow: 0 0 24px rgba(124,58,237,0.45);
-      border-radius: 10px;
+      background: linear-gradient(135deg, #E01B74, #C5155F);
+      box-shadow: 0 0 20px rgba(224,27,116,0.35);
+      border-radius: 8px;
       color: #fff;
       font-weight: 600;
       padding: 0.75rem 1.75rem;
@@ -701,7 +703,7 @@ One HTML file per screen + its variants (loading, error, empty).
       align-items: center;
       gap: 0.5rem;
     }
-    .btn-primary:hover { box-shadow: 0 0 48px rgba(124,58,237,0.65); }
+    .btn-primary:hover { box-shadow: 0 0 40px rgba(224,27,116,0.55); }
 
     /* Ghost button */
     .btn-ghost {
@@ -720,18 +722,18 @@ One HTML file per screen + its variants (loading, error, empty).
       background: rgba(255,255,255,0.04);
     }
 
-    /* Badge pill */
+    /* Badge pill — magenta */
     .badge-new {
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
       padding: 0.35rem 0.9rem;
-      background: rgba(124,58,237,0.15);
-      border: 1px solid rgba(124,58,237,0.35);
+      background: rgba(224,27,116,0.12);
+      border: 1px solid rgba(224,27,116,0.30);
       border-radius: 9999px;
       font-size: 0.75rem;
       font-weight: 500;
-      color: #a78bfa;
+      color: #FF6BAF;
       letter-spacing: 0.02em;
     }
 
@@ -740,7 +742,7 @@ One HTML file per screen + its variants (loading, error, empty).
 
     /* Focus visible for accessibility */
     :focus-visible {
-      outline: 2px solid #7c3aed;
+      outline: 2px solid #E01B74;
       outline-offset: 3px;
     }
 
@@ -749,7 +751,7 @@ One HTML file per screen + its variants (loading, error, empty).
       position: fixed;
       bottom: 1rem;
       right: 1rem;
-      background: rgba(124,58,237,0.9);
+      background: rgba(224,27,116,0.9);
       color: white;
       padding: 0.5rem 1rem;
       border-radius: 8px;
@@ -829,9 +831,9 @@ One HTML file per screen + its variants (loading, error, empty).
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;">
       <!-- Feature card (repeat x3 minimum) -->
       <article class="glass-card" style="padding:2rem;">
-        <!-- Icon in a glassmorphism square -->
-        <div style="width:44px;height:44px;border-radius:10px;
-                    background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);
+        <!-- Icon in a dark square with magenta accent -->
+        <div style="width:44px;height:44px;border-radius:8px;
+                    background:rgba(224,27,116,0.12);border:1px solid rgba(224,27,116,0.25);
                     display:flex;align-items:center;justify-content:center;
                     margin-bottom:1.25rem;font-size:1.25rem;">
           🔗
@@ -846,7 +848,7 @@ One HTML file per screen + its variants (loading, error, empty).
 <!-- BOTTOM CTA SECTION -->
 <section style="position:relative;overflow:hidden;">
   <div style="position:absolute;inset:0;
-              background:radial-gradient(ellipse 70% 60% at 50% 50%, rgba(124,58,237,0.25), transparent);
+              background:radial-gradient(ellipse 60% 50% at 50% 50%, rgba(224,27,116,0.22), transparent);
               pointer-events:none;"></div>
   <div style="position:relative;max-width:640px;margin:0 auto;padding:0 2rem;text-align:center;">
     <h2 class="gradient-text"

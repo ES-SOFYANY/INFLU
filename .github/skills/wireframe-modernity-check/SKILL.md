@@ -38,7 +38,7 @@ Le UX/UI Designer a pour règle stricte de produire des wireframes **modernes Sa
 
 ```
 1. Background dark
-   PATTERN : (#09090b|#0a0a0f|#111118|var\(--bg-base\)|background:\s*var\(--bg)
+   PATTERN : (#09090b|#0a0a0f|#0b0d0f|#111118|#111416|var\(--bg-base\)|background:\s*var\(--bg)
    FICHIERS : tous sauf wireframes minimaux (forgot-password.html, etc.)
 
 2. Inter font
@@ -58,7 +58,7 @@ Le UX/UI Designer a pour règle stricte de produire des wireframes **modernes Sa
    FICHIERS : pages avec cards (dashboard, feature pages)
 
 6. CTA glow button
-   PATTERN : box-shadow:\s*0\s+0\s+\d+px\s+rgba\(124|btn-primary|--glow-primary
+   PATTERN : box-shadow:\s*0\s+0\s+\d+px\s+rgba\((124|224)|btn-primary|--glow-primary
    FICHIERS : tous (au moins un CTA)
 
 7. Padding section ≥ 6rem

@@ -71,7 +71,7 @@ WF="docs/04-ux-ui/wireframes/login.html"
 score=0
 
 # Pattern 1 — dark background (15 pts)
-grep -qE "(#09090b|#0a0a0f|#111118|var\(--bg-base\))" "$WF" && score=$((score+15))
+grep -qE "(#09090b|#0a0a0f|#0b0d0f|#111118|#111416|var\(--bg-base\))" "$WF" && score=$((score+15))
 
 # Pattern 2 — Inter font (10 pts)
 grep -qE "fonts\.googleapis\.com.*Inter|font-family:\s*['\"]?Inter" "$WF" && score=$((score+10))
