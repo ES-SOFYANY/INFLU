@@ -1,0 +1,901 @@
+[
+  {
+    "id": "US-001",
+    "title": "US-001 — browse the public landing page in…",
+    "role": "visitor",
+    "description": "As a visitor, I want to browse the public landing page in French at /fr, so that I discover INFLU's value proposition for the MENA region.",
+    "acceptance_criteria_ids": [
+      "AC-001-01",
+      "AC-001-02"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-002",
+    "title": "US-002 — read the dedicated /fr/for-influencers pitch page…",
+    "role": "creator visitor",
+    "description": "As a creator visitor, I want to read the dedicated /fr/for-influencers pitch page with the 6-step creator journey, so that I understand the benefits of joining as an Influencer.",
+    "acceptance_criteria_ids": [
+      "AC-002-01",
+      "AC-002-02"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-003",
+    "title": "US-003 — read the dedicated /fr/for-brands pitch page…",
+    "role": "brand visitor",
+    "description": "As a brand visitor, I want to read the dedicated /fr/for-brands pitch page with the 9-step brand journey, so that I understand the benefits of running campaigns on INFLU.",
+    "acceptance_criteria_ids": [
+      "AC-003-01",
+      "AC-003-02"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-004",
+    "title": "US-004 — read the brand legal mentions at…",
+    "role": "brand visitor",
+    "description": "As a brand visitor, I want to read the brand legal mentions at /en/legal/brand, so that I am informed of my contractual context before signing up.",
+    "acceptance_criteria_ids": [
+      "AC-004-01",
+      "AC-004-02"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-005",
+    "title": "US-005 — read the creator legal mentions at…",
+    "role": "creator visitor",
+    "description": "As a creator visitor, I want to read the creator legal mentions at /en/legal/creator, so that I am informed of my contractual context before signing up.",
+    "acceptance_criteria_ids": [
+      "AC-005-01",
+      "AC-005-02"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-006",
+    "title": "US-006 — unknown",
+    "role": "unknown",
+    "description": "As a unknown, I want to unknown, so that unknown.",
+    "acceptance_criteria_ids": [
+      "AC-006-01",
+      "AC-006-02"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-010",
+    "title": "US-010 — sign in at /auth/login with my…",
+    "role": "registered user",
+    "description": "As a registered user, I want to sign in at /auth/login with my email and password, so that I am redirected to /creator or /business based on my role.",
+    "acceptance_criteria_ids": [
+      "AC-010-01",
+      "AC-010-02",
+      "AC-010-03",
+      "AC-010-04"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-011",
+    "title": "US-011 — sign in via Continue with Google",
+    "role": "registered user",
+    "description": "As a registered user, I want to sign in via Continue with Google, so that I authenticate without typing a password.",
+    "acceptance_criteria_ids": [
+      "AC-011-01",
+      "AC-011-02"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-012",
+    "title": "US-012 — request a reset link at /auth/forgot-password",
+    "role": "user who forgot my password",
+    "description": "As a user who forgot my password, I want to request a reset link at /auth/forgot-password, so that I receive an email to recover access.",
+    "acceptance_criteria_ids": [
+      "AC-012-01",
+      "AC-012-02"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-013",
+    "title": "US-013 — set my password via the magic…",
+    "role": "creator who just registered",
+    "description": "As a creator who just registered, I want to set my password via the magic link received by email, so that I can sign in afterwards (no password is requested at registration).",
+    "acceptance_criteria_ids": [
+      "AC-013-01",
+      "AC-013-02"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-014",
+    "title": "US-014 — logout via /auth/logout with an explicit…",
+    "role": "logged-in user",
+    "description": "As a logged-in user, I want to logout via /auth/logout with an explicit confirmation screen, so that I am protected against accidental disconnection.",
+    "acceptance_criteria_ids": [
+      "AC-014-01",
+      "AC-014-02",
+      "AC-014-03"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-015",
+    "title": "US-015 — choose my account type at /auth/register…",
+    "role": "unregistered visitor",
+    "description": "As a unregistered visitor, I want to choose my account type at /auth/register among the 4 cards (Influencer / Small Business / Brand / Agency), so that I land on the correct registration flow.",
+    "acceptance_criteria_ids": [
+      "AC-015-01",
+      "AC-015-02",
+      "AC-015-03",
+      "AC-015-04"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-016",
+    "title": "US-016 — fill the personal information step at…",
+    "role": "Influencer registrant",
+    "description": "As a Influencer registrant, I want to fill the personal information step at /auth/register/influencer (8 fields + 2 mandatory checkboxes, no password field), so that my creator account is created.",
+    "acceptance_criteria_ids": [
+      "AC-016-01",
+      "AC-016-02",
+      "AC-016-03",
+      "AC-016-04"
+    ],
+    "priority": "Must",
+    "wave": 1
+  },
+  {
+    "id": "US-017",
+    "title": "US-017 — assign at least one social account…",
+    "role": "Influencer registrant",
+    "description": "As a Influencer registrant, I want to assign at least one social account (Instagram / YouTube / TikTok / Twitter) at the second registration step, so that my profile is enriched with handle, followers and engagement.",
+    "acceptance_criteria_ids": [
+      "AC-017-01",
+      "AC-017-02",
+      "AC-017-03"
+    ],
+    "priority": "Must",
+    "wave": 2
+  },
+  {
+    "id": "US-018",
+    "title": "US-018 — complete the /auth/onboard onboarding (Account Information…",
+    "role": "Small Business / Brand / Agency registrant",
+    "description": "As a Small Business / Brand / Agency registrant, I want to complete the /auth/onboard onboarding (Account Information + Business Information including Juridical Form, ICE, Company Name, IF, RC, TVA), so that my business workspace is initialized at /business.",
+    "acceptance_criteria_ids": [
+      "AC-018-01",
+      "AC-018-02"
+    ],
+    "priority": "Must",
+    "wave": 2
+  },
+  {
+    "id": "US-020",
+    "title": "US-020 — view my Dashboard at /creator with…",
+    "role": "creator",
+    "description": "As a creator, I want to view my Dashboard at /creator with the 10 KPI cards (Total Collaborations, Pending Opportunities, Pending Matchings, Content to Submit, Submission Deadline, Content to Publish, Publication Deadline, Pending Payments, Revenue Generated in Dhs, INFLU Score), so that I monitor my activity at a glance.",
+    "acceptance_criteria_ids": [
+      "AC-020-01",
+      "AC-020-02"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-021",
+    "title": "US-021 — switch between Campaigns and Marketplace tabs…",
+    "role": "creator",
+    "description": "As a creator, I want to switch between Campaigns and Marketplace tabs on my Dashboard with Search / brand / status filters and a Clear button, so that I find a specific collaboration quickly.",
+    "acceptance_criteria_ids": [
+      "AC-021-01",
+      "AC-021-02",
+      "AC-021-03"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-022",
+    "title": "US-022 — see a placeholder `__` on KPIs…",
+    "role": "creator",
+    "description": "As a creator, I want to see a placeholder `__` on KPIs for disabled features and `--` / `N/A` on metrics not computable, so that I understand which data is unavailable rather than reading a misleading zero.",
+    "acceptance_criteria_ids": [
+      "AC-022-01",
+      "AC-022-02"
+    ],
+    "priority": "Should",
+    "wave": 3
+  },
+  {
+    "id": "US-023",
+    "title": "US-023 — see disabled sidebar items (Matchings, Calendar,…",
+    "role": "creator",
+    "description": "As a creator, I want to see disabled sidebar items (Matchings, Calendar, My Payments) with an explicit visual state, so that I know these features exist but are not yet available for my account.",
+    "acceptance_criteria_ids": [
+      "AC-023-01",
+      "AC-023-02"
+    ],
+    "priority": "Should",
+    "wave": 3
+  },
+  {
+    "id": "US-030",
+    "title": "US-030 — browse the Marketplace at /creator/marketplace as…",
+    "role": "creator",
+    "description": "As a creator, I want to browse the Marketplace at /creator/marketplace as a grid of opportunity cards with Search and Clear, so that I discover new product opportunities.",
+    "acceptance_criteria_ids": [
+      "AC-030-01",
+      "AC-030-02",
+      "AC-030-03"
+    ],
+    "priority": "Must",
+    "wave": 4
+  },
+  {
+    "id": "US-031",
+    "title": "US-031 — read the full opportunity detail at…",
+    "role": "creator",
+    "description": "As a creator, I want to read the full opportunity detail at /creator/marketplace/[id] (brand overview, product overview, requested content, deliverables table, hashtags, call to action, available slots, time remaining), so that I decide whether to apply.",
+    "acceptance_criteria_ids": [
+      "AC-031-01",
+      "AC-031-02",
+      "AC-031-03"
+    ],
+    "priority": "Must",
+    "wave": 4
+  },
+  {
+    "id": "US-032",
+    "title": "US-032 — the Apply button to be disabled…",
+    "role": "creator",
+    "description": "As a creator, I want to the Apply button to be disabled with a \"Complete your profile to apply\" checklist (CIN pending, RIB missing, ICE missing) and direct links to the right screens, so that I know exactly what blocks my application.",
+    "acceptance_criteria_ids": [
+      "AC-032-01",
+      "AC-032-02",
+      "AC-032-03"
+    ],
+    "priority": "Must",
+    "wave": 4
+  },
+  {
+    "id": "US-033",
+    "title": "US-033 — click Apply on an opportunity",
+    "role": "eligible creator (CIN validated + RIB uploaded + ICE filled)",
+    "description": "As a eligible creator (CIN validated + RIB uploaded + ICE filled), I want to click Apply on an opportunity, so that my application is submitted to the brand and a slot is reserved on a tier-segmented basis.",
+    "acceptance_criteria_ids": [
+      "AC-033-01",
+      "AC-033-02",
+      "AC-033-03"
+    ],
+    "priority": "Must",
+    "wave": 5
+  },
+  {
+    "id": "US-034",
+    "title": "US-034 — see the explicit \"Paid by INFLU\"…",
+    "role": "creator",
+    "description": "As a creator, I want to see the explicit \"Paid by INFLU\" mention next to the total amount of an opportunity, so that I understand INFLU is the payer (not the brand directly) and the SLA is 48h–7 days after content validation.",
+    "acceptance_criteria_ids": [
+      "AC-034-01",
+      "AC-034-02"
+    ],
+    "priority": "Must",
+    "wave": 4
+  },
+  {
+    "id": "US-035",
+    "title": "US-035 — see a per-opportunity expiration badge (\"Expires…",
+    "role": "creator",
+    "description": "As a creator, I want to see a per-opportunity expiration badge (\"Expires in N days\" or \"Expired\"), so that I prioritize time-sensitive opportunities and understand when applications are closed.",
+    "acceptance_criteria_ids": [
+      "AC-035-01",
+      "AC-035-02"
+    ],
+    "priority": "Must",
+    "wave": 4
+  },
+  {
+    "id": "US-040",
+    "title": "US-040 — view my collaborations list at /creator/collaborations…",
+    "role": "creator",
+    "description": "As a creator, I want to view my collaborations list at /creator/collaborations with the same columns and filters as the Dashboard Campaigns tab, so that I track my deals end-to-end.",
+    "acceptance_criteria_ids": [
+      "AC-040-01",
+      "AC-040-02"
+    ],
+    "priority": "Must",
+    "wave": 5
+  },
+  {
+    "id": "US-041",
+    "title": "US-041 — view my profile at /creator/my-accounts with…",
+    "role": "creator",
+    "description": "As a creator, I want to view my profile at /creator/my-accounts with the header (avatar, name, bio, category, country, gender) and the Profile overview section, so that brands see a clear identity.",
+    "acceptance_criteria_ids": [
+      "AC-041-01",
+      "AC-041-02"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-042",
+    "title": "US-042 — navigate the 5 tabs of my…",
+    "role": "creator",
+    "description": "As a creator, I want to navigate the 5 tabs of my profile (Social Coverage, Creator network, Posts, My INFLU, Audience insights — last one disabled), so that I expose all my content and metrics.",
+    "acceptance_criteria_ids": [
+      "AC-042-01",
+      "AC-042-02",
+      "AC-042-03"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-043",
+    "title": "US-043 — generate a Creator Report (printable export…",
+    "role": "creator",
+    "description": "As a creator, I want to generate a Creator Report (printable export with INFLU logo, identity, accounts, network and paginated social coverage), so that I can share a professional summary outside the platform.",
+    "acceptance_criteria_ids": [
+      "AC-043-01",
+      "AC-043-02"
+    ],
+    "priority": "Should",
+    "wave": 4
+  },
+  {
+    "id": "US-050",
+    "title": "US-050 — chat with My AI Coach at…",
+    "role": "creator",
+    "description": "As a creator, I want to chat with My AI Coach at /creator/ai-recos (sequential conversation in French, starting with \"Comment te positionnes-tu en tant qu'influenceur ?\"), so that I receive personalized campaign recommendations.",
+    "acceptance_criteria_ids": [
+      "AC-050-01",
+      "AC-050-02"
+    ],
+    "priority": "Must",
+    "wave": 4
+  },
+  {
+    "id": "US-051",
+    "title": "US-051 — the Send button of the AI…",
+    "role": "creator",
+    "description": "As a creator, I want to the Send button of the AI Coach to be disabled while the textarea is empty, and the Restart button to clear the conversation, so that I never send empty messages and can start over.",
+    "acceptance_criteria_ids": [
+      "AC-051-01",
+      "AC-051-02"
+    ],
+    "priority": "Should",
+    "wave": 4
+  },
+  {
+    "id": "US-060",
+    "title": "US-060 — chat with brands at /creator/messagerie with…",
+    "role": "creator",
+    "description": "As a creator, I want to chat with brands at /creator/messagerie with columns (Profile / Campaign / Last Message / Actions) and filters (Search / brand / status), so that I keep track of conversations related to my collaborations.",
+    "acceptance_criteria_ids": [
+      "AC-060-01",
+      "AC-060-02"
+    ],
+    "priority": "Must",
+    "wave": 6
+  },
+  {
+    "id": "US-061",
+    "title": "US-061 — see the empty state \"You don't…",
+    "role": "creator with no conversation yet",
+    "description": "As a creator with no conversation yet, I want to see the empty state \"You don't have any open discussions at the moment.\", so that I am not confused by an empty list.",
+    "acceptance_criteria_ids": [
+      "AC-061-01",
+      "AC-061-02"
+    ],
+    "priority": "Should",
+    "wave": 6
+  },
+  {
+    "id": "US-070",
+    "title": "US-070 — manage my Account Information at /creator/accounts…",
+    "role": "creator",
+    "description": "As a creator, I want to manage my Account Information at /creator/accounts (Account Type, Email disabled, Gender, Full Name, Phone +212, Address) with Update Information and Reset buttons disabled until something changes, so that I keep my profile up to date safely.",
+    "acceptance_criteria_ids": [
+      "AC-070-01",
+      "AC-070-02",
+      "AC-070-03"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-071",
+    "title": "US-071 — change my password from Account Settings…",
+    "role": "creator",
+    "description": "As a creator, I want to change my password from Account Settings (Change password button), so that I rotate my credentials.",
+    "acceptance_criteria_ids": [
+      "AC-071-01",
+      "AC-071-02"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-072",
+    "title": "US-072 — set my Billing information (\"I'm a…",
+    "role": "creator",
+    "description": "As a creator, I want to set my Billing information (\"I'm a ?\" radio Business / Auto-entrepreneur, then ICE search + Approve), so that my legal billing context is configured for payouts.",
+    "acceptance_criteria_ids": [
+      "AC-072-01",
+      "AC-072-02"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-073",
+    "title": "US-073 — define my Pricing at /creator/accounts?acc_tab=billing as…",
+    "role": "creator",
+    "description": "As a creator, I want to define my Pricing at /creator/accounts?acc_tab=billing as From / to ranges per (social account × content format) with a per-account \"Save account pricing\" button, so that brands see my reference rates.",
+    "acceptance_criteria_ids": [
+      "AC-073-01",
+      "AC-073-02",
+      "AC-073-03"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-074",
+    "title": "US-074 — manage my Documents at /creator/accounts?acc_tab=documents (CIN…",
+    "role": "creator",
+    "description": "As a creator, I want to manage my Documents at /creator/accounts?acc_tab=documents (CIN number + expiry with Submit / Cancel Validation, Bank account RIB upload, optional Attestation de régularité fiscale), so that I unlock the ability to apply to opportunities.",
+    "acceptance_criteria_ids": [
+      "AC-074-01",
+      "AC-074-02",
+      "AC-074-03"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-075",
+    "title": "US-075 — cancel my CIN validation request via…",
+    "role": "creator",
+    "description": "As a creator, I want to cancel my CIN validation request via Cancel Validation, so that I can resubmit corrected information.",
+    "acceptance_criteria_ids": [
+      "AC-075-01",
+      "AC-075-02"
+    ],
+    "priority": "Should",
+    "wave": 3
+  },
+  {
+    "id": "US-076",
+    "title": "US-076 — permanently delete my account from the…",
+    "role": "creator",
+    "description": "As a creator, I want to permanently delete my account from the Danger zone with the explicit warning \"Deleting your account will permanently remove your profile, campaigns, and billing information. This action cannot be undone.\", so that I exercise my right to erasure consciously.",
+    "acceptance_criteria_ids": [
+      "AC-076-01",
+      "AC-076-02"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-080",
+    "title": "US-080 — access /creator/support with a \"My reports\"…",
+    "role": "creator",
+    "description": "As a creator, I want to access /creator/support with a \"My reports\" section (counter \"0 report(s)\" + empty state \"No reports yet — Use the button in the bottom-right corner to report an issue.\") and a FAQ accordion (5 standard questions), so that I get help.",
+    "acceptance_criteria_ids": [
+      "AC-080-01",
+      "AC-080-02"
+    ],
+    "priority": "Must",
+    "wave": 8
+  },
+  {
+    "id": "US-081",
+    "title": "US-081 — click the floating \"Report an issue\"…",
+    "role": "creator",
+    "description": "As a creator, I want to click the floating \"Report an issue\" button (bottom-right) to open a modal with required Issue type (Bug / Feature request / Performance / UI issue / I have an issue on a campaign / Other), Title, Description, then Cancel / Submit report, so that I report a problem in a structured way.",
+    "acceptance_criteria_ids": [
+      "AC-081-01",
+      "AC-081-02"
+    ],
+    "priority": "Must",
+    "wave": 8
+  },
+  {
+    "id": "US-100",
+    "title": "US-100 — view my Dashboard at /business with…",
+    "role": "business user (Agency / Brand / Small Business)",
+    "description": "As a business user (Agency / Brand / Small Business), I want to view my Dashboard at /business with KPIs (Number of campaigns / Active / Draft / On hold / Completed) and tabs AI Campaigns / Marketplace and a primary \"New AI campaign\" CTA, so that I monitor and launch campaigns from one screen.",
+    "acceptance_criteria_ids": [
+      "AC-100-01",
+      "AC-100-02"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-101",
+    "title": "US-101 — a global influencer search in the…",
+    "role": "business user",
+    "description": "As a business user, I want to a global influencer search in the header (combobox autocomplete \"Search your best influencer by name or handle\" + \"Show suggestions\"), so that I quickly find a creator from anywhere in the app.",
+    "acceptance_criteria_ids": [
+      "AC-101-01",
+      "AC-101-02"
+    ],
+    "priority": "Should",
+    "wave": 4
+  },
+  {
+    "id": "US-102",
+    "title": "US-102 — see disabled sidebar items (Social Listening)…",
+    "role": "business user",
+    "description": "As a business user, I want to see disabled sidebar items (Social Listening) with an explicit visual state, so that I know the feature is planned but not yet active.",
+    "acceptance_criteria_ids": [
+      "AC-102-01",
+      "AC-102-02"
+    ],
+    "priority": "Should",
+    "wave": 3
+  },
+  {
+    "id": "US-110",
+    "title": "US-110 — start a New AI Campaign at…",
+    "role": "business user",
+    "description": "As a business user, I want to start a New AI Campaign at /business/ai-campaign as a chat conversation, with the first question \"What kind of campaign would you like to launch, and what scope are you aiming for?\" and a multi-select (Branding / Visibility – Awareness / Positioning – Storytelling / New Product Or Service Launch / Promotions / Event Promotion / Engagement & Interactions), so that the IA can build a tailored brief.",
+    "acceptance_criteria_ids": [
+      "AC-110-01",
+      "AC-110-02"
+    ],
+    "priority": "Must",
+    "wave": 5
+  },
+  {
+    "id": "US-111",
+    "title": "US-111 — manage all my AI campaigns at…",
+    "role": "business user",
+    "description": "As a business user, I want to manage all my AI campaigns at /business/ai-manager with Search / Select status / Clear filters, and see the empty state \"No AI campaigns created yet\" with a \"Create AI campaign\" CTA when the list is empty, so that I navigate my IA campaigns easily.",
+    "acceptance_criteria_ids": [
+      "AC-111-01",
+      "AC-111-02"
+    ],
+    "priority": "Must",
+    "wave": 5
+  },
+  {
+    "id": "US-120",
+    "title": "US-120 — create a Marketplace product through the…",
+    "role": "business user",
+    "description": "As a business user, I want to create a Marketplace product through the 5-step wizard at /business/marketplace/create (Brand Information / Product Details / Acceptance criteria / Deliverables / Dates) with strict per-step validation, so that I publish a complete brief.",
+    "acceptance_criteria_ids": [
+      "AC-120-01",
+      "AC-120-02",
+      "AC-120-03",
+      "AC-120-04"
+    ],
+    "priority": "Must",
+    "wave": 5
+  },
+  {
+    "id": "US-121",
+    "title": "US-121 — each Deliverable to enforce (Your platform…",
+    "role": "business user",
+    "description": "As a business user, I want to each Deliverable to enforce (Your platform / Content type / Quantity ≥ 1 / Unite price in Dhs / Tagged account with @ prefix), with \"Specify dates\" disabled while the deliverable is incomplete and \"Next\" disabled while no deliverable is added, so that I cannot publish an incomplete brief.",
+    "acceptance_criteria_ids": [
+      "AC-121-01",
+      "AC-121-02",
+      "AC-121-03"
+    ],
+    "priority": "Must",
+    "wave": 5
+  },
+  {
+    "id": "US-122",
+    "title": "US-122 — see my published products at /business/marketplace…",
+    "role": "business user",
+    "description": "As a business user, I want to see my published products at /business/marketplace (alias My Marketplace) and edit or delete them, so that I keep my offers up to date.",
+    "acceptance_criteria_ids": [
+      "AC-122-01",
+      "AC-122-02"
+    ],
+    "priority": "Should",
+    "wave": 5
+  },
+  {
+    "id": "US-130",
+    "title": "US-130 — find creators at /business/discovery with filters…",
+    "role": "business user",
+    "description": "As a business user, I want to find creators at /business/discovery with filters (platforms / keywords / categories / Range tier / genders / locations) persisted in the URL (`disc_filter`, `disc_seed`, `disc_page`) and a Reset (N) button reflecting active filters, so that my searches are deep-linkable.",
+    "acceptance_criteria_ids": [
+      "AC-130-01",
+      "AC-130-02",
+      "AC-130-03"
+    ],
+    "priority": "Must",
+    "wave": 4
+  },
+  {
+    "id": "US-131",
+    "title": "US-131 — switch between Table View (default) and…",
+    "role": "business user",
+    "description": "As a business user, I want to switch between Table View (default) and Grid View, with the table showing NAME / CATEGORIES / COUNTRY / PLATFORMS / ENGAGEMENT RATE (%) / POSTS / VIEWS / Actions, and pagination \"Page X of Y (Total Z records)\", so that I scan large result sets efficiently.",
+    "acceptance_criteria_ids": [
+      "AC-131-01",
+      "AC-131-02",
+      "AC-131-03"
+    ],
+    "priority": "Must",
+    "wave": 4
+  },
+  {
+    "id": "US-132",
+    "title": "US-132 — open a creator profile at /business/profile/[id]…",
+    "role": "business user",
+    "description": "As a business user, I want to open a creator profile at /business/profile/[id] with header, Profile overview, social accounts and tabs (Social Coverage / Creator network / Posts / Audience insights — disabled, no \"My INFLU\" tab on this view), so that I evaluate a creator before contacting.",
+    "acceptance_criteria_ids": [
+      "AC-132-01",
+      "AC-132-02"
+    ],
+    "priority": "Must",
+    "wave": 4
+  },
+  {
+    "id": "US-140",
+    "title": "US-140 — manage CRM lists at /business/crm with…",
+    "role": "business user",
+    "description": "As a business user, I want to manage CRM lists at /business/crm with a Search field, a \"Create New CRM\" button and the empty state \"No CRM list has been created yet.\" with illustration, so that I segment creators into shortlists.",
+    "acceptance_criteria_ids": [
+      "AC-140-01",
+      "AC-140-02"
+    ],
+    "priority": "Must",
+    "wave": 6
+  },
+  {
+    "id": "US-141",
+    "title": "US-141 — create a CRM list via a…",
+    "role": "business user",
+    "description": "As a business user, I want to create a CRM list via a modal (Title required, Description required, Cancel / Create CRM), so that my new shortlist is initialized.",
+    "acceptance_criteria_ids": [
+      "AC-141-01",
+      "AC-141-02"
+    ],
+    "priority": "Must",
+    "wave": 6
+  },
+  {
+    "id": "US-142",
+    "title": "US-142 — add a creator to a CRM…",
+    "role": "business user",
+    "description": "As a business user, I want to add a creator to a CRM list from the Discovery row actions, so that my shortlists are populated without leaving Discovery.",
+    "acceptance_criteria_ids": [
+      "AC-142-01",
+      "AC-142-02"
+    ],
+    "priority": "Should",
+    "wave": 6
+  },
+  {
+    "id": "US-150",
+    "title": "US-150 — chat with creators at /business/messagerie with…",
+    "role": "business user",
+    "description": "As a business user, I want to chat with creators at /business/messagerie with the same patterns as the creator messaging, so that I negotiate and follow up on deliverables.",
+    "acceptance_criteria_ids": [
+      "AC-150-01",
+      "AC-150-02"
+    ],
+    "priority": "Must",
+    "wave": 6
+  },
+  {
+    "id": "US-160",
+    "title": "US-160 — view my payments at /business/payments with…",
+    "role": "business user",
+    "description": "As a business user, I want to view my payments at /business/payments with two tabs (Marketplace payments default / Campaign payments) and filters (Select brand / Select status / Clear), so that I review all transactions split by source.",
+    "acceptance_criteria_ids": [
+      "AC-160-01",
+      "AC-160-02"
+    ],
+    "priority": "Must",
+    "wave": 7
+  },
+  {
+    "id": "US-161",
+    "title": "US-161 — each payment row to expose Creator…",
+    "role": "business user",
+    "description": "As a business user, I want to each payment row to expose Creator / Brand / Status / Amount in Dhs / Requested At / Completed At / Actions, with the empty state \"No payment data found\", so that I trace each transaction.",
+    "acceptance_criteria_ids": [
+      "AC-161-01",
+      "AC-161-02"
+    ],
+    "priority": "Must",
+    "wave": 7
+  },
+  {
+    "id": "US-170",
+    "title": "US-170 — manage my Account Information at /business/accounts…",
+    "role": "business user",
+    "description": "As a business user, I want to manage my Account Information at /business/accounts with Account Type \"Business Account\", Email disabled, Gender, Full Name, Phone +212, Address, plus the Business Information section in read-only (Juridical Form, ICE, Company Name, Company Address, IF, RC, TVA), so that I keep my profile and legal entity consistent.",
+    "acceptance_criteria_ids": [
+      "AC-170-01",
+      "AC-170-02"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-171",
+    "title": "US-171 — manage my Brands at /business/accounts?acc_tab=brands with…",
+    "role": "business user",
+    "description": "As a business user, I want to manage my Brands at /business/accounts?acc_tab=brands with a table (BRAND / WEBSITE / COUNTRY / Actions: Manage access, Add access, kebab) and a \"Link new brand\" button, so that I administer all brands of my account.",
+    "acceptance_criteria_ids": [
+      "AC-171-01",
+      "AC-171-02"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-172",
+    "title": "US-172 — link a new brand via a…",
+    "role": "Agency user",
+    "description": "As a Agency user, I want to link a new brand via a modal that searches the existing INFLU brand database by name or @ social account (no free creation), with \"Confirm selection\" disabled until a brand is selected, so that brands stay deduplicated.",
+    "acceptance_criteria_ids": [
+      "AC-172-01",
+      "AC-172-02",
+      "AC-172-03"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-173",
+    "title": "US-173 — Manage access and Add access on…",
+    "role": "Agency user",
+    "description": "As a Agency user, I want to Manage access and Add access on a brand row, so that I delegate brand control to the right members of my agency.",
+    "acceptance_criteria_ids": [
+      "AC-173-01",
+      "AC-173-02"
+    ],
+    "priority": "Should",
+    "wave": 3
+  },
+  {
+    "id": "US-174",
+    "title": "US-174 — permanently delete my account from the…",
+    "role": "business user",
+    "description": "As a business user, I want to permanently delete my account from the Danger zone with the same explicit warning as creators, so that I exercise my right to erasure consciously.",
+    "acceptance_criteria_ids": [
+      "AC-174-01",
+      "AC-174-02"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-180",
+    "title": "US-180 — access /business/support with the same FAQ…",
+    "role": "business user",
+    "description": "As a business user, I want to access /business/support with the same FAQ + reports + floating \"Report an issue\" pattern as creators, so that I get help inside my workspace.",
+    "acceptance_criteria_ids": [
+      "AC-180-01",
+      "AC-180-02"
+    ],
+    "priority": "Must",
+    "wave": 8
+  },
+  {
+    "id": "US-181",
+    "title": "US-181 — the Report an issue modal to…",
+    "role": "business user",
+    "description": "As a business user, I want to the Report an issue modal to enforce a required Issue type select (Bug / Feature request / Performance / UI issue / I have an issue on a campaign / Other), Title, Description and Cancel / Submit report, so that my report is properly classified.",
+    "acceptance_criteria_ids": [
+      "AC-181-01",
+      "AC-181-02"
+    ],
+    "priority": "Must",
+    "wave": 8
+  },
+  {
+    "id": "US-200",
+    "title": "US-200 — unknown",
+    "role": "unknown",
+    "description": "As a unknown, I want to unknown, so that unknown.",
+    "acceptance_criteria_ids": [
+      "AC-200-01",
+      "AC-200-02"
+    ],
+    "priority": "Must",
+    "wave": 8
+  },
+  {
+    "id": "US-201",
+    "title": "US-201 — unknown",
+    "role": "unknown",
+    "description": "As a unknown, I want to unknown, so that unknown.",
+    "acceptance_criteria_ids": [
+      "AC-201-01",
+      "AC-201-02"
+    ],
+    "priority": "Must",
+    "wave": 8
+  },
+  {
+    "id": "US-202",
+    "title": "US-202 — unknown",
+    "role": "unknown",
+    "description": "As a unknown, I want to unknown, so that unknown.",
+    "acceptance_criteria_ids": [
+      "AC-202-01",
+      "AC-202-02"
+    ],
+    "priority": "Must",
+    "wave": 8
+  },
+  {
+    "id": "US-203",
+    "title": "US-203 — unknown",
+    "role": "unknown",
+    "description": "As a unknown, I want to unknown, so that unknown.",
+    "acceptance_criteria_ids": [
+      "AC-203-01",
+      "AC-203-02"
+    ],
+    "priority": "Must",
+    "wave": 3
+  },
+  {
+    "id": "US-204",
+    "title": "US-204 — unknown",
+    "role": "unknown",
+    "description": "As a unknown, I want to unknown, so that unknown.",
+    "acceptance_criteria_ids": [
+      "AC-204-01",
+      "AC-204-02"
+    ],
+    "priority": "Should",
+    "wave": 7
+  },
+  {
+    "id": "US-205",
+    "title": "US-205 — unknown",
+    "role": "unknown",
+    "description": "As a unknown, I want to unknown, so that unknown.",
+    "acceptance_criteria_ids": [
+      "AC-205-01",
+      "AC-205-02"
+    ],
+    "priority": "Must",
+    "wave": 8
+  },
+  {
+    "id": "US-206",
+    "title": "US-206 — unknown",
+    "role": "unknown",
+    "description": "As a unknown, I want to unknown, so that unknown.",
+    "acceptance_criteria_ids": [
+      "AC-206-01",
+      "AC-206-02"
+    ],
+    "priority": "Must",
+    "wave": 8
+  }
+]

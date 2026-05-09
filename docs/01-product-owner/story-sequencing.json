@@ -1,0 +1,681 @@
+{
+  "graph": {
+    "US-001": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Landing publique"
+    },
+    "US-002": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Pitch créateurs"
+    },
+    "US-003": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Pitch marques"
+    },
+    "US-004": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Mentions légales brand"
+    },
+    "US-005": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Mentions légales creator"
+    },
+    "US-006": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Politique privacy"
+    },
+    "US-010": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Login email/password"
+    },
+    "US-011": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "OAuth Google"
+    },
+    "US-012": {
+      "dependencies": [
+        "US-010"
+      ],
+      "dependencyType": "functional",
+      "notes": "Forgot password"
+    },
+    "US-013": {
+      "dependencies": [
+        "US-016"
+      ],
+      "dependencyType": "functional",
+      "notes": "Magic link / set password créateur"
+    },
+    "US-014": {
+      "dependencies": [
+        "US-010"
+      ],
+      "dependencyType": "auth",
+      "notes": "Logout"
+    },
+    "US-015": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Sélection rôle"
+    },
+    "US-016": {
+      "dependencies": [
+        "US-015"
+      ],
+      "dependencyType": "functional",
+      "notes": "Inscription créateur étape 1"
+    },
+    "US-017": {
+      "dependencies": [
+        "US-016"
+      ],
+      "dependencyType": "functional",
+      "notes": "Liaison comptes sociaux"
+    },
+    "US-018": {
+      "dependencies": [
+        "US-015"
+      ],
+      "dependencyType": "functional",
+      "notes": "Onboarding business"
+    },
+    "US-020": {
+      "dependencies": [
+        "US-013",
+        "US-017"
+      ],
+      "dependencyType": "auth",
+      "notes": "Dashboard créateur"
+    },
+    "US-021": {
+      "dependencies": [
+        "US-020"
+      ],
+      "dependencyType": "UI",
+      "notes": "Onglets et filtres dashboard"
+    },
+    "US-022": {
+      "dependencies": [
+        "US-020"
+      ],
+      "dependencyType": "UI",
+      "notes": "Placeholders KPI"
+    },
+    "US-023": {
+      "dependencies": [
+        "US-020"
+      ],
+      "dependencyType": "UI",
+      "notes": "Sidebar disabled créateur"
+    },
+    "US-030": {
+      "dependencies": [
+        "US-020"
+      ],
+      "dependencyType": "functional",
+      "notes": "Marketplace liste"
+    },
+    "US-031": {
+      "dependencies": [
+        "US-030"
+      ],
+      "dependencyType": "functional",
+      "notes": "Détail opportunité"
+    },
+    "US-032": {
+      "dependencies": [
+        "US-031",
+        "US-074"
+      ],
+      "dependencyType": "data + workflow",
+      "notes": "Apply bloqué"
+    },
+    "US-033": {
+      "dependencies": [
+        "US-032"
+      ],
+      "dependencyType": "workflow",
+      "notes": "Apply réussi"
+    },
+    "US-034": {
+      "dependencies": [
+        "US-031"
+      ],
+      "dependencyType": "UI",
+      "notes": "Mention Paid by INFLU"
+    },
+    "US-035": {
+      "dependencies": [
+        "US-031"
+      ],
+      "dependencyType": "UI",
+      "notes": "Badge expiration"
+    },
+    "US-040": {
+      "dependencies": [
+        "US-033"
+      ],
+      "dependencyType": "data",
+      "notes": "Collaborations"
+    },
+    "US-041": {
+      "dependencies": [
+        "US-020"
+      ],
+      "dependencyType": "data",
+      "notes": "Profil créateur"
+    },
+    "US-042": {
+      "dependencies": [
+        "US-041"
+      ],
+      "dependencyType": "UI",
+      "notes": "Onglets profil"
+    },
+    "US-043": {
+      "dependencies": [
+        "US-042"
+      ],
+      "dependencyType": "functional",
+      "notes": "Creator Report"
+    },
+    "US-050": {
+      "dependencies": [
+        "US-020"
+      ],
+      "dependencyType": "functional",
+      "notes": "AI Coach"
+    },
+    "US-051": {
+      "dependencies": [
+        "US-050"
+      ],
+      "dependencyType": "UI",
+      "notes": "Send/Restart AI Coach"
+    },
+    "US-060": {
+      "dependencies": [
+        "US-040"
+      ],
+      "dependencyType": "functional",
+      "notes": "Messaging créateur"
+    },
+    "US-061": {
+      "dependencies": [
+        "US-060"
+      ],
+      "dependencyType": "UI",
+      "notes": "Empty state messaging"
+    },
+    "US-070": {
+      "dependencies": [
+        "US-020"
+      ],
+      "dependencyType": "functional",
+      "notes": "Account Information créateur"
+    },
+    "US-071": {
+      "dependencies": [
+        "US-070"
+      ],
+      "dependencyType": "functional",
+      "notes": "Change password"
+    },
+    "US-072": {
+      "dependencies": [
+        "US-070"
+      ],
+      "dependencyType": "data",
+      "notes": "Billing / ICE"
+    },
+    "US-073": {
+      "dependencies": [
+        "US-070"
+      ],
+      "dependencyType": "data",
+      "notes": "Pricing créateur"
+    },
+    "US-074": {
+      "dependencies": [
+        "US-070"
+      ],
+      "dependencyType": "data",
+      "notes": "Documents CIN/RIB"
+    },
+    "US-075": {
+      "dependencies": [
+        "US-074"
+      ],
+      "dependencyType": "functional",
+      "notes": "Cancel Validation CIN"
+    },
+    "US-076": {
+      "dependencies": [
+        "US-070"
+      ],
+      "dependencyType": "functional",
+      "notes": "Delete account créateur"
+    },
+    "US-080": {
+      "dependencies": [
+        "US-020"
+      ],
+      "dependencyType": "UI",
+      "notes": "Support créateur"
+    },
+    "US-081": {
+      "dependencies": [
+        "US-080"
+      ],
+      "dependencyType": "functional",
+      "notes": "Report an issue créateur"
+    },
+    "US-100": {
+      "dependencies": [
+        "US-018"
+      ],
+      "dependencyType": "auth",
+      "notes": "Dashboard business"
+    },
+    "US-101": {
+      "dependencies": [
+        "US-100"
+      ],
+      "dependencyType": "UI",
+      "notes": "Recherche globale créateur"
+    },
+    "US-102": {
+      "dependencies": [
+        "US-100"
+      ],
+      "dependencyType": "UI",
+      "notes": "Sidebar disabled business"
+    },
+    "US-110": {
+      "dependencies": [
+        "US-100"
+      ],
+      "dependencyType": "functional",
+      "notes": "New AI Campaign"
+    },
+    "US-111": {
+      "dependencies": [
+        "US-110"
+      ],
+      "dependencyType": "data",
+      "notes": "AI Manager"
+    },
+    "US-120": {
+      "dependencies": [
+        "US-100",
+        "US-171"
+      ],
+      "dependencyType": "data + workflow",
+      "notes": "Wizard create marketplace product"
+    },
+    "US-121": {
+      "dependencies": [
+        "US-120"
+      ],
+      "dependencyType": "UI",
+      "notes": "Validation deliverables"
+    },
+    "US-122": {
+      "dependencies": [
+        "US-120"
+      ],
+      "dependencyType": "data",
+      "notes": "My Marketplace"
+    },
+    "US-130": {
+      "dependencies": [
+        "US-100"
+      ],
+      "dependencyType": "functional",
+      "notes": "Discovery filtres URL"
+    },
+    "US-131": {
+      "dependencies": [
+        "US-130"
+      ],
+      "dependencyType": "UI",
+      "notes": "Table / Grid Discovery"
+    },
+    "US-132": {
+      "dependencies": [
+        "US-131"
+      ],
+      "dependencyType": "functional",
+      "notes": "Profil créateur côté business"
+    },
+    "US-140": {
+      "dependencies": [
+        "US-100"
+      ],
+      "dependencyType": "functional",
+      "notes": "CRM listes"
+    },
+    "US-141": {
+      "dependencies": [
+        "US-140"
+      ],
+      "dependencyType": "functional",
+      "notes": "Création liste CRM"
+    },
+    "US-142": {
+      "dependencies": [
+        "US-141",
+        "US-131"
+      ],
+      "dependencyType": "workflow",
+      "notes": "Add creator to CRM"
+    },
+    "US-150": {
+      "dependencies": [
+        "US-100"
+      ],
+      "dependencyType": "functional",
+      "notes": "Messaging business"
+    },
+    "US-160": {
+      "dependencies": [
+        "US-100",
+        "US-033"
+      ],
+      "dependencyType": "data",
+      "notes": "Payments business onglets"
+    },
+    "US-161": {
+      "dependencies": [
+        "US-160"
+      ],
+      "dependencyType": "UI",
+      "notes": "Colonnes & vide payments"
+    },
+    "US-170": {
+      "dependencies": [
+        "US-100"
+      ],
+      "dependencyType": "functional",
+      "notes": "Account settings business"
+    },
+    "US-171": {
+      "dependencies": [
+        "US-170"
+      ],
+      "dependencyType": "data",
+      "notes": "Manage your Brands"
+    },
+    "US-172": {
+      "dependencies": [
+        "US-171"
+      ],
+      "dependencyType": "functional",
+      "notes": "Link new brand"
+    },
+    "US-173": {
+      "dependencies": [
+        "US-171"
+      ],
+      "dependencyType": "functional",
+      "notes": "Manage / Add access"
+    },
+    "US-174": {
+      "dependencies": [
+        "US-170"
+      ],
+      "dependencyType": "functional",
+      "notes": "Delete account business"
+    },
+    "US-180": {
+      "dependencies": [
+        "US-100"
+      ],
+      "dependencyType": "UI",
+      "notes": "Support business"
+    },
+    "US-181": {
+      "dependencies": [
+        "US-180"
+      ],
+      "dependencyType": "functional",
+      "notes": "Report an issue business"
+    },
+    "US-200": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Page 404"
+    },
+    "US-201": {
+      "dependencies": [
+        "US-010",
+        "US-018"
+      ],
+      "dependencyType": "auth",
+      "notes": "Page 403"
+    },
+    "US-202": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Page 500"
+    },
+    "US-203": {
+      "dependencies": [
+        "US-010"
+      ],
+      "dependencyType": "UI",
+      "notes": "Header global"
+    },
+    "US-204": {
+      "dependencies": [
+        "US-203"
+      ],
+      "dependencyType": "functional",
+      "notes": "Notifications"
+    },
+    "US-205": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Empty states cohérents"
+    },
+    "US-206": {
+      "dependencies": [],
+      "dependencyType": "(root)",
+      "notes": "Boutons disabled — raisons"
+    }
+  },
+  "waves": [
+    {
+      "wave": 1,
+      "label": "Foundations (public + auth)",
+      "userStories": [
+        "US-001",
+        "US-002",
+        "US-003",
+        "US-004",
+        "US-005",
+        "US-006",
+        "US-010",
+        "US-011",
+        "US-012",
+        "US-014",
+        "US-015",
+        "US-016"
+      ],
+      "parallelizable": null
+    },
+    {
+      "wave": 2,
+      "label": "Onboarding (set password + social link + business onboard)",
+      "userStories": [
+        "US-013",
+        "US-017",
+        "US-018"
+      ],
+      "parallelizable": null
+    },
+    {
+      "wave": 3,
+      "label": "Dashboards & profil & account settings",
+      "userStories": [
+        "US-020",
+        "US-021",
+        "US-022",
+        "US-023",
+        "US-041",
+        "US-042",
+        "US-070",
+        "US-071",
+        "US-072",
+        "US-073",
+        "US-074",
+        "US-075",
+        "US-076",
+        "US-100",
+        "US-102",
+        "US-170",
+        "US-171",
+        "US-172",
+        "US-173",
+        "US-174",
+        "US-203"
+      ],
+      "parallelizable": null
+    },
+    {
+      "wave": 4,
+      "label": "Discovery, Marketplace browse, AI Coach, Creator Report",
+      "userStories": [
+        "US-030",
+        "US-031",
+        "US-032",
+        "US-034",
+        "US-035",
+        "US-043",
+        "US-050",
+        "US-051",
+        "US-101",
+        "US-130",
+        "US-131",
+        "US-132"
+      ],
+      "parallelizable": null
+    },
+    {
+      "wave": 5,
+      "label": "Apply, AI Campaign, Marketplace create wizard",
+      "userStories": [
+        "US-033",
+        "US-110",
+        "US-111",
+        "US-120",
+        "US-121",
+        "US-122"
+      ],
+      "parallelizable": null
+    },
+    {
+      "wave": 6,
+      "label": "Collaborations, Messaging, CRM",
+      "userStories": [
+        "US-040",
+        "US-060",
+        "US-061",
+        "US-140",
+        "US-141",
+        "US-142",
+        "US-150"
+      ],
+      "parallelizable": null
+    },
+    {
+      "wave": 7,
+      "label": "Payments & Notifications",
+      "userStories": [
+        "US-160",
+        "US-161",
+        "US-204"
+      ],
+      "parallelizable": null
+    },
+    {
+      "wave": 8,
+      "label": "Support & système",
+      "userStories": [
+        "US-080",
+        "US-081",
+        "US-180",
+        "US-181",
+        "US-200",
+        "US-201",
+        "US-202",
+        "US-205",
+        "US-206",
+        "US-001",
+        "US-010",
+        "US-013",
+        "US-017",
+        "US-018",
+        "US-070",
+        "US-071",
+        "US-072",
+        "US-073",
+        "US-074",
+        "US-075",
+        "US-076",
+        "US-020",
+        "US-021",
+        "US-022",
+        "US-023",
+        "US-041",
+        "US-042",
+        "US-100",
+        "US-170",
+        "US-171",
+        "US-172",
+        "US-173",
+        "US-174",
+        "US-102",
+        "US-203",
+        "US-030",
+        "US-031",
+        "US-032",
+        "US-034",
+        "US-035",
+        "US-043",
+        "US-050",
+        "US-051",
+        "US-101",
+        "US-130",
+        "US-131",
+        "US-132",
+        "US-033",
+        "US-110",
+        "US-111",
+        "US-120",
+        "US-121",
+        "US-122",
+        "US-060",
+        "US-061",
+        "US-150",
+        "US-040",
+        "US-140",
+        "US-141",
+        "US-142",
+        "US-160",
+        "US-161",
+        "US-204"
+      ],
+      "parallelizable": "parallélisation\n\n### Wave 1 — fortement parallélisable\nUS-001/002/003/004/005/006 (pages publiques statiques) et US-010/011/012/014/015/016 (auth) peuvent être attaquées en parallèle par 2 binômes (1 binôme « marketing pages », 1 binôme « auth flows »)"
+    }
+  ],
+  "generatedAt": "2026-05-09T20:07:01.927Z"
+}

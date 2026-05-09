@@ -1,0 +1,1504 @@
+{
+  "generated_at": "2026-05-09T20:08:42.956Z",
+  "total_scenarios": 169,
+  "scenarios_by_us": {
+    "US-001": [
+      {
+        "id": "AC-001-01",
+        "title": "Affichage de la landing principale",
+        "scenario": "Un visiteur consulte /fr",
+        "given": "je suis un visiteur non connecté",
+        "when": "j'ouvre l'URL https://www.INFLU.ai/fr",
+        "then": "la landing principale s'affiche en français"
+      },
+      {
+        "id": "AC-001-02",
+        "title": "Liens vers les pages thématiques",
+        "scenario": "Le visiteur navigue vers les pitchs spécialisés",
+        "given": "je suis sur /fr",
+        "when": "je clique sur le lien créateurs",
+        "then": "je suis redirigé vers /fr/for-influencers"
+      }
+    ],
+    "US-002": [
+      {
+        "id": "AC-002-01",
+        "title": "Parcours 6 étapes affiché",
+        "scenario": "Le visiteur lit le parcours créateur",
+        "given": "j'ouvre /fr/for-influencers",
+        "when": "la page est chargée",
+        "then": "les 6 étapes annoncées (Inscription / Découvrir / Sélectionné / Brief IA / Collaborer / Récompensé) sont visibles"
+      },
+      {
+        "id": "AC-002-02",
+        "title": "CTA inscription créateur",
+        "scenario": "Le visiteur clique sur l'inscription gratuite",
+        "given": "je suis sur /fr/for-influencers",
+        "when": "je clique sur \"Inscrivez-vous gratuitement\"",
+        "then": "je suis redirigé vers /auth/register"
+      }
+    ],
+    "US-003": [
+      {
+        "id": "AC-003-01",
+        "title": "Parcours 9 étapes affiché",
+        "scenario": "Le visiteur lit le parcours marque",
+        "given": "j'ouvre /fr/for-brands",
+        "when": null,
+        "then": "les 9 étapes annoncées (Compte → Suivi performance) sont visibles"
+      },
+      {
+        "id": "AC-003-02",
+        "title": "CTA réserver une démo",
+        "scenario": "Le visiteur clique sur Réserver une démo",
+        "given": "je suis sur /fr/for-brands",
+        "when": "je clique sur \"Réserver une démo\"",
+        "then": "un parcours de prise de rendez-vous démo est ouvert"
+      }
+    ],
+    "US-004": [
+      {
+        "id": "AC-004-01",
+        "title": "Lecture des mentions brand",
+        "scenario": "Le visiteur consulte les mentions brand",
+        "given": "j'ouvre /en/legal/brand",
+        "when": null,
+        "then": "la page de mentions légales destinée aux marques s'affiche"
+      },
+      {
+        "id": "AC-004-02",
+        "title": "Accessibilité depuis le footer",
+        "scenario": "Le visiteur accède aux mentions depuis le footer",
+        "given": "je suis sur /fr",
+        "when": "je clique sur \"Brand legal mentions\" dans le footer",
+        "then": "je suis redirigé vers /en/legal/brand"
+      }
+    ],
+    "US-005": [
+      {
+        "id": "AC-005-01",
+        "title": "Lecture des mentions creator",
+        "scenario": "Le visiteur consulte les mentions creator",
+        "given": "j'ouvre /en/legal/creator",
+        "when": null,
+        "then": "la page de mentions légales destinée aux créateurs s'affiche"
+      },
+      {
+        "id": "AC-005-02",
+        "title": "Référence depuis l'inscription créateur",
+        "scenario": "La checkbox d'inscription pointe vers les mentions",
+        "given": "je suis sur /auth/register/influencer",
+        "when": "je clique sur le lien \"legal mentions\" de la checkbox",
+        "then": "/en/legal/creator s'ouvre"
+      }
+    ],
+    "US-006": [
+      {
+        "id": "AC-006-01",
+        "title": "Lecture de la politique",
+        "scenario": "Le visiteur consulte la politique de confidentialité",
+        "given": "j'ouvre /en/legal/privacy",
+        "when": null,
+        "then": "la politique de confidentialité INFLU s'affiche"
+      },
+      {
+        "id": "AC-006-02",
+        "title": "Lien depuis le login",
+        "scenario": "Le visiteur accède à la politique depuis le login",
+        "given": "je suis sur /auth/login",
+        "when": "je clique sur \"privacy policy\" dans le pied de formulaire",
+        "then": "/en/legal/privacy s'ouvre"
+      }
+    ],
+    "US-010": [
+      {
+        "id": "AC-010-01",
+        "title": "Login créateur valide",
+        "scenario": "Connexion créateur réussie",
+        "given": "un compte créateur valide existe",
+        "when": "je saisis email et mot de passe corrects sur /auth/login",
+        "then": "je suis redirigé vers /creator"
+      },
+      {
+        "id": "AC-010-02",
+        "title": "Login business valide",
+        "scenario": "Connexion business réussie",
+        "given": "un compte business valide existe",
+        "when": "je me connecte avec ses identifiants",
+        "then": "je suis redirigé vers /business"
+      },
+      {
+        "id": "AC-010-03",
+        "title": "Identifiants invalides",
+        "scenario": "Identifiants incorrects",
+        "given": "je suis sur /auth/login",
+        "when": "je saisis un email valide et un mot de passe incorrect",
+        "then": "un message d'erreur s'affiche et je reste sur /auth/login"
+      },
+      {
+        "id": "AC-010-04",
+        "title": "Toggle visibilité mot de passe",
+        "scenario": "Afficher / masquer le mot de passe",
+        "given": "je suis sur /auth/login",
+        "when": "je clique sur le bouton toggle password visibility",
+        "then": "le champ password alterne entre type=password et type=text"
+      }
+    ],
+    "US-011": [
+      {
+        "id": "AC-011-01",
+        "title": "Connexion via Google",
+        "scenario": "Connexion OAuth Google",
+        "given": "je suis sur /auth/login",
+        "when": "je clique sur \"Continue with Google\"",
+        "then": "je suis redirigé vers le consentement Google"
+      },
+      {
+        "id": "AC-011-02",
+        "title": "Refus de consentement",
+        "scenario": "Refus du consentement OAuth",
+        "given": "je suis sur l'écran Google après clic",
+        "when": "je refuse le consentement",
+        "then": "je reviens sur /auth/login sans session ouverte"
+      }
+    ],
+    "US-012": [
+      {
+        "id": "AC-012-01",
+        "title": "Demande de reset",
+        "scenario": "Demande de réinitialisation",
+        "given": "je suis sur /auth/login",
+        "when": "je clique sur \"Forgot your password?\"",
+        "then": "je suis redirigé vers /auth/forgot-password"
+      },
+      {
+        "id": "AC-012-02",
+        "title": "Email envoyé",
+        "scenario": "Confirmation d'envoi",
+        "given": "je suis sur /auth/forgot-password",
+        "when": "je soumets un email connu",
+        "then": "un message de confirmation indique qu'un email a été envoyé"
+      }
+    ],
+    "US-013": [
+      {
+        "id": "AC-013-01",
+        "title": "Définir le mot de passe via le magic link",
+        "scenario": "Le créateur définit son mot de passe initial",
+        "given": "je viens de finir l'inscription créateur (aucun champ password saisi)",
+        "when": "je clique sur le lien et saisis un nouveau mot de passe valide",
+        "then": "mon compte est activé et je peux me connecter via /auth/login"
+      },
+      {
+        "id": "AC-013-02",
+        "title": "Lien expiré",
+        "scenario": "Magic link expiré",
+        "given": "le magic link reçu a expiré",
+        "when": "je clique dessus",
+        "then": "un message m'invite à demander un nouveau lien"
+      }
+    ],
+    "US-014": [
+      {
+        "id": "AC-014-01",
+        "title": "Confirmation Logout",
+        "scenario": "Confirmation explicite de déconnexion",
+        "given": "je suis connecté",
+        "when": "j'arrive sur /auth/logout",
+        "then": "le titre \"Are you sure you want to logout?\" s'affiche"
+      },
+      {
+        "id": "AC-014-02",
+        "title": "Annulation du Logout",
+        "scenario": "L'utilisateur annule",
+        "given": "je suis sur /auth/logout",
+        "when": "je clique sur Cancel",
+        "then": "je reste connecté et je retourne sur l'écran précédent"
+      },
+      {
+        "id": "AC-014-03",
+        "title": "Déconnexion confirmée",
+        "scenario": "L'utilisateur confirme",
+        "given": "je suis sur /auth/logout",
+        "when": "je clique sur Logout",
+        "then": "ma session est détruite et je suis redirigé vers /auth/login"
+      }
+    ],
+    "US-015": [
+      {
+        "id": "AC-015-01",
+        "title": "4 cartes affichées",
+        "scenario": "Les 4 rôles d'inscription sont proposés",
+        "given": "j'ouvre /auth/register",
+        "when": null,
+        "then": "je vois 4 cartes : \"I'm an Influencer\", \"We're a Small Business\", \"We are a Brand\", \"We are an Agency\""
+      },
+      {
+        "id": "AC-015-02",
+        "title": "Routage Influencer",
+        "scenario": "Choix Influencer",
+        "given": "je suis sur /auth/register",
+        "when": "je clique sur \"Get started as an Influencer\"",
+        "then": "je suis redirigé vers /auth/register/influencer"
+      },
+      {
+        "id": "AC-015-03",
+        "title": "Routage business",
+        "scenario": "Choix Business / Brand / Agency",
+        "given": "je suis sur /auth/register",
+        "when": "je clique sur le CTA d'un des 3 rôles business (Small Business, Brand, Agency)",
+        "then": "je suis routé vers le flux d'inscription business correspondant"
+      },
+      {
+        "id": "AC-015-04",
+        "title": "Lien vers login",
+        "scenario": "Bascule vers login",
+        "given": "je suis sur /auth/register",
+        "when": "je clique sur \"Already have an account? Let connect now!\"",
+        "then": "je suis redirigé vers /auth/login"
+      }
+    ],
+    "US-016": [
+      {
+        "id": "AC-016-01",
+        "title": "Champs requis et absence de password",
+        "scenario": "Aucun champ password n'est demandé",
+        "given": "j'ouvre /auth/register/influencer",
+        "when": null,
+        "then": "les champs Email, Gender, Full name, Country (default Morocco), Phone (+212), City, Address sont visibles"
+      },
+      {
+        "id": "AC-016-02",
+        "title": "Validation des checkboxes",
+        "scenario": "Les checkboxes sont obligatoires",
+        "given": "j'ai rempli tous les champs texte",
+        "when": "je laisse une des deux checkboxes décochée",
+        "then": "le bouton \"Assign an account\" est bloqué"
+      },
+      {
+        "id": "AC-016-03",
+        "title": "Préfixe téléphone fixe +212",
+        "scenario": "Le préfixe +212 est imposé",
+        "given": "je suis sur /auth/register/influencer",
+        "when": null,
+        "then": "le champ téléphone affiche le préfixe fixe \"+212\" non modifiable"
+      },
+      {
+        "id": "AC-016-04",
+        "title": "Passage à l'étape 2",
+        "scenario": "Passage à l'étape Assign account",
+        "given": "le formulaire est valide",
+        "when": "je clique sur \"Assign an account\"",
+        "then": "je passe à l'étape 2 \"Assign account\""
+      }
+    ],
+    "US-017": [
+      {
+        "id": "AC-017-01",
+        "title": "Au moins un compte requis",
+        "scenario": "Aucun compte social lié",
+        "given": "je suis à l'étape 2 d'inscription",
+        "when": "je tente de continuer sans avoir lié un compte social",
+        "then": "une erreur indique qu'au moins un compte (Instagram / YouTube / TikTok / Twitter) doit être lié"
+      },
+      {
+        "id": "AC-017-02",
+        "title": "Liaison réussie",
+        "scenario": "Liaison réussie d'un compte Instagram",
+        "given": "je clique sur \"Lier Instagram\"",
+        "when": "je termine le flux OAuth Instagram avec succès",
+        "then": "mon handle, mon nombre de followers et mon engagement sont récupérés et affichés"
+      },
+      {
+        "id": "AC-017-03",
+        "title": "Compte créateur visible en Discovery",
+        "scenario": "Apparition dans Discovery",
+        "given": "j'ai au moins un compte social lié",
+        "when": "une marque ouvre /business/discovery",
+        "then": "ma fiche peut apparaître dans les résultats avec ma \"Social Coverage\""
+      }
+    ],
+    "US-018": [
+      {
+        "id": "AC-018-01",
+        "title": "Saisie Account Information",
+        "scenario": "Saisie des infos personnelles",
+        "given": "je suis sur /auth/onboard avec un rôle business",
+        "when": "je remplis Account Type, Email, Gender, Full Name, Phone (+212), Address",
+        "then": "mes informations personnelles sont enregistrées"
+      },
+      {
+        "id": "AC-018-02",
+        "title": "Saisie Business Information",
+        "scenario": "Saisie de l'entité légale",
+        "given": "je suis à l'étape Business Information",
+        "when": "je remplis Juridical Form, ICE, Company Name, Company Address, IF, RC, TVA",
+        "then": "mes informations légales sont enregistrées"
+      }
+    ],
+    "US-020": [
+      {
+        "id": "AC-020-01",
+        "title": "10 KPIs affichés",
+        "scenario": "Le créateur consulte ses KPIs",
+        "given": "je suis sur /creator",
+        "when": null,
+        "then": "les 10 cards KPIs sont visibles : Total Collaborations, Pending Opportunities, Pending Matchings, Content to Submit, Submission Deadline, Content to Publish, Publication Deadline, Pending Payments, Revenue Generated (avec suffixe \"Dhs\"), INFLU Score"
+      },
+      {
+        "id": "AC-020-02",
+        "title": "Revenue en Dirhams",
+        "scenario": "La devise est exprimée en Dhs",
+        "given": "je suis sur le Dashboard créateur",
+        "when": null,
+        "then": "la card Revenue Generated affiche un montant suivi de \"Dhs\""
+      }
+    ],
+    "US-021": [
+      {
+        "id": "AC-021-01",
+        "title": "Tab par défaut Campaigns",
+        "scenario": "L'onglet Campaigns est par défaut",
+        "given": "je suis sur /creator",
+        "when": null,
+        "then": "l'onglet \"Campaigns\" est sélectionné"
+      },
+      {
+        "id": "AC-021-02",
+        "title": "Filtres et bouton Clear",
+        "scenario": "Application et reset des filtres",
+        "given": "je suis sur l'onglet Campaigns",
+        "when": "je saisis un terme dans Search puis sélectionne une marque et un statut",
+        "then": "la table est filtrée When je clique sur \"Clear\" Then tous les filtres sont réinitialisés"
+      },
+      {
+        "id": "AC-021-03",
+        "title": "État vide",
+        "scenario": "Aucune campagne disponible",
+        "given": "aucune collaboration n'existe",
+        "when": "j'ouvre l'onglet Campaigns",
+        "then": "l'état vide affiche le texte EXACT \"No campaigns available at the moment.\""
+      }
+    ],
+    "US-022": [
+      {
+        "id": "AC-022-01",
+        "title": "Feature désactivée",
+        "scenario": "Pending Matchings désactivée",
+        "given": "la feature Matchings n'est pas active sur mon compte",
+        "when": null,
+        "then": "la card \"Pending Matchings\" affiche le placeholder \"__\""
+      },
+      {
+        "id": "AC-022-02",
+        "title": "Métriques non calculables",
+        "scenario": "Engagement et Growth non calculables",
+        "given": "un compte social trop récent pour calculer l'engagement et le growth",
+        "when": null,
+        "then": "\"ENGAGEMENT RATE\" affiche \"--\" et \"GROWTH\" affiche \"N/A\""
+      }
+    ],
+    "US-023": [
+      {
+        "id": "AC-023-01",
+        "title": "Items grisés",
+        "scenario": "Items inéligibles affichés mais désactivés",
+        "given": "je suis sur /creator",
+        "when": null,
+        "then": "les items sidebar \"Matchings\", \"Calendar\" et \"My Payments\" sont visibles mais à l'état disabled"
+      },
+      {
+        "id": "AC-023-02",
+        "title": "Clic sans effet",
+        "scenario": "Clic sur un item disabled",
+        "given": "un item sidebar est disabled",
+        "when": "je clique dessus",
+        "then": "aucune navigation ne se produit"
+      }
+    ],
+    "US-030": [
+      {
+        "id": "AC-030-01",
+        "title": "Affichage en grille de cards",
+        "scenario": "Liste des opportunités",
+        "given": "des produits Marketplace sont publiés",
+        "when": "j'ouvre /creator/marketplace",
+        "then": "les opportunités s'affichent en grille de cards verticales"
+      },
+      {
+        "id": "AC-030-02",
+        "title": "Recherche et Clear",
+        "scenario": "Recherche d'une opportunité",
+        "given": "je suis sur /creator/marketplace",
+        "when": "je saisis un mot-clé dans Search",
+        "then": "les cards correspondantes sont filtrées When je clique sur \"Clear\" Then la grille complète est restaurée"
+      },
+      {
+        "id": "AC-030-03",
+        "title": "État vide",
+        "scenario": "Aucun produit dans le marketplace",
+        "given": "aucun produit n'est publié",
+        "when": "j'ouvre l'onglet Marketplace du Dashboard",
+        "then": "l'état vide affiche le texte EXACT \"No products found in your marketplace\""
+      }
+    ],
+    "US-031": [
+      {
+        "id": "AC-031-01",
+        "title": "Sections affichées",
+        "scenario": "Lecture du détail",
+        "given": "j'ouvre /creator/marketplace/[id]",
+        "when": null,
+        "then": "je vois Brand overview, Product overview, Requested content, le tableau Product deliverables, les hashtags, le Call to Action, Available slots, Time remaining"
+      },
+      {
+        "id": "AC-031-02",
+        "title": "Tableau Product deliverables",
+        "scenario": "Colonnes du tableau deliverables",
+        "given": "je consulte une opportunité",
+        "when": null,
+        "then": "le tableau Product deliverables expose les colonnes Plateforme, CONTENT, DATE RECEPTION, DATE PUBLICATION, PRICE/UNIT (en Dhs)"
+      },
+      {
+        "id": "AC-031-03",
+        "title": "Hashtags imposés",
+        "scenario": "Les hashtags sont fournis et non modifiables",
+        "given": "une opportunité expose des hashtags légaux (#ad, #sponsorisé, #partenariat_rémunéré)",
+        "when": null,
+        "then": "ces hashtags sont affichés dans la section dédiée et le créateur ne peut pas les modifier"
+      }
+    ],
+    "US-032": [
+      {
+        "id": "AC-032-01",
+        "title": "Apply disabled si profil incomplet",
+        "scenario": "CIN, RIB ou ICE manquants",
+        "given": "mon profil n'a pas la CIN validée OU pas de RIB OU pas d'ICE",
+        "when": "j'ouvre une opportunité Marketplace",
+        "then": "le bouton Apply est disabled"
+      },
+      {
+        "id": "AC-032-02",
+        "title": "Liens vers les écrans manquants",
+        "scenario": "Cliquer sur un élément manquant",
+        "given": "le bloc \"Complete your profile to apply\" est visible",
+        "when": "je clique sur \"Add your bank details (RIB)\"",
+        "then": "je suis redirigé vers /creator/accounts?acc_tab=documents"
+      },
+      {
+        "id": "AC-032-03",
+        "title": "CIN en Pending Validation bloque aussi",
+        "scenario": "CIN en attente de validation",
+        "given": "ma CIN est au statut \"Pending Validation\"",
+        "when": null,
+        "then": "le bouton Apply reste disabled jusqu'à ce que la CIN soit \"Validated\""
+      }
+    ],
+    "US-033": [
+      {
+        "id": "AC-033-01",
+        "title": "Apply enabled si profil complet",
+        "scenario": "Profil complet",
+        "given": "ma CIN est \"Validated\", mon RIB est uploadé, mon ICE est rempli",
+        "when": "j'ouvre une opportunité non expirée avec slots restants",
+        "then": "le bouton Apply est enabled"
+      },
+      {
+        "id": "AC-033-02",
+        "title": "Soumission de la candidature",
+        "scenario": "Le créateur postule",
+        "given": "le bouton Apply est enabled",
+        "when": "je clique sur Apply",
+        "then": "ma candidature est enregistrée"
+      },
+      {
+        "id": "AC-033-03",
+        "title": "Apply impossible si Expired",
+        "scenario": "Opportunité expirée",
+        "given": "le badge de l'opportunité affiche \"Expired\"",
+        "when": null,
+        "then": "le bouton Apply est disabled même si mon profil est complet"
+      }
+    ],
+    "US-034": [
+      {
+        "id": "AC-034-01",
+        "title": "Mention explicite \"Paid by INFLU\"",
+        "scenario": "Affichage de la mention payeur",
+        "given": "je consulte une opportunité Marketplace",
+        "when": null,
+        "then": "le bloc \"You will get up\" affiche le montant en Dhs et la mention \"Paid by INFLU\""
+      },
+      {
+        "id": "AC-034-02",
+        "title": "Paiement déclenché par INFLU",
+        "scenario": "Paiement après validation",
+        "given": "mon contenu a été validé par la marque",
+        "when": null,
+        "then": "INFLU déclenche le paiement entre 48h et 7 jours"
+      }
+    ],
+    "US-035": [
+      {
+        "id": "AC-035-01",
+        "title": "Format \"Expires in N days\"",
+        "scenario": "Opportunité encore active",
+        "given": "une opportunité expire dans 2 jours",
+        "when": null,
+        "then": "la card et la fiche détail affichent le badge \"Expires in 2 days\""
+      },
+      {
+        "id": "AC-035-02",
+        "title": "Bascule en \"Expired\"",
+        "scenario": "Opportunité expirée",
+        "given": "la date d'expiration est dépassée",
+        "when": null,
+        "then": "le badge bascule sur \"Expired\""
+      }
+    ],
+    "US-040": [
+      {
+        "id": "AC-040-01",
+        "title": "Liste des collaborations",
+        "scenario": "Le créateur consulte ses collaborations",
+        "given": "j'ouvre /creator/collaborations",
+        "when": null,
+        "then": "la table expose les mêmes colonnes que le Dashboard (Brand / Campaign / Status / Start Date / End Date / Actions)"
+      },
+      {
+        "id": "AC-040-02",
+        "title": "État vide identique",
+        "scenario": "Aucune collaboration",
+        "given": "je n'ai aucune collaboration",
+        "when": null,
+        "then": "l'état vide affiche le texte EXACT \"No campaigns available at the moment.\""
+      }
+    ],
+    "US-041": [
+      {
+        "id": "AC-041-01",
+        "title": "En-tête de profil",
+        "scenario": "Affichage du header de profil",
+        "given": "j'ouvre /creator/my-accounts",
+        "when": null,
+        "then": "je vois mon avatar, mon nom, mon bouton edit, ma bio courte, ma catégorie, mon pays et mon genre"
+      },
+      {
+        "id": "AC-041-02",
+        "title": "Section Profile overview",
+        "scenario": "Section overview avec actions kebab",
+        "given": "je suis sur /creator/my-accounts",
+        "when": null,
+        "then": "la section \"Profile overview\" affiche un paragraphe descriptif éditable et la liste de mes comptes sociaux"
+      }
+    ],
+    "US-042": [
+      {
+        "id": "AC-042-01",
+        "title": "Onglet par défaut Social Coverage",
+        "scenario": "Social Coverage par défaut",
+        "given": "j'ouvre /creator/my-accounts",
+        "when": null,
+        "then": "l'onglet \"Social Coverage\" est sélectionné"
+      },
+      {
+        "id": "AC-042-02",
+        "title": "Onglet Audience insights désactivé",
+        "scenario": "Audience insights non disponible",
+        "given": "je suis sur le profil créateur",
+        "when": null,
+        "then": "l'onglet \"Audience insights\" est visible mais à l'état disabled"
+      },
+      {
+        "id": "AC-042-03",
+        "title": "Onglet My INFLU spécifique créateur",
+        "scenario": "My INFLU n'apparaît que côté créateur",
+        "given": "je consulte mon propre profil sur /creator/my-accounts",
+        "when": null,
+        "then": "l'onglet \"My INFLU\" est présent"
+      }
+    ],
+    "US-043": [
+      {
+        "id": "AC-043-01",
+        "title": "Génération du rapport",
+        "scenario": "Le créateur génère un rapport",
+        "given": "je suis sur /creator/my-accounts",
+        "when": "je déclenche la génération d'un Creator Report",
+        "then": "la vue export s'affiche avec logo INFLU, date de génération, identité, accounts, Creator network et Social coverage paginée"
+      },
+      {
+        "id": "AC-043-02",
+        "title": "Pagination des comptes sociaux",
+        "scenario": "Pagination dans le rapport",
+        "given": "j'ai plus de comptes sociaux qu'une page peut contenir",
+        "when": "je consulte le Creator Report",
+        "then": "la section \"Social coverage\" est paginée"
+      }
+    ],
+    "US-050": [
+      {
+        "id": "AC-050-01",
+        "title": "Première question en français",
+        "scenario": "Première bulle assistante",
+        "given": "j'ouvre /creator/ai-recos",
+        "when": null,
+        "then": "la première bulle assistante affiche \"Comment te positionnes-tu en tant qu'influenceur ?\""
+      },
+      {
+        "id": "AC-050-02",
+        "title": "Flux séquentiel",
+        "scenario": "Une réponse débloque la question suivante",
+        "given": "je suis sur AI Coach",
+        "when": "je saisis une réponse et l'envoie",
+        "then": "la question suivante est affichée par l'assistant"
+      }
+    ],
+    "US-051": [
+      {
+        "id": "AC-051-01",
+        "title": "Send disabled si textarea vide",
+        "scenario": "Bouton Send désactivé",
+        "given": "la zone de texte de l'AI Coach est vide",
+        "when": null,
+        "then": "le bouton Send est disabled"
+      },
+      {
+        "id": "AC-051-02",
+        "title": "Restart efface la conversation",
+        "scenario": "Réinitialisation",
+        "given": "une conversation est en cours",
+        "when": "je clique sur \"Restart\"",
+        "then": "la conversation est réinitialisée à la première question"
+      }
+    ],
+    "US-060": [
+      {
+        "id": "AC-060-01",
+        "title": "Colonnes et filtres",
+        "scenario": "Le créateur consulte sa messagerie",
+        "given": "j'ouvre /creator/messagerie",
+        "when": null,
+        "then": "la table expose Profile, Campaign, Last Message, Actions"
+      },
+      {
+        "id": "AC-060-02",
+        "title": "Lien depuis une collaboration",
+        "scenario": "Conversation liée à une collaboration",
+        "given": "une collaboration est en cours",
+        "when": "je clique sur l'action de message depuis /creator/collaborations",
+        "then": "la conversation correspondante s'ouvre dans /creator/messagerie"
+      }
+    ],
+    "US-061": [
+      {
+        "id": "AC-061-01",
+        "title": "Texte exact",
+        "scenario": "Aucune conversation",
+        "given": "je n'ai aucune conversation",
+        "when": "j'ouvre /creator/messagerie",
+        "then": "l'état vide affiche le texte EXACT \"You don't have any open discussions at the moment.\""
+      },
+      {
+        "id": "AC-061-02",
+        "title": "Aucun filtre actif",
+        "scenario": "État vide sans filtre",
+        "given": "j'arrive pour la première fois",
+        "when": null,
+        "then": "aucun filtre n'est pré-appliqué et l'état vide est affiché"
+      }
+    ],
+    "US-070": [
+      {
+        "id": "AC-070-01",
+        "title": "Email en lecture seule",
+        "scenario": "Email non modifiable",
+        "given": "je suis sur /creator/accounts onglet \"Account management\"",
+        "when": null,
+        "then": "le champ Email Address est disabled (lecture seule)"
+      },
+      {
+        "id": "AC-070-02",
+        "title": "Update Information disabled tant qu'aucun changement",
+        "scenario": "Pas de changement",
+        "given": "aucun champ n'a été modifié depuis le chargement",
+        "when": null,
+        "then": "les boutons \"Update Information\" et \"Reset\" sont disabled"
+      },
+      {
+        "id": "AC-070-03",
+        "title": "Update Information enabled après modification",
+        "scenario": "Modification d'un champ",
+        "given": "je modifie le champ Address",
+        "when": null,
+        "then": "\"Update Information\" et \"Reset\" deviennent enabled"
+      }
+    ],
+    "US-071": [
+      {
+        "id": "AC-071-01",
+        "title": "Ouverture du flux",
+        "scenario": "Le créateur change son mot de passe",
+        "given": "je suis sur /creator/accounts",
+        "when": "je clique sur \"Change password\"",
+        "then": "un flux de changement de mot de passe s'ouvre"
+      },
+      {
+        "id": "AC-071-02",
+        "title": "Mot de passe trop faible",
+        "scenario": "Mot de passe non conforme",
+        "given": "je suis sur le flux de changement",
+        "when": "je saisis un mot de passe trop court",
+        "then": "une erreur de complexité est affichée"
+      }
+    ],
+    "US-072": [
+      {
+        "id": "AC-072-01",
+        "title": "Choix Business / Auto-entrepreneur",
+        "scenario": "Sélection du statut**",
+        "given": "je suis sur la section Billing information",
+        "when": null,
+        "then": "la question \"I'm a ?\" affiche les radios \"Business\" (par défaut) et \"Auto-entrepreneur\""
+      },
+      {
+        "id": "AC-072-02",
+        "title": "ICE search & Approve",
+        "scenario": "Recherche ICE",
+        "given": "le champ ICE est vide",
+        "when": "je saisis un ICE et clique sur Search",
+        "then": "les boutons Search et Approve sont disabled When je saisis un ICE et clique sur Search Then si un ICE correspondant est trouvé le bouton Approve devient enabled"
+      }
+    ],
+    "US-073": [
+      {
+        "id": "AC-073-01",
+        "title": "Une ligne par (compte × format)",
+        "scenario": "Tableau Creator pricing",
+        "given": "j'ouvre /creator/accounts?acc_tab=billing",
+        "when": null,
+        "then": "chaque ligne du tableau correspond à un couple (compte social × format de contenu)"
+      },
+      {
+        "id": "AC-073-02",
+        "title": "Sauvegarde par compte",
+        "scenario": "Save account pricing par ligne",
+        "given": "je modifie la fourchette d'une ligne",
+        "when": "je clique sur \"Save account pricing\"",
+        "then": "seule cette ligne est sauvegardée"
+      },
+      {
+        "id": "AC-073-03",
+        "title": "Suggested market range",
+        "scenario": "Indicatif marché**",
+        "given": "je suis sur l'onglet Pricing",
+        "when": null,
+        "then": "le footer affiche \"Suggested market range based on your profile and past deals.\""
+      }
+    ],
+    "US-074": [
+      {
+        "id": "AC-074-01",
+        "title": "CIN en Pending Validation",
+        "scenario": "Soumission de CIN",
+        "given": "je suis sur /creator/accounts?acc_tab=documents",
+        "when": "je saisis CIN number et Date of expiry et clique sur \"Submit CIN details\"",
+        "then": "le statut affiche \"Pending Validation\""
+      },
+      {
+        "id": "AC-074-02",
+        "title": "Upload RIB",
+        "scenario": "Upload du RIB",
+        "given": "je suis sur le bloc \"Bank account details (RIB)\"",
+        "when": "je sélectionne un fichier puis clique sur \"Upload File\"",
+        "then": "mon RIB est uploadé"
+      },
+      {
+        "id": "AC-074-03",
+        "title": "Attestation optionnelle",
+        "scenario": "Attestation non requise pour particulier",
+        "given": "je suis sur le bloc Attestation de régularité fiscale",
+        "when": null,
+        "then": "le sous-titre indique \"You do not need to provide this document if you are not a company\""
+      }
+    ],
+    "US-075": [
+      {
+        "id": "AC-075-01",
+        "title": "Annulation possible",
+        "scenario": "Cancel d'une CIN en attente",
+        "given": "ma CIN est au statut \"Pending Validation\"",
+        "when": "je clique sur \"Cancel Validation\"",
+        "then": "ma demande est annulée et je peux ressoumettre"
+      },
+      {
+        "id": "AC-075-02",
+        "title": "Statut redevient vide",
+        "scenario": "Statut après annulation",
+        "given": "je viens d'annuler la validation",
+        "when": null,
+        "then": "le bloc CIN n'affiche plus le badge \"Pending Validation\""
+      }
+    ],
+    "US-076": [
+      {
+        "id": "AC-076-01",
+        "title": "Texte d'avertissement",
+        "scenario": "Affichage du warning",
+        "given": "je suis sur la section \"Danger zone\"",
+        "when": null,
+        "then": "le texte EXACT \"Deleting your account will permanently remove your profile, campaigns, and billing information. This action cannot be undone.\" est affiché"
+      },
+      {
+        "id": "AC-076-02",
+        "title": "Suppression confirmée",
+        "scenario": "Suppression définitive",
+        "given": "je clique sur \"Delete my account\"",
+        "when": "je confirme la suppression",
+        "then": "mon compte est supprimé et je suis déconnecté"
+      }
+    ],
+    "US-080": [
+      {
+        "id": "AC-080-01",
+        "title": "Section My reports vide",
+        "scenario": "Aucun report",
+        "given": "je n'ai déposé aucun report",
+        "when": "j'ouvre /creator/support",
+        "then": "la section affiche \"0 report(s)\" et le texte EXACT \"No reports yet — Use the button in the bottom-right corner to report an issue.\""
+      },
+      {
+        "id": "AC-080-02",
+        "title": "FAQ accordéon",
+        "scenario": "5 questions FAQ",
+        "given": "je suis sur /creator/support",
+        "when": null,
+        "then": "la FAQ liste 5 questions : What is INFLU?, How does INFLU help with influencer marketing?, Can I track campaign performance in real time?, Does INFLU support multiple social media platforms?, Is INFLU suitable for small businesses?"
+      }
+    ],
+    "US-081": [
+      {
+        "id": "AC-081-01",
+        "title": "Modale typée",
+        "scenario": "Ouverture de la modale",
+        "given": "je clique sur le bouton flottant \"Report an issue\"",
+        "when": null,
+        "then": "une modale s'ouvre avec le sous-titre \"Describe the problem and our team will get back to you.\""
+      },
+      {
+        "id": "AC-081-02",
+        "title": "Soumission",
+        "scenario": "Submit du report",
+        "given": "j'ai rempli Issue type et Title",
+        "when": "je clique sur \"Submit report\"",
+        "then": "le report est créé et compté dans \"My reports\""
+      }
+    ],
+    "US-100": [
+      {
+        "id": "AC-100-01",
+        "title": "KPIs et CTA",
+        "scenario": "Le business consulte son Dashboard",
+        "given": "j'ouvre /business",
+        "when": null,
+        "then": "les KPIs Number of campaigns / Active / Draft / On hold / Completed sont visibles"
+      },
+      {
+        "id": "AC-100-02",
+        "title": "État vide AI Campaigns",
+        "scenario": "Aucune campagne créée**",
+        "given": "aucune campagne n'a été créée",
+        "when": null,
+        "then": "l'état vide affiche le texte EXACT \"No campaigns created yet.\""
+      }
+    ],
+    "US-101": [
+      {
+        "id": "AC-101-01",
+        "title": "Combobox autocomplete",
+        "scenario": "Le business utilise la recherche globale",
+        "given": "je suis sur n'importe quel écran /business/*",
+        "when": "je saisis dans la recherche globale \"Search your best influencer by name or handle\"",
+        "then": "des suggestions s'affichent When je clique sur \"Show suggestions\" Then la liste de suggestions s'ouvre"
+      },
+      {
+        "id": "AC-101-02",
+        "title": "Sélection ouvre le profil",
+        "scenario": "Sélection d'un créateur**",
+        "given": "une suggestion est affichée",
+        "when": "je la sélectionne",
+        "then": "je suis redirigé vers /business/profile/[id]"
+      }
+    ],
+    "US-102": [
+      {
+        "id": "AC-102-01",
+        "title": "Social Listening disabled",
+        "scenario": "Social Listening désactivé",
+        "given": "je suis dans /business",
+        "when": null,
+        "then": "l'item sidebar \"Social Listening\" est visible mais à l'état disabled"
+      },
+      {
+        "id": "AC-102-02",
+        "title": "Aucun click effect",
+        "scenario": "Clic sans effet",
+        "given": "Social Listening est disabled",
+        "when": "je clique dessus",
+        "then": "aucune navigation ne se produit"
+      }
+    ],
+    "US-110": [
+      {
+        "id": "AC-110-01",
+        "title": "Première question",
+        "scenario": "Démarrage du chat IA",
+        "given": "j'ouvre /business/ai-campaign",
+        "when": null,
+        "then": "la première question est \"What kind of campaign would you like to launch, and what scope are you aiming for?\""
+      },
+      {
+        "id": "AC-110-02",
+        "title": "Sélection multi-options",
+        "scenario": "Choix de plusieurs scopes",
+        "given": "le dropdown multi-select est ouvert",
+        "when": "je sélectionne 2 options puis valide",
+        "then": "la conversation passe à l'étape suivante avec le brief en cours de génération"
+      }
+    ],
+    "US-111": [
+      {
+        "id": "AC-111-01",
+        "title": "État vide avec CTA",
+        "scenario": "Aucune campagne IA**",
+        "given": "j'ouvre /business/ai-manager sans campagne créée",
+        "when": null,
+        "then": "le titre EXACT \"No AI campaigns created yet\" s'affiche"
+      },
+      {
+        "id": "AC-111-02",
+        "title": "Filtres",
+        "scenario": "Recherche dans AI Manager**",
+        "given": "des campagnes IA existent",
+        "when": "je saisis dans Search ou applique un statut",
+        "then": "la liste est filtrée When je clique sur Clear Then les filtres sont réinitialisés"
+      }
+    ],
+    "US-120": [
+      {
+        "id": "AC-120-01",
+        "title": "Étape A Brand Information",
+        "scenario": "Saisie de la marque",
+        "given": "j'ouvre /business/marketplace/create",
+        "when": "je remplis ces champs",
+        "then": "l'étape A \"Brand Information\" demande Select Brand (parmi les marques liées) et Brand description When je remplis ces champs Then le bouton \"Next: Describe product\" devient enabled"
+      },
+      {
+        "id": "AC-120-02",
+        "title": "Étape B Product Details",
+        "scenario": "Détails produit",
+        "given": "je suis à l'étape B",
+        "when": null,
+        "then": "les champs requis sont Product Name, Product Description, Requested Content, Mini Script for Influencer"
+      },
+      {
+        "id": "AC-120-03",
+        "title": "Étape C Acceptance criteria",
+        "scenario": "Critères d'acceptation",
+        "given": "je suis à l'étape C",
+        "when": null,
+        "then": "je peux ajouter ou supprimer des critères texte libre"
+      },
+      {
+        "id": "AC-120-04",
+        "title": "Étape E Dates",
+        "scenario": "Saisie des dates par livraison",
+        "given": "j'ai défini au moins une livraison à l'étape D",
+        "when": "je clique sur \"Specify dates\"",
+        "then": "je peux saisir Date de réception et Date de publication par livraison"
+      }
+    ],
+    "US-121": [
+      {
+        "id": "AC-121-01",
+        "title": "Tagged account avec préfixe @",
+        "scenario": "Préfixe @ imposé",
+        "given": "j'ajoute une livraison",
+        "when": null,
+        "then": "le champ \"Tagged account\" est préfixé par \"@\" et requis"
+      },
+      {
+        "id": "AC-121-02",
+        "title": "Specify dates disabled si livraison incomplète",
+        "scenario": "Validation par étape",
+        "given": "une livraison est partiellement remplie",
+        "when": null,
+        "then": "le bouton \"Specify dates\" est disabled"
+      },
+      {
+        "id": "AC-121-03",
+        "title": "Next disabled tant qu'aucune livraison",
+        "scenario": "Au moins une livraison requise**",
+        "given": "aucune livraison n'est ajoutée",
+        "when": null,
+        "then": "le bouton \"Next\" est disabled"
+      }
+    ],
+    "US-122": [
+      {
+        "id": "AC-122-01",
+        "title": "Liste des produits publiés",
+        "scenario": "Le business consulte ses produits**",
+        "given": "j'ouvre /business/marketplace",
+        "when": null,
+        "then": "la liste de mes produits Marketplace publiés s'affiche"
+      },
+      {
+        "id": "AC-122-02",
+        "title": "Lien vers le détail public",
+        "scenario": "Aperçu côté créateur**",
+        "given": "un produit est publié",
+        "when": "j'ouvre son détail",
+        "then": "je vois la même fiche que celle exposée aux créateurs (cf. §5.4)"
+      }
+    ],
+    "US-130": [
+      {
+        "id": "AC-130-01",
+        "title": "Persistance dans l'URL",
+        "scenario": "Les filtres sont sérialisés",
+        "given": "j'applique des filtres sur Discovery",
+        "when": null,
+        "then": "l'URL inclut disc_filter (JSON encodé), disc_seed et disc_page"
+      },
+      {
+        "id": "AC-130-02",
+        "title": "Reset (N) des filtres",
+        "scenario": "Réinitialisation",
+        "given": "N filtres sont actifs",
+        "when": "je clique dessus",
+        "then": "le bouton \"Reset (N)\" affiche le compteur correct When je clique dessus Then tous les filtres sont effacés"
+      },
+      {
+        "id": "AC-130-03",
+        "title": "Filter Options drawer",
+        "scenario": "Filtres avancés**",
+        "given": "je clique sur \"Filter Options\"",
+        "when": null,
+        "then": "un drawer/modal s'ouvre avec les filtres avancés"
+      }
+    ],
+    "US-131": [
+      {
+        "id": "AC-131-01",
+        "title": "Table View par défaut",
+        "scenario": "Vue tableau par défaut",
+        "given": "j'ouvre /business/discovery",
+        "when": null,
+        "then": "la vue Table View est sélectionnée"
+      },
+      {
+        "id": "AC-131-02",
+        "title": "Bascule en Grid View",
+        "scenario": "Toggle vers Grid View",
+        "given": "je suis sur Discovery",
+        "when": "je bascule sur \"Grid View\"",
+        "then": "les résultats s'affichent sous forme de cards"
+      },
+      {
+        "id": "AC-131-03",
+        "title": "Pagination Page X of Y (Total Z records)",
+        "scenario": "Pagination affichée",
+        "given": "des résultats existent",
+        "when": null,
+        "then": "la pagination affiche \"Page X of Y (Total Z records)\""
+      }
+    ],
+    "US-132": [
+      {
+        "id": "AC-132-01",
+        "title": "En-tête et Profile overview",
+        "scenario": "Le business ouvre un profil créateur",
+        "given": "j'ouvre /business/profile/[id]",
+        "when": null,
+        "then": "je vois Avatar, Nom, Description courte, Catégorie, Pays, Genre"
+      },
+      {
+        "id": "AC-132-02",
+        "title": "Onglets disponibles sans My INFLU",
+        "scenario": "4 onglets visibles**",
+        "given": "je suis sur /business/profile/[id]",
+        "when": null,
+        "then": "les onglets sont Social Coverage, Creator network, Posts, Audience insights (disabled)"
+      }
+    ],
+    "US-140": [
+      {
+        "id": "AC-140-01",
+        "title": "État vide",
+        "scenario": "Aucune liste CRM**",
+        "given": "j'ouvre /business/crm sans aucune liste",
+        "when": null,
+        "then": "l'illustration \"No data found\" est visible"
+      },
+      {
+        "id": "AC-140-02",
+        "title": "Recherche dans les listes",
+        "scenario": "Filtrage**",
+        "given": "des listes CRM existent",
+        "when": "je saisis un terme dans Search",
+        "then": "la liste est filtrée"
+      }
+    ],
+    "US-141": [
+      {
+        "id": "AC-141-01",
+        "title": "Modale Create new CRM",
+        "scenario": "Champs requis**",
+        "given": "je clique sur \"Create New CRM\"",
+        "when": null,
+        "then": "la modale demande Title (requis) et Description (requis)"
+      },
+      {
+        "id": "AC-141-02",
+        "title": "Création confirmée",
+        "scenario": "Soumission**",
+        "given": "Title et Description sont remplis",
+        "when": "je clique sur \"Create CRM\"",
+        "then": "la liste est créée et apparaît dans /business/crm"
+      }
+    ],
+    "US-142": [
+      {
+        "id": "AC-142-01",
+        "title": "Action depuis Discovery",
+        "scenario": "Ajout depuis la table**",
+        "given": "je suis sur /business/discovery",
+        "when": "je clique sur l'action \"Add to CRM\" d'une ligne",
+        "then": "je peux choisir une liste existante et y ajouter le créateur"
+      },
+      {
+        "id": "AC-142-02",
+        "title": "Confirmation toast",
+        "scenario": "Confirmation visuelle**",
+        "given": "j'ai ajouté un créateur à une liste CRM",
+        "when": null,
+        "then": "un toast / notification confirme l'ajout"
+      }
+    ],
+    "US-150": [
+      {
+        "id": "AC-150-01",
+        "title": "Mêmes patterns que créateur",
+        "scenario": "Conversations**",
+        "given": "j'ouvre /business/messagerie",
+        "when": null,
+        "then": "la table expose Profile / Campaign / Last Message / Actions avec filtres Search, brand, status"
+      },
+      {
+        "id": "AC-150-02",
+        "title": "Lancement conversation depuis Discovery",
+        "scenario": "Send message depuis Discovery**",
+        "given": "je suis sur Discovery",
+        "when": "je clique sur l'action message d'une ligne",
+        "then": "une nouvelle conversation s'ouvre dans /business/messagerie"
+      }
+    ],
+    "US-160": [
+      {
+        "id": "AC-160-01",
+        "title": "Marketplace payments par défaut",
+        "scenario": "Onglet par défaut**",
+        "given": "j'ouvre /business/payments",
+        "when": null,
+        "then": "l'onglet \"Marketplace payments\" est sélectionné"
+      },
+      {
+        "id": "AC-160-02",
+        "title": "Filtres",
+        "scenario": "Filtres et Clear**",
+        "given": "je suis sur Payments",
+        "when": "je sélectionne une marque et un statut",
+        "then": "la table est filtrée When je clique sur Clear Then les filtres sont réinitialisés"
+      }
+    ],
+    "US-161": [
+      {
+        "id": "AC-161-01",
+        "title": "Colonnes",
+        "scenario": "Colonnes visibles**",
+        "given": "je suis sur Payments",
+        "when": null,
+        "then": "les colonnes sont Creator, Brand, Status, Amount (Dhs), Requested At, Completed At, Actions"
+      },
+      {
+        "id": "AC-161-02",
+        "title": "État vide",
+        "scenario": "Aucun paiement**",
+        "given": "aucun paiement n'existe",
+        "when": null,
+        "then": "l'état vide affiche le texte EXACT \"No payment data found\""
+      }
+    ],
+    "US-170": [
+      {
+        "id": "AC-170-01",
+        "title": "Account Type \"Business Account\"",
+        "scenario": "Account Type fixe**",
+        "given": "j'ouvre /business/accounts",
+        "when": null,
+        "then": "Account Type affiche \"Business Account\""
+      },
+      {
+        "id": "AC-170-02",
+        "title": "Business Information en lecture seule",
+        "scenario": "Section légale en read-only**",
+        "given": "je suis sur /business/accounts",
+        "when": null,
+        "then": "la section Business Information liste Juridical Form, ICE, Company Name, Company Address, IF, RC, TVA en lecture seule"
+      }
+    ],
+    "US-171": [
+      {
+        "id": "AC-171-01",
+        "title": "Table des marques",
+        "scenario": "Le business consulte ses marques**",
+        "given": "j'ouvre /business/accounts?acc_tab=brands",
+        "when": null,
+        "then": "la table expose les colonnes BRAND (logo + nom), WEBSITE (ou \"No website\"), COUNTRY (drapeau), Actions (Manage access, Add access, kebab)"
+      },
+      {
+        "id": "AC-171-02",
+        "title": "Aucune marque liée",
+        "scenario": "État vide marques**",
+        "given": "aucune marque n'est liée",
+        "when": null,
+        "then": "la table est vide et le bouton \"Link new brand\" reste accessible"
+      }
+    ],
+    "US-172": [
+      {
+        "id": "AC-172-01",
+        "title": "Modale recherche",
+        "scenario": "Recherche dans la base existante**",
+        "given": "je clique sur \"Link new brand\"",
+        "when": null,
+        "then": "une modale \"Link a new brand\" s'ouvre avec le champ \"Your brand\" (combobox autocomplete) et le sous-titre \"Search brand by name or social @account to your profile.\""
+      },
+      {
+        "id": "AC-172-02",
+        "title": "Confirm selection bloqué",
+        "scenario": "Confirm selection disabled tant qu'aucune marque n'est sélectionnée**",
+        "given": "la modale est ouverte",
+        "when": null,
+        "then": "les boutons \"Reset selection\" et \"Confirm selection\" sont disabled"
+      },
+      {
+        "id": "AC-172-03",
+        "title": "Liaison réussie",
+        "scenario": "Sélection et confirmation**",
+        "given": "je sélectionne une marque depuis la base",
+        "when": "je clique sur \"Confirm selection\"",
+        "then": "la marque apparaît dans la table \"Manage your Brands\""
+      }
+    ],
+    "US-173": [
+      {
+        "id": "AC-173-01",
+        "title": "Manage access",
+        "scenario": "Gestion des accès d'une marque**",
+        "given": "une marque est liée",
+        "when": "je clique sur l'action \"Manage access\" de cette marque",
+        "then": "je vois la liste des membres de l'agence et leurs droits"
+      },
+      {
+        "id": "AC-173-02",
+        "title": "Add access",
+        "scenario": "Inviter un nouveau membre**",
+        "given": "je suis sur Manage your Brands",
+        "when": "je clique sur \"Add access\" d'une marque",
+        "then": "je peux inviter un membre supplémentaire"
+      }
+    ],
+    "US-174": [
+      {
+        "id": "AC-174-01",
+        "title": "Texte d'avertissement identique",
+        "scenario": "Warning Delete my account**",
+        "given": "je suis sur la Danger zone de /business/accounts",
+        "when": null,
+        "then": "le texte EXACT \"Deleting your account will permanently remove your profile, campaigns, and billing information. This action cannot be undone.\" est affiché"
+      },
+      {
+        "id": "AC-174-02",
+        "title": "Suppression confirmée",
+        "scenario": "Confirmation et suppression**",
+        "given": "je clique sur \"Delete my account\" et je confirme",
+        "when": null,
+        "then": "mon compte business est supprimé et je suis déconnecté"
+      }
+    ],
+    "US-180": [
+      {
+        "id": "AC-180-01",
+        "title": "Mêmes sections que créateur",
+        "scenario": "FAQ + reports**",
+        "given": "j'ouvre /business/support",
+        "when": null,
+        "then": "je vois la section \"My reports\" avec compteur, l'état vide identique au créateur, la FAQ accordéon et le bouton flottant \"Report an issue\""
+      },
+      {
+        "id": "AC-180-02",
+        "title": "État vide reports",
+        "scenario": "Aucun report business**",
+        "given": "aucun report n'a été déposé",
+        "when": null,
+        "then": "le texte EXACT \"No reports yet — Use the button in the bottom-right corner to report an issue.\" est affiché"
+      }
+    ],
+    "US-181": [
+      {
+        "id": "AC-181-01",
+        "title": "Modale typée business",
+        "scenario": "Issue type requis**",
+        "given": "je clique sur \"Report an issue\" dans /business",
+        "when": null,
+        "then": "la modale demande Issue type (requis) parmi Bug / Feature request / Performance / UI issue / I have an issue on a campaign / Other, Title, Description"
+      },
+      {
+        "id": "AC-181-02",
+        "title": "Report soumis",
+        "scenario": "Soumission**",
+        "given": "Issue type, Title et Description sont remplis",
+        "when": "je clique sur \"Submit report\"",
+        "then": "le report est créé et compté dans My reports"
+      }
+    ],
+    "US-200": [
+      {
+        "id": "AC-200-01",
+        "title": "URL inconnue",
+        "scenario": "Navigation vers une URL inexistante**",
+        "given": "je tape une URL inconnue",
+        "when": null,
+        "then": "une page 404 dédiée s'affiche"
+      },
+      {
+        "id": "AC-200-02",
+        "title": "Statut HTTP 404",
+        "scenario": "Code HTTP**",
+        "given": "une URL inexistante est demandée",
+        "when": null,
+        "then": "la réponse HTTP est 404"
+      }
+    ],
+    "US-201": [
+      {
+        "id": "AC-201-01",
+        "title": "Créateur sur /business",
+        "scenario": "Accès interdit créateur → business**",
+        "given": "je suis connecté en créateur",
+        "when": "j'ouvre une URL /business/*",
+        "then": "une page 403 explicite s'affiche"
+      },
+      {
+        "id": "AC-201-02",
+        "title": "Business sur /creator",
+        "scenario": "Accès interdit business → créateur**",
+        "given": "je suis connecté en business",
+        "when": "j'ouvre /creator/*",
+        "then": "une page 403 explicite s'affiche"
+      }
+    ],
+    "US-202": [
+      {
+        "id": "AC-202-01",
+        "title": "Erreur serveur",
+        "scenario": "Erreur 500 du backend**",
+        "given": "un appel API renvoie une erreur 500",
+        "when": null,
+        "then": "une page 500 dédiée s'affiche avec un lien de retour"
+      },
+      {
+        "id": "AC-202-02",
+        "title": "Pas de blanc page",
+        "scenario": "L'utilisateur n'est pas laissé sur un blanc**",
+        "given": "une exception inattendue côté serveur",
+        "when": null,
+        "then": "la page 500 est rendue (pas de page blanche)"
+      }
+    ],
+    "US-203": [
+      {
+        "id": "AC-203-01",
+        "title": "Composants header",
+        "scenario": "Header sur tous les écrans connectés**",
+        "given": "je suis connecté",
+        "when": null,
+        "then": "le header expose un sélecteur de langue, une cloche notifications et un menu utilisateur (avatar / nom / email)"
+      },
+      {
+        "id": "AC-203-02",
+        "title": "Menu utilisateur",
+        "scenario": "Items du menu**",
+        "given": "je clique sur l'avatar",
+        "when": null,
+        "then": "le menu déroulant expose Profile, Pricing, Documents, Logout"
+      }
+    ],
+    "US-204": [
+      {
+        "id": "AC-204-01",
+        "title": "Notifications créateur",
+        "scenario": "Notifications créateur**",
+        "given": "je suis créateur",
+        "when": null,
+        "then": "la cloche reçoit les événements suivants : candidature acceptée/refusée, brief reçu, modification demandée, livrable validé, paiement reçu, message d'une marque, validation CIN, opportunité expirante, recommandation AI Coach"
+      },
+      {
+        "id": "AC-204-02",
+        "title": "Notifications business",
+        "scenario": "Notifications business**",
+        "given": "je suis business",
+        "when": null,
+        "then": "la cloche reçoit les événements : candidature reçue, livrable soumis, message d'un créateur, paiement complété/échoué, nouvelle marque liée"
+      }
+    ],
+    "US-205": [
+      {
+        "id": "AC-205-01",
+        "title": "Libellés EXACTS partout",
+        "scenario": "Empty states standardisés**",
+        "given": "une liste est vide",
+        "when": null,
+        "then": "le texte affiché correspond EXACTEMENT au catalogue §9.1 (Dashboard créateur, Marketplace, Dashboard business, Messaging, AI Manager, CRM, Payments, Support reports)"
+      },
+      {
+        "id": "AC-205-02",
+        "title": "Placeholder __ vs --",
+        "scenario": "Sémantique des placeholders**",
+        "given": "une feature est désactivée",
+        "when": null,
+        "then": "la valeur affichée est \"__\""
+      }
+    ],
+    "US-206": [
+      {
+        "id": "AC-206-01",
+        "title": "Apply disabled — bloc explicatif",
+        "scenario": "Apply bloqué**",
+        "given": "mon profil n'a pas la CIN/RIB/ICE complets",
+        "when": null,
+        "then": "le bouton Apply est disabled"
+      },
+      {
+        "id": "AC-206-02",
+        "title": "Send / Update / Confirm selection disabled",
+        "scenario": "Boutons désactivés avec raison**",
+        "given": "une condition de §9.2 n'est pas remplie",
+        "when": null,
+        "then": "le bouton concerné est disabled (Send tant que textarea vide, Update Information tant qu'aucun champ modifié, Confirm selection tant qu'aucune marque sélectionnée, Specify dates tant que livraison incomplète, Search ICE tant que champ vide, Approve ICE tant qu'aucun ICE trouvé, previous page sur page 1)"
+      }
+    ]
+  }
+}

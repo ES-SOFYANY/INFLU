@@ -1,0 +1,26 @@
+[
+  {
+    "name": "2. Personas",
+    "description": null
+  },
+  {
+    "name": "P1 — Créateur / Influenceur (Influencer)",
+    "description": "Créateur de contenu individuel (Instagram, TikTok, YouTube, Twitter), basé en MENA, segmenté par tier (Nano → Celebrity), cherchant à monétiser son audience via des collaborations contractualisées et payées par INFLU."
+  },
+  {
+    "name": "P2 — Small Business",
+    "description": "Marque de niche / early-stage, équipe marketing portée par le propriétaire. Lance des produits ou des promotions ponctuelles, opère sur l'espace `/business`."
+  },
+  {
+    "name": "P3 — Brand",
+    "description": "Marque établie cherchant des partenariats récurrents avec des créateurs. Gère plusieurs campagnes IA et produits Marketplace, opère sur `/business`."
+  },
+  {
+    "name": "P4 — Agency",
+    "description": "Agence média qui gère **plusieurs marques** sous un même compte (table « Manage your Brands »). Délègue les accès à ses membres (« Manage access », « Add access »)."
+  },
+  {
+    "name": "P5 — INFLU Platform (acteur système)",
+    "description": "Acteur tiers : valide manuellement les documents administratifs créateur (CIN « Pending Validation »), agit comme **payeur tiers** (paiements affichés « Paid by INFLU »), génère par IA briefs / scripts / recommandations / suggestions de prix."
+  }
+]
