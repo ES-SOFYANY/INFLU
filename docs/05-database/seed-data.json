@@ -1,0 +1,1704 @@
+{
+  "_comment": "Seed dataset minimal demo INFLU.ai MENA — format aws dynamodb batch-write-item. Usage: aws dynamodb batch-write-item --request-items file://seed-data.json --region eu-west-3. NOTE: chaque clé top-level est un nom de table (influ_main, influ_audit, influ_sessions). DynamoDB limite à 25 items par batch — le script seed.js (cf. migrations-plan.md) découpe automatiquement.",
+  "influ_main": [
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_admin_001"},
+          "SK": {"S": "PROFILE"},
+          "entity": {"S": "User"},
+          "id": {"S": "u_admin_001"},
+          "email": {"S": "admin@influ.ai"},
+          "emailVerified": {"BOOL": true},
+          "passwordHash": {"S": "$argon2id$v=19$m=65536,t=3,p=4$seedAdmin$placeholder"},
+          "role": {"S": "ADMIN"},
+          "accountType": {"S": "admin"},
+          "status": {"S": "ACTIVE"},
+          "fullName": {"S": "Sara El Amrani"},
+          "phone": {"S": "+212600000001"},
+          "country": {"S": "MA"},
+          "city": {"S": "Casablanca"},
+          "locale": {"S": "fr"},
+          "acceptedLegalAt": {"S": "2026-01-01T08:00:00Z"},
+          "ageOver18": {"BOOL": true},
+          "createdAt": {"S": "2026-01-01T08:00:00Z"},
+          "updatedAt": {"S": "2026-01-01T08:00:00Z"},
+          "GSI1PK": {"S": "EMAIL#admin@influ.ai"},
+          "GSI1SK": {"S": "USER#u_admin_001"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "EMAIL#admin@influ.ai"},
+          "SK": {"S": "USER#u_admin_001"},
+          "entity": {"S": "EmailSentinel"},
+          "userId": {"S": "u_admin_001"},
+          "createdAt": {"S": "2026-01-01T08:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_nano_010"},
+          "SK": {"S": "PROFILE"},
+          "entity": {"S": "User"},
+          "id": {"S": "u_creator_nano_010"},
+          "email": {"S": "amine.nano@example.ma"},
+          "emailVerified": {"BOOL": true},
+          "passwordHash": {"S": "$argon2id$v=19$m=65536,t=3,p=4$seedNano$placeholder"},
+          "role": {"S": "CREATOR"},
+          "accountType": {"S": "creator"},
+          "status": {"S": "ACTIVE"},
+          "gender": {"S": "M"},
+          "fullName": {"S": "Amine Bennani"},
+          "phone": {"S": "+212611111110"},
+          "country": {"S": "MA"},
+          "city": {"S": "Rabat"},
+          "locale": {"S": "fr"},
+          "acceptedLegalAt": {"S": "2026-02-15T10:00:00Z"},
+          "ageOver18": {"BOOL": true},
+          "createdAt": {"S": "2026-02-15T10:00:00Z"},
+          "updatedAt": {"S": "2026-02-15T10:00:00Z"},
+          "GSI1PK": {"S": "EMAIL#amine.nano@example.ma"},
+          "GSI1SK": {"S": "USER#u_creator_nano_010"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "EMAIL#amine.nano@example.ma"},
+          "SK": {"S": "USER#u_creator_nano_010"},
+          "entity": {"S": "EmailSentinel"},
+          "userId": {"S": "u_creator_nano_010"},
+          "createdAt": {"S": "2026-02-15T10:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_nano_010"},
+          "SK": {"S": "CREATOR#PROFILE"},
+          "entity": {"S": "CreatorProfile"},
+          "userId": {"S": "u_creator_nano_010"},
+          "bio": {"S": "Lifestyle créateur basé à Rabat — mode et café."},
+          "category": {"S": "Lifestyle"},
+          "tier": {"S": "NANO"},
+          "verified": {"BOOL": false},
+          "influScore": {"N": "62"},
+          "cinStatus": {"S": "VALIDATED"},
+          "ribUploaded": {"BOOL": true},
+          "iceFilled": {"BOOL": true},
+          "eligibleToApply": {"BOOL": true},
+          "seedHash": {"S": "h_010"},
+          "discoverable": {"BOOL": true},
+          "categories": {"SS": ["Lifestyle", "Fashion"]},
+          "createdAt": {"S": "2026-02-15T10:05:00Z"},
+          "updatedAt": {"S": "2026-04-20T14:00:00Z"},
+          "GSI3PK": {"S": "LOC#MA#CAT#Lifestyle"},
+          "GSI3SK": {"S": "NANO#000004500#h_010#u_creator_nano_010"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_nano_010"},
+          "SK": {"S": "SOCIAL#INSTAGRAM#amine.daily"},
+          "entity": {"S": "SocialAccount"},
+          "platform": {"S": "INSTAGRAM"},
+          "handle": {"S": "amine.daily"},
+          "url": {"S": "https://instagram.com/amine.daily"},
+          "followers": {"N": "4500"},
+          "engagementRate": {"N": "5.8"},
+          "posts": {"N": "212"},
+          "views": {"N": "0"},
+          "verified": {"BOOL": false},
+          "lastSyncedAt": {"S": "2026-05-01T12:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_nano_010"},
+          "SK": {"S": "PRICE#INSTAGRAM#reel"},
+          "entity": {"S": "CreatorPricing"},
+          "platform": {"S": "INSTAGRAM"},
+          "contentFormat": {"S": "reel"},
+          "accountId": {"S": "amine.daily"},
+          "rateFromMad": {"N": "800"},
+          "rateToMad": {"N": "1500"},
+          "currency": {"S": "MAD"},
+          "updatedAt": {"S": "2026-04-20T14:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_nano_010"},
+          "SK": {"S": "DOC#CIN#2026-02-16T09:00:00Z"},
+          "entity": {"S": "CreatorDocument"},
+          "documentId": {"S": "doc_cin_010"},
+          "type": {"S": "CIN"},
+          "s3Bucket": {"S": "influ-private-dev"},
+          "s3Key": {"S": "documents/u_creator_nano_010/cin/doc_cin_010.pdf"},
+          "mimeType": {"S": "application/pdf"},
+          "sizeBytes": {"N": "1245678"},
+          "cinNumber": {"S": "AB123456"},
+          "cinExpiry": {"S": "2030-02-15"},
+          "status": {"S": "VALIDATED"},
+          "validatedBy": {"S": "u_admin_001"},
+          "validatedAt": {"S": "2026-02-17T10:00:00Z"},
+          "createdAt": {"S": "2026-02-16T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_nano_010"},
+          "SK": {"S": "VALIDATION#CIN"},
+          "entity": {"S": "AdminValidationRequest"},
+          "userId": {"S": "u_creator_nano_010"},
+          "documentId": {"S": "doc_cin_010"},
+          "cinNumber": {"S": "AB123456"},
+          "submittedAt": {"S": "2026-02-16T09:00:00Z"},
+          "status": {"S": "VALIDATED"},
+          "decidedBy": {"S": "u_admin_001"},
+          "decidedAt": {"S": "2026-02-17T10:00:00Z"},
+          "GSI5PK": {"S": "STATUS#VALIDATED"},
+          "GSI5SK": {"S": "2026-02-16T09:00:00Z#u_creator_nano_010"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_micro_011"},
+          "SK": {"S": "PROFILE"},
+          "entity": {"S": "User"},
+          "id": {"S": "u_creator_micro_011"},
+          "email": {"S": "lina.beauty@example.ma"},
+          "emailVerified": {"BOOL": true},
+          "passwordHash": {"S": "$argon2id$v=19$m=65536,t=3,p=4$seedMicro$placeholder"},
+          "role": {"S": "CREATOR"},
+          "accountType": {"S": "creator"},
+          "status": {"S": "ACTIVE"},
+          "gender": {"S": "F"},
+          "fullName": {"S": "Lina Cherkaoui"},
+          "phone": {"S": "+212622222220"},
+          "country": {"S": "MA"},
+          "city": {"S": "Casablanca"},
+          "locale": {"S": "fr"},
+          "acceptedLegalAt": {"S": "2026-01-20T11:00:00Z"},
+          "ageOver18": {"BOOL": true},
+          "createdAt": {"S": "2026-01-20T11:00:00Z"},
+          "updatedAt": {"S": "2026-05-01T09:00:00Z"},
+          "GSI1PK": {"S": "EMAIL#lina.beauty@example.ma"},
+          "GSI1SK": {"S": "USER#u_creator_micro_011"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "EMAIL#lina.beauty@example.ma"},
+          "SK": {"S": "USER#u_creator_micro_011"},
+          "entity": {"S": "EmailSentinel"},
+          "userId": {"S": "u_creator_micro_011"},
+          "createdAt": {"S": "2026-01-20T11:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_micro_011"},
+          "SK": {"S": "CREATOR#PROFILE"},
+          "entity": {"S": "CreatorProfile"},
+          "userId": {"S": "u_creator_micro_011"},
+          "bio": {"S": "Beauté & skincare — reviews et tutos."},
+          "category": {"S": "Beauty"},
+          "tier": {"S": "MICRO"},
+          "verified": {"BOOL": true},
+          "influScore": {"N": "78"},
+          "cinStatus": {"S": "VALIDATED"},
+          "ribUploaded": {"BOOL": true},
+          "iceFilled": {"BOOL": true},
+          "eligibleToApply": {"BOOL": true},
+          "seedHash": {"S": "h_011"},
+          "discoverable": {"BOOL": true},
+          "categories": {"SS": ["Beauty", "Lifestyle"]},
+          "createdAt": {"S": "2026-01-20T11:00:00Z"},
+          "updatedAt": {"S": "2026-05-01T09:00:00Z"},
+          "GSI3PK": {"S": "LOC#MA#CAT#Beauty"},
+          "GSI3SK": {"S": "MICRO#000032000#h_011#u_creator_micro_011"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_micro_011"},
+          "SK": {"S": "SOCIAL#INSTAGRAM#lina.skin"},
+          "entity": {"S": "SocialAccount"},
+          "platform": {"S": "INSTAGRAM"},
+          "handle": {"S": "lina.skin"},
+          "url": {"S": "https://instagram.com/lina.skin"},
+          "followers": {"N": "32000"},
+          "engagementRate": {"N": "4.2"},
+          "posts": {"N": "486"},
+          "views": {"N": "0"},
+          "verified": {"BOOL": true},
+          "lastSyncedAt": {"S": "2026-05-01T08:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_micro_011"},
+          "SK": {"S": "SOCIAL#TIKTOK#linaskin"},
+          "entity": {"S": "SocialAccount"},
+          "platform": {"S": "TIKTOK"},
+          "handle": {"S": "linaskin"},
+          "url": {"S": "https://tiktok.com/@linaskin"},
+          "followers": {"N": "18500"},
+          "engagementRate": {"N": "7.1"},
+          "posts": {"N": "112"},
+          "views": {"N": "1240000"},
+          "verified": {"BOOL": false},
+          "lastSyncedAt": {"S": "2026-05-01T08:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_mid_012"},
+          "SK": {"S": "PROFILE"},
+          "entity": {"S": "User"},
+          "id": {"S": "u_creator_mid_012"},
+          "email": {"S": "youssef.tech@example.ma"},
+          "emailVerified": {"BOOL": true},
+          "passwordHash": {"S": "$argon2id$v=19$m=65536,t=3,p=4$seedMid$placeholder"},
+          "role": {"S": "CREATOR"},
+          "accountType": {"S": "creator"},
+          "status": {"S": "ACTIVE"},
+          "gender": {"S": "M"},
+          "fullName": {"S": "Youssef El Idrissi"},
+          "phone": {"S": "+212633333330"},
+          "country": {"S": "MA"},
+          "city": {"S": "Marrakech"},
+          "locale": {"S": "fr"},
+          "acceptedLegalAt": {"S": "2025-12-10T11:00:00Z"},
+          "ageOver18": {"BOOL": true},
+          "createdAt": {"S": "2025-12-10T11:00:00Z"},
+          "updatedAt": {"S": "2026-05-08T09:00:00Z"},
+          "GSI1PK": {"S": "EMAIL#youssef.tech@example.ma"},
+          "GSI1SK": {"S": "USER#u_creator_mid_012"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "EMAIL#youssef.tech@example.ma"},
+          "SK": {"S": "USER#u_creator_mid_012"},
+          "entity": {"S": "EmailSentinel"},
+          "userId": {"S": "u_creator_mid_012"},
+          "createdAt": {"S": "2025-12-10T11:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_mid_012"},
+          "SK": {"S": "CREATOR#PROFILE"},
+          "entity": {"S": "CreatorProfile"},
+          "userId": {"S": "u_creator_mid_012"},
+          "bio": {"S": "Tech et gaming — reviews matériel et tutos."},
+          "category": {"S": "Tech"},
+          "tier": {"S": "MID"},
+          "verified": {"BOOL": true},
+          "influScore": {"N": "85"},
+          "cinStatus": {"S": "VALIDATED"},
+          "ribUploaded": {"BOOL": true},
+          "iceFilled": {"BOOL": true},
+          "eligibleToApply": {"BOOL": true},
+          "seedHash": {"S": "h_012"},
+          "discoverable": {"BOOL": true},
+          "categories": {"SS": ["Tech", "Gaming"]},
+          "createdAt": {"S": "2025-12-10T11:00:00Z"},
+          "updatedAt": {"S": "2026-05-08T09:00:00Z"},
+          "GSI3PK": {"S": "LOC#MA#CAT#Tech"},
+          "GSI3SK": {"S": "MID#000125000#h_012#u_creator_mid_012"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_mid_012"},
+          "SK": {"S": "SOCIAL#YOUTUBE#yousseftech"},
+          "entity": {"S": "SocialAccount"},
+          "platform": {"S": "YOUTUBE"},
+          "handle": {"S": "yousseftech"},
+          "url": {"S": "https://youtube.com/@yousseftech"},
+          "followers": {"N": "125000"},
+          "engagementRate": {"N": "6.4"},
+          "posts": {"N": "342"},
+          "views": {"N": "12500000"},
+          "verified": {"BOOL": true},
+          "lastSyncedAt": {"S": "2026-05-08T08:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_mid_012"},
+          "SK": {"S": "SOCIAL#INSTAGRAM#yousseftech"},
+          "entity": {"S": "SocialAccount"},
+          "platform": {"S": "INSTAGRAM"},
+          "handle": {"S": "yousseftech"},
+          "url": {"S": "https://instagram.com/yousseftech"},
+          "followers": {"N": "62000"},
+          "engagementRate": {"N": "3.9"},
+          "posts": {"N": "210"},
+          "views": {"N": "0"},
+          "verified": {"BOOL": false},
+          "lastSyncedAt": {"S": "2026-05-08T08:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_yassir_020"},
+          "SK": {"S": "PROFILE"},
+          "entity": {"S": "User"},
+          "id": {"S": "u_business_yassir_020"},
+          "email": {"S": "marketing@yassir.com"},
+          "emailVerified": {"BOOL": true},
+          "passwordHash": {"S": "$argon2id$v=19$m=65536,t=3,p=4$seedYassir$placeholder"},
+          "role": {"S": "BUSINESS"},
+          "accountType": {"S": "brand"},
+          "status": {"S": "ACTIVE"},
+          "gender": {"S": "F"},
+          "fullName": {"S": "Khadija Ouazzani"},
+          "phone": {"S": "+212522000020"},
+          "country": {"S": "MA"},
+          "city": {"S": "Casablanca"},
+          "locale": {"S": "fr"},
+          "acceptedLegalAt": {"S": "2025-11-01T09:00:00Z"},
+          "ageOver18": {"BOOL": true},
+          "createdAt": {"S": "2025-11-01T09:00:00Z"},
+          "updatedAt": {"S": "2025-11-01T09:00:00Z"},
+          "GSI1PK": {"S": "EMAIL#marketing@yassir.com"},
+          "GSI1SK": {"S": "USER#u_business_yassir_020"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "EMAIL#marketing@yassir.com"},
+          "SK": {"S": "USER#u_business_yassir_020"},
+          "entity": {"S": "EmailSentinel"},
+          "userId": {"S": "u_business_yassir_020"},
+          "createdAt": {"S": "2025-11-01T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_yassir_020"},
+          "SK": {"S": "BUSINESS#PROFILE"},
+          "entity": {"S": "BusinessProfile"},
+          "userId": {"S": "u_business_yassir_020"},
+          "accountType": {"S": "brand"},
+          "companyName": {"S": "Yassir SAS"},
+          "defaultBrandId": {"S": "b_yassir_001"},
+          "createdAt": {"S": "2025-11-01T09:00:00Z"},
+          "updatedAt": {"S": "2025-11-01T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_yassir_020"},
+          "SK": {"S": "BUSINESS#LEGAL"},
+          "entity": {"S": "BusinessLegalEntity"},
+          "juridicalForm": {"S": "SARL"},
+          "ice": {"S": "001234567890123"},
+          "companyName": {"S": "Yassir SAS"},
+          "companyAddress": {"S": "Boulevard d'Anfa, Casablanca"},
+          "if": {"S": "12345678"},
+          "rc": {"S": "987654"},
+          "tva": {"S": "1234567"},
+          "createdAt": {"S": "2025-11-01T09:00:00Z"},
+          "updatedAt": {"S": "2025-11-01T09:00:00Z"},
+          "GSI4PK": {"S": "ICE#001234567890123"},
+          "GSI4SK": {"S": "USER#u_business_yassir_020"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_agency_021"},
+          "SK": {"S": "PROFILE"},
+          "entity": {"S": "User"},
+          "id": {"S": "u_business_agency_021"},
+          "email": {"S": "ops@mediaplus.ma"},
+          "emailVerified": {"BOOL": true},
+          "passwordHash": {"S": "$argon2id$v=19$m=65536,t=3,p=4$seedAgency$placeholder"},
+          "role": {"S": "AGENCY"},
+          "accountType": {"S": "agency"},
+          "status": {"S": "ACTIVE"},
+          "gender": {"S": "M"},
+          "fullName": {"S": "Hassan Tazi"},
+          "phone": {"S": "+212522000021"},
+          "country": {"S": "MA"},
+          "city": {"S": "Casablanca"},
+          "locale": {"S": "fr"},
+          "acceptedLegalAt": {"S": "2025-10-15T09:00:00Z"},
+          "ageOver18": {"BOOL": true},
+          "createdAt": {"S": "2025-10-15T09:00:00Z"},
+          "updatedAt": {"S": "2025-10-15T09:00:00Z"},
+          "GSI1PK": {"S": "EMAIL#ops@mediaplus.ma"},
+          "GSI1SK": {"S": "USER#u_business_agency_021"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "EMAIL#ops@mediaplus.ma"},
+          "SK": {"S": "USER#u_business_agency_021"},
+          "entity": {"S": "EmailSentinel"},
+          "userId": {"S": "u_business_agency_021"},
+          "createdAt": {"S": "2025-10-15T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_agency_021"},
+          "SK": {"S": "BUSINESS#PROFILE"},
+          "entity": {"S": "BusinessProfile"},
+          "userId": {"S": "u_business_agency_021"},
+          "accountType": {"S": "agency"},
+          "companyName": {"S": "MediaPlus Agency"},
+          "createdAt": {"S": "2025-10-15T09:00:00Z"},
+          "updatedAt": {"S": "2025-10-15T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_agency_021"},
+          "SK": {"S": "BUSINESS#LEGAL"},
+          "entity": {"S": "BusinessLegalEntity"},
+          "juridicalForm": {"S": "SA"},
+          "ice": {"S": "002345678901234"},
+          "companyName": {"S": "MediaPlus Agency"},
+          "companyAddress": {"S": "Rue Tarik Ibn Ziad, Casablanca"},
+          "if": {"S": "23456789"},
+          "rc": {"S": "112233"},
+          "tva": {"S": "2233445"},
+          "createdAt": {"S": "2025-10-15T09:00:00Z"},
+          "updatedAt": {"S": "2025-10-15T09:00:00Z"},
+          "GSI4PK": {"S": "ICE#002345678901234"},
+          "GSI4SK": {"S": "USER#u_business_agency_021"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_small_022"},
+          "SK": {"S": "PROFILE"},
+          "entity": {"S": "User"},
+          "id": {"S": "u_business_small_022"},
+          "email": {"S": "founder@bledcraft.ma"},
+          "emailVerified": {"BOOL": true},
+          "passwordHash": {"S": "$argon2id$v=19$m=65536,t=3,p=4$seedSmall$placeholder"},
+          "role": {"S": "BUSINESS"},
+          "accountType": {"S": "small_business"},
+          "status": {"S": "ACTIVE"},
+          "gender": {"S": "F"},
+          "fullName": {"S": "Salma Berrada"},
+          "phone": {"S": "+212522000022"},
+          "country": {"S": "MA"},
+          "city": {"S": "Fès"},
+          "locale": {"S": "fr"},
+          "acceptedLegalAt": {"S": "2026-03-05T09:00:00Z"},
+          "ageOver18": {"BOOL": true},
+          "createdAt": {"S": "2026-03-05T09:00:00Z"},
+          "updatedAt": {"S": "2026-03-05T09:00:00Z"},
+          "GSI1PK": {"S": "EMAIL#founder@bledcraft.ma"},
+          "GSI1SK": {"S": "USER#u_business_small_022"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "EMAIL#founder@bledcraft.ma"},
+          "SK": {"S": "USER#u_business_small_022"},
+          "entity": {"S": "EmailSentinel"},
+          "userId": {"S": "u_business_small_022"},
+          "createdAt": {"S": "2026-03-05T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_small_022"},
+          "SK": {"S": "BUSINESS#PROFILE"},
+          "entity": {"S": "BusinessProfile"},
+          "userId": {"S": "u_business_small_022"},
+          "accountType": {"S": "small_business"},
+          "companyName": {"S": "BledCraft"},
+          "createdAt": {"S": "2026-03-05T09:00:00Z"},
+          "updatedAt": {"S": "2026-03-05T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_disabled_013"},
+          "SK": {"S": "PROFILE"},
+          "entity": {"S": "User"},
+          "id": {"S": "u_creator_disabled_013"},
+          "email": {"S": "old.account@example.ma"},
+          "emailVerified": {"BOOL": true},
+          "passwordHash": {"S": "$argon2id$v=19$m=65536,t=3,p=4$seedDisabled$placeholder"},
+          "role": {"S": "CREATOR"},
+          "accountType": {"S": "creator"},
+          "status": {"S": "DISABLED"},
+          "fullName": {"S": "Compte Désactivé"},
+          "phone": {"S": "+212699999990"},
+          "country": {"S": "MA"},
+          "locale": {"S": "fr"},
+          "acceptedLegalAt": {"S": "2025-06-01T09:00:00Z"},
+          "ageOver18": {"BOOL": true},
+          "createdAt": {"S": "2025-06-01T09:00:00Z"},
+          "updatedAt": {"S": "2026-04-01T09:00:00Z"},
+          "GSI1PK": {"S": "EMAIL#old.account@example.ma"},
+          "GSI1SK": {"S": "USER#u_creator_disabled_013"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "EMAIL#old.account@example.ma"},
+          "SK": {"S": "USER#u_creator_disabled_013"},
+          "entity": {"S": "EmailSentinel"},
+          "userId": {"S": "u_creator_disabled_013"},
+          "createdAt": {"S": "2025-06-01T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "BRAND#b_yassir_001"},
+          "SK": {"S": "META"},
+          "entity": {"S": "Brand"},
+          "id": {"S": "b_yassir_001"},
+          "name": {"S": "Yassir"},
+          "nameNormalized": {"S": "yassir"},
+          "slug": {"S": "yassir"},
+          "socialHandle": {"S": "@yassir"},
+          "website": {"S": "https://yassir.com"},
+          "country": {"S": "MA"},
+          "logoKey": {"S": "brands/b_yassir_001/logo.png"},
+          "industry": {"S": "Mobility"},
+          "description": {"S": "Super-app de mobilité MENA."},
+          "status": {"S": "APPROVED"},
+          "linkedIce": {"S": "001234567890123"},
+          "createdAt": {"S": "2025-11-01T09:00:00Z"},
+          "updatedAt": {"S": "2025-11-01T09:00:00Z"},
+          "GSI4PK": {"S": "BRAND_INDEX"},
+          "GSI4SK": {"S": "yassir#b_yassir_001"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "BRAND#b_eucerin_002"},
+          "SK": {"S": "META"},
+          "entity": {"S": "Brand"},
+          "id": {"S": "b_eucerin_002"},
+          "name": {"S": "Eucerin"},
+          "nameNormalized": {"S": "eucerin"},
+          "slug": {"S": "eucerin"},
+          "socialHandle": {"S": "@eucerin"},
+          "website": {"S": "https://eucerin.com"},
+          "country": {"S": "MA"},
+          "logoKey": {"S": "brands/b_eucerin_002/logo.png"},
+          "industry": {"S": "Beauty"},
+          "description": {"S": "Soins dermatologiques."},
+          "status": {"S": "APPROVED"},
+          "createdAt": {"S": "2025-09-01T09:00:00Z"},
+          "updatedAt": {"S": "2025-09-01T09:00:00Z"},
+          "GSI4PK": {"S": "BRAND_INDEX"},
+          "GSI4SK": {"S": "eucerin#b_eucerin_002"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "BRAND#b_nuxe_003"},
+          "SK": {"S": "META"},
+          "entity": {"S": "Brand"},
+          "id": {"S": "b_nuxe_003"},
+          "name": {"S": "NUXE"},
+          "nameNormalized": {"S": "nuxe"},
+          "slug": {"S": "nuxe"},
+          "socialHandle": {"S": "@nuxe"},
+          "website": {"S": "https://nuxe.com"},
+          "country": {"S": "MA"},
+          "logoKey": {"S": "brands/b_nuxe_003/logo.png"},
+          "industry": {"S": "Beauty"},
+          "description": {"S": "Cosmétiques naturels."},
+          "status": {"S": "APPROVED"},
+          "createdAt": {"S": "2025-09-01T09:00:00Z"},
+          "updatedAt": {"S": "2025-09-01T09:00:00Z"},
+          "GSI4PK": {"S": "BRAND_INDEX"},
+          "GSI4SK": {"S": "nuxe#b_nuxe_003"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "BRAND#b_lasalle_004"},
+          "SK": {"S": "META"},
+          "entity": {"S": "Brand"},
+          "id": {"S": "b_lasalle_004"},
+          "name": {"S": "LA SALLE"},
+          "nameNormalized": {"S": "la salle"},
+          "slug": {"S": "la-salle"},
+          "socialHandle": {"S": "@lasalle"},
+          "website": {"S": "https://lasalle.ma"},
+          "country": {"S": "MA"},
+          "logoKey": {"S": "brands/b_lasalle_004/logo.png"},
+          "industry": {"S": "Education"},
+          "description": {"S": "École de management."},
+          "status": {"S": "APPROVED"},
+          "createdAt": {"S": "2025-09-01T09:00:00Z"},
+          "updatedAt": {"S": "2025-09-01T09:00:00Z"},
+          "GSI4PK": {"S": "BRAND_INDEX"},
+          "GSI4SK": {"S": "la salle#b_lasalle_004"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "ORG#u_business_yassir_020"},
+          "SK": {"S": "BRAND#b_yassir_001"},
+          "entity": {"S": "BrandOrgLink"},
+          "orgId": {"S": "u_business_yassir_020"},
+          "brandId": {"S": "b_yassir_001"},
+          "linkedAt": {"S": "2025-11-01T09:00:00Z"},
+          "GSI2PK": {"S": "BRAND#b_yassir_001"},
+          "GSI2SK": {"S": "ORG#u_business_yassir_020"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "ORG#u_business_agency_021"},
+          "SK": {"S": "BRAND#b_eucerin_002"},
+          "entity": {"S": "BrandOrgLink"},
+          "orgId": {"S": "u_business_agency_021"},
+          "brandId": {"S": "b_eucerin_002"},
+          "linkedAt": {"S": "2025-10-15T10:00:00Z"},
+          "GSI2PK": {"S": "BRAND#b_eucerin_002"},
+          "GSI2SK": {"S": "ORG#u_business_agency_021"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "ORG#u_business_agency_021"},
+          "SK": {"S": "BRAND#b_nuxe_003"},
+          "entity": {"S": "BrandOrgLink"},
+          "orgId": {"S": "u_business_agency_021"},
+          "brandId": {"S": "b_nuxe_003"},
+          "linkedAt": {"S": "2025-10-15T10:00:00Z"},
+          "GSI2PK": {"S": "BRAND#b_nuxe_003"},
+          "GSI2SK": {"S": "ORG#u_business_agency_021"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "ORG#u_business_agency_021"},
+          "SK": {"S": "BRAND#b_lasalle_004"},
+          "entity": {"S": "BrandOrgLink"},
+          "orgId": {"S": "u_business_agency_021"},
+          "brandId": {"S": "b_lasalle_004"},
+          "linkedAt": {"S": "2025-10-15T10:00:00Z"},
+          "GSI2PK": {"S": "BRAND#b_lasalle_004"},
+          "GSI2SK": {"S": "ORG#u_business_agency_021"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "BRAND#b_yassir_001"},
+          "SK": {"S": "ACCESS#u_business_yassir_020"},
+          "entity": {"S": "BrandAccess"},
+          "brandId": {"S": "b_yassir_001"},
+          "userId": {"S": "u_business_yassir_020"},
+          "role": {"S": "ADMIN"},
+          "invitedBy": {"S": "u_admin_001"},
+          "invitedAt": {"S": "2025-11-01T09:00:00Z"},
+          "acceptedAt": {"S": "2025-11-01T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_yassir_ride_001"},
+          "SK": {"S": "META"},
+          "entity": {"S": "MarketplaceProduct"},
+          "id": {"S": "mkt_yassir_ride_001"},
+          "ownerUserId": {"S": "u_business_yassir_020"},
+          "brandId": {"S": "b_yassir_001"},
+          "brandDescription": {"S": "Yassir, super-app MENA — VTC, livraison, paiements."},
+          "productName": {"S": "Yassir Ride — Promo Ramadan"},
+          "productDescription": {"S": "Promotion code RAMADAN26 sur Yassir Ride."},
+          "requestedContent": {"S": "1 REEL + 1 SET OF STORIES"},
+          "miniScript": {"S": "Présenter l'app, montrer la commande, mentionner le code RAMADAN26."},
+          "acceptanceCriteria": {"L": [
+            {"S": "Vidéo verticale 9:16, 60s max"},
+            {"S": "Code promo RAMADAN26 mentionné à l'oral et en overlay"},
+            {"S": "Hashtags imposés présents en première ligne de description"}
+          ]},
+          "hashtags": {"SS": ["#ad", "#partenariat_rémunéré", "#YassirRide", "#RAMADAN26"]},
+          "callToAction": {"S": "Téléchargez Yassir et utilisez RAMADAN26 pour 30% de réduction."},
+          "images": {"L": [{"S": "products/mkt_yassir_ride_001/1.jpg"}]},
+          "targetTier": {"S": "MICRO"},
+          "slotsTotal": {"N": "5"},
+          "slotsLeft": {"N": "3"},
+          "totalAmountMad": {"N": "12000"},
+          "currency": {"S": "MAD"},
+          "paidByInflu": {"BOOL": true},
+          "status": {"S": "PUBLISHED"},
+          "publishedAt": {"S": "2026-04-01T09:00:00Z"},
+          "expiresAt": {"S": "2026-05-30T23:59:59Z"},
+          "createdAt": {"S": "2026-04-01T08:00:00Z"},
+          "updatedAt": {"S": "2026-04-15T11:00:00Z"},
+          "GSI2PK": {"S": "BRAND#b_yassir_001"},
+          "GSI2SK": {"S": "MKT#2026-04-01T09:00:00Z#mkt_yassir_ride_001"},
+          "GSI4PK": {"S": "MKT#STATUS#PUBLISHED"},
+          "GSI4SK": {"S": "2026-04-01T09:00:00Z#mkt_yassir_ride_001"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_yassir_ride_001"},
+          "SK": {"S": "DELIV#del_001a"},
+          "entity": {"S": "MarketplaceDeliverable"},
+          "deliverableId": {"S": "del_001a"},
+          "platform": {"S": "INSTAGRAM"},
+          "contentType": {"S": "reel"},
+          "quantity": {"N": "1"},
+          "unitPriceMad": {"N": "2000"},
+          "currency": {"S": "MAD"},
+          "taggedAccount": {"S": "@yassir"},
+          "tier": {"S": "MICRO"},
+          "receptionDate": {"S": "2026-05-15"},
+          "publicationDate": {"S": "2026-05-20"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_yassir_ride_001"},
+          "SK": {"S": "DELIV#del_001b"},
+          "entity": {"S": "MarketplaceDeliverable"},
+          "deliverableId": {"S": "del_001b"},
+          "platform": {"S": "INSTAGRAM"},
+          "contentType": {"S": "story"},
+          "quantity": {"N": "3"},
+          "unitPriceMad": {"N": "400"},
+          "currency": {"S": "MAD"},
+          "taggedAccount": {"S": "@yassir"},
+          "tier": {"S": "MICRO"},
+          "receptionDate": {"S": "2026-05-15"},
+          "publicationDate": {"S": "2026-05-20"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_eucerin_skin_002"},
+          "SK": {"S": "META"},
+          "entity": {"S": "MarketplaceProduct"},
+          "id": {"S": "mkt_eucerin_skin_002"},
+          "ownerUserId": {"S": "u_business_agency_021"},
+          "brandId": {"S": "b_eucerin_002"},
+          "brandDescription": {"S": "Eucerin — soins dermatologiques."},
+          "productName": {"S": "Hyaluron Filler — Lancement"},
+          "productDescription": {"S": "Sérum anti-âge nouvelle formule."},
+          "requestedContent": {"S": "1 POST + 2 STORIES + 1 REEL"},
+          "miniScript": {"S": "Tester le produit 7 jours, montrer la routine et les résultats."},
+          "acceptanceCriteria": {"L": [
+            {"S": "Avant/après obligatoire"},
+            {"S": "Mention de la nouvelle formule"}
+          ]},
+          "hashtags": {"SS": ["#ad", "#sponsorisé", "#Eucerin", "#HyaluronFiller"]},
+          "callToAction": {"S": "Découvrez la nouvelle formule en pharmacie."},
+          "images": {"L": [{"S": "products/mkt_eucerin_skin_002/1.jpg"}]},
+          "targetTier": {"S": "MICRO"},
+          "slotsTotal": {"N": "8"},
+          "slotsLeft": {"N": "8"},
+          "totalAmountMad": {"N": "24000"},
+          "currency": {"S": "MAD"},
+          "paidByInflu": {"BOOL": true},
+          "status": {"S": "PUBLISHED"},
+          "publishedAt": {"S": "2026-04-20T10:00:00Z"},
+          "expiresAt": {"S": "2026-06-20T23:59:59Z"},
+          "createdAt": {"S": "2026-04-19T08:00:00Z"},
+          "updatedAt": {"S": "2026-04-20T10:00:00Z"},
+          "GSI2PK": {"S": "BRAND#b_eucerin_002"},
+          "GSI2SK": {"S": "MKT#2026-04-20T10:00:00Z#mkt_eucerin_skin_002"},
+          "GSI4PK": {"S": "MKT#STATUS#PUBLISHED"},
+          "GSI4SK": {"S": "2026-04-20T10:00:00Z#mkt_eucerin_skin_002"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_eucerin_skin_002"},
+          "SK": {"S": "DELIV#del_002a"},
+          "entity": {"S": "MarketplaceDeliverable"},
+          "deliverableId": {"S": "del_002a"},
+          "platform": {"S": "INSTAGRAM"},
+          "contentType": {"S": "reel"},
+          "quantity": {"N": "1"},
+          "unitPriceMad": {"N": "2500"},
+          "currency": {"S": "MAD"},
+          "taggedAccount": {"S": "@eucerin"},
+          "tier": {"S": "MICRO"},
+          "receptionDate": {"S": "2026-05-25"},
+          "publicationDate": {"S": "2026-06-05"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_nuxe_oil_003"},
+          "SK": {"S": "META"},
+          "entity": {"S": "MarketplaceProduct"},
+          "id": {"S": "mkt_nuxe_oil_003"},
+          "ownerUserId": {"S": "u_business_agency_021"},
+          "brandId": {"S": "b_nuxe_003"},
+          "brandDescription": {"S": "NUXE — cosmétiques naturels."},
+          "productName": {"S": "Huile Prodigieuse — été 2026"},
+          "productDescription": {"S": "Mise en avant de l'huile multi-usage."},
+          "requestedContent": {"S": "1 REEL"},
+          "miniScript": {"S": "Routine été plage / sortie."},
+          "acceptanceCriteria": {"L": [{"S": "Tournage en lumière naturelle"}]},
+          "hashtags": {"SS": ["#ad", "#NUXE", "#HuileProdigieuse"]},
+          "callToAction": {"S": "Disponible en parapharmacie."},
+          "images": {"L": [{"S": "products/mkt_nuxe_oil_003/1.jpg"}]},
+          "targetTier": {"S": "NANO"},
+          "slotsTotal": {"N": "10"},
+          "slotsLeft": {"N": "9"},
+          "totalAmountMad": {"N": "8000"},
+          "currency": {"S": "MAD"},
+          "paidByInflu": {"BOOL": true},
+          "status": {"S": "PUBLISHED"},
+          "publishedAt": {"S": "2026-04-25T10:00:00Z"},
+          "expiresAt": {"S": "2026-06-25T23:59:59Z"},
+          "createdAt": {"S": "2026-04-25T08:00:00Z"},
+          "updatedAt": {"S": "2026-04-25T10:00:00Z"},
+          "GSI2PK": {"S": "BRAND#b_nuxe_003"},
+          "GSI2SK": {"S": "MKT#2026-04-25T10:00:00Z#mkt_nuxe_oil_003"},
+          "GSI4PK": {"S": "MKT#STATUS#PUBLISHED"},
+          "GSI4SK": {"S": "2026-04-25T10:00:00Z#mkt_nuxe_oil_003"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_lasalle_open_004"},
+          "SK": {"S": "META"},
+          "entity": {"S": "MarketplaceProduct"},
+          "id": {"S": "mkt_lasalle_open_004"},
+          "ownerUserId": {"S": "u_business_agency_021"},
+          "brandId": {"S": "b_lasalle_004"},
+          "brandDescription": {"S": "LA SALLE — école de management."},
+          "productName": {"S": "Open Day Septembre 2026"},
+          "productDescription": {"S": "Promotion de la journée portes ouvertes."},
+          "requestedContent": {"S": "1 YOUTUBE SHORT + 2 TIKTOK"},
+          "miniScript": {"S": "Visite de l'école et témoignage."},
+          "acceptanceCriteria": {"L": [{"S": "Présence sur place obligatoire"}]},
+          "hashtags": {"SS": ["#ad", "#LaSalleOpenDay"]},
+          "callToAction": {"S": "Inscrivez-vous sur lasalle.ma"},
+          "images": {"L": [{"S": "products/mkt_lasalle_open_004/1.jpg"}]},
+          "targetTier": {"S": "MID"},
+          "slotsTotal": {"N": "3"},
+          "slotsLeft": {"N": "3"},
+          "totalAmountMad": {"N": "30000"},
+          "currency": {"S": "MAD"},
+          "paidByInflu": {"BOOL": true},
+          "status": {"S": "PUBLISHED"},
+          "publishedAt": {"S": "2026-05-01T10:00:00Z"},
+          "expiresAt": {"S": "2026-08-01T23:59:59Z"},
+          "createdAt": {"S": "2026-05-01T08:00:00Z"},
+          "updatedAt": {"S": "2026-05-01T10:00:00Z"},
+          "GSI2PK": {"S": "BRAND#b_lasalle_004"},
+          "GSI2SK": {"S": "MKT#2026-05-01T10:00:00Z#mkt_lasalle_open_004"},
+          "GSI4PK": {"S": "MKT#STATUS#PUBLISHED"},
+          "GSI4SK": {"S": "2026-05-01T10:00:00Z#mkt_lasalle_open_004"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_yassir_food_005"},
+          "SK": {"S": "META"},
+          "entity": {"S": "MarketplaceProduct"},
+          "id": {"S": "mkt_yassir_food_005"},
+          "ownerUserId": {"S": "u_business_yassir_020"},
+          "brandId": {"S": "b_yassir_001"},
+          "brandDescription": {"S": "Yassir Express — livraison de repas."},
+          "productName": {"S": "Yassir Express — Lancement Marrakech"},
+          "productDescription": {"S": "Découverte du service à Marrakech."},
+          "requestedContent": {"S": "1 TIKTOK"},
+          "miniScript": {"S": "Commande live et unboxing."},
+          "acceptanceCriteria": {"L": [{"S": "Format vertical 60s max"}]},
+          "hashtags": {"SS": ["#ad", "#YassirExpress"]},
+          "callToAction": {"S": "Commandez sur l'app Yassir."},
+          "images": {"L": [{"S": "products/mkt_yassir_food_005/1.jpg"}]},
+          "targetTier": {"S": "MID"},
+          "slotsTotal": {"N": "4"},
+          "slotsLeft": {"N": "4"},
+          "totalAmountMad": {"N": "20000"},
+          "currency": {"S": "MAD"},
+          "paidByInflu": {"BOOL": true},
+          "status": {"S": "DRAFT"},
+          "wizardStep": {"S": "E"},
+          "expiresAt": {"S": "2026-08-15T23:59:59Z"},
+          "createdAt": {"S": "2026-05-05T08:00:00Z"},
+          "updatedAt": {"S": "2026-05-08T10:00:00Z"},
+          "GSI2PK": {"S": "BRAND#b_yassir_001"},
+          "GSI2SK": {"S": "MKT#DRAFT#mkt_yassir_food_005"},
+          "GSI4PK": {"S": "MKT#STATUS#DRAFT"},
+          "GSI4SK": {"S": "2026-05-05T08:00:00Z#mkt_yassir_food_005"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_bledcraft_pottery_006"},
+          "SK": {"S": "META"},
+          "entity": {"S": "MarketplaceProduct"},
+          "id": {"S": "mkt_bledcraft_pottery_006"},
+          "ownerUserId": {"S": "u_business_small_022"},
+          "brandId": {"S": "b_lasalle_004"},
+          "brandDescription": {"S": "BledCraft — artisanat marocain."},
+          "productName": {"S": "Collection Poterie Fès — Printemps"},
+          "productDescription": {"S": "Promotion de la collection printemps."},
+          "requestedContent": {"S": "1 INSTAGRAM POST"},
+          "miniScript": {"S": "Mise en scène et storytelling artisan."},
+          "acceptanceCriteria": {"L": [{"S": "Photo lifestyle haute qualité"}]},
+          "hashtags": {"SS": ["#ad", "#BledCraft"]},
+          "callToAction": {"S": "Achetez sur bledcraft.ma"},
+          "images": {"L": [{"S": "products/mkt_bledcraft_pottery_006/1.jpg"}]},
+          "targetTier": {"S": "NANO"},
+          "slotsTotal": {"N": "6"},
+          "slotsLeft": {"N": "5"},
+          "totalAmountMad": {"N": "5400"},
+          "currency": {"S": "MAD"},
+          "paidByInflu": {"BOOL": true},
+          "status": {"S": "PUBLISHED"},
+          "publishedAt": {"S": "2026-04-10T10:00:00Z"},
+          "expiresAt": {"S": "2026-05-15T23:59:59Z"},
+          "createdAt": {"S": "2026-04-10T08:00:00Z"},
+          "updatedAt": {"S": "2026-04-22T11:00:00Z"},
+          "GSI2PK": {"S": "BRAND#b_lasalle_004"},
+          "GSI2SK": {"S": "MKT#2026-04-10T10:00:00Z#mkt_bledcraft_pottery_006"},
+          "GSI4PK": {"S": "MKT#STATUS#PUBLISHED"},
+          "GSI4SK": {"S": "2026-04-10T10:00:00Z#mkt_bledcraft_pottery_006"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_yassir_ride_001"},
+          "SK": {"S": "APP#u_creator_micro_011"},
+          "entity": {"S": "Application"},
+          "applicationId": {"S": "app_001"},
+          "productId": {"S": "mkt_yassir_ride_001"},
+          "creatorId": {"S": "u_creator_micro_011"},
+          "brandId": {"S": "b_yassir_001"},
+          "ownerUserId": {"S": "u_business_yassir_020"},
+          "status": {"S": "CONTENT_VALIDATED"},
+          "appliedAt": {"S": "2026-04-05T10:00:00Z"},
+          "respondedAt": {"S": "2026-04-06T10:00:00Z"},
+          "submittedContentAt": {"S": "2026-04-22T18:00:00Z"},
+          "submittedContentLinks": {"L": [{"S": "https://instagram.com/p/seedReel001"}]},
+          "validatedAt": {"S": "2026-04-23T11:00:00Z"},
+          "paymentId": {"S": "pay_001"},
+          "tier": {"S": "MICRO"},
+          "GSI2PK": {"S": "USER#u_creator_micro_011"},
+          "GSI2SK": {"S": "APP#2026-04-05T10:00:00Z#mkt_yassir_ride_001"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_yassir_ride_001"},
+          "SK": {"S": "APP#u_creator_mid_012"},
+          "entity": {"S": "Application"},
+          "applicationId": {"S": "app_002"},
+          "productId": {"S": "mkt_yassir_ride_001"},
+          "creatorId": {"S": "u_creator_mid_012"},
+          "brandId": {"S": "b_yassir_001"},
+          "ownerUserId": {"S": "u_business_yassir_020"},
+          "status": {"S": "ACCEPTED"},
+          "appliedAt": {"S": "2026-04-12T10:00:00Z"},
+          "respondedAt": {"S": "2026-04-13T10:00:00Z"},
+          "tier": {"S": "MID"},
+          "GSI2PK": {"S": "USER#u_creator_mid_012"},
+          "GSI2SK": {"S": "APP#2026-04-12T10:00:00Z#mkt_yassir_ride_001"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "MKT#mkt_eucerin_skin_002"},
+          "SK": {"S": "APP#u_creator_nano_010"},
+          "entity": {"S": "Application"},
+          "applicationId": {"S": "app_003"},
+          "productId": {"S": "mkt_eucerin_skin_002"},
+          "creatorId": {"S": "u_creator_nano_010"},
+          "brandId": {"S": "b_eucerin_002"},
+          "ownerUserId": {"S": "u_business_agency_021"},
+          "status": {"S": "APPLIED"},
+          "appliedAt": {"S": "2026-05-01T15:00:00Z"},
+          "tier": {"S": "NANO"},
+          "GSI2PK": {"S": "USER#u_creator_nano_010"},
+          "GSI2SK": {"S": "APP#2026-05-01T15:00:00Z#mkt_eucerin_skin_002"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_yassir_020"},
+          "SK": {"S": "AICAMP#aic_001"},
+          "entity": {"S": "AICampaignSession"},
+          "campaignId": {"S": "aic_001"},
+          "name": {"S": "Lancement Yassir Pay — Été"},
+          "scope": {"SS": ["NEW_PRODUCT_LAUNCH", "VISIBILITY_AWARENESS"]},
+          "currentStep": {"N": "3"},
+          "status": {"S": "DRAFT"},
+          "lastMessageAt": {"S": "2026-05-08T14:00:00Z"},
+          "createdAt": {"S": "2026-05-08T13:00:00Z"},
+          "updatedAt": {"S": "2026-05-08T14:00:00Z"},
+          "GSI4PK": {"S": "AICAMP#STATUS#DRAFT"},
+          "GSI4SK": {"S": "2026-05-08T14:00:00Z#aic_001"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "AICAMP#aic_001"},
+          "SK": {"S": "MSG#2026-05-08T13:00:00Z"},
+          "entity": {"S": "AICampaignMessage"},
+          "messageId": {"S": "msg_aic_001_1"},
+          "role": {"S": "assistant"},
+          "content": {"S": "What kind of campaign would you like to launch, and what scope are you aiming for?"},
+          "createdAt": {"S": "2026-05-08T13:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "AICAMP#aic_001"},
+          "SK": {"S": "MSG#2026-05-08T13:05:00Z"},
+          "entity": {"S": "AICampaignMessage"},
+          "messageId": {"S": "msg_aic_001_2"},
+          "role": {"S": "user"},
+          "content": {"S": "New Product Launch + Visibility Awareness"},
+          "createdAt": {"S": "2026-05-08T13:05:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_agency_021"},
+          "SK": {"S": "AICAMP#aic_002"},
+          "entity": {"S": "AICampaignSession"},
+          "campaignId": {"S": "aic_002"},
+          "name": {"S": "Eucerin Hyaluron — Activation MENA"},
+          "scope": {"SS": ["BRANDING", "ENGAGEMENT_INTERACTIONS"]},
+          "currentStep": {"N": "9"},
+          "status": {"S": "ACTIVE"},
+          "briefJson": {"M": {
+            "audience": {"S": "Femmes 25-45 MENA"},
+            "platforms": {"L": [{"S": "INSTAGRAM"}, {"S": "TIKTOK"}]},
+            "format": {"S": "Reels + Stories"},
+            "budgetMad": {"N": "80000"}
+          }},
+          "lastMessageAt": {"S": "2026-04-30T16:00:00Z"},
+          "createdAt": {"S": "2026-04-25T13:00:00Z"},
+          "updatedAt": {"S": "2026-04-30T16:00:00Z"},
+          "GSI4PK": {"S": "AICAMP#STATUS#ACTIVE"},
+          "GSI4SK": {"S": "2026-04-30T16:00:00Z#aic_002"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_yassir_020"},
+          "SK": {"S": "CRM#crm_yassir_top"},
+          "entity": {"S": "CrmList"},
+          "listId": {"S": "crm_yassir_top"},
+          "title": {"S": "Top Influenceurs Mobility"},
+          "description": {"S": "Shortlist pour campagnes Yassir Ride / Express."},
+          "memberCount": {"N": "2"},
+          "createdAt": {"S": "2026-03-01T09:00:00Z"},
+          "updatedAt": {"S": "2026-04-15T10:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CRM#crm_yassir_top"},
+          "SK": {"S": "MBR#u_creator_micro_011"},
+          "entity": {"S": "CrmListMember"},
+          "creatorId": {"S": "u_creator_micro_011"},
+          "addedBy": {"S": "u_business_yassir_020"},
+          "addedAt": {"S": "2026-03-15T10:00:00Z"},
+          "GSI2PK": {"S": "USER#u_creator_micro_011"},
+          "GSI2SK": {"S": "CRM#crm_yassir_top"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CRM#crm_yassir_top"},
+          "SK": {"S": "MBR#u_creator_mid_012"},
+          "entity": {"S": "CrmListMember"},
+          "creatorId": {"S": "u_creator_mid_012"},
+          "addedBy": {"S": "u_business_yassir_020"},
+          "addedAt": {"S": "2026-04-15T10:00:00Z"},
+          "GSI2PK": {"S": "USER#u_creator_mid_012"},
+          "GSI2SK": {"S": "CRM#crm_yassir_top"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_business_agency_021"},
+          "SK": {"S": "CRM#crm_beauty_micro"},
+          "entity": {"S": "CrmList"},
+          "listId": {"S": "crm_beauty_micro"},
+          "title": {"S": "Beauty Micro MA"},
+          "description": {"S": "Créatrices beauté Maroc tier MICRO."},
+          "memberCount": {"N": "1"},
+          "createdAt": {"S": "2026-04-20T09:00:00Z"},
+          "updatedAt": {"S": "2026-04-20T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CRM#crm_beauty_micro"},
+          "SK": {"S": "MBR#u_creator_micro_011"},
+          "entity": {"S": "CrmListMember"},
+          "creatorId": {"S": "u_creator_micro_011"},
+          "addedBy": {"S": "u_business_agency_021"},
+          "addedAt": {"S": "2026-04-20T09:00:00Z"},
+          "GSI2PK": {"S": "USER#u_creator_micro_011"},
+          "GSI2SK": {"S": "CRM#crm_beauty_micro"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CONV#conv_yassir_lina_001"},
+          "SK": {"S": "META"},
+          "entity": {"S": "Conversation"},
+          "convId": {"S": "conv_yassir_lina_001"},
+          "participantIds": {"SS": ["u_business_yassir_020", "u_creator_micro_011"]},
+          "brandId": {"S": "b_yassir_001"},
+          "productId": {"S": "mkt_yassir_ride_001"},
+          "applicationId": {"S": "app_001"},
+          "lastMessagePreview": {"S": "Parfait, on attend ton reel d'ici le 22."},
+          "lastMessageAt": {"S": "2026-04-15T16:30:00Z"},
+          "status": {"S": "OPEN"},
+          "createdAt": {"S": "2026-04-06T10:30:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CONV#conv_yassir_lina_001"},
+          "SK": {"S": "PART#u_business_yassir_020"},
+          "entity": {"S": "ConversationParticipant"},
+          "userId": {"S": "u_business_yassir_020"},
+          "unreadCount": {"N": "0"},
+          "lastReadAt": {"S": "2026-04-15T16:30:00Z"},
+          "GSI2PK": {"S": "USER#u_business_yassir_020"},
+          "GSI2SK": {"S": "CONV#2026-04-15T16:30:00Z#conv_yassir_lina_001"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CONV#conv_yassir_lina_001"},
+          "SK": {"S": "PART#u_creator_micro_011"},
+          "entity": {"S": "ConversationParticipant"},
+          "userId": {"S": "u_creator_micro_011"},
+          "unreadCount": {"N": "1"},
+          "lastReadAt": {"S": "2026-04-15T15:00:00Z"},
+          "GSI2PK": {"S": "USER#u_creator_micro_011"},
+          "GSI2SK": {"S": "CONV#2026-04-15T16:30:00Z#conv_yassir_lina_001"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CONV#conv_yassir_lina_001"},
+          "SK": {"S": "MSG#2026-04-06T10:30:00Z#m_001"},
+          "entity": {"S": "Message"},
+          "messageId": {"S": "m_001"},
+          "senderId": {"S": "u_business_yassir_020"},
+          "body": {"S": "Bonjour Lina, ravis de collaborer ! On t'envoie le brief en MP."},
+          "readBy": {"SS": ["u_business_yassir_020", "u_creator_micro_011"]},
+          "createdAt": {"S": "2026-04-06T10:30:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CONV#conv_yassir_lina_001"},
+          "SK": {"S": "MSG#2026-04-15T16:30:00Z#m_002"},
+          "entity": {"S": "Message"},
+          "messageId": {"S": "m_002"},
+          "senderId": {"S": "u_business_yassir_020"},
+          "body": {"S": "Parfait, on attend ton reel d'ici le 22."},
+          "readBy": {"SS": ["u_business_yassir_020"]},
+          "createdAt": {"S": "2026-04-15T16:30:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CONV#conv_eucerin_amine_002"},
+          "SK": {"S": "META"},
+          "entity": {"S": "Conversation"},
+          "convId": {"S": "conv_eucerin_amine_002"},
+          "participantIds": {"SS": ["u_business_agency_021", "u_creator_nano_010"]},
+          "brandId": {"S": "b_eucerin_002"},
+          "productId": {"S": "mkt_eucerin_skin_002"},
+          "applicationId": {"S": "app_003"},
+          "lastMessagePreview": {"S": "Merci pour ta candidature, on revient vers toi."},
+          "lastMessageAt": {"S": "2026-05-02T09:00:00Z"},
+          "status": {"S": "OPEN"},
+          "createdAt": {"S": "2026-05-02T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CONV#conv_eucerin_amine_002"},
+          "SK": {"S": "PART#u_business_agency_021"},
+          "entity": {"S": "ConversationParticipant"},
+          "userId": {"S": "u_business_agency_021"},
+          "unreadCount": {"N": "0"},
+          "lastReadAt": {"S": "2026-05-02T09:00:00Z"},
+          "GSI2PK": {"S": "USER#u_business_agency_021"},
+          "GSI2SK": {"S": "CONV#2026-05-02T09:00:00Z#conv_eucerin_amine_002"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CONV#conv_eucerin_amine_002"},
+          "SK": {"S": "PART#u_creator_nano_010"},
+          "entity": {"S": "ConversationParticipant"},
+          "userId": {"S": "u_creator_nano_010"},
+          "unreadCount": {"N": "1"},
+          "GSI2PK": {"S": "USER#u_creator_nano_010"},
+          "GSI2SK": {"S": "CONV#2026-05-02T09:00:00Z#conv_eucerin_amine_002"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "CONV#conv_eucerin_amine_002"},
+          "SK": {"S": "MSG#2026-05-02T09:00:00Z#m_003"},
+          "entity": {"S": "Message"},
+          "messageId": {"S": "m_003"},
+          "senderId": {"S": "u_business_agency_021"},
+          "body": {"S": "Merci pour ta candidature, on revient vers toi."},
+          "readBy": {"SS": ["u_business_agency_021"]},
+          "createdAt": {"S": "2026-05-02T09:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "PAY#pay_001"},
+          "SK": {"S": "META"},
+          "entity": {"S": "Payment"},
+          "id": {"S": "pay_001"},
+          "type": {"S": "MARKETPLACE"},
+          "creatorId": {"S": "u_creator_micro_011"},
+          "businessUserId": {"S": "u_business_yassir_020"},
+          "brandId": {"S": "b_yassir_001"},
+          "applicationId": {"S": "app_001"},
+          "amountMad": {"N": "3200"},
+          "feeMad": {"N": "320"},
+          "netAmountMad": {"N": "2880"},
+          "currency": {"S": "MAD"},
+          "status": {"S": "COMPLETED"},
+          "paidByInflu": {"BOOL": true},
+          "requestedAt": {"S": "2026-04-23T11:05:00Z"},
+          "scheduledAt": {"S": "2026-04-23T11:30:00Z"},
+          "completedAt": {"S": "2026-04-25T10:00:00Z"},
+          "slaHours": {"N": "48"},
+          "provider": {"S": "MOCK"},
+          "providerRef": {"S": "mock_001"},
+          "GSI4PK": {"S": "BUSINESS#u_business_yassir_020#MARKETPLACE#COMPLETED"},
+          "GSI4SK": {"S": "PAY#2026-04-23T11:05:00Z#pay_001"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "PAY#pay_002"},
+          "SK": {"S": "META"},
+          "entity": {"S": "Payment"},
+          "id": {"S": "pay_002"},
+          "type": {"S": "MARKETPLACE"},
+          "creatorId": {"S": "u_creator_mid_012"},
+          "businessUserId": {"S": "u_business_yassir_020"},
+          "brandId": {"S": "b_yassir_001"},
+          "applicationId": {"S": "app_002"},
+          "amountMad": {"N": "8000"},
+          "feeMad": {"N": "800"},
+          "netAmountMad": {"N": "7200"},
+          "currency": {"S": "MAD"},
+          "status": {"S": "PENDING"},
+          "paidByInflu": {"BOOL": true},
+          "requestedAt": {"S": "2026-05-05T10:00:00Z"},
+          "slaHours": {"N": "168"},
+          "provider": {"S": "MOCK"},
+          "GSI4PK": {"S": "BUSINESS#u_business_yassir_020#MARKETPLACE#PENDING"},
+          "GSI4SK": {"S": "PAY#2026-05-05T10:00:00Z#pay_002"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "PAY#pay_003"},
+          "SK": {"S": "META"},
+          "entity": {"S": "Payment"},
+          "id": {"S": "pay_003"},
+          "type": {"S": "CAMPAIGN"},
+          "creatorId": {"S": "u_creator_micro_011"},
+          "businessUserId": {"S": "u_business_agency_021"},
+          "brandId": {"S": "b_eucerin_002"},
+          "campaignId": {"S": "aic_002"},
+          "amountMad": {"N": "5000"},
+          "feeMad": {"N": "500"},
+          "netAmountMad": {"N": "4500"},
+          "currency": {"S": "MAD"},
+          "status": {"S": "FAILED"},
+          "paidByInflu": {"BOOL": true},
+          "requestedAt": {"S": "2026-04-28T10:00:00Z"},
+          "scheduledAt": {"S": "2026-04-28T10:30:00Z"},
+          "failedAt": {"S": "2026-04-28T11:00:00Z"},
+          "failureReason": {"S": "RIB rejected by bank — insufficient KYC"},
+          "slaHours": {"N": "168"},
+          "provider": {"S": "MOCK"},
+          "providerRef": {"S": "mock_003"},
+          "GSI4PK": {"S": "BUSINESS#u_business_agency_021#CAMPAIGN#FAILED"},
+          "GSI4SK": {"S": "PAY#2026-04-28T10:00:00Z#pay_003"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "PAY#pay_001"},
+          "SK": {"S": "EVT#2026-04-23T11:05:00Z"},
+          "entity": {"S": "PaymentEvent"},
+          "eventId": {"S": "evt_001"},
+          "eventType": {"S": "REQUESTED"},
+          "createdAt": {"S": "2026-04-23T11:05:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "PAY#pay_001"},
+          "SK": {"S": "EVT#2026-04-25T10:00:00Z"},
+          "entity": {"S": "PaymentEvent"},
+          "eventId": {"S": "evt_002"},
+          "eventType": {"S": "COMPLETED"},
+          "createdAt": {"S": "2026-04-25T10:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_micro_011"},
+          "SK": {"S": "NOTIF#2026-04-25T10:00:01Z#n_001"},
+          "entity": {"S": "Notification"},
+          "notifId": {"S": "n_001"},
+          "type": {"S": "PAYMENT_RECEIVED"},
+          "title": {"S": "Paiement reçu"},
+          "body": {"S": "Vous avez reçu 2 880 Dhs pour la campagne Yassir Ride."},
+          "data": {"M": {"paymentId": {"S": "pay_001"}, "amountMad": {"N": "2880"}}},
+          "link": {"S": "/creator/collaborations/app_001"},
+          "read": {"BOOL": false},
+          "createdAt": {"S": "2026-04-25T10:00:01Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_nano_010"},
+          "SK": {"S": "NOTIF#2026-02-17T10:00:01Z#n_002"},
+          "entity": {"S": "Notification"},
+          "notifId": {"S": "n_002"},
+          "type": {"S": "CIN_VALIDATED"},
+          "title": {"S": "CIN validée"},
+          "body": {"S": "Votre CIN a été validée. Vous pouvez désormais postuler."},
+          "data": {"M": {"documentId": {"S": "doc_cin_010"}}},
+          "link": {"S": "/creator/accounts?acc_tab=documents"},
+          "read": {"BOOL": true},
+          "readAt": {"S": "2026-02-17T11:00:00Z"},
+          "createdAt": {"S": "2026-02-17T10:00:01Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_micro_011"},
+          "SK": {"S": "SUP#sup_001"},
+          "entity": {"S": "SupportReport"},
+          "reportId": {"S": "sup_001"},
+          "issueType": {"S": "UI_ISSUE"},
+          "title": {"S": "Bouton Apply qui clignote"},
+          "description": {"S": "Sur Safari, le bouton Apply de la fiche produit clignote en bleu."},
+          "status": {"S": "OPEN"},
+          "createdAt": {"S": "2026-05-03T15:00:00Z"},
+          "updatedAt": {"S": "2026-05-03T15:00:00Z"},
+          "GSI5PK": {"S": "SUP#STATUS#OPEN"},
+          "GSI5SK": {"S": "2026-05-03T15:00:00Z#sup_001"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_pending_014"},
+          "SK": {"S": "PROFILE"},
+          "entity": {"S": "User"},
+          "id": {"S": "u_creator_pending_014"},
+          "email": {"S": "kawtar.pending@example.ma"},
+          "emailVerified": {"BOOL": true},
+          "passwordHash": {"S": "$argon2id$v=19$m=65536,t=3,p=4$seedPending$placeholder"},
+          "role": {"S": "CREATOR"},
+          "accountType": {"S": "creator"},
+          "status": {"S": "ACTIVE"},
+          "gender": {"S": "F"},
+          "fullName": {"S": "Kawtar Idrissi"},
+          "phone": {"S": "+212644444440"},
+          "country": {"S": "MA"},
+          "city": {"S": "Tanger"},
+          "locale": {"S": "fr"},
+          "acceptedLegalAt": {"S": "2026-05-01T11:00:00Z"},
+          "ageOver18": {"BOOL": true},
+          "createdAt": {"S": "2026-05-01T11:00:00Z"},
+          "updatedAt": {"S": "2026-05-01T11:00:00Z"},
+          "GSI1PK": {"S": "EMAIL#kawtar.pending@example.ma"},
+          "GSI1SK": {"S": "USER#u_creator_pending_014"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "EMAIL#kawtar.pending@example.ma"},
+          "SK": {"S": "USER#u_creator_pending_014"},
+          "entity": {"S": "EmailSentinel"},
+          "userId": {"S": "u_creator_pending_014"},
+          "createdAt": {"S": "2026-05-01T11:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_pending_014"},
+          "SK": {"S": "DOC#CIN#2026-05-02T10:00:00Z"},
+          "entity": {"S": "CreatorDocument"},
+          "documentId": {"S": "doc_cin_014"},
+          "type": {"S": "CIN"},
+          "s3Bucket": {"S": "influ-private-dev"},
+          "s3Key": {"S": "documents/u_creator_pending_014/cin/doc_cin_014.pdf"},
+          "mimeType": {"S": "application/pdf"},
+          "sizeBytes": {"N": "987654"},
+          "cinNumber": {"S": "K012345"},
+          "cinExpiry": {"S": "2031-05-01"},
+          "status": {"S": "PENDING"},
+          "createdAt": {"S": "2026-05-02T10:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "USER#u_creator_pending_014"},
+          "SK": {"S": "VALIDATION#CIN"},
+          "entity": {"S": "AdminValidationRequest"},
+          "userId": {"S": "u_creator_pending_014"},
+          "documentId": {"S": "doc_cin_014"},
+          "cinNumber": {"S": "K012345"},
+          "submittedAt": {"S": "2026-05-02T10:00:00Z"},
+          "status": {"S": "PENDING"},
+          "GSI5PK": {"S": "STATUS#PENDING"},
+          "GSI5SK": {"S": "2026-05-02T10:00:00Z#u_creator_pending_014"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "__SCHEMA__"},
+          "SK": {"S": "VERSION"},
+          "entity": {"S": "SchemaVersion"},
+          "version": {"N": "1"},
+          "appliedAt": {"S": "2026-05-09T00:00:00Z"},
+          "appliedBy": {"S": "database-engineer-seed"}
+        }
+      }
+    }
+  ],
+  "influ_audit": [
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "AUDIT#PAYMENT#pay_001"},
+          "SK": {"S": "2026-04-25T10:00:00Z#aud_001"},
+          "entity": {"S": "AuditEvent"},
+          "eventId": {"S": "aud_001"},
+          "entityType": {"S": "PAYMENT"},
+          "entityId": {"S": "pay_001"},
+          "action": {"S": "PAYMENT_COMPLETED"},
+          "actorUserId": {"S": "system"},
+          "actorRole": {"S": "SYSTEM"},
+          "payload": {"M": {"amountMad": {"N": "2880"}, "provider": {"S": "MOCK"}}},
+          "createdAt": {"S": "2026-04-25T10:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "AUDIT#CIN#u_creator_nano_010"},
+          "SK": {"S": "2026-02-17T10:00:00Z#aud_002"},
+          "entity": {"S": "AuditEvent"},
+          "eventId": {"S": "aud_002"},
+          "entityType": {"S": "CIN"},
+          "entityId": {"S": "doc_cin_010"},
+          "action": {"S": "CIN_VALIDATED"},
+          "actorUserId": {"S": "u_admin_001"},
+          "actorRole": {"S": "ADMIN"},
+          "createdAt": {"S": "2026-02-17T10:00:00Z"}
+        }
+      }
+    }
+  ],
+  "influ_sessions": [
+    {
+      "PutRequest": {
+        "Item": {
+          "PK": {"S": "sha256_seed_magic_link_demo"},
+          "SK": {"S": "META"},
+          "entity": {"S": "Session"},
+          "kind": {"S": "MAGIC_LINK"},
+          "userId": {"S": "u_creator_pending_014"},
+          "createdAt": {"S": "2026-05-09T00:00:00Z"},
+          "expiresAt": {"N": "1746748800"}
+        }
+      }
+    }
+  ]
+}
