@@ -9,9 +9,9 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main.js",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --watch",
+    "test:cov": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "lint": "eslint \"{src,test}/**/*.ts\" --max-warnings 0",
     "openapi:export": "ts-node -r tsconfig-paths/register scripts/export-openapi.ts"

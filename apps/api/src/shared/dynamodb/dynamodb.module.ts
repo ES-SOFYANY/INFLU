@@ -17,6 +17,10 @@ import { DYNAMODB_DOC_CLIENT } from './dynamodb.tokens';
         const client = new DynamoDBClient({
           region: cfg.awsRegion,
           endpoint: cfg.dynamoDbEndpoint,
+          credentials: {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? 'local',
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? 'local',
+          },
         });
         return DynamoDBDocumentClient.from(client, {
           marshallOptions: { removeUndefinedValues: true, convertClassInstanceToMap: true },

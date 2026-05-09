@@ -10,7 +10,7 @@
     "isolatedModules": false,
     "noUncheckedIndexedAccess": false,
     "paths": {
-      "@my-app/shared-types": ["../../packages/shared-types/dist/index.d.ts"],
+      "@my-app/shared-types": ["../../packages/shared-types/dist"],
       "@my-app/shared-types/*": ["../../packages/shared-types/dist/*"]
     }
   },
