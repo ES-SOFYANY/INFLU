@@ -4,6 +4,57 @@
  */
 
 export interface paths {
+    readonly "/api/admin/validations/cin": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** List CIN validation requests (admin only). Defaults to PENDING. */
+        readonly get: operations["AdminValidationController_list"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/admin/validations/cin/{id}/approve": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** Approve a pending CIN validation request (admin only). */
+        readonly post: operations["AdminValidationController_approve"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/admin/validations/cin/{id}/reject": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** Reject a pending CIN validation request (admin only). */
+        readonly post: operations["AdminValidationController_reject"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/api/auth/forgot-password": {
         readonly parameters: {
             readonly query?: never;
@@ -123,6 +174,23 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/auth/refresh": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** Rotate refresh token (single-use) */
+        readonly post: operations["AuthController_refresh"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/api/auth/register/{role}": {
         readonly parameters: {
             readonly query?: never;
@@ -134,6 +202,23 @@ export interface paths {
         readonly put?: never;
         /** [US-016] Register a new user (creator step 1, no password) */
         readonly post: operations["AuthController_register"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/auth/reset-password": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-012] Apply a new password using a reset token */
+        readonly post: operations["AuthController_resetPassword"];
         readonly delete?: never;
         readonly options?: never;
         readonly head?: never;
@@ -1243,8 +1328,23 @@ export interface components {
              * @example 2030-01-15
              */
             readonly dateOfExpiry?: string;
+            /** @description Reason provided when status is REJECTED. */
+            readonly rejectionReason?: string;
             /** @enum {string} */
-            readonly status: "NONE" | "PENDING_VALIDATION" | "VALIDATED" | "CANCELLED";
+            readonly status: "NONE" | "PENDING_VALIDATION" | "VALIDATED" | "REJECTED" | "CANCELLED";
+        };
+        readonly CinValidationItemDto: {
+            readonly cinNumber: string;
+            /** @description ISO date of CIN expiry (YYYY-MM-DD) */
+            readonly dateOfExpiry: string;
+            readonly fullName: string;
+            readonly rejectionReason?: string;
+            /** @enum {string} */
+            readonly status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+            /** @description ISO 8601 datetime */
+            readonly submittedAt: string;
+            /** Format: uuid */
+            readonly userId: string;
         };
         readonly CollaborationBrandDto: {
             /** Format: uri */
@@ -1753,6 +1853,11 @@ export interface components {
             readonly page: number;
             readonly total: number;
         };
+        readonly PaginatedCinValidationsDto: {
+            readonly items: readonly components["schemas"]["CinValidationItemDto"][];
+            /** @description Next page number, or null if there are no more pages. */
+            readonly nextCursor: number | null;
+        };
         readonly PaginatedCollaborationsDto: {
             readonly items: readonly components["schemas"]["CollaborationItemDto"][];
             readonly limit: number;
@@ -1893,6 +1998,10 @@ export interface components {
             readonly max: number;
             readonly min: number;
         };
+        readonly RefreshDto: {
+            /** @description Active refresh token to rotate */
+            readonly refreshToken: string;
+        };
         readonly RegisterCreatorDto: {
             /** @description Must be true (legal mentions & privacy) */
             readonly acceptLegal: boolean;
@@ -1911,6 +2020,16 @@ export interface components {
             readonly locale?: "fr" | "en" | "ar";
             /** @example +212600000000 */
             readonly phone: string;
+        };
+        readonly RejectCinValidationDto: {
+            /** @description Human-readable rejection reason */
+            readonly reason: string;
+        };
+        readonly ResetPasswordDto: {
+            /** @description New password — ≥ 8 chars, 1 uppercase, 1 digit */
+            readonly newPassword: string;
+            /** @description Password reset token (received by email after /auth/forgot-password) */
+            readonly token: string;
         };
         readonly RoleOptionDto: {
             /** @description CTA label for the role card */
@@ -2103,6 +2222,7 @@ export type SchemaChangeBusinessPasswordDto = components['schemas']['ChangeBusin
 export type SchemaChangePasswordDto = components['schemas']['ChangePasswordDto'];
 export type SchemaChatMessageDto = components['schemas']['ChatMessageDto'];
 export type SchemaCinStatusDto = components['schemas']['CinStatusDto'];
+export type SchemaCinValidationItemDto = components['schemas']['CinValidationItemDto'];
 export type SchemaCollaborationBrandDto = components['schemas']['CollaborationBrandDto'];
 export type SchemaCollaborationCampaignDto = components['schemas']['CollaborationCampaignDto'];
 export type SchemaCollaborationItemDto = components['schemas']['CollaborationItemDto'];
@@ -2148,6 +2268,7 @@ export type SchemaNotificationDto = components['schemas']['NotificationDto'];
 export type SchemaOnboardBusinessDto = components['schemas']['OnboardBusinessDto'];
 export type SchemaPaginatedBusinessPaymentsDto = components['schemas']['PaginatedBusinessPaymentsDto'];
 export type SchemaPaginatedCampaignsDto = components['schemas']['PaginatedCampaignsDto'];
+export type SchemaPaginatedCinValidationsDto = components['schemas']['PaginatedCinValidationsDto'];
 export type SchemaPaginatedCollaborationsDto = components['schemas']['PaginatedCollaborationsDto'];
 export type SchemaPaginatedConversationsDto = components['schemas']['PaginatedConversationsDto'];
 export type SchemaPaginatedCreatorPaymentsDto = components['schemas']['PaginatedCreatorPaymentsDto'];
@@ -2165,7 +2286,10 @@ export type SchemaPostMessageDto = components['schemas']['PostMessageDto'];
 export type SchemaPricingDto = components['schemas']['PricingDto'];
 export type SchemaPricingLineDto = components['schemas']['PricingLineDto'];
 export type SchemaPricingSuggestedRangeDto = components['schemas']['PricingSuggestedRangeDto'];
+export type SchemaRefreshDto = components['schemas']['RefreshDto'];
 export type SchemaRegisterCreatorDto = components['schemas']['RegisterCreatorDto'];
+export type SchemaRejectCinValidationDto = components['schemas']['RejectCinValidationDto'];
+export type SchemaResetPasswordDto = components['schemas']['ResetPasswordDto'];
 export type SchemaRoleOptionDto = components['schemas']['RoleOptionDto'];
 export type SchemaRoleOptionsResponseDto = components['schemas']['RoleOptionsResponseDto'];
 export type SchemaSendCampaignMessageDto = components['schemas']['SendCampaignMessageDto'];
@@ -2186,6 +2310,152 @@ export type SchemaUploadUrlDto = components['schemas']['UploadUrlDto'];
 export type SchemaUserPublicDto = components['schemas']['UserPublicDto'];
 export type $defs = Record<string, never>;
 export interface operations {
+    readonly AdminValidationController_list: {
+        readonly parameters: {
+            readonly query?: {
+                readonly limit?: number;
+                readonly page?: number;
+                readonly status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedCinValidationsDto"];
+                };
+            };
+            /** @description Unauthenticated */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN — requires ADMIN role */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly AdminValidationController_approve: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CinValidationItemDto"];
+                };
+            };
+            /** @description Unauthenticated */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description INVALID_CIN_TRANSITION */
+            readonly 409: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly AdminValidationController_reject: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["RejectCinValidationDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CinValidationItemDto"];
+                };
+            };
+            /** @description VALIDATION_FAILED */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthenticated */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description INVALID_CIN_TRANSITION */
+            readonly 409: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     readonly AuthController_forgotPassword: {
         readonly parameters: {
             readonly query?: never;
@@ -2393,6 +2663,36 @@ export interface operations {
             };
         };
     };
+    readonly AuthController_refresh: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["RefreshDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["AuthTokensDto"];
+                };
+            };
+            /** @description INVALID_REFRESH_TOKEN */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     readonly AuthController_register: {
         readonly parameters: {
             readonly query?: never;
@@ -2425,6 +2725,43 @@ export interface operations {
             };
             /** @description Email already registered */
             readonly 409: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly AuthController_resetPassword: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["ResetPasswordDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["AuthSessionDto"];
+                };
+            };
+            /** @description Validation failed (weak password) */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description INVALID_RESET_TOKEN */
+            readonly 401: {
                 headers: {
                     readonly [name: string]: unknown;
                 };

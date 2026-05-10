@@ -97,7 +97,7 @@ describe('AiCoachController (US-050, US-051)', () => {
 
   // ------- US-051 send -------
 
-  it('[AC-050-02 / AC-051] POST /messages → 201 avec userMessage + aiResponse', async () => {
+  it('[AC-050-02] [AC-051] POST /messages → 201 avec userMessage + aiResponse', async () => {
     await seedActiveUser(ctx, { email: 'c2@test.local', password: 'Pass1234' });
     const token = await login(ctx, 'c2@test.local', 'Pass1234');
     const create = await request(ctx.app.getHttpServer())

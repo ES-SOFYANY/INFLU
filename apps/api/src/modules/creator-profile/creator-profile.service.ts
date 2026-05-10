@@ -427,6 +427,7 @@ export class CreatorProfileService {
       status: doc.status,
       cinNumber: doc.cinNumber,
       dateOfExpiry: doc.dateOfExpiry,
+      rejectionReason: doc.rejectionReason,
     };
   }
 

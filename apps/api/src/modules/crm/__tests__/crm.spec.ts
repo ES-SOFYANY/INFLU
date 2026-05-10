@@ -345,7 +345,7 @@ describe('CrmController US-140 / US-141 / US-142', () => {
   // US-142 — add / remove creator
   // ===================================================================
 
-  it('[AC-142-OK] POST /lists/:id/creators/:creatorId ajoute', async () => {
+  it('[AC-142-01] [AC-142-02] POST /lists/:id/creators/:creatorId ajoute (action depuis Discovery + confirmation)', async () => {
     await seedActiveUser(ctx, {
       email: 'biz-add@test.local',
       password: 'Pass1234',
@@ -376,7 +376,7 @@ describe('CrmController US-140 / US-141 / US-142', () => {
     expect(detail.body.creatorsCount).toBe(1);
   });
 
-  it('[AC-142-409] Ajout en double → 409 ALREADY_IN_LIST', async () => {
+  it('[AC-142-02] [AC-142-409] Ajout en double → 409 ALREADY_IN_LIST (toast d\'erreur côté UI)', async () => {
     await seedActiveUser(ctx, {
       email: 'biz-dup@test.local',
       password: 'Pass1234',

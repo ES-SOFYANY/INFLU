@@ -18,10 +18,13 @@ import type {
   MagicLinkConsumeDto,
   MagicLinkRequestDto,
   OnboardBusinessDto,
+  RefreshDto,
   RegisterCreatorDto,
+  ResetPasswordDto,
   RoleOptionsResponseDto,
   UserPublicDto,
 } from './dto';
+import { AuthTokensDto } from './dto/auth-session.dto';
 import { v4 as uuidv4 } from './uuid';
 
 import type { Role } from '@my-app/shared-types';
@@ -144,17 +147,10 @@ export class AuthService {
     const email = dto.email.toLowerCase();
     const user = await this.repo.findByEmail(email);
     if (user) {
-      const token = randomBytes(32).toString('hex');
-      const tokenHash = sha256(token);
-      const now = Date.now();
-      await this.repo.putSession({
-        tokenHash,
-        kind: 'RESET_PASSWORD',
-        userId: user.id,
-        createdAt: new Date(now).toISOString(),
-        expiresAt: Math.floor((now + 60 * 60 * 1000) / 1000),
-        payload: { locale: dto.locale ?? user.locale },
-      });
+      const issued = await this.issueResetPasswordToken(
+        user.id,
+        dto.locale ?? user.locale,
+      );
       await this.audit.append({
         actorUserId: user.id,
         action: 'AUTH_FORGOT_PASSWORD_REQUEST',
@@ -162,11 +158,160 @@ export class AuthService {
         details: { email, locale: dto.locale ?? user.locale },
       });
       this.logger.log(
-        `[email-stub] would send reset link for ${email} (token=${token.slice(0, 6)}…)`,
+        `[email-stub] would send reset link for ${email} (token=${issued.token.slice(0, 6)}…)`,
       );
     } else {
       this.logger.log(`[email-stub] forgot-password requested for unknown email ${email}`);
     }
+  }
+
+  /**
+   * US-012 — Internal helper: emits an opaque reset-password token (32 random
+   * bytes hex) and persists its sha256 hash in `influ_sessions` with TTL 30 min
+   * and kind=RESET_PASSWORD. Public so unit tests can fetch the actual token
+   * without parsing logs.
+   */
+  async issueResetPasswordToken(
+    userId: string,
+    locale: 'fr' | 'en' | 'ar',
+  ): Promise<{ token: string; expiresAt: number }> {
+    const token = randomBytes(32).toString('hex');
+    const tokenHash = sha256(token);
+    const nowMs = Date.now();
+    const expiresAt = Math.floor((nowMs + 30 * 60 * 1000) / 1000);
+    await this.repo.putSession({
+      tokenHash,
+      kind: 'RESET_PASSWORD',
+      userId,
+      createdAt: new Date(nowMs).toISOString(),
+      expiresAt,
+      payload: { locale },
+    });
+    return { token, expiresAt };
+  }
+
+  // ============ Reset password (consume token from forgot-password) ============
+
+  async resetPassword(dto: ResetPasswordDto): Promise<AuthSessionDto> {
+    const tokenHash = sha256(dto.token);
+    const session = await this.repo.getSession(tokenHash);
+    if (!session || session.kind !== 'RESET_PASSWORD' || !session.userId) {
+      throw new BusinessException(
+        ERROR_CODES.INVALID_RESET_TOKEN,
+        'Reset token is invalid.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    if (session.usedAt) {
+      throw new BusinessException(
+        ERROR_CODES.INVALID_RESET_TOKEN,
+        'Reset token has already been used.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    if (Date.now() / 1000 > session.expiresAt) {
+      throw new BusinessException(
+        ERROR_CODES.INVALID_RESET_TOKEN,
+        'Reset token has expired.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    const user = await this.repo.findById(session.userId);
+    if (!user) {
+      throw new BusinessException(
+        ERROR_CODES.INVALID_RESET_TOKEN,
+        'Reset token is invalid.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    try {
+      await this.repo.markSessionUsed(tokenHash, new Date().toISOString());
+    } catch (err) {
+      const e = err as { name?: string };
+      if (e.name === 'ConditionalCheckFailedException') {
+        throw new BusinessException(
+          ERROR_CODES.INVALID_RESET_TOKEN,
+          'Reset token has already been used.',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+      throw err;
+    }
+
+    const passwordHash = await bcrypt.hash(dto.newPassword, 10);
+    await this.repo.setPasswordAndActivate(user.id, passwordHash);
+    user.passwordHash = passwordHash;
+    user.status = 'ACTIVE';
+    user.emailVerified = true;
+
+    await this.audit.append({
+      actorUserId: user.id,
+      action: 'AUTH_PASSWORD_RESET',
+      resource: `USER#${user.id}`,
+    });
+    return this.issueSession(user);
+  }
+
+  // ============ Refresh token rotation ============
+
+  async refresh(dto: RefreshDto): Promise<AuthTokensDto> {
+    const tokenHash = sha256(dto.refreshToken);
+    const session = await this.repo.getSession(tokenHash);
+    if (!session || session.kind !== 'REFRESH' || !session.userId) {
+      throw new BusinessException(
+        ERROR_CODES.INVALID_REFRESH_TOKEN,
+        'Refresh token is invalid.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    if (session.usedAt) {
+      throw new BusinessException(
+        ERROR_CODES.INVALID_REFRESH_TOKEN,
+        'Refresh token has already been used (revoked).',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    if (Date.now() / 1000 > session.expiresAt) {
+      throw new BusinessException(
+        ERROR_CODES.INVALID_REFRESH_TOKEN,
+        'Refresh token has expired.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    const user = await this.repo.findById(session.userId);
+    if (!user) {
+      throw new BusinessException(
+        ERROR_CODES.INVALID_REFRESH_TOKEN,
+        'Refresh token is invalid.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    // Atomically revoke the current refresh token (single-use rotation).
+    try {
+      await this.repo.markSessionUsed(tokenHash, new Date().toISOString());
+    } catch (err) {
+      const e = err as { name?: string };
+      if (e.name === 'ConditionalCheckFailedException') {
+        throw new BusinessException(
+          ERROR_CODES.INVALID_REFRESH_TOKEN,
+          'Refresh token has already been used (revoked).',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+      throw err;
+    }
+
+    const session2 = await this.issueSession(user);
+    await this.audit.append({
+      actorUserId: user.id,
+      action: 'AUTH_REFRESH_ROTATE',
+      resource: `USER#${user.id}`,
+    });
+    return session2.tokens;
   }
 
   // ============ US-014: Logout ============

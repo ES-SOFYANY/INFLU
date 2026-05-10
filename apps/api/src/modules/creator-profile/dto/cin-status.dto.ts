@@ -4,6 +4,7 @@ export type CreatorCinStatus =
   | 'NONE'
   | 'PENDING_VALIDATION'
   | 'VALIDATED'
+  | 'REJECTED'
   | 'CANCELLED';
 
 /**
@@ -11,7 +12,7 @@ export type CreatorCinStatus =
  */
 export class CinStatusDto {
   @ApiProperty({
-    enum: ['NONE', 'PENDING_VALIDATION', 'VALIDATED', 'CANCELLED'],
+    enum: ['NONE', 'PENDING_VALIDATION', 'VALIDATED', 'REJECTED', 'CANCELLED'],
   })
   status!: CreatorCinStatus;
 
@@ -23,4 +24,10 @@ export class CinStatusDto {
     example: '2030-01-15',
   })
   dateOfExpiry?: string;
+
+  @ApiPropertyOptional({
+    description: 'Reason provided when status is REJECTED.',
+  })
+  rejectionReason?: string;
 }
+

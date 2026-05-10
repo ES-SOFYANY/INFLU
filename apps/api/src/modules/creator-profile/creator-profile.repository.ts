@@ -302,6 +302,30 @@ export class CreatorProfileRepository {
       }),
     );
   }
+
+  /**
+   * Set the CIN document status to REJECTED with a reason (admin action).
+   */
+  async rejectCinDocument(userId: string, reason: string): Promise<void> {
+    await this.db.client.send(
+      new UpdateCommand({
+        TableName: this.db.mainTable,
+        Key: {
+          PK: DynamoDbService.userPk(userId),
+          SK: CreatorProfileRepository.cinDocSk(),
+        },
+        UpdateExpression:
+          'SET #s = :s, rejectionReason = :r, updatedAt = :ts',
+        ExpressionAttributeNames: { '#s': 'status' },
+        ExpressionAttributeValues: {
+          ':s': 'REJECTED',
+          ':r': reason,
+          ':ts': new Date().toISOString(),
+        },
+        ConditionExpression: 'attribute_exists(PK)',
+      }),
+    );
+  }
 }
 
 export interface PricingLineRecord {
@@ -320,4 +344,5 @@ export interface CinDocumentRecord {
   status: CreatorCinStatus;
   submittedAt: string;
   updatedAt: string;
+  rejectionReason?: string;
 }

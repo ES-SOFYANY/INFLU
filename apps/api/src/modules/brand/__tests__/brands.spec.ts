@@ -94,7 +94,7 @@ describe('BrandController US-171/172/173 (brand listing, search, link, access)',
   });
 
   // ---------------- US-172 link ----------------
-  it('[AC-172-03] POST /business/brands/link → 201 et apparaît dans GET /business/brands', async () => {
+  it('[AC-171-01] [AC-172-03] POST /business/brands/link → 201 et apparaît dans GET /business/brands', async () => {
     await seedBusinessUser(ctx, { email: 'b3@test.local', password: 'Pass1234' });
     const token = await loginBusiness(ctx, 'b3@test.local', 'Pass1234');
     // Trigger seed via search

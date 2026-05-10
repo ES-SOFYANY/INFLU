@@ -178,7 +178,7 @@ describe('DiscoveryController GET /business/discovery/creators (US-130, US-131, 
 
   // -------- US-131 (table/grid) --------
 
-  it('[AC-131-01/02] le payload contient les champs requis pour Table ET Grid', async () => {
+  it('[AC-131-01] [AC-131-02] le payload contient les champs requis pour Table ET Grid', async () => {
     await seedDiscoveryCreators(ctx, 1);
     const { token } = await loginAsBusiness(ctx);
     const res = await request(ctx.app.getHttpServer())

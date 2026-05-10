@@ -33,10 +33,13 @@ import {
   MagicLinkConsumeDto,
   MagicLinkRequestDto,
   OnboardBusinessDto,
+  RefreshDto,
   RegisterCreatorDto,
+  ResetPasswordDto,
   RoleOptionsResponseDto,
   UserPublicDto,
 } from './dto';
+import { AuthTokensDto } from './dto/auth-session.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -82,6 +85,29 @@ export class AuthController {
   async forgotPassword(@Body() dto: EmailLocaleDto): Promise<{ message: string }> {
     await this.service.forgotPassword(dto);
     return { message: 'If an account exists, a reset email has been sent.' };
+  }
+
+  // ----- US-012: Reset password -----
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '[US-012] Apply a new password using a reset token' })
+  @ApiBody({ type: ResetPasswordDto })
+  @ApiResponse({ status: 200, type: AuthSessionDto })
+  @ApiResponse({ status: 400, description: 'Validation failed (weak password)' })
+  @ApiResponse({ status: 401, description: 'INVALID_RESET_TOKEN' })
+  resetPassword(@Body() dto: ResetPasswordDto): Promise<AuthSessionDto> {
+    return this.service.resetPassword(dto);
+  }
+
+  // ----- Refresh token rotation -----
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Rotate refresh token (single-use)' })
+  @ApiBody({ type: RefreshDto })
+  @ApiResponse({ status: 200, type: AuthTokensDto })
+  @ApiResponse({ status: 401, description: 'INVALID_REFRESH_TOKEN' })
+  refresh(@Body() dto: RefreshDto): Promise<AuthTokensDto> {
+    return this.service.refresh(dto);
   }
 
   // ----- US-014: Logout -----

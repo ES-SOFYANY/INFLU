@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 
 import { AdminValidationModule } from '../admin-validation/admin-validation.module';
 
@@ -12,7 +12,7 @@ import { CreatorProfileService } from './creator-profile.service';
  * Story Implementers fill controllers / services / repositories per US.
  */
 @Module({
-  imports: [AdminValidationModule],
+  imports: [forwardRef(() => AdminValidationModule)],
   controllers: [CreatorProfileController],
   providers: [
     CreatorProfileService,

@@ -8,3 +8,5 @@ export * from './role-options.dto';
 export * from './magic-link-request.dto';
 export * from './magic-link-consume.dto';
 export * from './onboard-business.dto';
+export * from './refresh.dto';
+export * from './reset-password.dto';

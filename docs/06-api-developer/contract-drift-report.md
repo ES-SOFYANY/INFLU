@@ -1,6 +1,7 @@
 # API Contract Drift Report
 
 > Updated: 2026-05-10 — Wave 1 Auth implementation (US-010..US-016).
+> Updated: 2026-05-10 — Coverage gaps closure (refresh, reset-password, admin-validation, drift arbitrations).
 
 This report tracks intentional or accidental divergences between the implemented
 NestJS API and `docs/03-tech-lead/api-contract.md` / `openapi.yaml`. Each entry
@@ -133,8 +134,88 @@ must be either **resolved** (implementation aligned to contract) or
 | **Reason** | Parent agent spec (Wave Support): "FAQ peut rester authentifiée pour simplicité". Title/description upper bounds prevent abuse and align with the wireframe textareas. `total` is needed by the UI to render the "X report(s)" counter required by AC-080-01 / AC-180-02; cursor pagination is overkill for a feature where each user submits a handful of reports. |
 | **Resolution plan** | Tech Lead to (a) make `/support/faq` authenticated in `openapi.yaml`, (b) add `maxLength` to `CreateReportRequest`, (c) replace `PaginatedReports` with a simple `{ items, total }` shape (or document a `total` extension on `Paginated`) for the support feature. |
 
+### DRIFT-200 — `PUT /business/marketplace/products/{id}` kept as `PATCH` (US-122)
+
+| Field | Status |
+|---|---|
+| **Endpoint** | `PUT /business/marketplace/products/{id}` (contract) vs `PATCH /business/marketplace/products/{id}` (implementation) |
+| **Contract** | `PUT` for full-resource replacement |
+| **Implementation** | `PATCH` for partial-update (status, title, description, deliverables, …). Tests `marketplace.spec.ts` cover the PATCH semantics. |
+| **Severity** | Low — verb mismatch only, request body identical |
+| **Reason / Decision** | The endpoint exposes a partial update (clients send only the fields they want to modify, e.g. `{ status: 'PAUSED' }` or `{ priceMad: 5000 }`). This matches `PATCH` semantics per RFC 5789. Keeping `PUT` would force clients to resend the full product on every change, which is brittle and inconsistent with all other `/me` partial updates already settled on `PATCH` (`/creator/me`, `/business/me`). |
+| **Resolution plan** | **Decision: keep `PATCH`.** Tech Lead to update `openapi.yaml` to declare `PATCH /business/marketplace/products/{id}` (replacing the `PUT`). |
+
+### DRIFT-201 — `POST /auth/onboard` kept as `POST /auth/onboard/business` (US-018)
+
+> Already documented under DRIFT-006. **Decision (2026-05-10): keep `POST /auth/onboard/business`** as the canonical path. The contract `POST /auth/onboard` (authenticated, juridical-only) is dropped because:
+>
+> 1. The Wave 2 wireframe (US-018) collects account info (email/password/fullName/phone/address) and legal info (juridicalForm/ice/companyName/companyAddress/if/rc/tva) in one form.
+> 2. ICE uniqueness is enforced atomically with EMAIL uniqueness in a single `TransactWriteCommand`.
+> 3. Adding a separate `/auth/onboard/{type}` for `BUSINESS|AGENCY|SMALL_BUSINESS|BRAND` (with the type embedded in the URL) is more explicit than overloading a single `/auth/onboard` with a discriminated body.
+>
+> No alias is added — the contract diverges from the implementation. This entry is **accepted**; Tech Lead to refresh `openapi.yaml`.
+
+### DRIFT-202 — `GET /auth/roles` (US-015) [resolved by adding to contract]
+
+> See DRIFT-003. The endpoint is **legitimate and required** by the front-end role-selection screen. Decision: add `GET /auth/roles` + `RoleOptionsResponse` schema to `openapi.yaml` next sync. No code change.
+
+### DRIFT-203 — Additional endpoint `GET /creator/me/billing` (US-074)
+
+| Field | Status |
+|---|---|
+| **Endpoint** | `GET /creator/me/billing` |
+| **Contract** | Not present in `openapi.yaml` |
+| **Implementation** | Returns the creator's billing profile (BUSINESS or AUTO_ENTREPRENEUR), ICE/RIB/IF/RC/TVA, and approval status. Drives the wireframe at `/me/billing`. |
+| **Severity** | Low — additive |
+| **Reason** | US-074 wireframe needs a single endpoint to load the creator's billing/legal block. Splitting it into multiple sub-resources adds round-trips for no benefit. |
+| **Resolution plan** | Tech Lead to add `GET /creator/me/billing` returning `CreatorBilling` to `openapi.yaml` (the `CreatorBilling` schema already exists). |
+
+### DRIFT-204 — Additional endpoints `POST /creator/me/password/change` and `POST /business/me/password/change` (US-076, US-035)
+
+| Field | Status |
+|---|---|
+| **Endpoints** | `POST /creator/me/password/change`, `POST /business/me/password/change` |
+| **Contract** | Not present in `openapi.yaml` (covered by US-071 via `/auth/reset-password` for unauthenticated reset only) |
+| **Implementation** | Authenticated change-password with `{ currentPassword, newPassword }` body. Returns 401 `WRONG_PASSWORD` when the current password is incorrect, 400 `WEAK_PASSWORD` when the new password fails the strength check. |
+| **Severity** | Low — additive (authenticated companion of `/auth/reset-password`) |
+| **Reason** | Wireframes US-035 / US-076 expose a "Change password" panel inside `/account-info`, distinct from the public reset-by-email flow. The endpoint is required by the UI; covering it via `/auth/reset-password` would force the user to leave the app and check their email even when they already know their current password. |
+| **Resolution plan** | Tech Lead to declare both endpoints under `Account` tag with `ChangePasswordRequest { currentPassword, newPassword }` and document the 401 `WRONG_PASSWORD` error code. |
+
+### DRIFT-205 — Admin validation listing pagination shape (US-Admin)
+
+| Field | Status |
+|---|---|
+| **Endpoint** | `GET /admin/validations/cin` |
+| **Contract** | `PaginatedCinSubmissions` extends `Paginated { items, nextCursor: string\|null }` and uses `cursor`/`limit` query params + a `CinSubmission` schema with fields `userFullName`, `expiry`, `rectoUrl`, `versoUrl`. |
+| **Implementation** | `PaginatedCinValidationsDto { items, nextCursor: number\|null }` with `page`/`limit`/`status` query params. Items shaped as `CinValidationItemDto { userId, fullName, cinNumber, dateOfExpiry, status, submittedAt, rejectionReason? }`. Status enum is `PENDING|APPROVED|REJECTED|CANCELLED` (the pipeline of an `AdminValidationRequest`) rather than the `CinDocument` enum (`PENDING|VALIDATED|REJECTED|NONE`). |
+| **Severity** | Low — additive (no admin endpoint had any consumer yet); shape differences are constrained to admin-only views |
+| **Reason** | (a) `page`-based pagination is simpler for the admin back-office (small volumes, sortable table) and matches the user-story brief verbatim. (b) `userFullName` is renamed `fullName` to match the rest of the API (`UserPublic.fullName`). (c) `dateOfExpiry` matches the creator-side DTO field name (`SubmitCinDto.dateOfExpiry`). (d) `rectoUrl`/`versoUrl` are not yet exposed because the upload step (US-074 mock) does not produce signed download URLs in MVP. |
+| **Resolution plan** | Tech Lead to align `openapi.yaml` next sync: declare `page`/`limit`/`status` params, rename fields, drop `rectoUrl`/`versoUrl` (or mark them optional until S3 signed-GET is wired). |
+
 ---
 
 ## Resolved entries
 
-_(none yet)_
+### RESOLVED-001 — `POST /auth/refresh` (rotation)
+
+| Field | Status |
+|---|---|
+| **Endpoint** | `POST /auth/refresh` |
+| **Status** | **Implemented & aligned with contract** (2026-05-10) |
+| **Notes** | Body `{ refreshToken }`. Verifies the token in `influ_sessions` (kind=`REFRESH`, not `usedAt`, not expired), atomically marks the row as used (single-use rotation, conditional update), then issues a fresh access+refresh pair via `issueSession`. Reusing the same token returns 401 `INVALID_REFRESH_TOKEN`. Response shape matches the contract `AuthTokens { accessToken, refreshToken, expiresIn }`. |
+
+### RESOLVED-002 — `POST /auth/reset-password`
+
+| Field | Status |
+|---|---|
+| **Endpoint** | `POST /auth/reset-password` |
+| **Status** | **Implemented & aligned with contract** (2026-05-10) |
+| **Notes** | Body `{ token, newPassword }`. The reset token is issued by `POST /auth/forgot-password` (now persisted as a single-use `RESET_PASSWORD` session row in `influ_sessions` with TTL 30 min). Reset validates the token (kind, not used, not expired), updates the bcrypt password hash, marks the session as used, and issues a fresh `AuthSession`. Invalid/expired/reused token → 401 `INVALID_RESET_TOKEN`. Weak password → 400 `VALIDATION_FAILED`. Response shape matches the contract `AuthSession`. |
+
+### RESOLVED-003 — Admin validation module (`/admin/validations/cin`)
+
+| Field | Status |
+|---|---|
+| **Endpoints** | `GET /admin/validations/cin`, `POST /admin/validations/cin/{id}/approve`, `POST /admin/validations/cin/{id}/reject` |
+| **Status** | **Implemented** (2026-05-10) — see DRIFT-205 for shape arbitration |
+| **Notes** | Guarded by `@Roles('ADMIN')`. Approve flips both the `AdminValidationRequest.status` and the creator's `CinDocument.status` to VALIDATED. Reject flips both to REJECTED with the provided reason. Non-existing request → 404. Already-processed request → 409 `INVALID_CIN_TRANSITION`. |
