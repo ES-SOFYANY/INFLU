@@ -1,0 +1,76 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - link "Skip to content" [ref=e6] [cursor=pointer]:
+        - /url: "#main"
+      - banner [ref=e7]:
+        - generic [ref=e8]:
+          - link "INFLU.ai" [ref=e9] [cursor=pointer]:
+            - /url: /business/dashboard
+          - combobox [ref=e10]:
+            - combobox "Search your best influencer by name or handle" [ref=e11]
+            - generic [ref=e12]: 🔍
+          - button "Show suggestions" [ref=e13] [cursor=pointer]
+        - generic [ref=e14]:
+          - combobox "Change language" [ref=e15]:
+            - option "FR" [selected]
+            - option "EN"
+            - option "AR"
+          - button "Notifications" [ref=e18] [cursor=pointer]: 🔔
+          - generic [ref=e19]: S
+          - button "Salma Berrada" [ref=e20] [cursor=pointer]
+      - generic [ref=e21]:
+        - navigation "Business navigation" [ref=e22]:
+          - link "📊 Dashboard" [ref=e24] [cursor=pointer]:
+            - /url: /business/dashboard
+          - generic [ref=e25]:
+            - generic [ref=e26]: INFLU AI
+            - link "✨ New AI Campaign" [ref=e27] [cursor=pointer]:
+              - /url: /business/ai-campaign
+            - link "🤖 AI Manager" [ref=e28] [cursor=pointer]:
+              - /url: /business/ai-manager
+          - generic [ref=e29]:
+            - generic [ref=e30]: Marketplace
+            - link "➕ Add Product" [ref=e31] [cursor=pointer]:
+              - /url: /business/marketplace/create
+            - link "🛍 My Marketplace" [ref=e32] [cursor=pointer]:
+              - /url: /business/marketplace
+          - generic [ref=e33]:
+            - generic [ref=e34]: Tools
+            - link "🔍 Discovery" [ref=e35] [cursor=pointer]:
+              - /url: /business/discovery
+            - link "📇 CRM" [ref=e36] [cursor=pointer]:
+              - /url: /business/crm
+            - link "👂 Social Listening 🔒" [disabled] [ref=e37]:
+              - /url: "#"
+          - generic [ref=e38]:
+            - generic [ref=e39]: Communication
+            - link "💬 Messaging" [ref=e40] [cursor=pointer]:
+              - /url: /business/messaging
+            - link "💰 Payments" [ref=e41] [cursor=pointer]:
+              - /url: /business/payments
+          - generic [ref=e42]:
+            - generic [ref=e43]: Settings
+            - link "⚙️ Account Settings" [ref=e44] [cursor=pointer]:
+              - /url: /business/accounts
+            - link "❓ Support" [ref=e45] [cursor=pointer]:
+              - /url: /business/support
+        - main [ref=e47]:
+          - generic [ref=e48]:
+            - heading "My Marketplace" [level=1] [ref=e49]
+            - link "+ Add Product" [ref=e50] [cursor=pointer]:
+              - /url: /business/marketplace/create
+          - generic [ref=e51]:
+            - combobox "Filter by brand" [ref=e52]:
+              - option "Select brand…" [selected]
+            - combobox "Filter by status" [ref=e53]:
+              - option "Select status" [selected]
+              - option "Draft"
+              - option "Published"
+              - option "Expired"
+              - option "Closed"
+            - button "Clear" [ref=e54] [cursor=pointer]
+          - status [ref=e55]: Loading…
+      - button "Report an issue" [ref=e56] [cursor=pointer]: ⚠ Report an issue

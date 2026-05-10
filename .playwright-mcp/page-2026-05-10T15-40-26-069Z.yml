@@ -1,0 +1,39 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - banner [ref=e7]:
+        - link "INFLU.ai" [ref=e9] [cursor=pointer]:
+          - /url: /
+        - link "Sign in" [ref=e11] [cursor=pointer]:
+          - /url: /auth/login
+      - main [ref=e12]:
+        - heading "Creator legal mentions" [level=1] [ref=e13]
+        - paragraph [ref=e14]: "Last updated: April 2026"
+        - article [ref=e15]:
+          - generic [ref=e16]:
+            - heading "1. Eligibility" [level=2] [ref=e17]
+            - paragraph [ref=e18]: You must be 18+ and a resident of Morocco (MENA expansion in roadmap). You declare these by checkbox at registration.
+          - generic [ref=e19]:
+            - heading "2. Required documents" [level=2] [ref=e20]
+            - paragraph [ref=e21]:
+              - text: "To apply for opportunities, you must submit: a valid"
+              - strong [ref=e22]: CIN
+              - text: (Moroccan ID, validated by INFLU within 48h), a
+              - strong [ref=e23]: RIB
+              - text: (bank details), and a valid
+              - strong [ref=e24]: ICE
+              - text: (commercial identifier).
+          - generic [ref=e25]:
+            - heading "3. Content responsibilities" [level=2] [ref=e26]
+            - paragraph [ref=e27]: "Imposed hashtags (#ad, #sponsorisé, #partenariat_rémunéré) must be used. Disclosure rules per Moroccan advertising law apply."
+          - generic [ref=e28]:
+            - heading "4. Payment" [level=2] [ref=e29]
+            - paragraph [ref=e30]: "All payments made in MAD by INFLU directly. SLA: 48h–7 days after content validation by the brand."
+          - generic [ref=e31]:
+            - heading "5. Account deletion" [level=2] [ref=e32]
+            - paragraph [ref=e33]: You can delete your account from Account Settings → Danger zone. Action is irreversible.
+        - paragraph [ref=e34]:
+          - link "Privacy policy →" [ref=e35] [cursor=pointer]:
+            - /url: /legal/privacy

@@ -1,0 +1,95 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - banner [ref=e7]:
+        - generic [ref=e8]:
+          - link "INFLU.ai" [ref=e9] [cursor=pointer]:
+            - /url: /
+          - navigation "Public navigation" [ref=e10]:
+            - link "Pour les créateurs" [ref=e11] [cursor=pointer]:
+              - /url: /for-influencers
+            - link "Pour les marques" [ref=e12] [cursor=pointer]:
+              - /url: /for-brands
+            - link "Légal" [ref=e13] [cursor=pointer]:
+              - /url: /legal/privacy
+        - generic [ref=e14]:
+          - combobox "Changer de langue" [ref=e15]:
+            - option "FR" [selected]
+            - option "EN"
+            - option "AR"
+          - link "Se connecter" [ref=e16] [cursor=pointer]:
+            - /url: /auth/login
+          - link "Inscrivez-vous gratuitement" [ref=e17] [cursor=pointer]:
+            - /url: /auth/register
+      - main [ref=e18]:
+        - generic [ref=e20]:
+          - generic [ref=e21]: ✦ Nouveau — Briefs IA générés en 60 secondes
+          - heading "L'influencer marketing réinventé par l'IA pour le Maroc" [level=1] [ref=e22]:
+            - text: L'influencer marketing
+            - text: réinventé par l'IA
+            - text: pour le Maroc
+          - paragraph [ref=e23]: INFLU.ai connecte créateurs et marques de la région MENA. Briefs, scripts, paiements — tout est géré, en MAD, en français/anglais/arabe.
+          - generic [ref=e24]:
+            - link "Inscrivez-vous gratuitement →" [ref=e25] [cursor=pointer]:
+              - /url: /auth/register
+            - link "Réserver une démo" [ref=e26] [cursor=pointer]:
+              - /url: /for-brands
+          - paragraph [ref=e27]: Aucune carte de crédit requise · Disponible en 🇲🇦 🇩🇿 🇹🇳
+        - generic [ref=e29]:
+          - heading "Une plateforme, trois acteurs" [level=2] [ref=e30]
+          - generic [ref=e31]:
+            - article [ref=e32]:
+              - generic [ref=e33]: 🎬
+              - heading "Créateurs" [level=3] [ref=e34]
+              - paragraph [ref=e35]: Découvrez des collaborations, postulez en un clic, soyez payés par INFLU sous 48h–7 jours.
+              - link "En savoir plus →" [ref=e36] [cursor=pointer]:
+                - /url: /for-influencers
+            - article [ref=e37]:
+              - generic [ref=e38]: 🏷️
+              - heading "Marques" [level=3] [ref=e39]
+              - paragraph [ref=e40]: Lancez une campagne IA en 5 minutes. Brief, scripts, recommandations de profils — tout est généré.
+              - link "En savoir plus →" [ref=e41] [cursor=pointer]:
+                - /url: /for-brands
+            - article [ref=e42]:
+              - generic [ref=e43]: 🛡️
+              - heading "INFLU" [level=3] [ref=e44]
+              - paragraph [ref=e45]: "Tiers de confiance : héberge le contrat, valide les pièces, déclenche les paiements en MAD."
+        - generic [ref=e47]:
+          - heading "Conçu pour la région MENA" [level=2] [ref=e48]
+          - paragraph [ref=e49]: Devise locale, validations admin Maroc (CIN, ICE, RIB), 3 langues dont l'arabe RTL.
+          - generic [ref=e50]:
+            - article [ref=e51]:
+              - heading "💸 Paiement garanti" [level=3] [ref=e52]
+              - paragraph [ref=e53]: « Paid by INFLU » — vous êtes payé sous 48h–7 jours après validation, en Dhs.
+            - article [ref=e54]:
+              - heading "🤖 Brief IA en 60s" [level=3] [ref=e55]
+              - paragraph [ref=e56]: "Chat conversationnel : décrivez votre objectif, l'IA génère brief, scripts, profils."
+            - article [ref=e57]:
+              - heading "🔍 Discovery puissant" [level=3] [ref=e58]
+              - paragraph [ref=e59]: Filtres par tier (Nano → Celebrity), catégorie, plateforme, ville. URLs partageables.
+            - article [ref=e60]:
+              - heading "📋 Contrats signés en ligne" [level=3] [ref=e61]
+              - paragraph [ref=e62]: Génération + signature électronique légalement contraignante.
+            - article [ref=e63]:
+              - heading "🌍 Multilingue + RTL" [level=3] [ref=e64]
+              - paragraph [ref=e65]: Français, English, العربية — interface complètement adaptée au RTL.
+            - article [ref=e66]:
+              - heading "🏢 Multi-marques" [level=3] [ref=e67]
+              - paragraph [ref=e68]: "Pour agences : gérez plusieurs marques avec des accès dédiés."
+        - generic [ref=e70]:
+          - heading "Prêt à commencer ?" [level=2] [ref=e71]
+          - paragraph [ref=e72]: Inscription gratuite. Pas de carte requise.
+          - link "Créer mon compte INFLU →" [ref=e73] [cursor=pointer]:
+            - /url: /auth/register
+      - contentinfo [ref=e75]:
+        - generic [ref=e76]:
+          - generic [ref=e77]: © 2026 INFLU.ai — Casablanca, Maroc
+          - navigation "Footer" [ref=e78]:
+            - link "Mentions marque" [ref=e79] [cursor=pointer]:
+              - /url: /legal/brand
+            - link "Mentions créateur" [ref=e80] [cursor=pointer]:
+              - /url: /legal/creator
+            - link "Confidentialité" [ref=e81] [cursor=pointer]:
+              - /url: /legal/privacy

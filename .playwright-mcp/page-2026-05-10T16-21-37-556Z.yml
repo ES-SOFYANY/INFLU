@@ -1,0 +1,97 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - link "Skip to content" [ref=e6] [cursor=pointer]:
+        - /url: "#main"
+      - banner [ref=e7]:
+        - link "INFLU.ai" [ref=e8] [cursor=pointer]:
+          - /url: /creator/dashboard
+        - generic [ref=e9]:
+          - combobox "Change language" [ref=e10]:
+            - option "FR" [selected]
+            - option "EN"
+            - option "AR"
+          - button "Notifications" [ref=e13] [cursor=pointer]: 🔔
+          - generic [ref=e14]:
+            - generic [ref=e15]: A
+            - button "Amine Bennani" [ref=e16] [cursor=pointer]
+      - generic [ref=e17]:
+        - navigation "Creator navigation" [ref=e18]:
+          - link "📊 Dashboard" [ref=e20] [cursor=pointer]:
+            - /url: /creator/dashboard
+          - generic [ref=e21]:
+            - generic [ref=e22]: Opportunities
+            - link "🎯 Matchings 🔒" [disabled] [ref=e23]:
+              - /url: "#"
+            - link "🤝 Collaboration" [ref=e24] [cursor=pointer]:
+              - /url: /creator/collaborations
+            - link "🛍 Marketplace" [ref=e25] [cursor=pointer]:
+              - /url: /creator/marketplace
+          - generic [ref=e26]:
+            - generic [ref=e27]: Assets
+            - link "👤 My Account" [ref=e28] [cursor=pointer]:
+              - /url: /creator/my-account
+            - link "🤖 My AI coach" [ref=e29] [cursor=pointer]:
+              - /url: /creator/ai-coach
+          - generic [ref=e30]:
+            - generic [ref=e31]: Tools
+            - link "💬 Messaging" [ref=e32] [cursor=pointer]:
+              - /url: /creator/messaging
+            - link "📅 Calendar 🔒" [disabled] [ref=e33]:
+              - /url: "#"
+            - link "💰 My Payments 🔒" [disabled] [ref=e34]:
+              - /url: "#"
+          - generic [ref=e35]:
+            - generic [ref=e36]: Settings
+            - link "⚙️ Account Settings" [ref=e37] [cursor=pointer]:
+              - /url: /creator/accounts
+            - link "❓ Support" [ref=e38] [cursor=pointer]:
+              - /url: /creator/support
+        - main [ref=e40]:
+          - generic [ref=e41]:
+            - generic [ref=e42]: A
+            - generic [ref=e43]:
+              - generic [ref=e44]:
+                - heading "Amine Bennani" [level=1] [ref=e45]
+                - button "Edit name" [active] [ref=e46] [cursor=pointer]: ✏️
+                - generic [ref=e47]: ✓ Verified
+              - paragraph
+              - generic [ref=e48]:
+                - generic [ref=e49]: 🌍 MA
+                - generic [ref=e50]: Male
+          - generic [ref=e51]:
+            - generic [ref=e52]:
+              - heading "Profile overview" [level=2] [ref=e53]
+              - button "Profile overview actions" [ref=e54] [cursor=pointer]: ⋯
+            - paragraph
+          - tablist [ref=e55]:
+            - tab "Social Coverage" [selected] [ref=e56] [cursor=pointer]
+            - tab "Creator network" [ref=e57] [cursor=pointer]
+            - tab "Posts" [ref=e58] [cursor=pointer]
+            - tab "My INFLU" [ref=e59] [cursor=pointer]
+            - tab "Audience insights 🔒" [disabled] [ref=e60]
+          - table [ref=e61]:
+            - rowgroup [ref=e62]:
+              - row "Platform Social media Followers Engagement rate Growth Engagement avg. Average views" [ref=e63]:
+                - columnheader "Platform" [ref=e64]
+                - columnheader "Social media" [ref=e65]
+                - columnheader "Followers" [ref=e66]
+                - columnheader "Engagement rate" [ref=e67]
+                - columnheader "Growth" [ref=e68]
+                - columnheader "Engagement avg." [ref=e69]
+                - columnheader "Average views" [ref=e70]
+            - rowgroup [ref=e71]:
+              - row "📷 Instagram A amine.daily 4.5K 5.80% N/A -- --" [ref=e72]:
+                - cell "📷 Instagram" [ref=e73]
+                - cell "A amine.daily" [ref=e74]:
+                  - generic [ref=e75]:
+                    - generic [ref=e76]: A
+                    - text: amine.daily
+                - cell "4.5K" [ref=e77]
+                - cell "5.80%" [ref=e78]
+                - cell "N/A" [ref=e79]
+                - cell "--" [ref=e80]
+                - cell "--" [ref=e81]
+      - button "Report an issue" [ref=e82] [cursor=pointer]: ⚠ Report an issue

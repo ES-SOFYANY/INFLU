@@ -1,8 +1,8 @@
 # Manual QA Bug Report — Iterations 1+2
 
 **Total** : 8 bugs (BUG-MAN-001 → BUG-MAN-008).
-**Fixed inline** : 7 (BUG-MAN-001..007).
-**Open with workaround** : 1 (BUG-MAN-008 — Major, UX double-`@` quirk in marketplace wizard).
+**Fixed inline** : 8 (BUG-MAN-001..008).
+**Open** : 0.
 
 ---
 
@@ -230,7 +230,18 @@ the authoritative validator (returns 404 on unknown ids).
 
 **Workaround vérifié** : taper la valeur SANS `@` (ex. `yassir`) → l'input affiche `@yassir`, et le POST passe.
 
-**Fix proposé (non appliqué)** : dans le composant Angular du Deliverable Row, ajouter un `(input)` handler qui supprime tous les `@` du début avant ré-application du préfixe.
+**Root cause** : dans `apps/web/src/app/features/business/pages/marketplace-create.page.ts`,
+le handler `(ngModelChange)="updateDeliverable(i, 'taggedAccount', '@' + $event)"`
+prépendait toujours un `@`, sans normaliser ce que l'utilisateur tapait. Si l'utilisateur
+entrait déjà `@yassir`, le modèle devenait `@@yassir` → rejeté par la regex serveur
+`/^@[a-zA-Z0-9._]{2,30}$/`.
 
-**Status**: ❌ Open (workaround documenté)
-**Screenshots**: `screenshots/iteration-02/brand-yassir/marketplace-create-step4-deliverables.png`
+**Fix appliqué** : nouveau helper `setTaggedAccount(idx, raw)` qui strip TOUS les `@`
+de tête (`raw.replace(/^@+/, '').trim()`) avant de prépender un `@` unique. `taggedHandle()`
+durci de la même manière. Régression couverte par `[BUG-MAN-008]` dans
+`marketplace-create.page.spec.ts`.
+
+**Status**: ✅ Fixed
+**Commit**: (voir fix-log)
+**Screenshots**: `screenshots/iteration-02/brand-yassir/marketplace-create-step4-deliverables.png` (before, QA),
+`docs/11-bugfix-general/screenshots/BUG-MAN-008-after.png` (after)

@@ -33,7 +33,7 @@ describe('BusinessMarketplaceCreatePage', () => {
     http = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
     // Initial brands load
-    http.expectOne('/api/business/brands').flush([{ id: BRAND_ID, name: 'Eucerin' }]);
+    http.expectOne('/api/v1/business/brands').flush([{ id: BRAND_ID, name: 'Eucerin' }]);
     fixture.detectChanges();
   });
 
@@ -73,7 +73,7 @@ describe('BusinessMarketplaceCreatePage', () => {
 
     next.click();
     fixture.detectChanges();
-    const req = http.expectOne('/api/business/marketplace/products');
+    const req = http.expectOne('/api/v1/business/marketplace/products');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({
       brandId: BRAND_ID,
@@ -96,7 +96,7 @@ describe('BusinessMarketplaceCreatePage', () => {
     expect(next.disabled).toBeFalse();
     next.click();
     fixture.detectChanges();
-    const req = http.expectOne(`/api/business/marketplace/products/${PRODUCT_ID}`);
+    const req = http.expectOne(`/api/v1/business/marketplace/products/${PRODUCT_ID}`);
     expect(req.request.method).toBe('PATCH');
     expect(req.request.body.step).toBe('PRODUCT_DETAILS');
     req.flush(wizardDto({ currentStep: 'ACCEPTANCE_CRITERIA' }));
@@ -151,12 +151,29 @@ describe('BusinessMarketplaceCreatePage', () => {
     setInput('deliverable-taggedAccount-0', 'eucerin_ma');
     el().querySelector<HTMLButtonElement>('[data-testid="btn-next"]')!.click();
     fixture.detectChanges();
-    const req = http.expectOne(`/api/business/marketplace/products/${PRODUCT_ID}`);
+    const req = http.expectOne(`/api/v1/business/marketplace/products/${PRODUCT_ID}`);
     expect(req.request.body.step).toBe('DELIVERABLES');
     expect(req.request.body.deliverables[0].taggedAccount).toBe('@eucerin_ma');
     req.flush(wizardDto({ currentStep: 'DATES' }));
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="step-dates"]')).toBeTruthy();
+  });
+
+  it('[BUG-MAN-008] Step D — typing "@@yassir" is normalized to a single "@" in payload', () => {
+    advanceToStep('DELIVERABLES');
+    el().querySelector<HTMLButtonElement>('[data-testid="deliverable-add"]')!.click();
+    fixture.detectChanges();
+    setInput('deliverable-platform-0', 'INSTAGRAM');
+    setInput('deliverable-contentType-0', 'reel');
+    setInput('deliverable-quantity-0', '1');
+    setInput('deliverable-unitPrice-0', '4000');
+    // User pastes/types value WITH leading '@' (or two) — must be normalized to a single '@'
+    setInput('deliverable-taggedAccount-0', '@@yassir');
+    el().querySelector<HTMLButtonElement>('[data-testid="btn-next"]')!.click();
+    fixture.detectChanges();
+    const req = http.expectOne(`/api/v1/business/marketplace/products/${PRODUCT_ID}`);
+    expect(req.request.body.deliverables[0].taggedAccount).toBe('@yassir');
+    req.flush(wizardDto({ currentStep: 'DATES' }));
   });
 
   it('[AC-120-04] Step E — Publish requires reception+publication and POSTs publish', () => {
@@ -170,10 +187,10 @@ describe('BusinessMarketplaceCreatePage', () => {
     const spy = spyOn(router, 'navigate');
     el().querySelector<HTMLButtonElement>('[data-testid="btn-publish"]')!.click();
     fixture.detectChanges();
-    const saveReq = http.expectOne(`/api/business/marketplace/products/${PRODUCT_ID}`);
+    const saveReq = http.expectOne(`/api/v1/business/marketplace/products/${PRODUCT_ID}`);
     expect(saveReq.request.method).toBe('PATCH');
     saveReq.flush(wizardDto({ currentStep: 'DATES' }));
-    const pubReq = http.expectOne(`/api/business/marketplace/products/${PRODUCT_ID}/publish`);
+    const pubReq = http.expectOne(`/api/v1/business/marketplace/products/${PRODUCT_ID}/publish`);
     expect(pubReq.request.method).toBe('POST');
     pubReq.flush(wizardDto({ status: 'PUBLISHED' }));
     expect(spy).toHaveBeenCalledWith(['/business/marketplace']);
@@ -191,7 +208,7 @@ describe('BusinessMarketplaceCreatePage', () => {
     setInput('input-brandId', BRAND_ID);
     setInput('input-brandDescription', 'A premium brand.');
     clickNext();
-    http.expectOne('/api/business/marketplace/products').flush(wizardDto());
+    http.expectOne('/api/v1/business/marketplace/products').flush(wizardDto());
     fixture.detectChanges();
     if (target === 'PRODUCT_DETAILS') return;
 
@@ -201,7 +218,7 @@ describe('BusinessMarketplaceCreatePage', () => {
     setInput('input-miniScript', 'Script');
     clickNext();
     http
-      .expectOne(`/api/business/marketplace/products/${PRODUCT_ID}`)
+      .expectOne(`/api/v1/business/marketplace/products/${PRODUCT_ID}`)
       .flush(wizardDto({ currentStep: 'ACCEPTANCE_CRITERIA' }));
     fixture.detectChanges();
     if (target === 'ACCEPTANCE_CRITERIA') return;
@@ -211,7 +228,7 @@ describe('BusinessMarketplaceCreatePage', () => {
     setInput('criterion-0', 'Speak french');
     clickNext();
     http
-      .expectOne(`/api/business/marketplace/products/${PRODUCT_ID}`)
+      .expectOne(`/api/v1/business/marketplace/products/${PRODUCT_ID}`)
       .flush(wizardDto({ currentStep: 'DELIVERABLES' }));
     fixture.detectChanges();
     if (target === 'DELIVERABLES') return;
@@ -225,7 +242,7 @@ describe('BusinessMarketplaceCreatePage', () => {
     setInput('deliverable-taggedAccount-0', 'eucerin_ma');
     clickNext();
     http
-      .expectOne(`/api/business/marketplace/products/${PRODUCT_ID}`)
+      .expectOne(`/api/v1/business/marketplace/products/${PRODUCT_ID}`)
       .flush(wizardDto({ currentStep: 'DATES' }));
     fixture.detectChanges();
   }

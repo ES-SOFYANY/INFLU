@@ -9,6 +9,7 @@
     "incremental": true,
     "isolatedModules": false,
     "noUncheckedIndexedAccess": false,
+    "types": ["jest", "node"],
     "paths": {
       "@my-app/shared-types": ["../../packages/shared-types/dist"],
       "@my-app/shared-types/*": ["../../packages/shared-types/dist/*"]

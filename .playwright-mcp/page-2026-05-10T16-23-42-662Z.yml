@@ -1,0 +1,79 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - link "Skip to content" [ref=e6] [cursor=pointer]:
+        - /url: "#main"
+      - banner [ref=e7]:
+        - link "INFLU.ai" [ref=e8] [cursor=pointer]:
+          - /url: /creator/dashboard
+        - generic [ref=e9]:
+          - combobox "Change language" [ref=e10]:
+            - option "FR" [selected]
+            - option "EN"
+            - option "AR"
+          - button "Notifications" [ref=e13] [cursor=pointer]: 🔔
+          - generic [ref=e14]:
+            - generic [ref=e15]: A
+            - button "Amine Bennani" [ref=e16] [cursor=pointer]
+      - generic [ref=e17]:
+        - navigation "Creator navigation" [ref=e18]:
+          - link "📊 Dashboard" [ref=e20] [cursor=pointer]:
+            - /url: /creator/dashboard
+          - generic [ref=e21]:
+            - generic [ref=e22]: Opportunities
+            - link "🎯 Matchings 🔒" [disabled] [ref=e23]:
+              - /url: "#"
+            - link "🤝 Collaboration" [ref=e24] [cursor=pointer]:
+              - /url: /creator/collaborations
+            - link "🛍 Marketplace" [ref=e25] [cursor=pointer]:
+              - /url: /creator/marketplace
+          - generic [ref=e26]:
+            - generic [ref=e27]: Assets
+            - link "👤 My Account" [ref=e28] [cursor=pointer]:
+              - /url: /creator/my-account
+            - link "🤖 My AI coach" [ref=e29] [cursor=pointer]:
+              - /url: /creator/ai-coach
+          - generic [ref=e30]:
+            - generic [ref=e31]: Tools
+            - link "💬 Messaging" [ref=e32] [cursor=pointer]:
+              - /url: /creator/messaging
+            - link "📅 Calendar 🔒" [disabled] [ref=e33]:
+              - /url: "#"
+            - link "💰 My Payments 🔒" [disabled] [ref=e34]:
+              - /url: "#"
+          - generic [ref=e35]:
+            - generic [ref=e36]: Settings
+            - link "⚙️ Account Settings" [ref=e37] [cursor=pointer]:
+              - /url: /creator/accounts
+            - link "❓ Support" [ref=e38] [cursor=pointer]:
+              - /url: /creator/support
+        - main [ref=e40]:
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - generic [ref=e43]: A
+              - generic [ref=e44]:
+                - heading "My AI coach" [level=1] [ref=e45]
+                - paragraph [ref=e46]: Conversation personnalisée pour Ali
+            - button "↻ Restart" [ref=e47] [cursor=pointer]
+          - log [ref=e48]:
+            - generic [ref=e49]:
+              - generic [ref=e50]: 🤖
+              - generic [ref=e51]:
+                - strong [ref=e52]: Assistant Message
+                - text: Comment te positionnes-tu en tant qu'influenceur ?
+            - generic [ref=e58]:
+              - generic [ref=e59]: Salut coach, comment optimiser mon engagement Instagram ?
+              - generic [ref=e60]: A
+            - generic [ref=e61]:
+              - generic [ref=e62]: 🤖
+              - generic [ref=e63]:
+                - strong [ref=e64]: Assistant Message
+                - text: "Réponse mock à : Salut coach, comment optimiser mon engagement Instagram ?"
+          - generic [ref=e53]:
+            - textbox "Your message" [ref=e54]:
+              - /placeholder: Tape ta réponse…
+            - button "Send" [disabled]: ✈
+          - paragraph [ref=e55]: Tape un message pour envoyer.
+      - button "Report an issue" [ref=e56] [cursor=pointer]: ⚠ Report an issue

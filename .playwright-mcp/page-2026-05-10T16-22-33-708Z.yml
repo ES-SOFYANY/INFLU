@@ -1,0 +1,101 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - link "Skip to content" [ref=e6] [cursor=pointer]:
+        - /url: "#main"
+      - banner [ref=e7]:
+        - link "INFLU.ai" [ref=e8] [cursor=pointer]:
+          - /url: /creator/dashboard
+        - generic [ref=e9]:
+          - combobox "Change language" [ref=e10]:
+            - option "FR" [selected]
+            - option "EN"
+            - option "AR"
+          - button "Notifications" [ref=e13] [cursor=pointer]: 🔔
+          - generic [ref=e14]:
+            - generic [ref=e15]: A
+            - button "Amine Bennani" [ref=e16] [cursor=pointer]
+      - generic [ref=e17]:
+        - navigation "Creator navigation" [ref=e18]:
+          - link "📊 Dashboard" [ref=e20] [cursor=pointer]:
+            - /url: /creator/dashboard
+          - generic [ref=e21]:
+            - generic [ref=e22]: Opportunities
+            - link "🎯 Matchings 🔒" [disabled] [ref=e23]:
+              - /url: "#"
+            - link "🤝 Collaboration" [ref=e24] [cursor=pointer]:
+              - /url: /creator/collaborations
+            - link "🛍 Marketplace" [ref=e25] [cursor=pointer]:
+              - /url: /creator/marketplace
+          - generic [ref=e26]:
+            - generic [ref=e27]: Assets
+            - link "👤 My Account" [ref=e28] [cursor=pointer]:
+              - /url: /creator/my-account
+            - link "🤖 My AI coach" [ref=e29] [cursor=pointer]:
+              - /url: /creator/ai-coach
+          - generic [ref=e30]:
+            - generic [ref=e31]: Tools
+            - link "💬 Messaging" [ref=e32] [cursor=pointer]:
+              - /url: /creator/messaging
+            - link "📅 Calendar 🔒" [disabled] [ref=e33]:
+              - /url: "#"
+            - link "💰 My Payments 🔒" [disabled] [ref=e34]:
+              - /url: "#"
+          - generic [ref=e35]:
+            - generic [ref=e36]: Settings
+            - link "⚙️ Account Settings" [ref=e37] [cursor=pointer]:
+              - /url: /creator/accounts
+            - link "❓ Support" [ref=e38] [cursor=pointer]:
+              - /url: /creator/support
+        - main [ref=e41]:
+          - heading "Support" [level=1] [ref=e42]
+          - paragraph [ref=e43]: Report an issue or browse answers to common questions.
+          - generic [ref=e44]:
+            - heading "My reports 0 report(s)" [level=2] [ref=e45]:
+              - text: My reports
+              - generic [ref=e46]: 0 report(s)
+            - status [ref=e47]:
+              - generic [ref=e48]: 📋
+              - paragraph [ref=e49]: No reports yet — Use the button in the bottom-right corner to report an issue.
+          - generic [ref=e50]:
+            - heading "Frequently asked questions" [level=2] [ref=e51]
+            - generic [ref=e52]:
+              - group [ref=e53]:
+                - generic "What is INFLU?" [ref=e54] [cursor=pointer]
+              - group [ref=e55]:
+                - generic "How does INFLU help with influencer marketing?" [ref=e56] [cursor=pointer]
+              - group [ref=e57]:
+                - generic "Can I track campaign performance in real time?" [ref=e58] [cursor=pointer]
+              - group [ref=e59]:
+                - generic "Does INFLU support multiple social media platforms?" [ref=e60] [cursor=pointer]
+              - group [ref=e61]:
+                - generic "Is INFLU suitable for small businesses?" [ref=e62] [cursor=pointer]
+      - generic:
+        - button "Report an issue" [active] [ref=e63] [cursor=pointer]: ⚠ Report an issue
+        - dialog "Report an issue" [ref=e64]:
+          - generic [ref=e65]:
+            - heading "Report an issue" [level=2] [ref=e66]
+            - paragraph [ref=e67]: Describe the problem and our team will get back to you.
+          - generic [ref=e68]:
+            - generic [ref=e69]:
+              - generic [ref=e70]:
+                - generic [ref=e71]: Issue type *
+                - combobox "Issue type *" [ref=e72]:
+                  - option "Select issue type…" [selected]
+                  - option "Bug"
+                  - option "Feature request"
+                  - option "Performance"
+                  - option "UI issue"
+                  - option "I have an issue on a campaign"
+                  - option "Other"
+              - generic [ref=e73]:
+                - generic [ref=e74]: Title
+                - textbox "Title" [ref=e75]
+              - generic [ref=e76]:
+                - generic [ref=e77]: Description
+                - textbox "Description" [ref=e78]
+            - generic [ref=e79]:
+              - button "Cancel" [ref=e80] [cursor=pointer]
+              - button "Submit report" [disabled]

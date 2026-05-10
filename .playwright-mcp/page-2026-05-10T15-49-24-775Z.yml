@@ -1,0 +1,104 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - link "Skip to content" [ref=e6] [cursor=pointer]:
+        - /url: "#main"
+      - banner [ref=e7]:
+        - link "INFLU.ai" [ref=e8] [cursor=pointer]:
+          - /url: /creator/dashboard
+        - generic [ref=e9]:
+          - combobox "Change language" [ref=e10]:
+            - option "FR" [selected]
+            - option "EN"
+            - option "AR"
+          - button "Notifications" [ref=e13] [cursor=pointer]: 🔔
+          - generic [ref=e14]:
+            - generic [ref=e15]: A
+            - button "Amine Bennani" [ref=e16] [cursor=pointer]
+      - generic [ref=e17]:
+        - navigation "Creator navigation" [ref=e18]:
+          - link "📊 Dashboard" [ref=e20] [cursor=pointer]:
+            - /url: /creator/dashboard
+          - generic [ref=e21]:
+            - generic [ref=e22]: Opportunities
+            - link "🎯 Matchings 🔒" [disabled] [ref=e23]:
+              - /url: "#"
+            - link "🤝 Collaboration" [ref=e24] [cursor=pointer]:
+              - /url: /creator/collaborations
+            - link "🛍 Marketplace" [ref=e25] [cursor=pointer]:
+              - /url: /creator/marketplace
+          - generic [ref=e26]:
+            - generic [ref=e27]: Assets
+            - link "👤 My Account" [ref=e28] [cursor=pointer]:
+              - /url: /creator/my-account
+            - link "🤖 My AI coach" [ref=e29] [cursor=pointer]:
+              - /url: /creator/ai-coach
+          - generic [ref=e30]:
+            - generic [ref=e31]: Tools
+            - link "💬 Messaging" [ref=e32] [cursor=pointer]:
+              - /url: /creator/messaging
+            - link "📅 Calendar 🔒" [disabled] [ref=e33]:
+              - /url: "#"
+            - link "💰 My Payments 🔒" [disabled] [ref=e34]:
+              - /url: "#"
+          - generic [ref=e35]:
+            - generic [ref=e36]: Settings
+            - link "⚙️ Account Settings" [ref=e37] [cursor=pointer]:
+              - /url: /creator/accounts
+            - link "❓ Support" [ref=e38] [cursor=pointer]:
+              - /url: /creator/support
+        - main [ref=e40]:
+          - link "← Go back" [ref=e41] [cursor=pointer]:
+            - /url: /creator/marketplace
+          - generic [ref=e42]:
+            - generic [ref=e43]:
+              - generic [ref=e44]:
+                - generic [ref=e45]:
+                  - generic [ref=e46]: ⏱ Expires in 84 days
+                  - heading "Open Day Septembre 2026 for" [level=1] [ref=e47]
+                - button "Apply" [ref=e48] [cursor=pointer]
+              - alert [ref=e49]: You have already applied to this opportunity.
+              - generic [ref=e50]:
+                - generic [ref=e51]:
+                  - generic [ref=e52]: L
+                  - strong [ref=e53]: LA SALLE
+                - heading "Brand overview" [level=2] [ref=e54]
+                - paragraph [ref=e55]: Education — MA
+              - generic [ref=e56]:
+                - heading "Product overview" [level=2] [ref=e57]
+                - paragraph [ref=e58]: Promotion de la journée portes ouvertes.
+                - heading "Requested content" [level=3] [ref=e59]
+                - paragraph [ref=e60]: 1 YOUTUBE SHORT + 2 TIKTOK
+              - generic [ref=e61]:
+                - heading "Product deliverables" [level=2] [ref=e62]
+                - table [ref=e63]:
+                  - rowgroup [ref=e64]:
+                    - row "Platform Content Date Reception Date Publication Price/unit" [ref=e65]:
+                      - columnheader "Platform" [ref=e66]
+                      - columnheader "Content" [ref=e67]
+                      - columnheader "Date Reception" [ref=e68]
+                      - columnheader "Date Publication" [ref=e69]
+                      - columnheader "Price/unit" [ref=e70]
+                  - rowgroup
+              - generic [ref=e71]:
+                - heading "Product details" [level=2] [ref=e72]
+                - generic [ref=e73]:
+                  - term [ref=e74]: Available slots
+                  - definition [ref=e75]: 2 influencers
+                  - term [ref=e76]: Time remaining
+                  - definition [ref=e77]: Expires in 84 days
+                  - term [ref=e78]: Hashtags
+                  - definition [ref=e79]:
+                    - code [ref=e80]: "#LaSalleOpenDay"
+                    - code [ref=e81]: "#ad"
+                  - term [ref=e82]: Call to Action
+                  - definition [ref=e83]: Inscrivez-vous sur lasalle.ma
+            - complementary [ref=e84]:
+              - generic [ref=e85]:
+                - paragraph [ref=e86]: You will get up
+                - paragraph [ref=e87]: 0 Dhs
+                - generic [ref=e88]: 💸 Paid by INFLU
+              - paragraph [ref=e90]: Deliverables
+      - button "Report an issue" [ref=e91] [cursor=pointer]: ⚠ Report an issue

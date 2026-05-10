@@ -1,0 +1,84 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - link "Skip to content" [ref=e6] [cursor=pointer]:
+        - /url: "#main"
+      - banner [ref=e7]:
+        - generic [ref=e8]:
+          - link "INFLU.ai" [ref=e9] [cursor=pointer]:
+            - /url: /business/dashboard
+          - combobox [ref=e10]:
+            - combobox "Search your best influencer by name or handle" [ref=e11]
+            - generic [ref=e12]: 🔍
+          - button "Show suggestions" [ref=e13] [cursor=pointer]
+        - generic [ref=e14]:
+          - combobox "Change language" [ref=e15]:
+            - option "FR" [selected]
+            - option "EN"
+            - option "AR"
+          - button "Notifications" [ref=e18] [cursor=pointer]: 🔔
+          - generic [ref=e19]: K
+          - button "Khadija Ouazzani" [ref=e20] [cursor=pointer]
+      - generic [ref=e21]:
+        - navigation "Business navigation" [ref=e22]:
+          - link "📊 Dashboard" [ref=e24] [cursor=pointer]:
+            - /url: /business/dashboard
+          - generic [ref=e25]:
+            - generic [ref=e26]: INFLU AI
+            - link "✨ New AI Campaign" [ref=e27] [cursor=pointer]:
+              - /url: /business/ai-campaign
+            - link "🤖 AI Manager" [ref=e28] [cursor=pointer]:
+              - /url: /business/ai-manager
+          - generic [ref=e29]:
+            - generic [ref=e30]: Marketplace
+            - link "➕ Add Product" [ref=e31] [cursor=pointer]:
+              - /url: /business/marketplace/create
+            - link "🛍 My Marketplace" [ref=e32] [cursor=pointer]:
+              - /url: /business/marketplace
+          - generic [ref=e33]:
+            - generic [ref=e34]: Tools
+            - link "🔍 Discovery" [ref=e35] [cursor=pointer]:
+              - /url: /business/discovery
+            - link "📇 CRM" [ref=e36] [cursor=pointer]:
+              - /url: /business/crm
+            - link "👂 Social Listening 🔒" [disabled] [ref=e37]:
+              - /url: "#"
+          - generic [ref=e38]:
+            - generic [ref=e39]: Communication
+            - link "💬 Messaging" [ref=e40] [cursor=pointer]:
+              - /url: /business/messaging
+            - link "💰 Payments" [ref=e41] [cursor=pointer]:
+              - /url: /business/payments
+          - generic [ref=e42]:
+            - generic [ref=e43]: Settings
+            - link "⚙️ Account Settings" [ref=e44] [cursor=pointer]:
+              - /url: /business/accounts
+            - link "❓ Support" [ref=e45] [cursor=pointer]:
+              - /url: /business/support
+        - main [ref=e48]:
+          - heading "Support" [level=1] [ref=e49]
+          - paragraph [ref=e50]: Report an issue or browse answers to common questions.
+          - generic [ref=e51]:
+            - heading "My reports 1 report(s)" [level=2] [ref=e89]:
+              - text: My reports
+              - generic [ref=e53]: 1 report(s)
+            - list [ref=e90]:
+              - listitem [ref=e91]:
+                - generic [ref=e92]: QA iter2 — business test ticket
+                - generic [ref=e93]: OPEN
+          - generic [ref=e57]:
+            - heading "Frequently asked questions" [level=2] [ref=e58]
+            - generic [ref=e59]:
+              - group [ref=e60]:
+                - generic "What is INFLU?" [ref=e61] [cursor=pointer]
+              - group [ref=e62]:
+                - generic "How does INFLU help with influencer marketing?" [ref=e63] [cursor=pointer]
+              - group [ref=e64]:
+                - generic "Can I track campaign performance in real time?" [ref=e65] [cursor=pointer]
+              - group [ref=e66]:
+                - generic "Does INFLU support multiple social media platforms?" [ref=e67] [cursor=pointer]
+              - group [ref=e68]:
+                - generic "Is INFLU suitable for small businesses?" [ref=e69] [cursor=pointer]
+      - button "Report an issue" [ref=e70] [cursor=pointer]: ⚠ Report an issue

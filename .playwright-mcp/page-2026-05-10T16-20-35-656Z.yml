@@ -1,0 +1,21 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e64]:
+      - link "INFLU.ai" [ref=e66] [cursor=pointer]:
+        - /url: /
+      - main [ref=e67]:
+        - generic [ref=e68]: 📧
+        - heading "Check your inbox" [level=1] [ref=e69]
+        - paragraph [ref=e70]:
+          - text: We sent a magic link to
+          - strong [ref=e71]: qa.iter2.creator@example.ma
+          - text: . Click it to set your password and sign in.
+        - link "← Back to sign in" [ref=e72] [cursor=pointer]:
+          - /url: /auth/login
+        - paragraph [ref=e73]:
+          - text: Didn't receive it? Check spam or
+          - link "resend" [ref=e74] [cursor=pointer]:
+            - /url: /auth/forgot-password
+          - text: .

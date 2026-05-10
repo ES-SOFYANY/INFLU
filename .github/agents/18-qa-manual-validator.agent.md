@@ -198,6 +198,69 @@ return JSON.stringify(checks);
 
 ---
 
+# STEP 2.5 — CSS & Basic Visual Consistency Check
+
+**Light verification of CSS and visual issues. Flag only obvious problems that impact usability or brand consistency.**
+
+## 2.5.1 — Check for basic CSS & visual issues
+
+For each page already screenshotted in STEP 2, perform these light checks:
+
+```javascript
+// mcp_playwright_browser_evaluate
+const checks = {
+  // Layout integrity
+  hasHorizontalScroll: document.documentElement.scrollWidth > window.innerWidth,
+  hasVisibleOverflows: document.querySelectorAll('[style*="overflow:hidden"]').length,
+  
+  // Text readability (basic)
+  lowContrastElements: document.querySelectorAll('body *').length > 0 ? 
+    Array.from(document.querySelectorAll('body *')).filter(el => {
+      const computed = window.getComputedStyle(el);
+      const color = computed.color;
+      const bgColor = computed.backgroundColor;
+      // Very basic check: if both are white or both are black-ish
+      return (color === 'rgb(255, 255, 255)' && bgColor === 'rgb(255, 255, 255)') ||
+             (color === 'rgb(0, 0, 0)' && bgColor === 'rgb(0, 0, 0)');
+    }).length : 0,
+  
+  // Font/styling
+  brokenImages: document.querySelectorAll('img[alt]').length - document.querySelectorAll('img[complete=true]').length,
+  hasVisiblePlaceholders: !!document.querySelector('[placeholder]:not([value])'),
+  
+  // General layout
+  elementsDontFitViewport: document.querySelectorAll('[style*="position:fixed"], [class*="fixed"]').length,
+  hasConsoleErrors: false // will be checked separately
+};
+
+return JSON.stringify(checks, null, 2);
+```
+
+## 2.5.2 — CSS Issues Classification
+
+**Only flag issues if they are obvious and affect usability:**
+
+- ❌ **Critical**: Horizontal scrolling on desktop, unreadable text, overlapping critical elements
+- ⚠️ **Minor**: Slightly off spacing, minor icon misalignment, small visual inconsistencies
+- ✅ **OK**: Looks visually consistent, no obvious CSS issues
+
+## 2.5.3 — Build CSS audit report (if issues found)
+
+If visual issues are detected, add them to `docs/10-qa-manual/css-issues-found.md`:
+
+```markdown
+## CSS & Visual Issues Found
+
+| Page | Persona | Issue | Severity | Action |
+|------|---------|-------|----------|--------|
+| /creator/dashboard | creator | Horizontal scrollbar appears on desktop | Minor | Verify Tailwind responsive config |
+| /campaigns/:id | admin | Text contrast too low on buttons | Critical | Request design system correction |
+```
+
+**Rule**: Only add to report if issue is obvious, not a matter of design preference.
+
+---
+
 # STEP 3 — Form Census (from Source Code)
 
 **Do NOT trust QA Manual's form list. Scan the actual Angular source code.**
@@ -542,6 +605,15 @@ If coverage < 95% → iterate with QA Manual (see STEP 9).
 | Persona | Expected Page | Actual Redirect | Severity |
 |---------|---------------|-----------------|----------|
 
+## CSS & Visual Issues
+- Pages audited for CSS: N
+- Pages with obvious CSS issues: N (list below)
+- Issues requiring correction: N
+
+### Detected CSS Issues
+| Page | Persona | Issue Type | Severity | Action |
+|------|---------|-----------|----------|--------|
+
 ## Data Presence
 - Pages verified: N
 - Pages with real data: N
@@ -599,6 +671,7 @@ cat >> docs/10-qa-manual/qa-validator-iterations.md << EOF
 - Forms tested: N/M
 - AC scenarios covered: N/M
 - Blocking bugs: N
+- CSS issues found: N
 - Verdict: COMPLETE | INCOMPLETE | BUGS OPEN | ESCALATION
 - Gaps sent to QA Manual: [list]
 EOF
@@ -632,6 +705,7 @@ Form census         : N/N tested (gaps: [routes])
 Button census       : N/N tested (gaps: [pages])
 AC coverage         : N/N scenarios covered end-to-end (gaps: [AC IDs])
 Data presence       : N/N pages with real data verified
+CSS issues          : N obvious issues detected (list in report)
 403 issues          : N personas stuck at 403 (list: [emails])
 Blocking bugs open  : N (list: BUG-MAN-NNN)
 Report              : docs/10-qa-manual/QA-MANUAL-VALIDATION-REPORT.md

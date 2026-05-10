@@ -1,0 +1,57 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link "INFLU.ai" [ref=e7] [cursor=pointer]:
+          - /url: /
+        - combobox "Change language" [ref=e8]:
+          - option "EN" [selected]
+          - option "FR"
+          - option "AR"
+      - main [ref=e9]:
+        - generic [ref=e10]:
+          - heading "Create your INFLU account" [level=1] [ref=e11]
+          - paragraph [ref=e12]: Join thousands of influencers and brands using INFLU to collaborate and grow together.
+        - list [ref=e13]:
+          - listitem [ref=e14]:
+            - generic [ref=e15]: 🎬
+            - heading "I'm an Influencer" [level=2] [ref=e16]
+            - list [ref=e17]:
+              - listitem [ref=e18]: · Content creator
+              - listitem [ref=e19]: · Social media personalities
+              - listitem [ref=e20]: · Digital creators
+            - link "Get started as an Influencer →" [ref=e21] [cursor=pointer]:
+              - /url: /auth/register/influencer
+          - listitem [ref=e22]:
+            - generic [ref=e23]: 🌱
+            - heading "We're a Small Business" [level=2] [ref=e24]
+            - list [ref=e25]:
+              - listitem [ref=e26]: · Local or niche brands
+              - listitem [ref=e27]: · Owner-led marketing teams
+              - listitem [ref=e28]: · Early-stage product launches
+            - link "Get started as a small business →" [ref=e29] [cursor=pointer]:
+              - /url: /auth/register/business
+          - listitem [ref=e30]:
+            - generic [ref=e31]: 🏷️
+            - heading "We are a Brand" [level=2] [ref=e32]
+            - list [ref=e33]:
+              - listitem [ref=e34]: · Business owners
+              - listitem [ref=e35]: · Marketing managers
+              - listitem [ref=e36]: · Product companies
+            - link "Get started as a Brand →" [ref=e37] [cursor=pointer]:
+              - /url: /auth/register/business
+          - listitem [ref=e38]:
+            - generic [ref=e39]: 🏢
+            - heading "We are an Agency" [level=2] [ref=e40]
+            - list [ref=e41]:
+              - listitem [ref=e42]: · Agency owners
+              - listitem [ref=e43]: · Marketing agencies
+              - listitem [ref=e44]: · Brand management companies
+            - link "Get started as an Agency →" [ref=e45] [cursor=pointer]:
+              - /url: /auth/register/business
+        - paragraph [ref=e46]:
+          - text: Already have an account?
+          - link "Let connect now!" [ref=e47] [cursor=pointer]:
+            - /url: /auth/login

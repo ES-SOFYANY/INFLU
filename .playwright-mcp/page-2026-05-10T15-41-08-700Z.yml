@@ -1,0 +1,7 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e37]:
+      - heading "CIN validation queue" [level=1] [ref=e38]
+      - paragraph [ref=e39]: Placeholder — to be implemented by Story Implementer.

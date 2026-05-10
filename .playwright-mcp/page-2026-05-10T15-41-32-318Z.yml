@@ -1,0 +1,15 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - link "INFLU.ai" [ref=e7] [cursor=pointer]:
+        - /url: /
+      - main [ref=e8]:
+        - generic [ref=e9]:
+          - generic [ref=e10]: 🚪
+          - heading "Are you sure you want to logout?" [level=1] [ref=e11]
+          - paragraph [ref=e12]: You'll be redirected to the sign-in page.
+          - generic [ref=e13]:
+            - button "Cancel" [ref=e14] [cursor=pointer]
+            - button "Logout" [ref=e15] [cursor=pointer]

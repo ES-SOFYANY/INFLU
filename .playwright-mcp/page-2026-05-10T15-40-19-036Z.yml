@@ -1,0 +1,75 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - banner [ref=e7]:
+        - link "INFLU.ai" [ref=e9] [cursor=pointer]:
+          - /url: /
+        - generic [ref=e10]:
+          - link "Se connecter" [ref=e11] [cursor=pointer]:
+            - /url: /auth/login
+          - link "Réserver une démo" [ref=e12] [cursor=pointer]:
+            - /url: /auth/register
+      - main [ref=e13]:
+        - generic [ref=e15]:
+          - generic [ref=e16]: 🏷️ Pour les marques & agences
+          - heading "Lancez une campagne en 5 minutes. Pas en 5 semaines." [level=1] [ref=e17]:
+            - text: Lancez une campagne
+            - text: en 5 minutes.
+            - text: Pas en 5 semaines.
+          - paragraph [ref=e18]: L'IA génère le brief, recommande les profils, écrit les scripts. Vous validez. INFLU paie.
+          - generic [ref=e19]:
+            - link "Réserver une démo" [ref=e20] [cursor=pointer]:
+              - /url: /auth/register
+            - link "Inscription gratuite" [ref=e21] [cursor=pointer]:
+              - /url: /auth/register
+        - generic [ref=e23]:
+          - heading "9 étapes guidées par l'IA" [level=2] [ref=e24]
+          - generic [ref=e25]:
+            - generic [ref=e26]:
+              - generic [ref=e27]: "01"
+              - heading "Créer le compte marque" [level=3] [ref=e28]
+            - generic [ref=e29]:
+              - generic [ref=e30]: "02"
+              - heading "Brief IA généré" [level=3] [ref=e31]
+            - generic [ref=e32]:
+              - generic [ref=e33]: "03"
+              - heading "Recommandations IA de profils" [level=3] [ref=e34]
+            - generic [ref=e35]:
+              - generic [ref=e36]: "04"
+              - heading "Scripts IA" [level=3] [ref=e37]
+            - generic [ref=e38]:
+              - generic [ref=e39]: "05"
+              - heading "Matching IA" [level=3] [ref=e40]
+            - generic [ref=e41]:
+              - generic [ref=e42]: "06"
+              - heading "Négociation transparente" [level=3] [ref=e43]
+            - generic [ref=e44]:
+              - generic [ref=e45]: "07"
+              - heading "Contrats signés en ligne" [level=3] [ref=e46]
+            - generic [ref=e47]:
+              - generic [ref=e48]: "08"
+              - heading "Workflow & tâches" [level=3] [ref=e49]
+            - generic [ref=e50]:
+              - generic [ref=e51]: "09"
+              - heading "Suivi performance temps réel" [level=3] [ref=e52]
+          - generic [ref=e53]:
+            - text: ✨
+            - generic [ref=e54]:
+              - strong [ref=e55]: "Bonus :"
+              - text: Marketplace produit + invitation d'agence partenaire.
+        - generic [ref=e58]:
+          - heading "Lançons votre première campagne" [level=2] [ref=e59]
+          - link "Réserver une démo →" [ref=e60] [cursor=pointer]:
+            - /url: /auth/register
+      - contentinfo [ref=e62]:
+        - generic [ref=e63]:
+          - generic [ref=e64]: © 2026 INFLU.ai — Casablanca, Maroc
+          - navigation "Footer" [ref=e65]:
+            - link "Mentions marque" [ref=e66] [cursor=pointer]:
+              - /url: /legal/brand
+            - link "Mentions créateur" [ref=e67] [cursor=pointer]:
+              - /url: /legal/creator
+            - link "Confidentialité" [ref=e68] [cursor=pointer]:
+              - /url: /legal/privacy

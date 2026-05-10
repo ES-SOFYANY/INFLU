@@ -1,0 +1,110 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e34]:
+      - link "Skip to content" [ref=e35] [cursor=pointer]:
+        - /url: "#main"
+      - banner [ref=e36]:
+        - link "INFLU.ai" [ref=e37] [cursor=pointer]:
+          - /url: /creator/dashboard
+        - generic [ref=e38]:
+          - combobox "Change language" [ref=e39]:
+            - option "FR" [selected]
+            - option "EN"
+            - option "AR"
+          - button "Notifications" [ref=e42] [cursor=pointer]: 🔔
+          - generic [ref=e43]:
+            - generic [ref=e44]: K
+            - button "Kawtar Idrissi" [ref=e45] [cursor=pointer]
+      - generic [ref=e46]:
+        - navigation "Creator navigation" [ref=e47]:
+          - link "📊 Dashboard" [ref=e49] [cursor=pointer]:
+            - /url: /creator/dashboard
+          - generic [ref=e50]:
+            - generic [ref=e51]: Opportunities
+            - link "🎯 Matchings 🔒" [disabled] [ref=e52]:
+              - /url: "#"
+            - link "🤝 Collaboration" [ref=e53] [cursor=pointer]:
+              - /url: /creator/collaborations
+            - link "🛍 Marketplace" [ref=e54] [cursor=pointer]:
+              - /url: /creator/marketplace
+          - generic [ref=e55]:
+            - generic [ref=e56]: Assets
+            - link "👤 My Account" [ref=e57] [cursor=pointer]:
+              - /url: /creator/my-account
+            - link "🤖 My AI coach" [ref=e58] [cursor=pointer]:
+              - /url: /creator/ai-coach
+          - generic [ref=e59]:
+            - generic [ref=e60]: Tools
+            - link "💬 Messaging" [ref=e61] [cursor=pointer]:
+              - /url: /creator/messaging
+            - link "📅 Calendar 🔒" [disabled] [ref=e62]:
+              - /url: "#"
+            - link "💰 My Payments 🔒" [disabled] [ref=e63]:
+              - /url: "#"
+          - generic [ref=e64]:
+            - generic [ref=e65]: Settings
+            - link "⚙️ Account Settings" [ref=e66] [cursor=pointer]:
+              - /url: /creator/accounts
+            - link "❓ Support" [ref=e67] [cursor=pointer]:
+              - /url: /creator/support
+        - main [ref=e69]:
+          - generic [ref=e71]:
+            - heading "Welcome back, creator" [level=1] [ref=e72]
+            - paragraph [ref=e73]: Here's what's happening with your collaborations.
+          - generic [ref=e74]:
+            - generic [ref=e75]:
+              - generic [ref=e76]: Total Collaborations
+              - generic [ref=e77]: "0"
+            - generic [ref=e78]:
+              - generic [ref=e79]: Pending Opportunities
+              - generic [ref=e80]: "0"
+            - generic [ref=e81]:
+              - generic [ref=e82]: Pending Matchings
+              - generic [ref=e83]: __
+            - generic [ref=e84]:
+              - generic [ref=e85]: Content to Submit
+              - generic [ref=e86]: "0"
+            - generic [ref=e87]:
+              - generic [ref=e88]: Submission Deadline
+              - generic [ref=e89]: __
+            - generic [ref=e90]:
+              - generic [ref=e91]: Content to Publish
+              - generic [ref=e92]: "0"
+            - generic [ref=e93]:
+              - generic [ref=e94]: Publication Deadline
+              - generic [ref=e95]: __
+            - generic [ref=e96]:
+              - generic [ref=e97]: Pending Payments
+              - generic [ref=e98]: "0"
+            - generic [ref=e99]:
+              - generic [ref=e100]: Revenue Generated
+              - generic [ref=e101]: 0 Dhs
+            - generic [ref=e102]:
+              - generic [ref=e103]: INFLU Score
+              - generic [ref=e104]: __
+          - tablist [ref=e105]:
+            - tab "Campaigns" [selected] [ref=e106] [cursor=pointer]
+            - tab "Marketplace" [ref=e107] [cursor=pointer]
+          - generic [ref=e108]:
+            - searchbox "Search" [ref=e109]
+            - combobox "Filter by brand" [ref=e110]:
+              - option "Select brand…" [selected]
+            - combobox "Filter by status" [ref=e111]:
+              - option "Select status" [selected]
+              - option "Applied"
+              - option "Active"
+              - option "Rejected"
+              - option "Content submitted"
+              - option "Modification requested"
+              - option "Validated"
+              - option "Paid"
+            - button "Clear" [ref=e112] [cursor=pointer]
+          - status [ref=e114]:
+            - generic [ref=e115]: 📭
+            - heading "No campaigns available at the moment." [level=2] [ref=e116]
+            - paragraph [ref=e117]: Browse the Marketplace to find new opportunities and start collaborating.
+            - link "Browse Marketplace →" [ref=e118] [cursor=pointer]:
+              - /url: /creator/marketplace
+      - button "Report an issue" [ref=e119] [cursor=pointer]: ⚠ Report an issue

@@ -1,0 +1,78 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - link "INFLU.ai" [ref=e7] [cursor=pointer]:
+        - /url: /
+      - main [ref=e8]:
+        - generic [ref=e9]:
+          - heading "Join INFLU as a Influencer!" [level=1] [ref=e10]
+          - paragraph [ref=e11]: Contract with top influencers and brands in minutes.
+        - list "Registration steps" [ref=e12]:
+          - listitem [ref=e13]:
+            - generic [ref=e14]: "1"
+            - generic [ref=e15]:
+              - generic [ref=e16]: Personal information
+              - generic [ref=e17]: Provide your personal details and credentials
+          - listitem [ref=e18]:
+            - generic [ref=e19]: "2"
+            - generic [ref=e20]:
+              - generic [ref=e21]: Assign account
+              - generic [ref=e22]: Assign your own account
+        - alert [ref=e69]:
+          - generic [ref=e70]: ⚠️
+          - generic [ref=e71]: "Unknown role \"CREATOR\". Allowed: influencer, small-business, brand, agency"
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - generic [ref=e25]: Email *
+            - textbox "Email *" [ref=e26]:
+              - /placeholder: you@example.com
+              - text: qa.iter2.creator@example.ma
+          - generic [ref=e27]:
+            - generic [ref=e28]:
+              - generic [ref=e29]: Gender *
+              - combobox "Gender *" [ref=e30]:
+                - option "Select gender"
+                - option "Male"
+                - option "Female" [selected]
+            - generic [ref=e31]:
+              - generic [ref=e32]: Full name *
+              - textbox "Full name *" [ref=e33]: QA Iter2 Creator
+          - generic [ref=e34]:
+            - generic [ref=e35]: Country *
+            - textbox "Country *" [ref=e36]: MA
+            - paragraph [ref=e37]: "Default: Morocco. Country code (ISO-3166-1 alpha-2)."
+          - generic [ref=e38]:
+            - generic [ref=e39]: Phone number *
+            - generic [ref=e40]:
+              - generic [ref=e41]: "+212"
+              - textbox "Phone number, prefix +212" [ref=e42]:
+                - /placeholder: 6XXXXXXXX
+                - text: "612345678"
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - generic [ref=e45]: City *
+              - textbox "City *" [ref=e46]: Casablanca
+            - generic [ref=e47]:
+              - generic [ref=e48]: Address
+              - textbox "Address" [ref=e49]: 123 rue Test
+          - generic [ref=e50]:
+            - generic [ref=e51]:
+              - checkbox "I agree to the legal mentions & privacy policy*" [checked] [ref=e52]
+              - generic [ref=e53]:
+                - text: I agree to the
+                - link "legal mentions" [ref=e54] [cursor=pointer]:
+                  - /url: /legal/creator
+                - text: "&"
+                - link "privacy policy" [ref=e55] [cursor=pointer]:
+                  - /url: /legal/privacy
+                - text: "*"
+            - generic [ref=e56]:
+              - checkbox "I am 18 or over *" [checked] [ref=e57]
+              - generic [ref=e58]: I am 18 or over *
+          - generic [ref=e59]:
+            - link "← Choose another role" [ref=e60] [cursor=pointer]:
+              - /url: /auth/register
+            - button "Assign an account →" [ref=e61] [cursor=pointer]
+          - paragraph [ref=e62]: ℹ️ No password required here — we'll email you a secure magic link to set your password.

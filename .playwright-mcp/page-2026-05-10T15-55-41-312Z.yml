@@ -1,0 +1,49 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - link "INFLU.ai" [ref=e7] [cursor=pointer]:
+        - /url: /
+      - main [ref=e8]:
+        - generic [ref=e9]:
+          - heading "Welcome back to INFLU!" [level=1] [ref=e10]
+          - paragraph [ref=e11]: Sign in to continue.
+          - alert [ref=e34]:
+            - generic [ref=e35]: ⚠️
+            - generic [ref=e36]: Account is not active
+          - generic [ref=e12]:
+            - generic [ref=e13]:
+              - generic [ref=e14]: Email *
+              - textbox "Email *" [ref=e15]:
+                - /placeholder: you@example.com
+                - text: old.account@example.ma
+            - generic [ref=e16]:
+              - generic [ref=e17]: Password *
+              - generic [ref=e18]:
+                - textbox "Password *" [ref=e19]:
+                  - /placeholder: ••••••••
+                  - text: Test1234!
+                - button "Show password" [ref=e20] [cursor=pointer]: 👁
+              - link "Forgot your password?" [ref=e22] [cursor=pointer]:
+                - /url: /auth/forgot-password
+            - button "Sign In" [ref=e23] [cursor=pointer]
+          - generic [ref=e24]:
+            - separator [ref=e25]
+            - text: OR
+            - separator [ref=e26]
+          - button "Continue with Google" [ref=e27] [cursor=pointer]:
+            - generic [ref=e28]: G
+            - text: Continue with Google
+          - paragraph [ref=e29]:
+            - text: New to INFLU?
+            - link "Create an account" [ref=e30] [cursor=pointer]:
+              - /url: /auth/register
+          - paragraph [ref=e31]:
+            - text: By clicking continue, you agree to our
+            - link "legal mentions" [ref=e32] [cursor=pointer]:
+              - /url: /legal/brand
+            - text: and
+            - link "privacy policy" [ref=e33] [cursor=pointer]:
+              - /url: /legal/privacy
+            - text: .

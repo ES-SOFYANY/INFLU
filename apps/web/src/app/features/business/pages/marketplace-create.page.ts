@@ -367,7 +367,7 @@ function emptyDeliverable(): DeliverableForm {
                       [attr.id]="'deliverable-taggedAccount-' + i"
                       [attr.data-testid]="'deliverable-taggedAccount-' + i"
                       [ngModel]="taggedHandle(d.taggedAccount)"
-                      (ngModelChange)="updateDeliverable(i, 'taggedAccount', '@' + $event)"
+                      (ngModelChange)="setTaggedAccount(i, $event)"
                       [name]="'taggedAccount-' + i"
                     />
                   </div>
@@ -660,7 +660,15 @@ export class BusinessMarketplaceCreatePage implements OnInit {
   }
 
   protected taggedHandle(value: string): string {
-    return value.startsWith('@') ? value.slice(1) : value;
+    // BUG-MAN-008 — strip ALL leading '@' so display never shows '@@'
+    return value.replace(/^@+/, '');
+  }
+
+  protected setTaggedAccount(idx: number, raw: string): void {
+    // BUG-MAN-008 — normalize to a single leading '@', regardless of what the
+    // user typed (with or without '@', or even multiple '@@@').
+    const handle = (raw ?? '').replace(/^@+/, '').trim();
+    this.updateDeliverable(idx, 'taggedAccount', handle ? '@' + handle : '');
   }
 
   // US-121 — deliverable validation rules

@@ -1,0 +1,84 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - link "Skip to content" [ref=e6] [cursor=pointer]:
+        - /url: "#main"
+      - banner [ref=e7]:
+        - generic [ref=e8]:
+          - link "INFLU.ai" [ref=e9] [cursor=pointer]:
+            - /url: /business/dashboard
+          - combobox [ref=e10]:
+            - combobox "Search your best influencer by name or handle" [ref=e11]
+            - generic [ref=e12]: 🔍
+          - button "Show suggestions" [ref=e13] [cursor=pointer]
+        - generic [ref=e14]:
+          - combobox "Change language" [ref=e15]:
+            - option "FR" [selected]
+            - option "EN"
+            - option "AR"
+          - button "Notifications" [ref=e18] [cursor=pointer]: 🔔
+          - generic [ref=e19]: K
+          - button "Khadija Ouazzani" [ref=e20] [cursor=pointer]
+      - generic [ref=e21]:
+        - navigation "Business navigation" [ref=e22]:
+          - link "📊 Dashboard" [ref=e24] [cursor=pointer]:
+            - /url: /business/dashboard
+          - generic [ref=e25]:
+            - generic [ref=e26]: INFLU AI
+            - link "✨ New AI Campaign" [ref=e27] [cursor=pointer]:
+              - /url: /business/ai-campaign
+            - link "🤖 AI Manager" [ref=e28] [cursor=pointer]:
+              - /url: /business/ai-manager
+          - generic [ref=e29]:
+            - generic [ref=e30]: Marketplace
+            - link "➕ Add Product" [ref=e31] [cursor=pointer]:
+              - /url: /business/marketplace/create
+            - link "🛍 My Marketplace" [ref=e32] [cursor=pointer]:
+              - /url: /business/marketplace
+          - generic [ref=e33]:
+            - generic [ref=e34]: Tools
+            - link "🔍 Discovery" [ref=e35] [cursor=pointer]:
+              - /url: /business/discovery
+            - link "📇 CRM" [ref=e36] [cursor=pointer]:
+              - /url: /business/crm
+            - link "👂 Social Listening 🔒" [disabled] [ref=e37]:
+              - /url: "#"
+          - generic [ref=e38]:
+            - generic [ref=e39]: Communication
+            - link "💬 Messaging" [ref=e40] [cursor=pointer]:
+              - /url: /business/messaging
+            - link "💰 Payments" [ref=e41] [cursor=pointer]:
+              - /url: /business/payments
+          - generic [ref=e42]:
+            - generic [ref=e43]: Settings
+            - link "⚙️ Account Settings" [ref=e44] [cursor=pointer]:
+              - /url: /business/accounts
+            - link "❓ Support" [ref=e45] [cursor=pointer]:
+              - /url: /business/support
+        - main [ref=e47]:
+          - generic [ref=e48]:
+            - generic [ref=e49]:
+              - heading "New AI Campaign" [level=1] [ref=e50]
+              - paragraph [ref=e51]: Step 1 of 9 — let's define your campaign
+            - button "↻ Restart" [ref=e52] [cursor=pointer]
+          - log [ref=e53]:
+            - generic [ref=e54]:
+              - generic [ref=e55]: 🤖
+              - generic [ref=e56]:
+                - strong [ref=e57]: INFLU AI
+                - paragraph [ref=e58]: What kind of campaign would you like to launch, and what scope are you aiming for?
+            - generic [ref=e78]:
+              - generic [ref=e79]: Lance une campagne pour Yassir Ride en septembre, ciblage urbain Casablanca-Rabat.
+              - generic [ref=e80]: B
+            - generic [ref=e81]:
+              - generic [ref=e82]: 🤖
+              - generic [ref=e83]:
+                - strong [ref=e84]: INFLU AI
+                - paragraph [ref=e85]: "[mock-ai-campaign] Lance une campagne pour Yassir Ride en septembre, ciblage urbain Casablanca-Raba"
+          - generic [ref=e74]:
+            - textbox "Your message" [ref=e75]:
+              - /placeholder: Add details or skip with Send…
+            - button "Send" [disabled]: ✈
+      - button "Report an issue" [ref=e76] [cursor=pointer]: ⚠ Report an issue

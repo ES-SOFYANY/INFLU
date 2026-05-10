@@ -1,0 +1,95 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - link "Skip to content" [ref=e6] [cursor=pointer]:
+        - /url: "#main"
+      - banner [ref=e7]:
+        - generic [ref=e8]:
+          - link "INFLU.ai" [ref=e9] [cursor=pointer]:
+            - /url: /business/dashboard
+          - combobox [ref=e10]:
+            - combobox "Search your best influencer by name or handle" [ref=e11]
+            - generic [ref=e12]: 🔍
+          - button "Show suggestions" [ref=e13] [cursor=pointer]
+        - generic [ref=e14]:
+          - combobox "Change language" [ref=e15]:
+            - option "FR" [selected]
+            - option "EN"
+            - option "AR"
+          - button "Notifications" [ref=e18] [cursor=pointer]: 🔔
+          - generic [ref=e19]: K
+          - button "Khadija Ouazzani" [ref=e20] [cursor=pointer]
+      - generic [ref=e21]:
+        - navigation "Business navigation" [ref=e22]:
+          - link "📊 Dashboard" [ref=e24] [cursor=pointer]:
+            - /url: /business/dashboard
+          - generic [ref=e25]:
+            - generic [ref=e26]: INFLU AI
+            - link "✨ New AI Campaign" [ref=e27] [cursor=pointer]:
+              - /url: /business/ai-campaign
+            - link "🤖 AI Manager" [ref=e28] [cursor=pointer]:
+              - /url: /business/ai-manager
+          - generic [ref=e29]:
+            - generic [ref=e30]: Marketplace
+            - link "➕ Add Product" [ref=e31] [cursor=pointer]:
+              - /url: /business/marketplace/create
+            - link "🛍 My Marketplace" [ref=e32] [cursor=pointer]:
+              - /url: /business/marketplace
+          - generic [ref=e33]:
+            - generic [ref=e34]: Tools
+            - link "🔍 Discovery" [ref=e35] [cursor=pointer]:
+              - /url: /business/discovery
+            - link "📇 CRM" [ref=e36] [cursor=pointer]:
+              - /url: /business/crm
+            - link "👂 Social Listening 🔒" [disabled] [ref=e37]:
+              - /url: "#"
+          - generic [ref=e38]:
+            - generic [ref=e39]: Communication
+            - link "💬 Messaging" [ref=e40] [cursor=pointer]:
+              - /url: /business/messaging
+            - link "💰 Payments" [ref=e41] [cursor=pointer]:
+              - /url: /business/payments
+          - generic [ref=e42]:
+            - generic [ref=e43]: Settings
+            - link "⚙️ Account Settings" [ref=e44] [cursor=pointer]:
+              - /url: /business/accounts
+            - link "❓ Support" [ref=e45] [cursor=pointer]:
+              - /url: /business/support
+        - main [ref=e47]:
+          - heading "Create marketplace product" [level=1] [ref=e48]
+          - paragraph [ref=e49]: Create a new product to offer in the marketplace.
+          - list "Wizard steps" [ref=e50]:
+            - listitem [ref=e51]:
+              - generic [ref=e52]: A
+              - generic [ref=e54]: Brand Information
+            - listitem [ref=e55]:
+              - generic [ref=e56]: B
+              - generic [ref=e58]: Product Details
+            - listitem [ref=e59]:
+              - generic [ref=e60]: C
+              - generic [ref=e62]: Acceptance criteria
+            - listitem [ref=e63]:
+              - generic [ref=e64]: D
+              - generic [ref=e66]: Deliverables
+            - listitem [ref=e67]:
+              - generic [ref=e68]: E
+              - generic [ref=e70]: Dates
+          - generic [ref=e71]:
+            - heading "A — Brand Information" [level=2] [ref=e72]
+            - generic [ref=e73]:
+              - generic [ref=e74]:
+                - generic [ref=e75]: Select Brand *
+                - combobox "Select Brand *" [ref=e76]:
+                  - option "Select a brand…" [selected]
+                  - option "Yassir"
+              - generic [ref=e77]:
+                - generic [ref=e78]: Brand description *
+                - textbox "Brand description *" [ref=e79]:
+                  - /placeholder: Describe the brand context, values, target market…
+          - generic [ref=e80]:
+            - button "← Previous" [disabled]
+            - generic [ref=e81]:
+              - 'button "Next: Describe product →" [disabled]'
+      - button "Report an issue" [ref=e82] [cursor=pointer]: ⚠ Report an issue

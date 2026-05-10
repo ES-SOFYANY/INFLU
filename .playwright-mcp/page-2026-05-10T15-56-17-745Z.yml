@@ -1,0 +1,104 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e34]:
+      - link "Skip to content" [ref=e35] [cursor=pointer]:
+        - /url: "#main"
+      - banner [ref=e36]:
+        - generic [ref=e37]:
+          - link "INFLU.ai" [ref=e38] [cursor=pointer]:
+            - /url: /business/dashboard
+          - combobox [ref=e39]:
+            - combobox "Search your best influencer by name or handle" [ref=e40]
+            - generic [ref=e41]: 🔍
+          - button "Show suggestions" [ref=e42] [cursor=pointer]
+        - generic [ref=e43]:
+          - combobox "Change language" [ref=e44]:
+            - option "FR" [selected]
+            - option "EN"
+            - option "AR"
+          - button "Notifications" [ref=e47] [cursor=pointer]: 🔔
+          - generic [ref=e48]: K
+          - button "Khadija Ouazzani" [ref=e49] [cursor=pointer]
+      - generic [ref=e50]:
+        - navigation "Business navigation" [ref=e51]:
+          - link "📊 Dashboard" [ref=e53] [cursor=pointer]:
+            - /url: /business/dashboard
+          - generic [ref=e54]:
+            - generic [ref=e55]: INFLU AI
+            - link "✨ New AI Campaign" [ref=e56] [cursor=pointer]:
+              - /url: /business/ai-campaign
+            - link "🤖 AI Manager" [ref=e57] [cursor=pointer]:
+              - /url: /business/ai-manager
+          - generic [ref=e58]:
+            - generic [ref=e59]: Marketplace
+            - link "➕ Add Product" [ref=e60] [cursor=pointer]:
+              - /url: /business/marketplace/create
+            - link "🛍 My Marketplace" [ref=e61] [cursor=pointer]:
+              - /url: /business/marketplace
+          - generic [ref=e62]:
+            - generic [ref=e63]: Tools
+            - link "🔍 Discovery" [ref=e64] [cursor=pointer]:
+              - /url: /business/discovery
+            - link "📇 CRM" [ref=e65] [cursor=pointer]:
+              - /url: /business/crm
+            - link "👂 Social Listening 🔒" [disabled] [ref=e66]:
+              - /url: "#"
+          - generic [ref=e67]:
+            - generic [ref=e68]: Communication
+            - link "💬 Messaging" [ref=e69] [cursor=pointer]:
+              - /url: /business/messaging
+            - link "💰 Payments" [ref=e70] [cursor=pointer]:
+              - /url: /business/payments
+          - generic [ref=e71]:
+            - generic [ref=e72]: Settings
+            - link "⚙️ Account Settings" [ref=e73] [cursor=pointer]:
+              - /url: /business/accounts
+            - link "❓ Support" [ref=e74] [cursor=pointer]:
+              - /url: /business/support
+        - main [ref=e76]:
+          - generic [ref=e77]:
+            - generic [ref=e78]:
+              - heading "Business Dashboard" [level=1] [ref=e79]
+              - paragraph [ref=e80]: Monitor and launch campaigns from one screen.
+            - link "✨ New AI campaign" [ref=e81] [cursor=pointer]:
+              - /url: /business/ai-campaign
+          - generic [ref=e82]:
+            - generic [ref=e83]:
+              - generic [ref=e84]: Number of campaigns
+              - generic [ref=e85]: "0"
+            - generic [ref=e86]:
+              - generic [ref=e87]: Active
+              - generic [ref=e88]: "0"
+            - generic [ref=e89]:
+              - generic [ref=e90]: Draft
+              - generic [ref=e91]: "0"
+            - generic [ref=e92]:
+              - generic [ref=e93]: On hold
+              - generic [ref=e94]: "0"
+            - generic [ref=e95]:
+              - generic [ref=e96]: Completed
+              - generic [ref=e97]: "0"
+          - tablist [ref=e98]:
+            - tab "AI Campaigns" [selected] [ref=e99] [cursor=pointer]
+            - tab "Marketplace" [ref=e100] [cursor=pointer]
+          - generic [ref=e101]:
+            - searchbox "Search" [ref=e102]
+            - combobox "Filter by brand" [ref=e103]:
+              - option "Select brand…" [selected]
+              - option "Yassir"
+            - combobox "Filter by status" [ref=e104]:
+              - option "Select status" [selected]
+              - option "Draft"
+              - option "Active"
+              - option "On hold"
+              - option "Completed"
+            - button "Clear" [ref=e105] [cursor=pointer]
+          - status [ref=e107]:
+            - generic [ref=e108]: 📊
+            - heading "No campaigns created yet." [level=2] [ref=e109]
+            - paragraph [ref=e110]: Launch your first AI campaign to start collaborating with creators.
+            - link "✨ Create AI campaign" [ref=e111] [cursor=pointer]:
+              - /url: /business/ai-campaign
+      - button "Report an issue" [ref=e112] [cursor=pointer]: ⚠ Report an issue

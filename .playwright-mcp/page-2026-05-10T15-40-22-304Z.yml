@@ -1,0 +1,29 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - banner [ref=e7]:
+        - link "INFLU.ai" [ref=e9] [cursor=pointer]:
+          - /url: /
+        - link "Sign in" [ref=e11] [cursor=pointer]:
+          - /url: /auth/login
+      - main [ref=e12]:
+        - heading "Privacy policy" [level=1] [ref=e13]
+        - paragraph [ref=e14]: "RGPD-compliant · Last updated: April 2026"
+        - article [ref=e15]:
+          - generic [ref=e16]:
+            - heading "Data we collect" [level=2] [ref=e17]
+            - paragraph [ref=e18]: Identity (Full name, email, phone +212, address, CIN), social accounts metadata (handles, follower counts), business identifiers (ICE, IF, RC, TVA), banking (RIB), usage analytics.
+          - generic [ref=e19]:
+            - heading "Why we collect it" [level=2] [ref=e20]
+            - paragraph [ref=e21]: Account management, opportunity matching, payment processing, regulatory compliance (Moroccan advertising and tax law).
+          - generic [ref=e22]:
+            - heading "Your rights" [level=2] [ref=e23]
+            - paragraph [ref=e24]: "Access, rectification, erasure (Danger zone), data portability, objection. Contact: privacy@influ.ai"
+          - generic [ref=e25]:
+            - heading "Retention" [level=2] [ref=e26]
+            - paragraph [ref=e27]: "Identity data: 3 years after last login. Financial records: 10 years (legal Moroccan obligation)."
+          - generic [ref=e28]:
+            - heading "Cookies" [level=2] [ref=e29]
+            - paragraph [ref=e30]: Essential cookies only (auth session, locale). No advertising cookies. No third-party tracking.
