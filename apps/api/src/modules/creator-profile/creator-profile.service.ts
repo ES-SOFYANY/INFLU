@@ -20,6 +20,7 @@ import type {
   CreatorBillingDto,
   CreatorDashboardKpisDto,
   CreatorProfileOverviewDto,
+  CreatorReportDto,
   IceApproveDto,
   IceSearchDto,
   IceSearchResultDto,
@@ -208,6 +209,25 @@ export class CreatorProfileService {
         typeof a.engagementAverage === 'number' ? a.engagementAverage : null,
       averageViews: typeof a.averageViews === 'number' ? a.averageViews : null,
     }));
+  }
+
+  /**
+   * US-043 — Aggregate the printable Creator Report.
+   * MVP: reuses ProfileOverview + SocialCoverage; creatorNetwork & posts
+   * are returned as empty arrays (filled when the data layer is ready).
+   */
+  async getCreatorReport(userId: string): Promise<CreatorReportDto> {
+    const [profile, socialCoverage] = await Promise.all([
+      this.getProfileOverview(userId),
+      this.getSocialCoverage(userId),
+    ]);
+    return {
+      generatedAt: new Date().toISOString(),
+      profile,
+      socialCoverage,
+      creatorNetwork: [],
+      posts: [],
+    };
   }
 
   // =====================================================================

@@ -45,6 +45,12 @@ export const ERROR_CODES = {
   ICE_NOT_FOUND: 'ICE_NOT_FOUND',
   WRONG_PASSWORD: 'WRONG_PASSWORD',
   PASSWORD_INVALID: 'PASSWORD_INVALID',
+
+  // AI Coach
+  EMPTY_MESSAGE: 'EMPTY_MESSAGE',
+
+  // Discovery
+  INVALID_DISC_FILTER: 'INVALID_DISC_FILTER',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

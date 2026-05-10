@@ -29,6 +29,7 @@ import {
   CreatorBillingDto,
   CreatorDashboardKpisDto,
   CreatorProfileOverviewDto,
+  CreatorReportDto,
   IceApproveDto,
   IceSearchDto,
   IceSearchResultDto,
@@ -146,6 +147,21 @@ export class CreatorProfileController {
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<SocialCoverageRowDto[]> {
     return this.service.getSocialCoverage(user.userId);
+  }
+
+  // ----- US-043: Creator Report -----
+  @Get('me/creator-report')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-043] Read the printable Creator Report' })
+  @ApiResponse({ status: 200, type: CreatorReportDto })
+  @ApiResponse({ status: 401, description: 'Missing or invalid bearer token' })
+  @ApiResponse({ status: 403, description: 'Caller is not a creator' })
+  getCreatorReport(
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<CreatorReportDto> {
+    return this.service.getCreatorReport(user.userId);
   }
 
   // ===== US-070: Account information =====

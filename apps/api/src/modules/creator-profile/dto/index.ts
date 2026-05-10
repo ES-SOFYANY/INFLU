@@ -5,6 +5,7 @@ export * from './creator-billing.dto';
 export * from './creator-dashboard-kpis.dto';
 export * from './creator-profile-overview.dto';
 export * from './creator-profile.dto';
+export * from './creator-report.dto';
 export * from './ice.dto';
 export * from './link-social-account.dto';
 export * from './pricing.dto';

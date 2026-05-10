@@ -226,6 +226,40 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/business/discovery/creators": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-130] Search creators (URL-bookmarkable) */
+        readonly get: operations["DiscoveryController_searchCreators"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/discovery/creators/{id}": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-132] Get a public creator profile (business/agency view) */
+        readonly get: operations["DiscoveryController_getPublicProfile"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/api/business/me": {
         readonly parameters: {
             readonly query?: never;
@@ -298,6 +332,57 @@ export interface paths {
         readonly patch: operations["CreatorProfileController_updateAccountInfo"];
         readonly trace?: never;
     };
+    readonly "/api/creator/me/ai-coach/sessions": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-050] Start a new AI Coach session */
+        readonly post: operations["AiCoachController_createSession"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/ai-coach/sessions/{id}/messages": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-051] Send a message to the AI Coach */
+        readonly post: operations["AiCoachController_sendMessage"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/ai-coach/sessions/{id}/restart": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-051] Restart the AI Coach session */
+        readonly post: operations["AiCoachController_restartSession"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/api/creator/me/billing": {
         readonly parameters: {
             readonly query?: never;
@@ -343,6 +428,23 @@ export interface paths {
         readonly put?: never;
         /** [US-072] Lookup an ICE in the registry (mock) */
         readonly post: operations["CreatorProfileController_searchIce"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/creator-report": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-043] Read the printable Creator Report */
+        readonly get: operations["CreatorProfileController_getCreatorReport"];
+        readonly put?: never;
+        readonly post?: never;
         readonly delete?: never;
         readonly options?: never;
         readonly head?: never;
@@ -577,6 +679,18 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        readonly AiCoachSessionDto: {
+            /**
+             * @description First assistant question (always returned in French)
+             * @example Comment te positionnes-tu en tant qu'influenceur ?
+             */
+            readonly firstMessage: string;
+            /**
+             * Format: uuid
+             * @description New AI Coach session id
+             */
+            readonly sessionId: string;
+        };
         readonly ApplicationDto: {
             /** Format: date-time */
             readonly appliedAt: string;
@@ -717,6 +831,15 @@ export interface components {
             /** @description New password — ≥ 8 chars, 1 uppercase, 1 digit */
             readonly newPassword: string;
         };
+        readonly ChatMessageDto: {
+            readonly content: string;
+            /** Format: date-time */
+            readonly createdAt: string;
+            /** Format: uuid */
+            readonly id: string;
+            /** @enum {string} */
+            readonly role: "USER" | "ASSISTANT";
+        };
         readonly CinStatusDto: {
             /** @description Moroccan CIN number (e.g. AB123456) */
             readonly cinNumber?: string;
@@ -786,6 +909,66 @@ export interface components {
             readonly gender?: "M" | "F";
             /** Format: uuid */
             readonly id: string;
+        };
+        readonly CreatorReportDto: {
+            /** @description MVP: empty array */
+            readonly creatorNetwork: readonly Record<string, never>[];
+            /** Format: date-time */
+            readonly generatedAt: string;
+            /** @description MVP: empty array */
+            readonly posts: readonly Record<string, never>[];
+            readonly profile: components["schemas"]["CreatorProfileOverviewDto"];
+            readonly socialCoverage: readonly components["schemas"]["SocialCoverageRowDto"][];
+        };
+        readonly DiscoveryCreatorItemDto: {
+            /** Format: uri */
+            readonly avatarUrl?: string;
+            /** @description Average views (MVP: 0 if unknown) */
+            readonly averageViews: number;
+            /** @description All categories (Table column) */
+            readonly categories: readonly string[];
+            /** @description ISO-3166-1 alpha-2 */
+            readonly country?: string;
+            /** @description Average engagement rate across linked accounts (%) */
+            readonly engagementRate: number;
+            /** @enum {string} */
+            readonly gender?: "M" | "F";
+            /** Format: uuid */
+            readonly id: string;
+            /** @description Primary category (Table column) */
+            readonly mainCategory?: string;
+            readonly name: string;
+            readonly platforms: readonly components["schemas"]["DiscoveryPlatformInfoDto"][];
+            /** @description Number of posts (MVP: 0) */
+            readonly posts: number;
+        };
+        readonly DiscoveryPlatformInfoDto: {
+            readonly followers: number;
+            /** @enum {string} */
+            readonly platform: "INSTAGRAM" | "YOUTUBE" | "TIKTOK" | "TWITTER";
+        };
+        readonly DiscoveryPublicCreatorProfileDto: {
+            /** Format: uri */
+            readonly avatarUrl?: string;
+            /** @description Short bio (header) */
+            readonly bio?: string;
+            readonly country?: string;
+            /** Format: uri */
+            readonly coverUrl?: string;
+            /** @description MVP: empty array */
+            readonly creatorNetwork: readonly Record<string, never>[];
+            /** @enum {string} */
+            readonly gender?: "M" | "F";
+            /** Format: uuid */
+            readonly id: string;
+            /** @description Long description paragraph */
+            readonly longDescription?: string;
+            readonly mainCategory?: string;
+            readonly name: string;
+            /** @description MVP: empty array */
+            readonly posts: readonly Record<string, never>[];
+            readonly socialAccounts: readonly components["schemas"]["SocialAccountDto"][];
+            readonly socialCoverage: readonly components["schemas"]["SocialCoverageRowDto"][];
         };
         readonly EmailLocaleDto: {
             /** Format: email */
@@ -982,6 +1165,13 @@ export interface components {
             readonly rc: string;
             readonly tva: string;
         };
+        readonly PaginatedDiscoveryCreatorsDto: {
+            readonly items: readonly components["schemas"]["DiscoveryCreatorItemDto"][];
+            readonly limit: number;
+            readonly page: number;
+            readonly total: number;
+            readonly totalPages: number;
+        };
         readonly PaginatedMarketplaceProductsDto: {
             readonly items: readonly components["schemas"]["MarketplaceProductCardDto"][];
             readonly limit: number;
@@ -1050,6 +1240,13 @@ export interface components {
         };
         readonly RoleOptionsResponseDto: {
             readonly roles: readonly components["schemas"]["RoleOptionDto"][];
+        };
+        readonly SendMessageDto: {
+            readonly content: string;
+        };
+        readonly SendMessageResponseDto: {
+            readonly aiResponse: components["schemas"]["ChatMessageDto"];
+            readonly userMessage: components["schemas"]["ChatMessageDto"];
         };
         readonly SocialAccountDto: {
             /** @description Engagement rate in percent (0–100) */
@@ -1161,6 +1358,7 @@ export interface components {
     headers: never;
     pathItems: never;
 }
+export type SchemaAiCoachSessionDto = components['schemas']['AiCoachSessionDto'];
 export type SchemaApplicationDto = components['schemas']['ApplicationDto'];
 export type SchemaAuthSessionDto = components['schemas']['AuthSessionDto'];
 export type SchemaAuthTokensDto = components['schemas']['AuthTokensDto'];
@@ -1173,11 +1371,16 @@ export type SchemaBusinessDashboardKpisDto = components['schemas']['BusinessDash
 export type SchemaBusinessInfoDto = components['schemas']['BusinessInfoDto'];
 export type SchemaChangeBusinessPasswordDto = components['schemas']['ChangeBusinessPasswordDto'];
 export type SchemaChangePasswordDto = components['schemas']['ChangePasswordDto'];
+export type SchemaChatMessageDto = components['schemas']['ChatMessageDto'];
 export type SchemaCinStatusDto = components['schemas']['CinStatusDto'];
 export type SchemaCreatorAccountInfoDto = components['schemas']['CreatorAccountInfoDto'];
 export type SchemaCreatorBillingDto = components['schemas']['CreatorBillingDto'];
 export type SchemaCreatorDashboardKpisDto = components['schemas']['CreatorDashboardKpisDto'];
 export type SchemaCreatorProfileOverviewDto = components['schemas']['CreatorProfileOverviewDto'];
+export type SchemaCreatorReportDto = components['schemas']['CreatorReportDto'];
+export type SchemaDiscoveryCreatorItemDto = components['schemas']['DiscoveryCreatorItemDto'];
+export type SchemaDiscoveryPlatformInfoDto = components['schemas']['DiscoveryPlatformInfoDto'];
+export type SchemaDiscoveryPublicCreatorProfileDto = components['schemas']['DiscoveryPublicCreatorProfileDto'];
 export type SchemaEmailLocaleDto = components['schemas']['EmailLocaleDto'];
 export type SchemaGoogleCallbackDto = components['schemas']['GoogleCallbackDto'];
 export type SchemaGrantBrandAccessDto = components['schemas']['GrantBrandAccessDto'];
@@ -1195,6 +1398,7 @@ export type SchemaMarketplaceDeliverableDto = components['schemas']['Marketplace
 export type SchemaMarketplaceProductCardDto = components['schemas']['MarketplaceProductCardDto'];
 export type SchemaMarketplaceProductDetailDto = components['schemas']['MarketplaceProductDetailDto'];
 export type SchemaOnboardBusinessDto = components['schemas']['OnboardBusinessDto'];
+export type SchemaPaginatedDiscoveryCreatorsDto = components['schemas']['PaginatedDiscoveryCreatorsDto'];
 export type SchemaPaginatedMarketplaceProductsDto = components['schemas']['PaginatedMarketplaceProductsDto'];
 export type SchemaPricingDto = components['schemas']['PricingDto'];
 export type SchemaPricingLineDto = components['schemas']['PricingLineDto'];
@@ -1202,6 +1406,8 @@ export type SchemaPricingSuggestedRangeDto = components['schemas']['PricingSugge
 export type SchemaRegisterCreatorDto = components['schemas']['RegisterCreatorDto'];
 export type SchemaRoleOptionDto = components['schemas']['RoleOptionDto'];
 export type SchemaRoleOptionsResponseDto = components['schemas']['RoleOptionsResponseDto'];
+export type SchemaSendMessageDto = components['schemas']['SendMessageDto'];
+export type SchemaSendMessageResponseDto = components['schemas']['SendMessageResponseDto'];
 export type SchemaSocialAccountDto = components['schemas']['SocialAccountDto'];
 export type SchemaSocialCoverageRowDto = components['schemas']['SocialCoverageRowDto'];
 export type SchemaSubmitCinDto = components['schemas']['SubmitCinDto'];
@@ -1706,6 +1912,101 @@ export interface operations {
             };
         };
     };
+    readonly DiscoveryController_searchCreators: {
+        readonly parameters: {
+            readonly query?: {
+                readonly categories?: readonly string[];
+                readonly gender?: readonly ("M" | "F")[];
+                readonly limit?: number;
+                /** @description ISO-3166-1 alpha-2 */
+                readonly location?: string;
+                readonly page?: number;
+                readonly platforms?: readonly ("INSTAGRAM" | "YOUTUBE" | "TIKTOK" | "TWITTER")[];
+                /** @description Free-text query (matches name) */
+                readonly q?: string;
+                /** @description Tier filter (NANO|MICRO|MID|MACRO|MEGA|CELEBRITY) */
+                readonly range?: readonly ("NANO" | "MICRO" | "MID" | "MACRO" | "MEGA" | "CELEBRITY")[];
+                readonly seed?: string;
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedDiscoveryCreatorsDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS / AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly DiscoveryController_getPublicProfile: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["DiscoveryPublicCreatorProfileDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS / AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Creator not found */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     readonly BusinessProfileController_getAccountInfo: {
         readonly parameters: {
             readonly query?: never;
@@ -2007,6 +2308,141 @@ export interface operations {
             };
         };
     };
+    readonly AiCoachController_createSession: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["AiCoachSessionDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly AiCoachController_sendMessage: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["SendMessageDto"];
+            };
+        };
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["SendMessageResponseDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Session not found */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description EMPTY_MESSAGE */
+            readonly 422: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly AiCoachController_restartSession: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["AiCoachSessionDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Session not found */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     readonly CreatorProfileController_getBilling: {
         readonly parameters: {
             readonly query?: never;
@@ -2086,6 +2522,39 @@ export interface operations {
             };
             /** @description ICE_NOT_FOUND */
             readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_getCreatorReport: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CreatorReportDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
                 headers: {
                     readonly [name: string]: unknown;
                 };
