@@ -516,7 +516,17 @@ export class BusinessDiscoveryPage implements OnInit {
   }
 
   private makeSeed(): string {
-    return Math.random().toString(36).slice(2, 10);
+    // BUG-MAN-004 fix: backend validates `seed` as UUID (@IsUUID), so a short
+    // base36 random string was rejected with 400 VALIDATION_FAILED.
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+    // Fallback for older browsers (very unlikely on the supported matrix).
+    const hex = (n: number) =>
+      Math.floor(Math.random() * 16 ** n)
+        .toString(16)
+        .padStart(n, '0');
+    return `${hex(8)}-${hex(4)}-4${hex(3)}-${(8 + Math.floor(Math.random() * 4)).toString(16)}${hex(3)}-${hex(12)}`;
   }
 }
 
