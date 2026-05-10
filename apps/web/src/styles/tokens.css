@@ -35,10 +35,10 @@
   --color-danger:         #EF4444;
   --color-info:           #38BDF8;
 
-  /* ----- Text (AA verified on --bg-base) ----- */
-  --text-primary:   #ECECF2;   /* 17.5:1 ✅ */
-  --text-secondary: #A1A6B5;   /* 6.4:1 ✅ */
-  --text-muted:     #6B7280;   /* 4.6:1 ✅ */
+  /* ----- Text (AA verified on --bg-base #0A0A0F and --bg-elevated #11141B) ----- */
+  --text-primary:   #ECECF2;   /* 17.5:1 on bg-base ✅ */
+  --text-secondary: #A1A6B5;   /* 6.4:1 on bg-base ✅ */
+  --text-muted:     #9CA3AF;   /* BUG-UI-002 fix: 6.39:1 on bg-base, 5.34:1 on bg-elevated (was #6B7280 = 4.08:1 / 3.81:1, AA fail) ✅ */
   --text-disabled:  #4B5563;   /* For disabled states */
   --text-inverse:   #0A0A0F;
 

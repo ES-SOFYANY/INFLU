@@ -27,7 +27,7 @@ export default {
           DEFAULT: '#ECECF2',
           primary: '#ECECF2',
           secondary: '#A1A6B5',
-          muted: '#6B7280',
+          muted: '#9CA3AF', // BUG-UI-002: AA-compliant on bg-base (6.39:1) and bg-elevated (5.34:1)
           disabled: '#4B5563',
           inverse: '#0A0A0F',
         },
