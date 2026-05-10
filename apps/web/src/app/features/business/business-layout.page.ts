@@ -16,6 +16,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { AuthApiService } from '../auth/data/auth-api.service';
 import { I18nService, type Locale } from '../../core/i18n/i18n.service';
 import { BusinessApiService } from './data/business-api.service';
+import { CrmAddDialogHostComponent } from './components/crm-add-dialog-host.component';
 
 /**
  * US-101 — Global influencer search (header combobox).
@@ -25,7 +26,7 @@ import { BusinessApiService } from './data/business-api.service';
 @Component({
   selector: 'app-business-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, FormsModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, FormsModule, CrmAddDialogHostComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <a class="skip-link" href="#main">Skip to content</a>
@@ -231,6 +232,9 @@ import { BusinessApiService } from './data/business-api.service';
 
       <router-outlet />
     </div>
+
+    <!-- US-142: shared "Add to CRM" dialog host -->
+    <app-crm-add-dialog-host />
   `,
 })
 export class BusinessLayoutPage {

@@ -9,13 +9,17 @@ import type {
   SchemaBusinessDashboardKpisDto,
   SchemaCampaignDto,
   SchemaChangePasswordDto,
+  SchemaCreateCrmListDto,
   SchemaCreateMarketplaceProductDto,
+  SchemaCrmListDetailDto,
+  SchemaCrmListDto,
   SchemaDiscoveryCreatorItemDto,
   SchemaDiscoveryPublicCreatorProfileDto,
   SchemaGrantBrandAccessDto,
   SchemaLinkBrandDto,
   SchemaMarketplaceProductWizardDto,
   SchemaPaginatedCampaignsDto,
+  SchemaPaginatedCrmListsDto,
   SchemaPaginatedDiscoveryCreatorsDto,
   SchemaPaginatedMarketplaceProductsDto,
   SchemaSendCampaignMessageDto,
@@ -225,6 +229,50 @@ export class BusinessApiService {
 
   deleteProduct(id: string): Observable<void> {
     return this.api.delete<void>(`/business/marketplace/products/${id}`);
+  }
+
+  // US-140 — List my CRM lists
+  listCrmLists(query: { q?: string; page?: number; limit?: number } = {}): Observable<
+    SchemaPaginatedCrmListsDto
+  > {
+    const params: Record<string, string | number> = {};
+    if (query.q) params['q'] = query.q;
+    if (query.page) params['page'] = query.page;
+    if (query.limit) params['limit'] = query.limit;
+    return this.api.get<SchemaPaginatedCrmListsDto>('/business/crm/lists', { params });
+  }
+
+  // US-141 — Create a CRM list
+  createCrmList(dto: SchemaCreateCrmListDto): Observable<SchemaCrmListDto> {
+    return this.api.post<SchemaCrmListDto>('/business/crm/lists', dto);
+  }
+
+  // US-140 — Get a CRM list detail
+  getCrmList(id: string): Observable<SchemaCrmListDetailDto> {
+    return this.api.get<SchemaCrmListDetailDto>(`/business/crm/lists/${id}`);
+  }
+
+  // US-141 — Update a CRM list
+  updateCrmList(id: string, dto: SchemaCreateCrmListDto): Observable<SchemaCrmListDto> {
+    return this.api.put<SchemaCrmListDto>(`/business/crm/lists/${id}`, dto);
+  }
+
+  // US-141 — Soft-delete a CRM list
+  deleteCrmList(id: string): Observable<void> {
+    return this.api.delete<void>(`/business/crm/lists/${id}`);
+  }
+
+  // US-142 — Add a creator to a CRM list
+  addCreatorToCrmList(listId: string, creatorId: string): Observable<SchemaCrmListDetailDto> {
+    return this.api.post<SchemaCrmListDetailDto>(
+      `/business/crm/lists/${listId}/creators/${creatorId}`,
+      {},
+    );
+  }
+
+  // US-142 — Remove a creator from a CRM list
+  removeCreatorFromCrmList(listId: string, creatorId: string): Observable<void> {
+    return this.api.delete<void>(`/business/crm/lists/${listId}/creators/${creatorId}`);
   }
 }
 

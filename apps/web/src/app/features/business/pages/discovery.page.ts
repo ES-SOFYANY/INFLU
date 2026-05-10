@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import type { SchemaDiscoveryCreatorItemDto } from '@my-app/shared-types';
 
 import { BusinessApiService } from '../data/business-api.service';
+import { CrmAddDialogService } from '../data/crm-add-dialog.service';
 
 type Platform = 'INSTAGRAM' | 'YOUTUBE' | 'TIKTOK' | 'TWITTER';
 type Tier = 'NANO' | 'MICRO' | 'MID' | 'MACRO' | 'MEGA' | 'CELEBRITY';
@@ -267,6 +268,7 @@ const COUNTRY_FLAG: Record<string, string> = {
                       class="btn btn-ghost btn-sm"
                       aria-label="Add to CRM"
                       data-testid="action-crm"
+                      (click)="onAddToCrm(c.id)"
                     >
                       📇
                     </button>
@@ -275,6 +277,7 @@ const COUNTRY_FLAG: Record<string, string> = {
                       class="btn btn-ghost btn-sm"
                       aria-label="Send message"
                       data-testid="action-message"
+                      (click)="onSendMessage(c.id)"
                     >
                       💬
                     </button>
@@ -320,6 +323,7 @@ export class BusinessDiscoveryPage implements OnInit {
   private readonly api = inject(BusinessApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly crmDialog = inject(CrmAddDialogService);
 
   protected readonly platforms = PLATFORMS;
   protected readonly tiers = TIERS;
@@ -424,6 +428,18 @@ export class BusinessDiscoveryPage implements OnInit {
 
   protected toggleDrawer(): void {
     this.drawerOpen.update((v) => !v);
+  }
+
+  /** US-142 — open the shared "Add to CRM" picker for this creator. */
+  protected onAddToCrm(creatorId: string): void {
+    this.crmDialog.open(creatorId).subscribe();
+  }
+
+  /** US-150-02 — start (or open) a conversation with this creator. */
+  protected onSendMessage(creatorId: string): void {
+    void this.router.navigate(['/business/messaging'], {
+      queryParams: { creatorId },
+    });
   }
 
   protected initial(name: string): string {
