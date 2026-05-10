@@ -52,6 +52,24 @@ const pages: PageSpec[] = [
   // Admin
   { url: '/admin', label: 'admin-dashboard', user: 'admin' },
   { url: '/admin/cin-validation', label: 'admin-cin-validation', user: 'admin' },
+  // --- Iteration #3 extension (QA-VALIDATION-REPORT.md V2) ---
+  // Detail / nested routes
+  { url: '/creator/marketplace/op_demo_001', label: 'creator-marketplace-detail', user: 'creator' },
+  { url: '/business/profile/u_creator_micro_011', label: 'business-creator-profile', user: 'business' },
+  { url: '/business/marketplace/create', label: 'business-marketplace-create', user: 'business' },
+  // Auth flow leftovers
+  { url: '/auth/reset-password', label: 'auth-reset-password' },
+  { url: '/auth/magic-link-sent', label: 'auth-magic-link-sent' },
+  { url: '/auth/logout', label: 'auth-logout' },
+  { url: '/auth/register/influencer/social', label: 'auth-register-influencer-step2' },
+  // Tabbed surfaces (acc_tab query)
+  { url: '/creator/accounts?acc_tab=billing', label: 'creator-accounts-billing', user: 'creator' },
+  { url: '/creator/accounts?acc_tab=documents', label: 'creator-accounts-documents', user: 'creator' },
+  { url: '/business/accounts?acc_tab=brands', label: 'business-accounts-brands', user: 'business' },
+  // System error pages
+  { url: '/does-not-exist-404-route', label: 'system-404' },
+  { url: '/403', label: 'system-403' },
+  { url: '/500', label: 'system-500' },
 ];
 
 async function setUser(page: Page, role?: 'creator' | 'business' | 'admin') {

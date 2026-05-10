@@ -1,22 +1,24 @@
 # QA Frontend — Bug Report
 
-> Iteration #1 — 10 May 2026
+> Iteration #2 — 10 May 2026 (re-verification)
 > Format strict per `.github/skills/bug-report-format`. Prefix `BUG-UI-NNN`.
 > Wireframe deviations live in [wireframe-conformity-report.md](./wireframe-conformity-report.md).
 > CSS / design-system bugs live in [css-report.md](./css-report.md).
 > A11y violations are summarised here at the BUG level with detail in [a11y-report.md](./a11y-report.md).
 
-## Summary
+## Summary (Iteration #2 — verified)
 
 | Severity | Count | IDs | Status |
 |---|---|---|---|
-| Bloquant | **1** | BUG-UI-001 | ✅ Fixed (`6989e2f`) |
-| Critique | **1** | BUG-UI-002 | ✅ Fixed (`feaef75` + `8079ed2`) |
+| Bloquant | **1** | BUG-UI-001 | ✅ Fixed (`6989e2f`) — verified Iter#2 |
+| Critique | **1** | BUG-UI-002 | ✅ Fixed (`feaef75` + `8079ed2`) — verified Iter#2 |
 | Majeur | **0** | — | — |
 | Mineur | **0** | — | — |
 
+> Iteration #2 re-run (115/115 green across chromium-desktop full suite + firefox-desktop
+> `@cross-browser` + chromium-mobile `@responsive`). No new bugs detected.
 > See also [`css-report.md`](./css-report.md): CSS-001/002 fixed in `37d18e6`,
-> CSS-003 deferred (Mineur, refactor wave). All bugs closed for iteration 1.
+> CSS-003 deferred (Mineur, refactor wave). All bugs closed for iteration 2.
 
 > Every blocking failure must be fixed before merge. Critical = workaround possible
 > but feature is unusable to end-users (here: most pages flag a11y violations under
@@ -64,7 +66,7 @@
   Body: {"code":"NOT_FOUND","message":"Cannot POST /api/auth/login"}
   ```
 
-**Statut** : **Fixed** — commit `6989e2f` (`fix(web): align frontend API base URL with /api/v1 (BUG-UI-001)`). All four `02-auth` redirect tests turn green. See [`docs/10-bugfix-frontend/fix-log.md`](../10-bugfix-frontend/fix-log.md).
+**Statut** : **Fixed — verified Iteration #2** — commit `6989e2f` (`fix(web): align frontend API base URL with /api/v1 (BUG-UI-001)`). All four `02-auth` redirect tests are green on chromium-desktop (Iter#2 re-run). Direct probe `POST http://localhost:3000/api/v1/auth/login` returns `200` with valid tokens for `admin@influ.ai`. See [`docs/10-bugfix-frontend/fix-log.md`](../10-bugfix-frontend/fix-log.md).
 
 ---
 
@@ -110,7 +112,7 @@ Pages that passed a11y (no blocking violations): `/auth/login`, `/auth/register`
 - Public landing footer: [`screenshots/landing-desktop.png`](./screenshots/landing-desktop.png).
 - Per-page axe-core JSON exports are attached on the failing tests in `apps/web/test-results/...` (run `npx playwright show-report`).
 
-**Statut** : **Fixed** — commits `feaef75` (token bump #6B7280 → #9CA3AF, 6.39:1 / 5.34:1) and `8079ed2` (btn-danger #EF4444 → #DC2626 to clear white-on-red 3.76:1 on .btn-danger). Full a11y suite is now 32/32 green on chromium-desktop. See [`docs/10-bugfix-frontend/fix-log.md`](../10-bugfix-frontend/fix-log.md).
+**Statut** : **Fixed — verified Iteration #2** — commits `feaef75` (token bump #6B7280 → #9CA3AF, 6.39:1 / 5.34:1) and `8079ed2` (btn-danger #EF4444 → #DC2626 to clear white-on-red 3.76:1 on .btn-danger). Full a11y suite is **32/32 green** on chromium-desktop in Iter#2 re-run — 0 `serious` color-contrast violations across all 32 audited pages. See [`docs/10-bugfix-frontend/fix-log.md`](../10-bugfix-frontend/fix-log.md).
 
 ---
 

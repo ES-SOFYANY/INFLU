@@ -18,12 +18,43 @@ interface CssSpec {
 }
 
 const auditPages: CssSpec[] = [
+  // Public
   { url: '/', label: 'landing' },
+  { url: '/for-influencers', label: 'for-influencers' },
+  { url: '/for-brands', label: 'for-brands' },
+  { url: '/legal/brand', label: 'legal-brand' },
+  { url: '/legal/creator', label: 'legal-creator' },
+  { url: '/legal/privacy', label: 'legal-privacy' },
+  // Auth
   { url: '/auth/login', label: 'login' },
   { url: '/auth/register', label: 'register' },
+  { url: '/auth/register/influencer', label: 'register-influencer' },
+  { url: '/auth/register/business', label: 'register-business' },
+  { url: '/auth/forgot-password', label: 'forgot' },
+  { url: '/auth/onboard', label: 'onboard' },
+  // Creator
   { url: '/creator', label: 'creator-dashboard', user: 'creator' },
+  { url: '/creator/marketplace', label: 'creator-marketplace', user: 'creator' },
+  { url: '/creator/collaborations', label: 'creator-collaborations', user: 'creator' },
+  { url: '/creator/my-account', label: 'creator-my-account', user: 'creator' },
+  { url: '/creator/ai-coach', label: 'creator-ai-coach', user: 'creator' },
+  { url: '/creator/messaging', label: 'creator-messaging', user: 'creator' },
+  { url: '/creator/accounts', label: 'creator-accounts', user: 'creator' },
+  { url: '/creator/support', label: 'creator-support', user: 'creator' },
+  // Business
   { url: '/business', label: 'business-dashboard', user: 'business' },
+  { url: '/business/ai-campaign', label: 'business-ai-campaign', user: 'business' },
+  { url: '/business/ai-manager', label: 'business-ai-manager', user: 'business' },
+  { url: '/business/marketplace', label: 'business-marketplace', user: 'business' },
+  { url: '/business/discovery', label: 'business-discovery', user: 'business' },
+  { url: '/business/crm', label: 'business-crm', user: 'business' },
+  { url: '/business/messaging', label: 'business-messaging', user: 'business' },
+  { url: '/business/payments', label: 'business-payments', user: 'business' },
+  { url: '/business/accounts', label: 'business-accounts', user: 'business' },
+  { url: '/business/support', label: 'business-support', user: 'business' },
+  // Admin
   { url: '/admin', label: 'admin-dashboard', user: 'admin' },
+  { url: '/admin/cin-validation', label: 'admin-cin-validation', user: 'admin' },
 ];
 
 async function setUser(page: Page, role?: 'creator' | 'business' | 'admin') {

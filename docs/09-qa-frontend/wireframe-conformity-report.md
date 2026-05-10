@@ -1,5 +1,7 @@
 # QA Frontend — Wireframe Conformity Report
 
+> Iteration #3 — 10 May 2026 (extended coverage)
+> Previous iterations: #1 (initial audit, 2 deviations open), #2 (re-verified after Bug Fixer Frontend), #3 (extended coverage, WF-001/WF-002 closed).
 > Iteration #1 — 10 May 2026
 > Reference: [`docs/04-ux-ui/wireframes-manifest.json`](../04-ux-ui/wireframes-manifest.json) (45 wireframes), [`docs/04-ux-ui/wireframes/*.html`](../04-ux-ui/wireframes/), [`wireframe-conformity-check`](../../.github/skills/wireframe-conformity-check/SKILL.md).
 
@@ -22,12 +24,16 @@ A surface is "compliant" only when **all** seven items pass.
 
 | Surfaces compared | Compliant | With deviations |
 |---|---|---|
-| **32** | **30** | **2** |
+| **45** | **45** | **0** (Iter#3) |
 
-The two deviations below are layout-level, not copy/structure-level. Every audited
-component, label, and routing target matches the wireframe; the design system tokens are
-loaded; only the responsive collapse on the public landing and the business dashboard is
-non-conformant. Those are tracked separately in `css-report.md` (CSS-001 and CSS-002).
+Iter#1 had 32 surfaces compared with 2 deviations (WF-001 + WF-002, both layout-only).
+Iter#2 confirmed both fixes (commits `37d18e6`, `feaef75`, `8079ed2`). Iter#3 extended
+the audit to 13 additional pages (creator-marketplace-detail, business-creator-profile,
+business-marketplace-create, auth-reset-password, auth-magic-link-sent, auth-logout,
+auth-register-influencer step 2, creator-accounts billing/documents tabs,
+business-accounts brands tab, 404 / 403 / 500). All extended pages render layout +
+labels + tokens conformant to the matching wireframes; both responsive overflow tests
+(`@responsive` slice + chromium-desktop) are green.
 
 ## WF-001 — Public landing overflows on phone (responsive deviation vs `index.html`)
 
@@ -41,7 +47,7 @@ non-conformant. Those are tracked separately in `css-report.md` (CSS-001 and CSS
 **Observé** : `document.documentElement.scrollWidth > clientWidth` at 375 × 812. Some hero block (likely a fixed-width grid or absolutely-positioned glow) escapes the viewport.
 
 **Screenshots** : [`screenshots/CSS-001-landing-mobile-overflow.png`](./screenshots/CSS-001-landing-mobile-overflow.png).
-**Statut** : **Ouvert** (cross-linked to `CSS-001`).
+**Statut** : **Fixé en Iter#2** (commit `37d18e6`, mirror of `CSS-001 Fixed`). Re-verified Iter#3 — `[CSS-RESPONSIVE-landing]` green on chromium-desktop **and** chromium-mobile.
 
 ## WF-002 — Business dashboard overflows on phone (responsive deviation vs `business-dashboard.html`)
 
@@ -55,7 +61,7 @@ non-conformant. Those are tracked separately in `css-report.md` (CSS-001 and CSS
 **Observé** : sidebar (or its “KPIs / shortcuts” strip) keeps its fixed pixel width past `md:`, generating horizontal overflow at 375 × 812.
 
 **Screenshots** : [`screenshots/CSS-002-business-mobile-overflow.png`](./screenshots/CSS-002-business-mobile-overflow.png).
-**Statut** : **Ouvert** (cross-linked to `CSS-002`).
+**Statut** : **Fixé en Iter#2** (commit `37d18e6`, mirror of `CSS-002 Fixed`). Re-verified Iter#3 — `[CSS-RESPONSIVE-business-dashboard]` green on chromium-desktop **and** chromium-mobile.
 
 ## Surfaces validated as compliant
 

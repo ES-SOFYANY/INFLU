@@ -1,5 +1,47 @@
 # QA Frontend — Accessibility (WCAG 2.1 AA) Report
 
+> Iteration #3 — 10 May 2026 — axe-core 4.11 (extended coverage)
+> Audit suite: [`apps/web/e2e/a11y/wcag-aa.spec.ts`](../../apps/web/e2e/a11y/wcag-aa.spec.ts)
+> Tags applied: `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`.
+
+## Headline (Iteration #3)
+
+| Pages audited | Pages with `critical`/`serious` violations |
+|---|---|
+| **45** | **0** |
+
+> +13 pages vs. Iter#2 (32 → 45) — see "Iteration #3 extension" below.
+
+## Iteration history
+
+| Iteration | Pages audited | Pages with blocking violations | Notes |
+|---|---|---|---|
+| #1 | 32 | 24 (all `serious` `color-contrast`, bundled into `BUG-UI-002`) | initial audit |
+| #2 | 32 | **0** | `BUG-UI-002` fixed (commits `feaef75`, `8079ed2` — `--text-muted` raised) |
+| **#3** | **45** | **0** | +13 pages: marketplace-detail, business-creator-profile, marketplace-create, reset-password, magic-link-sent, logout, register-influencer step 2, creator-accounts (billing & documents tabs), business-accounts (brands tab), 404 / 403 / 500 |
+
+## Iteration #3 extension — 13 added pages (all green)
+
+| Label | URL | Result |
+|---|---|---|
+| creator-marketplace-detail | `/creator/marketplace/op_demo_001` | ✅ |
+| business-creator-profile | `/business/profile/u_creator_micro_011` | ✅ |
+| business-marketplace-create | `/business/marketplace/create` | ✅ |
+| auth-reset-password | `/auth/reset-password` | ✅ |
+| auth-magic-link-sent | `/auth/magic-link-sent` | ✅ |
+| auth-logout | `/auth/logout` | ✅ |
+| auth-register-influencer-step2 | `/auth/register/influencer/social` | ✅ |
+| creator-accounts-billing | `/creator/accounts?acc_tab=billing` | ✅ |
+| creator-accounts-documents | `/creator/accounts?acc_tab=documents` | ✅ |
+| business-accounts-brands | `/business/accounts?acc_tab=brands` | ✅ |
+| system-404 | `/does-not-exist-404-route` | ✅ |
+| system-403 | `/403` | ✅ |
+| system-500 | `/500` | ✅ |
+
+---
+
+## Historical detail — Iteration #1 (kept for traceability)
+
 > Iteration #1 — 10 May 2026 — axe-core 4.11
 > Audit suite: [`apps/web/e2e/a11y/wcag-aa.spec.ts`](../../apps/web/e2e/a11y/wcag-aa.spec.ts)
 > Tags applied: `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`.

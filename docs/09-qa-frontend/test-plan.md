@@ -1,6 +1,6 @@
 # QA Frontend — Test Plan
 
-> Generated 10 May 2026 — Iteration #1
+> Generated 10 May 2026 — Iteration #1, extended Iteration #3.
 > QA Frontend Engineer — Playwright + axe-core + design-system audit
 
 ## Scope
@@ -30,10 +30,14 @@ pages, and a WCAG 2.1 AA audit on every page reachable in the routing graph.
 | [apps/web/e2e/03-creator.spec.ts](../../apps/web/e2e/03-creator.spec.ts) | Creator surfaces | 10 | US-020, 030, 031, 040, 041, 050, 060, 070, 080 |
 | [apps/web/e2e/04-business.spec.ts](../../apps/web/e2e/04-business.spec.ts) | Business surfaces | 12 | US-100..180 (brand+agency) |
 | [apps/web/e2e/05-admin-rbac.spec.ts](../../apps/web/e2e/05-admin-rbac.spec.ts) | Admin + RBAC | 5 | US-200, 201, RBAC matrix |
-| [apps/web/e2e/a11y/wcag-aa.spec.ts](../../apps/web/e2e/a11y/wcag-aa.spec.ts) | WCAG 2.1 AA — axe-core | 32 | every reachable page |
-| [apps/web/e2e/css/design-system.spec.ts](../../apps/web/e2e/css/design-system.spec.ts) | Design tokens, overflow, focus | 19 | landing, login, register, dashboards × 3 |
+| [apps/web/e2e/06-extended-must-us.spec.ts](../../apps/web/e2e/06-extended-must-us.spec.ts) | Extended Must-US (Iter#3) | 18 | US-032, 034, 035, 042, 071, 072, 073, 081, 121, 131, 141, 161, 171, 181, 202, 203, 205, 206 |
+| [apps/web/e2e/journeys/creator-nominal.spec.ts](../../apps/web/e2e/journeys/creator-nominal.spec.ts) | Creator end-to-end journey (user-flows §2.1) | 1 | US-010..013, 020, 030..035, 040, 060, 070..074 |
+| [apps/web/e2e/journeys/business-nominal.spec.ts](../../apps/web/e2e/journeys/business-nominal.spec.ts) | Business end-to-end journey (user-flows §3.1) | 1 | US-015, 018, 100, 110, 120..132, 140, 150, 160, 171 |
+| [apps/web/e2e/journeys/edge-cases.spec.ts](../../apps/web/e2e/journeys/edge-cases.spec.ts) | Edge cases EC-C5/C6/C11 (user-flows §2.2) | 3 | US-013, 016, RBAC/guards |
+| [apps/web/e2e/a11y/wcag-aa.spec.ts](../../apps/web/e2e/a11y/wcag-aa.spec.ts) | WCAG 2.1 AA — axe-core | **45** | every reachable page incl. detail / tabs / system errors |
+| [apps/web/e2e/css/design-system.spec.ts](../../apps/web/e2e/css/design-system.spec.ts) | Design tokens, overflow, focus | **69** | 32 audited pages × (overflow desktop + responsive mobile) + tokens + focus |
 
-**Total: 106 tests on `chromium-desktop` (default project).**
+**Total: 229 tests passing across `chromium-desktop` (188) + `firefox-desktop` `@cross-browser` (1) + `chromium-mobile` `@responsive` (40).**
 
 ## Coverage matrix (US → AC → spec → wireframe → a11y)
 
@@ -78,6 +82,36 @@ pages, and a WCAG 2.1 AA audit on every page reachable in the routing graph.
 | US-180/181 | business | AC-180-01 | 04-business#support | `business-support.html` | `business-support` |
 | US-200/201 | admin | AC-200-01, AC-201-01 | 05-admin-rbac#admin | `admin-cin-validation-queue.html` | `admin-dashboard`, `admin-cin-validation` |
 | RBAC | cross-role | AC-RBAC-01..03 | 05-admin-rbac#rbac | — | — |
+
+## Iteration #3 — Extended coverage matrix
+
+> All entries below are added by `06-extended-must-us.spec.ts` and the three
+> `journeys/*.spec.ts` files. They close the gaps documented in
+> `QA-VALIDATION-REPORT.md` §3 V1, V2, V3, V4.
+
+| US | Role | AC scenario(s) | E2E test | Wireframe | A11y page label |
+|---|---|---|---|---|---|
+| US-032 | creator | AC-032-01 | 06-extended#US-032 | `creator-marketplace-detail.html` | `creator-marketplace-detail` |
+| US-034 | creator | AC-034-01 | 06-extended#US-034 | `creator-marketplace-detail.html` | `creator-marketplace-detail` |
+| US-035 | creator | AC-035-01 | 06-extended#US-035 | `creator-marketplace-list.html` | `creator-marketplace` |
+| US-042 | creator | AC-042-01 | 06-extended#US-042 | `creator-my-account.html` | `creator-my-account` |
+| US-071 | creator | AC-071-01 | 06-extended#US-071 | `creator-account-settings.html` | `creator-accounts` |
+| US-072 | creator | AC-072-01 | 06-extended#US-072 | `creator-account-pricing.html` | `creator-accounts-billing` |
+| US-073 | creator | AC-073-01 | 06-extended#US-073 | `creator-account-pricing.html` | `creator-accounts-billing` |
+| US-081 | creator | AC-081-01 | 06-extended#US-081 | `creator-support.html` | `creator-support` |
+| US-121 | business | AC-121-01 | 06-extended#US-121 | `business-marketplace-create.html` | `business-marketplace-create` |
+| US-131 | business | AC-131-01 | 06-extended#US-131 | `business-discovery.html` | `business-discovery` |
+| US-141 | business | AC-141-01 | 06-extended#US-141 | `business-crm.html` | `business-crm` |
+| US-161 | business | AC-161-01 | 06-extended#US-161 | `business-payments.html` | `business-payments` |
+| US-171 | business | AC-171-01 | 06-extended#US-171 | `business-account-brands.html` | `business-accounts-brands` |
+| US-181 | business | AC-181-01 | 06-extended#US-181 | `business-support.html` | `business-support` |
+| US-202 | any | AC-202-01 | 06-extended#US-202 | `error-generic.html` | `system-500` |
+| US-203 | any | AC-203-01 | 06-extended#US-203 | layout headers | `creator-dashboard` (host) |
+| US-205 | any | AC-205-01 | 06-extended#US-205 | empty-state copy (PRD §9.1) | `creator-collaborations` |
+| US-206 | any | AC-206-01 | 06-extended#US-206 | tooltip on disabled CTA (PRD §9.2) | `creator-marketplace-detail` |
+| user-flows §2.1 | creator | JOURNEY-CREATOR-NOMINAL | journeys/creator-nominal | flows-2-1 chain | (covered by a11y suite) |
+| user-flows §3.1 | business | JOURNEY-BUSINESS-NOMINAL | journeys/business-nominal | flows-3-1 chain | (covered by a11y suite) |
+| user-flows §2.2 | creator | EC-C5 / EC-C6 / EC-C11 | journeys/edge-cases | — | — |
 
 ## Tests intentionally deferred to QA Manual
 
