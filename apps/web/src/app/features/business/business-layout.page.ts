@@ -17,6 +17,7 @@ import { AuthApiService } from '../auth/data/auth-api.service';
 import { I18nService, type Locale } from '../../core/i18n/i18n.service';
 import { BusinessApiService } from './data/business-api.service';
 import { CrmAddDialogHostComponent } from './components/crm-add-dialog-host.component';
+import { NotificationsBellComponent } from '../../shared/notifications/notifications-bell.component';
 
 /**
  * US-101 — Global influencer search (header combobox).
@@ -26,7 +27,14 @@ import { CrmAddDialogHostComponent } from './components/crm-add-dialog-host.comp
 @Component({
   selector: 'app-business-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, FormsModule, CrmAddDialogHostComponent],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    FormsModule,
+    CrmAddDialogHostComponent,
+    NotificationsBellComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <a class="skip-link" href="#main">Skip to content</a>
@@ -121,7 +129,7 @@ import { CrmAddDialogHostComponent } from './components/crm-add-dialog-host.comp
           <option value="en">EN</option>
           <option value="ar">AR</option>
         </select>
-        <button class="btn btn-ghost btn-sm" type="button" aria-label="Notifications">🔔</button>
+        <app-notifications-bell />
         <span class="avatar avatar-sm">{{ initial() }}</span>
         <button
           type="button"

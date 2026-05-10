@@ -63,5 +63,34 @@
       "businessSection": "معلومات الشركة",
       "submit": "إنشاء الحساب"
     }
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "empty": "لا توجد إشعارات بعد.",
+    "markAllAsRead": "تحديد الكل كمقروء",
+    "error": "تعذر تحميل الإشعارات."
+  },
+  "payments": {
+    "title": "مدفوعات الشركة",
+    "subtitle": "قم بإدارة ومراجعة جميع سجلات مدفوعات شركتك.",
+    "tabs": {
+      "marketplace": "مدفوعات السوق",
+      "campaign": "مدفوعات الحملات"
+    },
+    "filters": {
+      "selectBrand": "حدد العلامة التجارية",
+      "selectStatus": "حدد الحالة",
+      "clear": "مسح"
+    },
+    "columns": {
+      "creator": "المبدع",
+      "brand": "العلامة التجارية",
+      "status": "الحالة",
+      "amount": "المبلغ (درهم)",
+      "requestedAt": "تم الطلب في",
+      "completedAt": "تم الإكمال في",
+      "actions": "إجراءات"
+    },
+    "empty": "No payment data found"
   }
 }

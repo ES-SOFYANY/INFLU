@@ -18,6 +18,7 @@ import type {
   SchemaGrantBrandAccessDto,
   SchemaLinkBrandDto,
   SchemaMarketplaceProductWizardDto,
+  SchemaPaginatedBusinessPaymentsDto,
   SchemaPaginatedCampaignsDto,
   SchemaPaginatedCrmListsDto,
   SchemaPaginatedDiscoveryCreatorsDto,
@@ -273,6 +274,22 @@ export class BusinessApiService {
   // US-142 — Remove a creator from a CRM list
   removeCreatorFromCrmList(listId: string, creatorId: string): Observable<void> {
     return this.api.delete<void>(`/business/crm/lists/${listId}/creators/${creatorId}`);
+  }
+
+  // US-160 / US-161 — Business payments (Marketplace + Campaign tabs)
+  listBusinessPayments(query: {
+    type: 'MARKETPLACE' | 'CAMPAIGN';
+    brand?: string;
+    status?: 'PENDING' | 'COMPLETED' | 'FAILED';
+    page?: number;
+    limit?: number;
+  }): Observable<SchemaPaginatedBusinessPaymentsDto> {
+    const params: Record<string, string | number> = { type: query.type };
+    if (query.brand) params['brand'] = query.brand;
+    if (query.status) params['status'] = query.status;
+    if (query.page) params['page'] = query.page;
+    if (query.limit) params['limit'] = query.limit;
+    return this.api.get<SchemaPaginatedBusinessPaymentsDto>('/business/payments', { params });
   }
 }
 

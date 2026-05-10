@@ -63,5 +63,34 @@
       "businessSection": "Business Information",
       "submit": "Create account"
     }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet.",
+    "markAllAsRead": "Mark all as read",
+    "error": "Could not load notifications."
+  },
+  "payments": {
+    "title": "Business Payments",
+    "subtitle": "Manage and review all your business payment records.",
+    "tabs": {
+      "marketplace": "Marketplace payments",
+      "campaign": "Campaign payments"
+    },
+    "filters": {
+      "selectBrand": "Select brand",
+      "selectStatus": "Select status",
+      "clear": "Clear"
+    },
+    "columns": {
+      "creator": "Creator",
+      "brand": "Brand",
+      "status": "Status",
+      "amount": "Amount (Dhs)",
+      "requestedAt": "Requested At",
+      "completedAt": "Completed At",
+      "actions": "Actions"
+    },
+    "empty": "No payment data found"
   }
 }

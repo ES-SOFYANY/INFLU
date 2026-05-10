@@ -63,5 +63,34 @@
       "businessSection": "Informations de l'entreprise",
       "submit": "Créer le compte"
     }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "Aucune notification pour le moment.",
+    "markAllAsRead": "Tout marquer comme lu",
+    "error": "Impossible de charger les notifications."
+  },
+  "payments": {
+    "title": "Paiements business",
+    "subtitle": "Gérez et examinez tous vos paiements business.",
+    "tabs": {
+      "marketplace": "Paiements Marketplace",
+      "campaign": "Paiements Campagne"
+    },
+    "filters": {
+      "selectBrand": "Sélectionner une marque",
+      "selectStatus": "Sélectionner un statut",
+      "clear": "Effacer"
+    },
+    "columns": {
+      "creator": "Créateur",
+      "brand": "Marque",
+      "status": "Statut",
+      "amount": "Montant (Dhs)",
+      "requestedAt": "Demandé le",
+      "completedAt": "Terminé le",
+      "actions": "Actions"
+    },
+    "empty": "No payment data found"
   }
 }

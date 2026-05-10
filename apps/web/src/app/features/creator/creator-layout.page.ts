@@ -4,6 +4,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { AuthService } from '../../core/auth/auth.service';
 import { AuthApiService } from '../auth/data/auth-api.service';
 import { I18nService, type Locale } from '../../core/i18n/i18n.service';
+import { NotificationsBellComponent } from '../../shared/notifications/notifications-bell.component';
 
 /**
  * US-023 — Creator shell layout (sidebar + top header).
@@ -13,7 +14,7 @@ import { I18nService, type Locale } from '../../core/i18n/i18n.service';
 @Component({
   selector: 'app-creator-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, NotificationsBellComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <a class="skip-link" href="#main">Skip to content</a>
@@ -34,7 +35,7 @@ import { I18nService, type Locale } from '../../core/i18n/i18n.service';
           <option value="en">EN</option>
           <option value="ar">AR</option>
         </select>
-        <button class="btn btn-ghost btn-sm" type="button" aria-label="Notifications">🔔</button>
+        <app-notifications-bell />
         <div class="flex items-center gap-2">
           <span class="avatar avatar-sm">{{ initial() }}</span>
           <button
