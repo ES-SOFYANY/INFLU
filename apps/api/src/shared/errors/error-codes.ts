@@ -63,6 +63,9 @@ export const ERROR_CODES = {
   LIST_NOT_FOUND: 'LIST_NOT_FOUND',
   CREATOR_NOT_FOUND: 'CREATOR_NOT_FOUND',
   ALREADY_IN_LIST: 'ALREADY_IN_LIST',
+
+  // Notifications (US-204)
+  NOTIFICATION_NOT_FOUND: 'NOTIFICATION_NOT_FOUND',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

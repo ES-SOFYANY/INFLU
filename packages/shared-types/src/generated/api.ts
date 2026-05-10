@@ -507,6 +507,23 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/business/payments": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-160][US-161] List business payments by tab (Marketplace|Campaign), brand, status */
+        readonly get: operations["BusinessPaymentsController_list"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/api/creator/me": {
         readonly parameters: {
             readonly query?: never;
@@ -765,6 +782,23 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/creator/me/payments": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-160] List my payments (creator) */
+        readonly get: operations["CreatorPaymentsController_listMine"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/api/creator/me/pricing": {
         readonly parameters: {
             readonly query?: never;
@@ -915,6 +949,40 @@ export interface paths {
         readonly put?: never;
         /** [US-060] Post a message in a conversation */
         readonly post: operations["MessagingController_postMessage"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/notifications": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-204] List my notifications (paginated, newest first) */
+        readonly get: operations["NotificationsController_list"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/notifications/{id}/read": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-204] Mark a notification as read */
+        readonly post: operations["NotificationsController_markAsRead"];
         readonly delete?: never;
         readonly options?: never;
         readonly head?: never;
@@ -1581,6 +1649,19 @@ export interface components {
             /** Format: uuid */
             readonly senderId: string;
         };
+        readonly NotificationDto: {
+            /** Format: date-time */
+            readonly createdAt: string;
+            /** Format: uuid */
+            readonly id: string;
+            readonly isRead: boolean;
+            /** @description Deep-link path (relative) when clicking the notification */
+            readonly link?: string;
+            readonly message: string;
+            readonly title: string;
+            /** @enum {string} */
+            readonly type: "APPLICATION_ACCEPTED" | "APPLICATION_REJECTED" | "BRIEF_RECEIVED" | "CONTENT_MODIFICATION_REQUESTED" | "DELIVERABLE_VALIDATED" | "PAYMENT_RECEIVED" | "MESSAGE_RECEIVED" | "CIN_VALIDATED" | "OPPORTUNITY_EXPIRING" | "AI_COACH_RECOMMENDATION" | "APPLICATION_RECEIVED" | "DELIVERABLE_SUBMITTED" | "PAYMENT_COMPLETED_OR_FAILED" | "NEW_BRAND_LINKED";
+        };
         readonly OnboardBusinessDto: {
             /** @description Must be true (legal mentions & privacy) */
             readonly acceptLegal: boolean;
@@ -1613,6 +1694,12 @@ export interface components {
             readonly rc: string;
             readonly tva: string;
         };
+        readonly PaginatedBusinessPaymentsDto: {
+            readonly items: readonly components["schemas"]["PaymentBusinessRowDto"][];
+            readonly limit: number;
+            readonly page: number;
+            readonly total: number;
+        };
         readonly PaginatedCampaignsDto: {
             readonly items: readonly components["schemas"]["CampaignDto"][];
             readonly limit: number;
@@ -1627,6 +1714,12 @@ export interface components {
         };
         readonly PaginatedConversationsDto: {
             readonly items: readonly components["schemas"]["ConversationItemDto"][];
+            readonly limit: number;
+            readonly page: number;
+            readonly total: number;
+        };
+        readonly PaginatedCreatorPaymentsDto: {
+            readonly items: readonly components["schemas"]["PaymentCreatorRowDto"][];
             readonly limit: number;
             readonly page: number;
             readonly total: number;
@@ -1656,6 +1749,65 @@ export interface components {
             readonly limit: number;
             readonly page: number;
             readonly total: number;
+        };
+        readonly PaginatedNotificationsDto: {
+            readonly items: readonly components["schemas"]["NotificationDto"][];
+            readonly limit: number;
+            readonly page: number;
+            readonly total: number;
+            /** @description Total unread notifications for badge */
+            readonly unreadCount: number;
+        };
+        readonly PaymentBrandSummaryDto: {
+            /** Format: uuid */
+            readonly id: string;
+            readonly name: string;
+        };
+        readonly PaymentBusinessRowDto: {
+            /** @description Amount in MAD (Dhs) */
+            readonly amount: number;
+            readonly brand: components["schemas"]["PaymentBrandSummaryDto"];
+            /**
+             * Format: date-time
+             * @description ISO timestamp when payment completed; null otherwise
+             */
+            readonly completedAt: Record<string, never> | null;
+            readonly creator: components["schemas"]["PaymentCreatorSummaryDto"];
+            /**
+             * @default MAD
+             * @enum {string}
+             */
+            readonly currency: "MAD";
+            /** Format: uuid */
+            readonly id: string;
+            /** Format: date-time */
+            readonly requestedAt: string;
+            /** @enum {string} */
+            readonly status: "PENDING" | "COMPLETED" | "FAILED";
+        };
+        readonly PaymentCreatorRowDto: {
+            readonly amount: number;
+            readonly brand: components["schemas"]["PaymentBrandSummaryDto"];
+            /** Format: date-time */
+            readonly completedAt: Record<string, never> | null;
+            /**
+             * @default MAD
+             * @enum {string}
+             */
+            readonly currency: "MAD";
+            /** Format: uuid */
+            readonly id: string;
+            /** Format: date-time */
+            readonly requestedAt: string;
+            /** @enum {string} */
+            readonly status: "PENDING" | "COMPLETED" | "FAILED";
+        };
+        readonly PaymentCreatorSummaryDto: {
+            /** Format: uri */
+            readonly avatarUrl?: string;
+            /** Format: uuid */
+            readonly id: string;
+            readonly name: string;
         };
         readonly PostMessageDto: {
             readonly content: string;
@@ -1927,14 +2079,22 @@ export type SchemaMarketplaceProductCardDto = components['schemas']['Marketplace
 export type SchemaMarketplaceProductDetailDto = components['schemas']['MarketplaceProductDetailDto'];
 export type SchemaMarketplaceProductWizardDto = components['schemas']['MarketplaceProductWizardDto'];
 export type SchemaMessageDto = components['schemas']['MessageDto'];
+export type SchemaNotificationDto = components['schemas']['NotificationDto'];
 export type SchemaOnboardBusinessDto = components['schemas']['OnboardBusinessDto'];
+export type SchemaPaginatedBusinessPaymentsDto = components['schemas']['PaginatedBusinessPaymentsDto'];
 export type SchemaPaginatedCampaignsDto = components['schemas']['PaginatedCampaignsDto'];
 export type SchemaPaginatedCollaborationsDto = components['schemas']['PaginatedCollaborationsDto'];
 export type SchemaPaginatedConversationsDto = components['schemas']['PaginatedConversationsDto'];
+export type SchemaPaginatedCreatorPaymentsDto = components['schemas']['PaginatedCreatorPaymentsDto'];
 export type SchemaPaginatedCrmListsDto = components['schemas']['PaginatedCrmListsDto'];
 export type SchemaPaginatedDiscoveryCreatorsDto = components['schemas']['PaginatedDiscoveryCreatorsDto'];
 export type SchemaPaginatedMarketplaceProductsDto = components['schemas']['PaginatedMarketplaceProductsDto'];
 export type SchemaPaginatedMessagesDto = components['schemas']['PaginatedMessagesDto'];
+export type SchemaPaginatedNotificationsDto = components['schemas']['PaginatedNotificationsDto'];
+export type SchemaPaymentBrandSummaryDto = components['schemas']['PaymentBrandSummaryDto'];
+export type SchemaPaymentBusinessRowDto = components['schemas']['PaymentBusinessRowDto'];
+export type SchemaPaymentCreatorRowDto = components['schemas']['PaymentCreatorRowDto'];
+export type SchemaPaymentCreatorSummaryDto = components['schemas']['PaymentCreatorSummaryDto'];
 export type SchemaPostMessageDto = components['schemas']['PostMessageDto'];
 export type SchemaPricingDto = components['schemas']['PricingDto'];
 export type SchemaPricingLineDto = components['schemas']['PricingLineDto'];
@@ -3564,6 +3724,54 @@ export interface operations {
             };
         };
     };
+    readonly BusinessPaymentsController_list: {
+        readonly parameters: {
+            readonly query: {
+                /** @description Filter by brand id */
+                readonly brand?: string;
+                readonly limit?: number;
+                readonly page?: number;
+                readonly status?: "PENDING" | "COMPLETED" | "FAILED";
+                /** @description Marketplace or Campaign tab */
+                readonly type: "MARKETPLACE" | "CAMPAIGN";
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedBusinessPaymentsDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     readonly CreatorProfileController_getAccountInfo: {
         readonly parameters: {
             readonly query?: never;
@@ -4165,6 +4373,43 @@ export interface operations {
             };
         };
     };
+    readonly CreatorPaymentsController_listMine: {
+        readonly parameters: {
+            readonly query?: {
+                readonly limit?: number;
+                readonly page?: number;
+                readonly status?: "PENDING" | "COMPLETED" | "FAILED";
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedCreatorPaymentsDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     readonly CreatorProfileController_getPricing: {
         readonly parameters: {
             readonly query?: never;
@@ -4652,6 +4897,71 @@ export interface operations {
             };
             /** @description EMPTY_MESSAGE */
             readonly 422: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly NotificationsController_list: {
+        readonly parameters: {
+            readonly query?: {
+                readonly limit?: number;
+                readonly page?: number;
+                /** @description Return only unread notifications */
+                readonly unreadOnly?: boolean;
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedNotificationsDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly NotificationsController_markAsRead: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Marked as read */
+            readonly 204: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description NOTIFICATION_NOT_FOUND */
+            readonly 404: {
                 headers: {
                     readonly [name: string]: unknown;
                 };

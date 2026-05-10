@@ -1,16 +1,28 @@
 import { Module } from '@nestjs/common';
 
-import { PaymentsController } from './payments.controller';
+import { AuthModule } from '../auth/auth.module';
+import { BrandModule } from '../brand/brand.module';
+
+import {
+  BusinessPaymentsController,
+  CreatorPaymentsController,
+  PaymentsController,
+} from './payments.controller';
 import { PaymentsRepository } from './payments.repository';
 import { PaymentsService } from './payments.service';
 
 /**
  * PaymentsModule — bounded context shell.
- * Story Implementers fill controllers / services / repositories per US.
+ * US-160 / US-161 — payments listing for business + creator views.
  */
 @Module({
-  controllers: [PaymentsController],
+  imports: [AuthModule, BrandModule],
+  controllers: [
+    BusinessPaymentsController,
+    CreatorPaymentsController,
+    PaymentsController,
+  ],
   providers: [PaymentsService, PaymentsRepository],
-  exports: [PaymentsService],
+  exports: [PaymentsService, PaymentsRepository],
 })
 export class PaymentsModule {}
