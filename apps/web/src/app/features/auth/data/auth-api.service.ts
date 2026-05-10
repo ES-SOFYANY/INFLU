@@ -64,7 +64,7 @@ export class AuthApiService {
 
   /** US-016 — Register an influencer (step 1, no password). */
   registerInfluencer(dto: SchemaRegisterCreatorDto): Observable<SchemaUserPublicDto> {
-    return this.api.post<SchemaUserPublicDto>('/auth/register/CREATOR', dto);
+    return this.api.post<SchemaUserPublicDto>('/auth/register/influencer', dto);
   }
 
   /** US-013 — Consume a creator magic link to set the initial password and sign in. */

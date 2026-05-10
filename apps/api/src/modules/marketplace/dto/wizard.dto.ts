@@ -88,8 +88,10 @@ export class DeliverableInputDto {
  * US-120 — Body of `POST /business/marketplace/products` (wizard step 1).
  */
 export class CreateMarketplaceProductDto {
-  @ApiProperty({ format: 'uuid' })
-  @IsUUID('4')
+  @ApiProperty({ description: 'Brand identifier (UUIDv4 or seed-style id)' })
+  @IsString()
+  @MinLength(1)
+  @MaxLength(64)
   brandId!: string;
 
   @ApiProperty({ minLength: 10, maxLength: 1000 })
@@ -110,9 +112,11 @@ export class UpdateMarketplaceProductDto {
   step!: MarketplaceWizardStep;
 
   // BRAND_INFO
-  @ApiPropertyOptional({ format: 'uuid' })
+  @ApiPropertyOptional({ description: 'Brand identifier (UUIDv4 or seed-style id)' })
   @IsOptional()
-  @IsUUID('4')
+  @IsString()
+  @MinLength(1)
+  @MaxLength(64)
   brandId?: string;
 
   @ApiPropertyOptional({ minLength: 10, maxLength: 1000 })

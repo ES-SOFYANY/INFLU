@@ -1,36 +1,40 @@
-# Form Catalogue — Iteration 1
+# Form Catalogue — Iterations 1+2
 
 ## Summary
 
-- Total forms discovered in the app: 8
-- Forms tested with full submit + verified response: 3
-- Forms tested rendering only (multi-step wizards / deferred submit): 5
+- Total forms discovered in the app : 11 (login, login-edge×2, marketplace apply×2, register, marketplace wizard, profile edit, 2 support tickets, 2 AI chat sends)
+- Forms tested with full submit + verified response : **11 / 11** (100 %)
+- Forms FAIL (open) : 0
+- Forms with bug fixed inline during submission : 2 (BUG-MAN-006 register, BUG-MAN-007 marketplace wizard)
 
 ## Form Results
 
-| Page Route | Form Name / Purpose | Persona(s) Tested | Filled | Submitted | API Response | UI Feedback | Screenshot | Status |
-|-----------|---------------------|-------------------|--------|-----------|--------------|-------------|-----------|--------|
-| `/auth/login` | Login | all 10 personas | ✅ | ✅ | `POST /api/v1/auth/login` 200 | redirect to role landing | `<persona>/dashboard.png` | ✅ PASS |
-| `/auth/login` | Login (empty submit — validation) | unauthenticated | ✅ (empty) | ✅ | n/a (client-side block) | field-level errors shown | `discovery/login-empty-submit.png` | ✅ PASS |
-| `/auth/login` | Login (disabled account) | `creator.disabled@example.ma` | ✅ | ✅ | 401 `{code:"ACCOUNT_DISABLED"}` | clear toast "Account is not active" | `creator-disabled/disabled-login.png` | ✅ PASS |
-| `/creator/marketplace/:id` | Apply (POST application) | `creator.nano@example.ma` | n/a (single button) | ✅ | 409 already-applied | message "You already applied" (after BUG-MAN-002) | `creator-nano/marketplace-detail-already-applied-after-fix.png` | ✅ PASS |
-| `/creator/marketplace/:id` | Apply (eligibility-blocked) | `creator.pending@example.ma` | n/a | ✅ | 403 `{code:"ELIGIBILITY_BLOCKED"}` | banner explains missing docs | `creator-pending/eligibility-after-fix.png` | ✅ PASS |
-| `/auth/register` | Multi-step register wizard | unauthenticated | ⚠️ render only | ❌ deferred | n/a | n/a | n/a | ⚠️ DEFERRED to iter 2 |
-| `/business/marketplace/create` | Marketplace product creation wizard | `marketing@yassir.com` | ⚠️ render only | ❌ deferred | n/a | n/a | `brand-yassir/marketplace-create.png` | ⚠️ DEFERRED to iter 2 |
-| `/creator/my-account` (profile / billing / documents tabs) | Profile edit | `creator.nano@example.ma` | ⚠️ render only | ❌ deferred | n/a | n/a | `creator-nano/my-account.png` | ⚠️ DEFERRED to iter 2 |
-| `/creator/support` | New ticket | `creator.nano@example.ma` | ⚠️ render only | ❌ deferred | n/a | n/a | `creator-nano/support.png` | ⚠️ DEFERRED to iter 2 |
-| `/business/support` | New ticket | `marketing@yassir.com` | ⚠️ render only | ❌ deferred | n/a | n/a | `brand-yassir/support.png` | ⚠️ DEFERRED to iter 2 |
-| `/creator/ai-coach` | Chat send | `creator.nano@example.ma` | ⚠️ render only | ❌ deferred | n/a | n/a | `creator-nano/ai-coach.png` | ⚠️ DEFERRED to iter 2 |
+| # | Page Route | Form Name | Persona(s) | Filled | Submitted | API Response | UI Feedback | Screenshot | Status |
+|---|-----------|-----------|------------|--------|-----------|--------------|-------------|-----------|--------|
+| 1 | `/auth/login` | Login (valid) | all 10 personas | ✅ | ✅ | `POST /api/v1/auth/login` 200 | redirect to role landing | `iteration-01/<persona>/dashboard.png` | ✅ PASS |
+| 2 | `/auth/login` | Login (empty submit — validation) | unauthenticated | ✅ (empty) | ✅ | n/a (client-side block) | field-level errors shown | `iteration-01/discovery/login-empty-submit.png` | ✅ PASS |
+| 3 | `/auth/login` | Login (disabled account) | `old.account@example.ma` | ✅ | ✅ | 401 `{code:"ACCOUNT_DISABLED"}` | clear toast "Account is not active" | `iteration-01/creator-disabled/disabled-login.png` | ✅ PASS |
+| 4 | `/creator/marketplace/:id` | Apply (already-applied) | `amine.nano@example.ma` | n/a | ✅ | 409 already-applied | message "You already applied" | `iteration-01/creator-nano/marketplace-detail-already-applied-after-fix.png` | ✅ PASS (after BUG-MAN-002) |
+| 5 | `/creator/marketplace/:id` | Apply (eligibility-blocked) | `kawtar.pending@example.ma` | n/a | ✅ | 403 `{code:"ELIGIBILITY_BLOCKED"}` | banner explains missing docs | `iteration-01/creator-pending/eligibility-after-fix.png` | ✅ PASS |
+| 6 | `/auth/register/influencer` | Register (validation errors) | unauthenticated | ✅ (empty + invalid email) | ✅ | n/a (client) | per-field errors | `iteration-02/registration/03-validation-errors.png` | ✅ PASS |
+| 7 | `/auth/register/influencer` | Register (valid) | unauthenticated | ✅ | ✅ | `POST /auth/register/influencer` 201 | redirect `/auth/magic-link-sent` | `iteration-02/registration/05-influencer-success-magic-link-sent.png` | ✅ PASS (after BUG-MAN-006) |
+| 8 | `/business/marketplace/create` | Marketplace product creation wizard (5 steps + publish) | `marketing@yassir.com` | ✅ | ✅ | `POST /marketplace/products` 201 → `PATCH /:id/dates` 200 → `POST /:id/publish` 200 | redirect `/business/marketplace`, product visible | `iteration-02/brand-yassir/marketplace-create-published.png` | ✅ PASS (after BUG-MAN-007 ; workaround BUG-MAN-008) |
+| 9 | `/creator/accounts` (Profile tab) | Profile edit | `amine.nano@example.ma` | ✅ | ✅ | `PUT /users/me/profile` 200 | "Information updated." + button disabled | `iteration-02/creator-nano/profile-edit-after-submit.png` | ✅ PASS |
+| 10 | `/creator/support` | New ticket | `amine.nano@example.ma` | ✅ | ✅ | `POST /support/tickets` 201 | ticket appears with OPEN status, "1 report(s)" | `iteration-02/creator-nano/support-ticket-created.png` | ✅ PASS |
+| 11 | `/business/support` | New ticket | `marketing@yassir.com` | ✅ | ✅ | `POST /support/tickets` 201 | ticket appears with OPEN status | `iteration-02/brand-yassir/support-ticket-created.png` | ✅ PASS |
+| 12 | `/creator/ai-coach` | Chat send | `amine.nano@example.ma` | ✅ | ✅ | `POST /ai/coach/messages` 200 | user message + mock assistant reply | `iteration-02/creator-nano/ai-coach-after-send.png` | ✅ PASS |
+| 13 | `/business/ai-campaign` | Chat send | `marketing@yassir.com` | ✅ | ✅ | `POST /ai/campaign/messages` 200 | user message + mock assistant reply (`[mock-ai-campaign] ...`) | `iteration-02/brand-yassir/ai-campaign-after-send.png` | ✅ PASS |
 
 ## Forms KO
 
-None — every form **submitted** in this iteration ended in PASS after the inline
-fixes (`BUG-MAN-002` for the Apply error mapping, `BUG-MAN-003` for the eligibility
-banner contract drift).
+Aucun. Tous les formulaires soumis ont fini en PASS après les corrections inline (BUG-MAN-006 register, BUG-MAN-007 marketplace wizard ; BUG-MAN-008 a un workaround documenté).
 
-## Notes for next iteration
+## Marketplace wizard sub-form details (iter 2)
 
-The five deferred forms are multi-step wizards or text-entry surfaces whose
-back-end POST/PUT was not exercised in iteration 1. They render correctly with no
-console errors, and their controllers were already smoke-tested at the API level
-(see `tests/integration/`). End-to-end submit will be done in iteration 2.
+| Step | Sub-form | API at "Next" | Status |
+|------|----------|---------------|--------|
+| A | Title / description / category / content type | local | ✅ |
+| B | Conditions textarea | local | ✅ |
+| C | Target audience (gender, age range, location, platforms) | local | ✅ |
+| D | Deliverables (platform, content-type, taggedAccount, required-elements) + initial draft | `POST /marketplace/products` 201 | ✅ (after BUG-MAN-007) |
+| E | Dates + publish | `PATCH /:id/dates` 200 → `POST /:id/publish` 200 | ✅ |

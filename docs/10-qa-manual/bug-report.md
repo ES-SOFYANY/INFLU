@@ -1,7 +1,8 @@
-# Manual QA Bug Report — Iteration 1
+# Manual QA Bug Report — Iterations 1+2
 
-All 5 bugs found in this iteration were fixed inline. Status of each is **Fixed**
-with a commit reference. No bugs remain Open.
+**Total** : 8 bugs (BUG-MAN-001 → BUG-MAN-008).
+**Fixed inline** : 7 (BUG-MAN-001..007).
+**Open with workaround** : 1 (BUG-MAN-008 — Major, UX double-`@` quirk in marketplace wizard).
 
 ---
 
@@ -11,11 +12,11 @@ with a commit reference. No bugs remain Open.
 - **Severity**: Critical
 - **Component**: Backend (DynamoDB attribute typing) → surfaces as Frontend TypeError
 - **Endpoint / Page**: `GET /api/v1/marketplace/products/:id` → `/creator/marketplace/:id`
-- **Persona**: `creator.nano@example.ma`
+- **Persona**: `amine.nano@example.ma`
 - **Environment**: local
 
 **Reproduction**
-1. Login as creator.nano
+1. Login as amine.nano
 2. Open any marketplace product card
 3. Observe Angular TypeError in the console (`@for` cannot iterate `Set`)
 
@@ -41,10 +42,10 @@ the Angular template chokes on it.
 - **Severity**: Major
 - **Component**: Frontend
 - **Page**: `/creator/marketplace/:id`
-- **Persona**: `creator.nano@example.ma`
+- **Persona**: `amine.nano@example.ma`
 
 **Reproduction**
-1. Login as creator.nano
+1. Login as amine.nano
 2. Open a product the creator already applied to
 3. Click "Apply"
 
@@ -71,10 +72,10 @@ shape.
 - **Severity**: Major
 - **Component**: Seed data (contract drift)
 - **Page**: `/creator/marketplace/:id` (eligibility banner)
-- **Persona**: `creator.pending@example.ma`
+- **Persona**: `kawtar.pending@example.ma`
 
 **Reproduction**
-1. Login as creator.pending
+1. Login as kawtar.pending
 2. Visit any product
 3. Observe banner: "Submit your CIN to apply" (action button shown)
 
@@ -151,3 +152,85 @@ the authoritative validator (returns 404 on unknown ids).
   in the seed → "Total compensation: 0" displayed. Cosmetic seed gap.
 - Some marketplace cards show title "X for " with empty tier suffix (cosmetic
   i18n / template).
+
+---
+
+## BUG-MAN-006 — Frontend register endpoint uses uppercase enum (404)
+
+- **US**: US-016
+- **Severity**: Critical
+- **Component**: Frontend
+- **Endpoint / Page**: `POST /api/v1/auth/register/CREATOR` → `/auth/register/influencer`
+- **Persona**: unauthenticated (new user)
+- **Environment**: local
+
+**Reproduction**
+1. Navigate `/auth/register`
+2. Choose "I'm a creator"
+3. Fill form with valid data
+4. Submit "Continue"
+5. Observe: `404 Not Found` from API
+
+**Expected**: `POST /api/v1/auth/register/influencer` → 201 + redirect `/auth/magic-link-sent`.
+**Observed**: `POST /api/v1/auth/register/CREATOR` → 404 (controller declares `:role` only matches `influencer|business`).
+
+**Root cause**: `apps/web/src/app/features/auth/data/auth-api.service.ts` interpolated the role enum directly (`UserRole.CREATOR`) into the URL.
+
+**Fix**: Hardcode the path segment to `/auth/register/influencer` in `registerInfluencer()`.
+**Status**: ✅ Fixed (inline, iter 2)
+**Screenshots**: `screenshots/iteration-02/registration/05-influencer-success-magic-link-sent.png`
+
+---
+
+## BUG-MAN-007 — Marketplace wizard rejects seed-style brandId (UUID v4 only)
+
+- **US**: US-120 / US-121
+- **Severity**: Critical
+- **Component**: Backend (DTO validation)
+- **Endpoint / Page**: `POST /api/v1/marketplace/products` → `/business/marketplace/create` Step D "Next"
+- **Persona**: `marketing@yassir.com`
+- **Environment**: local
+
+**Reproduction**
+1. Login as Khadija (yassir brand)
+2. Open `/business/marketplace/create`
+3. Complete Steps A–D
+4. Click "Next" at Step D → draft POST is fired
+5. Observe: 400 Bad Request `brandId must be a UUID`
+
+**Expected**: 201 Created (draft saved).
+**Observed**: 400 — payload contains `brandId: "b_yassir_001"` (the seed-style brand id).
+
+**Root cause**: `CreateMarketplaceProductDto.brandId` had `@IsUUID('4')`. Seed uses `b_<slug>_NNN`.
+
+**Fix**: Replace `@IsUUID('4')` with `@IsString() @MinLength(1) @MaxLength(64)` (and the same for `UpdateMarketplaceProductDto.brandId` BRAND_INFO section). Updated `@ApiProperty` description.
+**Status**: ✅ Fixed (inline, iter 2)
+**Screenshots**: `screenshots/iteration-02/brand-yassir/marketplace-create-step5-ready-to-publish.png`, `screenshots/iteration-02/brand-yassir/marketplace-create-published.png`
+
+---
+
+## BUG-MAN-008 — `taggedAccount` input auto-prepends `@` causing `@@` double-prefix
+
+- **US**: US-120
+- **Severity**: Major (UX — pas de blocage si l'utilisateur tape sans `@`)
+- **Component**: Frontend
+- **Endpoint / Page**: `/business/marketplace/create` Step D (Deliverables)
+- **Persona**: `marketing@yassir.com`
+- **Environment**: local
+
+**Reproduction**
+1. Open marketplace wizard, atteindre Step D
+2. Sélectionner une plateforme et un type de contenu
+3. Cliquer le champ "Tagged account" et taper `@yassir`
+4. Observer la valeur `@@yassir`
+5. Click "Next" → 400 `taggedAccount must match /^@[a-zA-Z0-9._]{2,30}$/`
+
+**Expected**: l'input n'auto-prepende qu'une fois, ou strip un `@` initial saisi par l'utilisateur.
+**Observed**: deux `@` empilés → la regex serveur rejette.
+
+**Workaround vérifié** : taper la valeur SANS `@` (ex. `yassir`) → l'input affiche `@yassir`, et le POST passe.
+
+**Fix proposé (non appliqué)** : dans le composant Angular du Deliverable Row, ajouter un `(input)` handler qui supprime tous les `@` du début avant ré-application du préfixe.
+
+**Status**: ❌ Open (workaround documenté)
+**Screenshots**: `screenshots/iteration-02/brand-yassir/marketplace-create-step4-deliverables.png`

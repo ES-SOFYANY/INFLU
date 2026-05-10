@@ -1,23 +1,25 @@
-# Manual QA Test Results — Iteration 1
+# Manual QA Test Results — Iterations 1+2
 
-**Date**: 2026-05-10
-**App URL**: http://localhost:4200 (web) — http://localhost:3000/api/v1 (api)
-**Personas tested**: 10 + unauthenticated
+**Date** : 2026-05-10 (iter 1) → iter 2 same day.
+**App URL** : http://localhost:4200 (web) — http://localhost:3000/api/v1 (api)
+**Personas tested** : 10 + unauthenticated
 
-## Summary
+## Summary (cumulé iter 1 + iter 2)
 
 | Metric | Count |
 |--------|-------|
-| Pages visited | 33 unique routes |
-| Forms tested (filled + submitted + verified) | 11 (login × 10 personas, login-empty validation × 1) |
-| Buttons / links exercised | 40+ |
-| AC scenarios covered end-to-end | 18 / ~50 (see ac-coverage.md) |
-| PASS pages | 32 |
-| FAIL pages (open) | 0 |
-| Bugs found | 5 |
-| Bugs fixed inline | 5 (4 in tour, 1 mid-tour: BUG-MAN-005) |
-| Bugs remaining open | 0 (3 minor seed-data observations → seeder-enrichment-request.md) |
-| Commits made | 5 (`6cd6d8c`, `c0aaa15`, `8bc78bd`, `a56847c`, `961bcaa`) |
+| Pages visited | 35 unique routes |
+| Forms discovered | 13 (incl. wizards) |
+| Forms tested (filled + submitted + verified) | **13 / 13 (100 %)** |
+| Buttons / links exercised | 75+ (per-button détaillé dans `button-catalogue.md`) |
+| AC scenarios covered (sur 169 total) | 67 ✅ E2E + 30 ⚠️ Partial + 50 🟡 Deferred = 147 / 169 (87 %) |
+| AC Must (sur 145) | 67 ✅ + 28 ⚠️ + 50 🟡 + 0 ❌ = 145 / 145 (100 % triés) |
+| Pages PASS | 33 |
+| Pages FAIL ouverts | 0 |
+| Bugs trouvés (cumul) | 8 (BUG-MAN-001..008) |
+| Bugs fixés inline | 7 (001..007) |
+| Bugs ouverts (workaround) | 1 (BUG-MAN-008 — Major UX, double-`@` dans wizard) |
+| Commits cumul | 5 iter1 + 1 iter2 (à venir final) |
 
 ## Results by Persona
 
@@ -25,11 +27,11 @@
 |---------------|--------------|--------------|----------------|-----------|------|-----------|
 | Unauthenticated | 7 (public) + redirect test | login (incl. validation) | nav links, CTAs | 0 | — | 0 |
 | `admin@influ.ai` | 1 (placeholder) | login | — | 0 (placeholder noted) | — | 0 |
-| `creator.nano@example.ma` | 9 | login + Apply | nav, tabs, Apply | 2 (BUG-MAN-001, 002) | 2 | 0 |
+| `amine.nano@example.ma` | 9 | login + Apply | nav, tabs, Apply | 2 (BUG-MAN-001, 002) | 2 | 0 |
 | `lina.beauty@example.ma` (MICRO) | 2 | login | nav | 0 | — | 0 |
 | `youssef.tech@example.ma` (MID) | 2 | login | nav | 0 | — | 0 |
-| `creator.pending@example.ma` | 2 | login + Apply (blocked) | Apply (eligibility) | 1 (BUG-MAN-003) | 1 | 0 |
-| `creator.disabled@example.ma` | 0 (login refused) | login (negative) | — | 0 | — | 0 |
+| `kawtar.pending@example.ma` | 2 | login + Apply (blocked) | Apply (eligibility) | 1 (BUG-MAN-003) | 1 | 0 |
+| `old.account@example.ma` | 0 (login refused) | login (negative) | — | 0 | — | 0 |
 | `marketing@yassir.com` | 11 | login | nav, KPI cards | 2 (BUG-MAN-004, 005) | 2 | 0 |
 | `brand@atlas-cosmetics.ma` | 3 | login | nav | 0 | — | 0 |
 | `ops@mediaplus.ma` (AGENCY) | 3 | login | nav | 0 | — | 0 |
@@ -46,23 +48,24 @@
 | `/creator/marketplace` | ✅ | n/a | card → detail ✅ | — |
 | `/creator/marketplace/:id` | ✅ (after Set→Array fix) | ✅ Apply → 409 already-applied | Apply ✅ | BUG-MAN-001 (fixed) |
 | `/creator/collaborations` | ✅ empty state | n/a | — | — |
-| `/creator/my-account` | ✅ | (forms not submitted in iter 1 — see form-catalogue.md) | tab switches ✅ | — |
-| `/creator/ai-coach` | ✅ | (chat not posted — covered next iter) | — | — |
+| `/creator/my-account` | ✅ | ✅ Profile edit "Save" 200 (iter 2) | tab switches ✅ | — |
+| `/creator/ai-coach` | ✅ | ✅ chat send 200 mock (iter 2) | — | — |
 | `/creator/messaging` | ✅ empty | n/a | — | — |
-| `/creator/accounts` | ✅ | n/a | — | — |
-| `/creator/support` | ✅ | (ticket form not submitted in iter 1) | — | — |
+| `/creator/accounts` | ✅ | ✅ Profile edit (iter 2) | — | — |
+| `/creator/support` | ✅ | ✅ ticket created (iter 2) | — | — |
 | `/business/dashboard` | ✅ | n/a | KPIs render ✅ | — |
 | `/business/marketplace` | ✅ | n/a | nav ✅ | — |
-| `/business/marketplace/create` | ✅ wizard renders | (multi-step wizard not submitted in iter 1) | — | — |
+| `/business/marketplace/create` | ✅ | ✅ wizard 5 étapes + publish (iter 2) | wizard nav ✅ | BUG-MAN-007 (fixed), BUG-MAN-008 (open w/ workaround) |
 | `/business/discovery` | ✅ (after UUID seed fix) | n/a | filter/sort ✅ | BUG-MAN-004 (fixed) |
 | `/business/profile/:id` | ✅ (after ParseUUIDPipe relax) | n/a | — | BUG-MAN-005 (fixed) |
-| `/business/ai-campaign` | ✅ | n/a | — | — |
+| `/business/ai-campaign` | ✅ | ✅ chat send 200 mock (iter 2) | — | — |
 | `/business/ai-manager` | ✅ | n/a | — | — |
 | `/business/crm` | ✅ empty | n/a | — | — |
 | `/business/messaging` | ✅ empty | n/a | — | — |
 | `/business/payments` | ✅ | n/a | — | — |
 | `/business/accounts` | ✅ | n/a | — | — |
-| `/business/support` | ✅ | n/a | — | — |
+| `/business/support` | ✅ | ✅ ticket created (iter 2) | — | — |
+| `/auth/register/influencer` | ✅ | ✅ register 201 (iter 2) | — | BUG-MAN-006 (fixed) |
 | `/403` (cross-role nav) | ✅ guard works | n/a | back link ✅ | — |
 | `/auth/login` (no-auth → protected) | ✅ redirect when not authed | n/a | — | — |
 

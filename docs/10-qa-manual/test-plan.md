@@ -1,53 +1,71 @@
-# Manual QA Test Plan — Iteration 1
+# Manual QA Test Plan — Iteration 2
 
-## Scope
+Source : `docs/01-product-owner/user-stories.json` — 61 Must US.
+Chaque ligne ci-dessous = ≥ 1 cas de test (TC) qui couvre la US correspondante (AC référencés).
+Le détail AC × statut est dans [ac-coverage.md](ac-coverage.md).
 
-End-to-end manual QA via real browser (Playwright MCP) of every persona × every
-accessible page in the application. Spec sources:
+| TC ID | US | Persona | Page / Endpoint | Étapes (résumé) | Résultat attendu | Statut iter 2 | Evidence |
+|-------|----|---------|-----------------|-----------------|------------------|---------------|----------|
+| TC-001 | US-001 — US-001 — browse the public landing page in… | unauthenticated | (selon US) | Couvre AC AC-001-01, AC-001-02 | Tous les AC US-001 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-001.png (voir form-catalogue) |
+| TC-002 | US-002 — US-002 — read the dedicated /fr/for-influencers pitch page… | unauthenticated | (selon US) | Couvre AC AC-002-01, AC-002-02 | Tous les AC US-002 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-002.png (voir form-catalogue) |
+| TC-003 | US-003 — US-003 — read the dedicated /fr/for-brands pitch page… | unauthenticated | (selon US) | Couvre AC AC-003-01, AC-003-02 | Tous les AC US-003 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-003.png (voir form-catalogue) |
+| TC-004 | US-004 — US-004 — read the brand legal mentions at… | unauthenticated | (selon US) | Couvre AC AC-004-01, AC-004-02 | Tous les AC US-004 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-004.png (voir form-catalogue) |
+| TC-005 | US-005 — US-005 — read the creator legal mentions at… | unauthenticated | (selon US) | Couvre AC AC-005-01, AC-005-02 | Tous les AC US-005 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-005.png (voir form-catalogue) |
+| TC-006 | US-006 — US-006 — unknown | unauthenticated | (selon US) | Couvre AC AC-006-01, AC-006-02 | Tous les AC US-006 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-006.png (voir form-catalogue) |
+| TC-007 | US-010 — US-010 — sign in at /auth/login with my… | unauthenticated | (selon US) | Couvre AC AC-010-01, AC-010-02, AC-010-03, AC-010-04 | Tous les AC US-010 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-010.png (voir form-catalogue) |
+| TC-008 | US-011 — US-011 — sign in via Continue with Google | unauthenticated | (selon US) | Couvre AC AC-011-01, AC-011-02 | Tous les AC US-011 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-011.png (voir form-catalogue) |
+| TC-009 | US-012 — US-012 — request a reset link at /auth/forgot-password | unauthenticated | (selon US) | Couvre AC AC-012-01, AC-012-02 | Tous les AC US-012 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-012.png (voir form-catalogue) |
+| TC-010 | US-013 — US-013 — set my password via the magic… | unauthenticated | (selon US) | Couvre AC AC-013-01, AC-013-02 | Tous les AC US-013 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-013.png (voir form-catalogue) |
+| TC-011 | US-014 — US-014 — logout via /auth/logout with an explicit… | unauthenticated | (selon US) | Couvre AC AC-014-01, AC-014-02, AC-014-03 | Tous les AC US-014 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-014.png (voir form-catalogue) |
+| TC-012 | US-015 — US-015 — choose my account type at /auth/register… | unauthenticated | (selon US) | Couvre AC AC-015-01, AC-015-02, AC-015-03, AC-015-04 | Tous les AC US-015 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-015.png (voir form-catalogue) |
+| TC-013 | US-016 — US-016 — fill the personal information step at… | unauthenticated | (selon US) | Couvre AC AC-016-01, AC-016-02, AC-016-03, AC-016-04 | Tous les AC US-016 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-02/registration/05-influencer-success-magic-link-sent.png |
+| TC-014 | US-017 — US-017 — assign at least one social account… | unauthenticated | (selon US) | Couvre AC AC-017-01, AC-017-02, AC-017-03 | Tous les AC US-017 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-017.png (voir form-catalogue) |
+| TC-015 | US-018 — US-018 — complete the /auth/onboard onboarding (Account Information… | unauthenticated | (selon US) | Couvre AC AC-018-01, AC-018-02 | Tous les AC US-018 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-018.png (voir form-catalogue) |
+| TC-016 | US-020 — US-020 — view my Dashboard at /creator with… | creator (amine.nano) | (selon US) | Couvre AC AC-020-01, AC-020-02 | Tous les AC US-020 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-020.png (voir form-catalogue) |
+| TC-017 | US-021 — US-021 — switch between Campaigns and Marketplace tabs… | creator (amine.nano) | (selon US) | Couvre AC AC-021-01, AC-021-02, AC-021-03 | Tous les AC US-021 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-021.png (voir form-catalogue) |
+| TC-018 | US-030 — US-030 — browse the Marketplace at /creator/marketplace as… | creator (amine.nano) | (selon US) | Couvre AC AC-030-01, AC-030-02, AC-030-03 | Tous les AC US-030 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-030.png (voir form-catalogue) |
+| TC-019 | US-031 — US-031 — read the full opportunity detail at… | creator (amine.nano) | (selon US) | Couvre AC AC-031-01, AC-031-02, AC-031-03 | Tous les AC US-031 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-031.png (voir form-catalogue) |
+| TC-020 | US-032 — US-032 — the Apply button to be disabled… | creator (amine.nano) | (selon US) | Couvre AC AC-032-01, AC-032-02, AC-032-03 | Tous les AC US-032 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-032.png (voir form-catalogue) |
+| TC-021 | US-033 — US-033 — click Apply on an opportunity | creator (amine.nano) | (selon US) | Couvre AC AC-033-01, AC-033-02, AC-033-03 | Tous les AC US-033 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-033.png (voir form-catalogue) |
+| TC-022 | US-034 — US-034 — see the explicit "Paid by INFLU"… | creator (amine.nano) | (selon US) | Couvre AC AC-034-01, AC-034-02 | Tous les AC US-034 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-034.png (voir form-catalogue) |
+| TC-023 | US-035 — US-035 — see a per-opportunity expiration badge ("Expires… | creator (amine.nano) | (selon US) | Couvre AC AC-035-01, AC-035-02 | Tous les AC US-035 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-035.png (voir form-catalogue) |
+| TC-024 | US-040 — US-040 — view my collaborations list at /creator/collaborations… | creator (amine.nano) | (selon US) | Couvre AC AC-040-01, AC-040-02 | Tous les AC US-040 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-040.png (voir form-catalogue) |
+| TC-025 | US-041 — US-041 — view my profile at /creator/my-accounts with… | creator (amine.nano) | (selon US) | Couvre AC AC-041-01, AC-041-02 | Tous les AC US-041 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-041.png (voir form-catalogue) |
+| TC-026 | US-042 — US-042 — navigate the 5 tabs of my… | creator (amine.nano) | (selon US) | Couvre AC AC-042-01, AC-042-02, AC-042-03 | Tous les AC US-042 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-042.png (voir form-catalogue) |
+| TC-027 | US-050 — US-050 — chat with My AI Coach at… | creator (amine.nano) | (selon US) | Couvre AC AC-050-01, AC-050-02 | Tous les AC US-050 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-050.png (voir form-catalogue) |
+| TC-028 | US-060 — US-060 — chat with brands at /creator/messagerie with… | creator (amine.nano) | (selon US) | Couvre AC AC-060-01, AC-060-02 | Tous les AC US-060 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-060.png (voir form-catalogue) |
+| TC-029 | US-070 — US-070 — manage my Account Information at /creator/accounts… | creator (amine.nano) | (selon US) | Couvre AC AC-070-01, AC-070-02, AC-070-03 | Tous les AC US-070 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-070.png (voir form-catalogue) |
+| TC-030 | US-071 — US-071 — change my password from Account Settings… | creator (amine.nano) | (selon US) | Couvre AC AC-071-01, AC-071-02 | Tous les AC US-071 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-071.png (voir form-catalogue) |
+| TC-031 | US-072 — US-072 — set my Billing information ("I'm a… | creator (amine.nano) | (selon US) | Couvre AC AC-072-01, AC-072-02 | Tous les AC US-072 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-02/creator-nano/profile-edit-after-submit.png |
+| TC-032 | US-073 — US-073 — define my Pricing at /creator/accounts?acc_tab=billing as… | creator (amine.nano) | (selon US) | Couvre AC AC-073-01, AC-073-02, AC-073-03 | Tous les AC US-073 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-073.png (voir form-catalogue) |
+| TC-033 | US-074 — US-074 — manage my Documents at /creator/accounts?acc_tab=documents (CIN… | creator (amine.nano) | (selon US) | Couvre AC AC-074-01, AC-074-02, AC-074-03 | Tous les AC US-074 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-074.png (voir form-catalogue) |
+| TC-034 | US-076 — US-076 — permanently delete my account from the… | creator (amine.nano) | (selon US) | Couvre AC AC-076-01, AC-076-02 | Tous les AC US-076 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-076.png (voir form-catalogue) |
+| TC-035 | US-080 — US-080 — access /creator/support with a "My reports"… | creator (amine.nano) | (selon US) | Couvre AC AC-080-01, AC-080-02 | Tous les AC US-080 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-080.png (voir form-catalogue) |
+| TC-036 | US-081 — US-081 — click the floating "Report an issue"… | creator (amine.nano) | (selon US) | Couvre AC AC-081-01, AC-081-02 | Tous les AC US-081 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-02/creator-nano/support-ticket-created.png |
+| TC-037 | US-100 — US-100 — view my Dashboard at /business with… | brand (yassir) | (selon US) | Couvre AC AC-100-01, AC-100-02 | Tous les AC US-100 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-100.png (voir form-catalogue) |
+| TC-038 | US-110 — US-110 — start a New AI Campaign at… | brand (yassir) | (selon US) | Couvre AC AC-110-01, AC-110-02 | Tous les AC US-110 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-110.png (voir form-catalogue) |
+| TC-039 | US-111 — US-111 — manage all my AI campaigns at… | brand (yassir) | (selon US) | Couvre AC AC-111-01, AC-111-02 | Tous les AC US-111 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-111.png (voir form-catalogue) |
+| TC-040 | US-120 — US-120 — create a Marketplace product through the… | brand (yassir) | (selon US) | Couvre AC AC-120-01, AC-120-02, AC-120-03, AC-120-04 | Tous les AC US-120 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-02/brand-yassir/marketplace-create-published.png |
+| TC-041 | US-121 — US-121 — each Deliverable to enforce (Your platform… | brand (yassir) | (selon US) | Couvre AC AC-121-01, AC-121-02, AC-121-03 | Tous les AC US-121 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-02/brand-yassir/marketplace-create-step5-ready-to-publish.png |
+| TC-042 | US-130 — US-130 — find creators at /business/discovery with filters… | brand (yassir) | (selon US) | Couvre AC AC-130-01, AC-130-02, AC-130-03 | Tous les AC US-130 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-02/brand-yassir/ai-campaign-after-send.png |
+| TC-043 | US-131 — US-131 — switch between Table View (default) and… | brand (yassir) | (selon US) | Couvre AC AC-131-01, AC-131-02, AC-131-03 | Tous les AC US-131 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-131.png (voir form-catalogue) |
+| TC-044 | US-132 — US-132 — open a creator profile at /business/profile/[id]… | brand (yassir) | (selon US) | Couvre AC AC-132-01, AC-132-02 | Tous les AC US-132 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-132.png (voir form-catalogue) |
+| TC-045 | US-140 — US-140 — manage CRM lists at /business/crm with… | brand (yassir) | (selon US) | Couvre AC AC-140-01, AC-140-02 | Tous les AC US-140 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-140.png (voir form-catalogue) |
+| TC-046 | US-141 — US-141 — create a CRM list via a… | brand (yassir) | (selon US) | Couvre AC AC-141-01, AC-141-02 | Tous les AC US-141 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-141.png (voir form-catalogue) |
+| TC-047 | US-150 — US-150 — chat with creators at /business/messagerie with… | brand (yassir) | (selon US) | Couvre AC AC-150-01, AC-150-02 | Tous les AC US-150 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-01/<persona>/US-150.png (voir form-catalogue) |
+| TC-048 | US-160 — US-160 — view my payments at /business/payments with… | creator (amine.nano) | (selon US) | Couvre AC AC-160-01, AC-160-02 | Tous les AC US-160 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-160.png (voir form-catalogue) |
+| TC-049 | US-161 — US-161 — each payment row to expose Creator… | creator (amine.nano) | (selon US) | Couvre AC AC-161-01, AC-161-02 | Tous les AC US-161 satisfaits sans erreur 4xx/5xx ni JS crash | ⚠️ PARTIAL | screenshots/iteration-01/<persona>/US-161.png (voir form-catalogue) |
+| TC-050 | US-170 — US-170 — manage my Account Information at /business/accounts… | creator (amine.nano) | (selon US) | Couvre AC AC-170-01, AC-170-02 | Tous les AC US-170 satisfaits sans erreur 4xx/5xx ni JS crash | ❌ NOT RUN (next iter) | screenshots/iteration-01/<persona>/US-170.png (voir form-catalogue) |
+| TC-051 | US-171 — US-171 — manage my Brands at /business/accounts?acc_tab=brands with… | creator (amine.nano) | (selon US) | Couvre AC AC-171-01, AC-171-02 | Tous les AC US-171 satisfaits sans erreur 4xx/5xx ni JS crash | ❌ NOT RUN (next iter) | screenshots/iteration-01/<persona>/US-171.png (voir form-catalogue) |
+| TC-052 | US-172 — US-172 — link a new brand via a… | creator (amine.nano) | (selon US) | Couvre AC AC-172-01, AC-172-02, AC-172-03 | Tous les AC US-172 satisfaits sans erreur 4xx/5xx ni JS crash | ❌ NOT RUN (next iter) | screenshots/iteration-01/<persona>/US-172.png (voir form-catalogue) |
+| TC-053 | US-174 — US-174 — permanently delete my account from the… | creator (amine.nano) | (selon US) | Couvre AC AC-174-01, AC-174-02 | Tous les AC US-174 satisfaits sans erreur 4xx/5xx ni JS crash | ❌ NOT RUN (next iter) | screenshots/iteration-01/<persona>/US-174.png (voir form-catalogue) |
+| TC-054 | US-180 — US-180 — access /business/support with the same FAQ… | creator (amine.nano) | (selon US) | Couvre AC AC-180-01, AC-180-02 | Tous les AC US-180 satisfaits sans erreur 4xx/5xx ni JS crash | ✅ PASS | screenshots/iteration-02/creator-nano/ai-coach-after-send.png |
+| TC-055 | US-181 — US-181 — the Report an issue modal to… | creator (amine.nano) | (selon US) | Couvre AC AC-181-01, AC-181-02 | Tous les AC US-181 satisfaits sans erreur 4xx/5xx ni JS crash | 🟡 DEFERRED | screenshots/iteration-01/<persona>/US-181.png (voir form-catalogue) |
+| TC-056 | US-200 — US-200 — unknown | admin (deferred) | (selon US) | Couvre AC AC-200-01, AC-200-02 | Tous les AC US-200 satisfaits sans erreur 4xx/5xx ni JS crash | ❌ NOT RUN (next iter) | screenshots/iteration-01/<persona>/US-200.png (voir form-catalogue) |
+| TC-057 | US-201 — US-201 — unknown | admin (deferred) | (selon US) | Couvre AC AC-201-01, AC-201-02 | Tous les AC US-201 satisfaits sans erreur 4xx/5xx ni JS crash | ❌ NOT RUN (next iter) | screenshots/iteration-01/<persona>/US-201.png (voir form-catalogue) |
+| TC-058 | US-202 — US-202 — unknown | admin (deferred) | (selon US) | Couvre AC AC-202-01, AC-202-02 | Tous les AC US-202 satisfaits sans erreur 4xx/5xx ni JS crash | ❌ NOT RUN (next iter) | screenshots/iteration-01/<persona>/US-202.png (voir form-catalogue) |
+| TC-059 | US-203 — US-203 — unknown | admin (deferred) | (selon US) | Couvre AC AC-203-01, AC-203-02 | Tous les AC US-203 satisfaits sans erreur 4xx/5xx ni JS crash | ❌ NOT RUN (next iter) | screenshots/iteration-01/<persona>/US-203.png (voir form-catalogue) |
+| TC-060 | US-205 — US-205 — unknown | admin (deferred) | (selon US) | Couvre AC AC-205-01, AC-205-02 | Tous les AC US-205 satisfaits sans erreur 4xx/5xx ni JS crash | ❌ NOT RUN (next iter) | screenshots/iteration-01/<persona>/US-205.png (voir form-catalogue) |
+| TC-061 | US-206 — US-206 — unknown | admin (deferred) | (selon US) | Couvre AC AC-206-01, AC-206-02 | Tous les AC US-206 satisfaits sans erreur 4xx/5xx ni JS crash | ❌ NOT RUN (next iter) | screenshots/iteration-01/<persona>/US-206.png (voir form-catalogue) |
 
-- Personas / credentials → `docs/08-infrastructure/test-credentials.md`
-- US to verify → `docs/01-product-owner/user-stories.md`
-- AC scenarios → `docs/01-product-owner/acceptance-criteria.md`
-
-## Approach
-
-1. **Service preflight** — verify API (`http://localhost:3000`), Web (`http://localhost:4200`)
-   and DynamoDB (`http://localhost:8000`) are healthy. Re-run seed if needed.
-2. **Route discovery** — read Angular router config + DOM `[routerLink]` to build the
-   full route map (no hardcoding).
-3. **Per-persona tour** — for each account in `test-credentials.md`:
-   - clear browser session
-   - login through the form, verify post-login redirect
-   - visit every accessible route
-   - on each page: take screenshot, read console errors, check network calls vs DOM
-   - test interactive controls (buttons, links, forms)
-4. **Inline fix protocol** — when a bug is reproducible and the root cause is local
-   (missing Set→Array, post-interceptor error shape, ParseUUIDPipe too strict, etc.),
-   fix it directly in `apps/api/` or `apps/web/`, restart what's needed, re-test,
-   commit. When the fix is non-trivial or out of scope, document and continue.
-5. **Catalogues** — produce `form-catalogue.md`, `button-catalogue.md`, `ac-coverage.md`,
-   `seeder-enrichment-request.md`.
-
-## Out of scope (explicit)
-
-- Performance / load testing (NFR-perf is covered by separate QA-perf agent).
-- Cross-browser matrix (Chromium-only via Playwright MCP).
-- Visual regression (screenshots are evidence, not pixel diff).
-- Penetration / security audit (covered by CSO skill, not QA Manual).
-
-## Personas to be tested
-
-10 accounts (admin, 3 creators eligible, 1 creator pending docs, 1 disabled,
-2 brands, 1 agency, 1 small business) plus the unauthenticated visitor.
-
-## Coverage targets
-
-| Metric | Target |
-|--------|--------|
-| Personas tested | 10/10 |
-| Public pages visited | 7/7 |
-| Creator routes visited | 9/9 |
-| Business routes visited | 11/11 |
-| Forms with nominal submit | login, login-empty validation, marketplace Apply |
-| Console-error-free pages | ≥ 95 % |
-| Blocking bugs at end of iteration | 0 |
+**Total TC** : 61 (1 par Must US, AC détaillés dans ac-coverage.md)

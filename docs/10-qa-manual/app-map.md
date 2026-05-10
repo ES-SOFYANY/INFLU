@@ -43,11 +43,11 @@ validated by visiting each one with at least one persona.
 | Persona | Email | Role | Eligible? | Post-login redirect |
 |---------|-------|------|-----------|---------------------|
 | Admin | `admin@influ.ai` | ADMIN | n/a | `/admin` |
-| Creator NANO | `creator.nano@example.ma` | CREATOR | ✅ | `/creator/dashboard` |
+| Creator NANO | `amine.nano@example.ma` | CREATOR | ✅ | `/creator/dashboard` |
 | Creator MICRO | `lina.beauty@example.ma` | CREATOR | ✅ | `/creator/dashboard` |
 | Creator MID | `youssef.tech@example.ma` | CREATOR | ✅ | `/creator/dashboard` |
-| Creator PENDING | `creator.pending@example.ma` | CREATOR | ❌ (CIN PENDING) | `/creator/dashboard` |
-| Creator DISABLED | `creator.disabled@example.ma` | CREATOR | n/a (disabled) | login fails 401 "Account is not active" |
+| Creator PENDING | `kawtar.pending@example.ma` | CREATOR | ❌ (CIN PENDING) | `/creator/dashboard` |
+| Creator DISABLED | `old.account@example.ma` | CREATOR | n/a (disabled) | login fails 401 "Account is not active" |
 | Business (Yassir) | `marketing@yassir.com` | BUSINESS | ✅ | `/business/dashboard` |
 | Business (Atlas) | `brand@atlas-cosmetics.ma` | BUSINESS | ✅ | `/business/dashboard` |
 | Agency (MediaPlus) | `ops@mediaplus.ma` | AGENCY | ✅ | `/business/dashboard` |
