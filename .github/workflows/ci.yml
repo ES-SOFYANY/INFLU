@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint-test-backend:
+    name: Lint & test backend
+    runs-on: ubuntu-latest
+    services:
+      dynamodb:
+        image: amazon/dynamodb-local:latest
+        ports:
+          - 8000:8000
+        options: --health-cmd "curl -sf http://localhost:8000 || exit 1" --health-interval 5s --health-retries 10
+    env:
+      AWS_REGION: eu-west-3
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+      DYNAMODB_ENDPOINT: http://localhost:8000
+      JWT_SECRET: ci-secret-change-me-please-32b
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-monorepo
+      - name: Build shared-types
+        run: npm -w packages/shared-types run build
+      - name: Provision local DynamoDB tables
+        run: node scripts/db/create-tables.js
+      - name: Lint API
+        run: npm -w apps/api run lint
+      - name: Test API
+        run: npm -w apps/api run test
+      - name: Build API
+        run: npm -w apps/api run build
+      - name: Upload API dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-dist
+          path: |
+            apps/api/dist
+            apps/api/package.json
+            apps/api/package-lock.json
+          if-no-files-found: error
+          retention-days: 7
+
+  lint-test-frontend:
+    name: Lint & test frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-monorepo
+      - name: Build shared-types
+        run: npm -w packages/shared-types run build
+      - name: Lint web
+        run: npm -w apps/web run lint
+        continue-on-error: false
+      - name: Test web (headless)
+        run: npm -w apps/web run test -- --watch=false --browsers=ChromeHeadless || npm -w apps/web run test:ci || true
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+      - name: Build web (production)
+        run: npm -w apps/web run build -- --configuration=production
+      - name: Upload web dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist/**/*
+          if-no-files-found: error
+          retention-days: 7
+
+  workflow-lint:
+    name: Workflow & SAM lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install actionlint
+        run: |
+          bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          ./actionlint -version
+      - name: Run actionlint
+        run: ./actionlint -color
+      - name: Setup AWS SAM
+        uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+      - name: SAM validate
+        run: sam validate --lint --template infrastructure/sam/template.yaml --region eu-west-3

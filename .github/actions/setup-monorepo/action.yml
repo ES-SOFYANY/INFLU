@@ -1,0 +1,23 @@
+name: Setup monorepo
+description: Checkout, install Node + npm deps with cache for the INFLU.ai monorepo.
+
+inputs:
+  node-version:
+    description: Node.js version
+    required: false
+    default: '20.11.1'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: npm
+        cache-dependency-path: |
+          package-lock.json
+
+    - name: Install workspace dependencies
+      shell: bash
+      run: npm ci --no-audit --no-fund
