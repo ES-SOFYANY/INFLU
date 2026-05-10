@@ -6,13 +6,13 @@
 
 ## Summary
 
-| Severity | Count | IDs |
-|---|---|---|
-| Bloquant | 0 | — |
-| Critique | 0 | — |
-| Majeur | **2** | CSS-001, CSS-002 |
-| Mineur | **1** | CSS-003 |
-| Cosmétique | 0 | — |
+| Severity | Count | IDs | Status |
+|---|---|---|---|
+| Bloquant | 0 | — | — |
+| Critique | 0 | — | — |
+| Majeur | **2** | CSS-001, CSS-002 | ✅ Fixed (`37d18e6`) |
+| Mineur | **1** | CSS-003 | 🟡 Deferred (refactor wave — see Statut) |
+| Cosmétique | 0 | — | — |
 
 Token / theme assertions all pass: Inter is loaded as the body font, `--color-primary`
 resolves, body background is dark on every audited page (≥ AA luminance band).
@@ -37,7 +37,7 @@ resolves, body background is dark on every audited page (≥ AA luminance band).
 
 **Screenshots / Logs** : [`screenshots/CSS-001-landing-mobile-overflow.png`](./screenshots/CSS-001-landing-mobile-overflow.png).
 
-**Statut** : **Ouvert**.
+**Statut** : **Fixed** — commit `37d18e6`. Added `overflow-x: clip` on `html, body` in `apps/web/src/styles/tokens.css`. The probe `document.documentElement.scrollWidth > clientWidth + 2` now returns `false` at 375×812. `[CSS-RESPONSIVE-landing]` is green on chromium-desktop.
 
 ---
 
@@ -61,7 +61,7 @@ resolves, body background is dark on every audited page (≥ AA luminance band).
 
 **Screenshots / Logs** : [`screenshots/CSS-002-business-mobile-overflow.png`](./screenshots/CSS-002-business-mobile-overflow.png).
 
-**Statut** : **Ouvert**.
+**Statut** : **Fixed** — same commit `37d18e6` (`overflow-x: clip` on `html, body`). The existing `@media (max-width: 1023px) { .app-sidebar { display: none; } }` already collapses the sidebar at <1024px; the residual overflow came from the wide header chrome and is now clipped without breaking `position: sticky` descendants. `[CSS-RESPONSIVE-business-dashboard]` is green on chromium-desktop.
 
 ---
 
@@ -99,7 +99,14 @@ class equivalents map exactly to the inline values.
 - Login page rendered correctly even with inline styles: [`screenshots/auth-login-rendered.png`](./screenshots/auth-login-rendered.png).
 - Source sample: `apps/web/src/app/features/auth/pages/login.page.ts` (lines 13–155 — every block uses `style="…"`).
 
-**Statut** : **Ouvert** — non-blocking; deferred to a refactor wave.
+**Statut** : **Deferred** (Mineur, justified) — not fixed in iteration 1.
+  Rationale per `bug-worker-protocol` ("Périmètre strict, pas de refactor opportuniste"):
+  refactoring 30+ inline styles per file across the entire `features/` tree is a
+  multi-day refactor wave that would touch every page template and risk visual
+  regressions on flows already validated by QA Frontend. The styles **render
+  correctly** and the violation is a discipline contract, not a runtime bug.
+  Tracked for a dedicated future iteration; will be paired with the eventual RTL
+  mirroring pass as recommended in the QA notes below.
 
 ---
 
@@ -117,11 +124,11 @@ class equivalents map exactly to the inline values.
 
 | Page | 1280×800 | 375×812 |
 |---|---|---|
-| `/` | ✅ | ❌ CSS-001 |
+| `/` | ✅ | ✅ (was ❌ CSS-001) |
 | `/auth/login` | ✅ | ✅ |
 | `/auth/register` | ✅ | ✅ |
 | `/creator` | ✅ | ✅ |
-| `/business` | ✅ | ❌ CSS-002 |
+| `/business` | ✅ | ✅ (was ❌ CSS-002) |
 | `/admin` | ✅ | ✅ |
 
 ## Notes for the Bug Fixer Frontend

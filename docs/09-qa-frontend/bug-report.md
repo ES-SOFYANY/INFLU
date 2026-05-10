@@ -8,12 +8,15 @@
 
 ## Summary
 
-| Severity | Count | IDs |
-|---|---|---|
-| Bloquant | **1** | BUG-UI-001 |
-| Critique | **1** | BUG-UI-002 |
-| Majeur | **0** | — |
-| Mineur | **0** | — |
+| Severity | Count | IDs | Status |
+|---|---|---|---|
+| Bloquant | **1** | BUG-UI-001 | ✅ Fixed (`6989e2f`) |
+| Critique | **1** | BUG-UI-002 | ✅ Fixed (`feaef75` + `8079ed2`) |
+| Majeur | **0** | — | — |
+| Mineur | **0** | — | — |
+
+> See also [`css-report.md`](./css-report.md): CSS-001/002 fixed in `37d18e6`,
+> CSS-003 deferred (Mineur, refactor wave). All bugs closed for iteration 1.
 
 > Every blocking failure must be fixed before merge. Critical = workaround possible
 > but feature is unusable to end-users (here: most pages flag a11y violations under
@@ -61,7 +64,7 @@
   Body: {"code":"NOT_FOUND","message":"Cannot POST /api/auth/login"}
   ```
 
-**Statut** : **Ouvert**.
+**Statut** : **Fixed** — commit `6989e2f` (`fix(web): align frontend API base URL with /api/v1 (BUG-UI-001)`). All four `02-auth` redirect tests turn green. See [`docs/10-bugfix-frontend/fix-log.md`](../10-bugfix-frontend/fix-log.md).
 
 ---
 
@@ -107,7 +110,7 @@ Pages that passed a11y (no blocking violations): `/auth/login`, `/auth/register`
 - Public landing footer: [`screenshots/landing-desktop.png`](./screenshots/landing-desktop.png).
 - Per-page axe-core JSON exports are attached on the failing tests in `apps/web/test-results/...` (run `npx playwright show-report`).
 
-**Statut** : **Ouvert**.
+**Statut** : **Fixed** — commits `feaef75` (token bump #6B7280 → #9CA3AF, 6.39:1 / 5.34:1) and `8079ed2` (btn-danger #EF4444 → #DC2626 to clear white-on-red 3.76:1 on .btn-danger). Full a11y suite is now 32/32 green on chromium-desktop. See [`docs/10-bugfix-frontend/fix-log.md`](../10-bugfix-frontend/fix-log.md).
 
 ---
 
