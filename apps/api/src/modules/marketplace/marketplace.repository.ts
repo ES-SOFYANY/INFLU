@@ -134,6 +134,14 @@ export class MarketplaceRepository {
       GSI4SK: _g4s,
       ...rest
     } = res.Item;
+    // BUG-MAN-001 fix: DynamoDB SS (string set) is returned as a JS Set by the
+    // Document Client. JSON.stringify(Set) yields '{}', breaking @for in the
+    // frontend. Normalize to a plain array here.
+    if (rest.hashtags instanceof Set) {
+      rest.hashtags = Array.from(rest.hashtags as Set<string>);
+    } else if (rest.hashtags == null) {
+      rest.hashtags = [];
+    }
     return rest as unknown as MarketplaceProductRecord;
   }
 
@@ -173,6 +181,11 @@ export class MarketplaceRepository {
           GSI4SK: _g4s,
           ...rest
         } = it;
+        if (rest.hashtags instanceof Set) {
+          rest.hashtags = Array.from(rest.hashtags as Set<string>);
+        } else if (rest.hashtags == null) {
+          rest.hashtags = [];
+        }
         all.push(rest as unknown as MarketplaceProductRecord);
       }
       cursor = res.LastEvaluatedKey;
@@ -345,6 +358,11 @@ export class MarketplaceRepository {
           GSI4SK: _g4s,
           ...rest
         } = it;
+        if (rest.hashtags instanceof Set) {
+          rest.hashtags = Array.from(rest.hashtags as Set<string>);
+        } else if (rest.hashtags == null) {
+          rest.hashtags = [];
+        }
         all.push(rest as unknown as MarketplaceProductRecord);
       }
       cursor = res.LastEvaluatedKey;
