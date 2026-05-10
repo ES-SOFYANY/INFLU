@@ -18,6 +18,7 @@ import { I18nService, type Locale } from '../../core/i18n/i18n.service';
 import { BusinessApiService } from './data/business-api.service';
 import { CrmAddDialogHostComponent } from './components/crm-add-dialog-host.component';
 import { NotificationsBellComponent } from '../../shared/notifications/notifications-bell.component';
+import { ReportIssueButtonComponent } from '../support/components/report-issue-button.component';
 
 /**
  * US-101 — Global influencer search (header combobox).
@@ -34,6 +35,7 @@ import { NotificationsBellComponent } from '../../shared/notifications/notificat
     FormsModule,
     CrmAddDialogHostComponent,
     NotificationsBellComponent,
+    ReportIssueButtonComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -243,6 +245,9 @@ import { NotificationsBellComponent } from '../../shared/notifications/notificat
 
     <!-- US-142: shared "Add to CRM" dialog host -->
     <app-crm-add-dialog-host />
+
+    <!-- US-181 — global floating "Report an issue" button -->
+    <app-report-issue-button />
   `,
 })
 export class BusinessLayoutPage {

@@ -1,16 +1,23 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
 
+import { ErrorPageComponent } from './error-page.component';
+
+/**
+ * US-202 — Generic 500 error page with a Retry / Back home CTA.
+ */
 @Component({
   selector: 'app-server-error-page',
   standalone: true,
-  imports: [TranslateModule],
+  imports: [ErrorPageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="mx-auto max-w-6xl px-6 py-12">
-      <h1 class="text-3xl font-semibold text-text-primary">500 — Server error</h1>
-      <p class="mt-2 text-text-secondary">Placeholder — to be implemented by Story Implementer.</p>
-    </section>
+    <app-error-page
+      code="500"
+      icon="⚠️"
+      title="Something went wrong"
+      message="An unexpected error occurred. We've been notified and are looking into it."
+      [showRetry]="true"
+    />
   `,
 })
 export class ServerErrorPage {}

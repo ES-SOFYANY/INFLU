@@ -5,6 +5,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { AuthApiService } from '../auth/data/auth-api.service';
 import { I18nService, type Locale } from '../../core/i18n/i18n.service';
 import { NotificationsBellComponent } from '../../shared/notifications/notifications-bell.component';
+import { ReportIssueButtonComponent } from '../support/components/report-issue-button.component';
 
 /**
  * US-023 — Creator shell layout (sidebar + top header).
@@ -14,7 +15,7 @@ import { NotificationsBellComponent } from '../../shared/notifications/notificat
 @Component({
   selector: 'app-creator-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, NotificationsBellComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, NotificationsBellComponent, ReportIssueButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <a class="skip-link" href="#main">Skip to content</a>
@@ -145,6 +146,9 @@ import { NotificationsBellComponent } from '../../shared/notifications/notificat
 
       <router-outlet />
     </div>
+
+    <!-- US-081 — global floating "Report an issue" button -->
+    <app-report-issue-button />
   `,
 })
 export class CreatorLayoutPage {

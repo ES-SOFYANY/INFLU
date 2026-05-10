@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
 
+import { SupportPage } from '../../support/components/support.page';
+
+/**
+ * US-080 — Support page for creators (/creator/support).
+ * Wraps the shared SupportPage component (US-180 reuses the same one).
+ */
 @Component({
   selector: 'app-creator-support-page',
   standalone: true,
-  imports: [TranslateModule],
+  imports: [SupportPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <section class="mx-auto max-w-6xl px-6 py-12">
-      <h1 class="text-3xl font-semibold text-text-primary">Support</h1>
-      <p class="mt-2 text-text-secondary">Placeholder — to be implemented by Story Implementer.</p>
-    </section>
-  `,
+  template: `<app-support-page />`,
 })
 export class CreatorSupportPage {}
