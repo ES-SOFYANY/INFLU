@@ -89,6 +89,39 @@ must be either **resolved** (implementation aligned to contract) or
 | **Reason** | Parent agent instruction (Wave 2 brief, US-017): MVP runs against a **mock** OAuth provider (no real Instagram/YouTube/TikTok/Twitter app yet). The frontend simulates the popup and forwards the `oauthCode` to the backend. This avoids hosting a `/social/{platform}/callback` redirect URL during MVP. |
 | **Resolution plan** | Tech Lead to revise `openapi.yaml`: change `link` to `POST` with body `{ oauthCode }` returning `SocialAccount`. When real providers are wired, add the optional `OAuthAuthorizeResponse` flow as `POST /creator/me/social-accounts/{platform}/link/start`. |
 
+### DRIFT-100 — Business `/me` shape and `BusinessDashboardKpis`
+
+| Field | Status |
+|---|---|
+| **Endpoints** | `GET /business/me`, `PATCH /business/me`, `DELETE /business/me`, `POST /business/me/password/change`, `GET /business/me/dashboard-kpis` (US-100, US-170, US-174) |
+| **Contract** | `BusinessProfile` flat (`companyName`, `juridicalForm`, `ice`, `if`, `rc`, `tva` at top level). `BusinessDashboardKpis { activeCampaigns, publishedProducts, pendingApplications, validatedDeliverables, totalSpentMad, scheduledPaymentsMad, unreadMessages, unreadNotifications }`. No `POST /business/me/password/change` declared. |
+| **Implementation** | `BusinessAccountInfoDto { accountType: 'BUSINESS_ACCOUNT', email, fullName, gender?, phone?, address?, businessInfo: { juridicalForm, ice, companyName, companyAddress, ifNumber, rc, tva } }`. `BusinessDashboardKpisDto { numberOfCampaigns, active, draft, onHold, completed, currency: 'MAD' }`. Adds `POST /business/me/password/change`. |
+| **Severity** | Medium — names of fields and KPI semantics differ; password endpoint is new |
+| **Reason** | Parent agent specification for US-170 / US-100 / US-174: dashboard KPIs are **campaign counters by status** (matches AC-100-01 wireframe), and `/business/me` mirrors `/creator/me` with a nested read-only `businessInfo` block to surface the legal entity (US-170 wireframes). Password change parity with `/creator/me/password/change` (US-071). |
+| **Resolution plan** | Tech Lead to refresh `BusinessProfile` schema → `BusinessAccountInfo` (nested `businessInfo`), refresh `BusinessDashboardKpis` → campaign status counters, declare `POST /business/me/password/change` with `ChangePasswordRequest`. |
+
+### DRIFT-101 — `BrandAccess.role` enum
+
+| Field | Status |
+|---|---|
+| **Endpoints** | `GET /business/brands/{id}/access`, `POST /business/brands/{id}/access` (US-173) |
+| **Contract** | `role ∈ { VIEWER, EDITOR, ADMIN }` |
+| **Implementation** | `role ∈ { OWNER, EDITOR, VIEWER }` |
+| **Severity** | Low — enum value differs (`OWNER` vs `ADMIN`) |
+| **Reason** | Parent agent specification for US-173 explicitly lists `OWNER\|EDITOR\|VIEWER`. The owner who first links a brand is granted `OWNER` automatically. |
+| **Resolution plan** | Tech Lead to align `BrandAccess.role` enum to `[OWNER, EDITOR, VIEWER]` in `openapi.yaml`. |
+
+### DRIFT-102 — Brand link endpoint and search hit shape
+
+| Field | Status |
+|---|---|
+| **Endpoints** | `POST /business/brands/link`, `GET /business/brands/search` (US-172) |
+| **Contract** | `POST /business/me/brands` (US-172). `BrandSearchHit` extends `Brand { id, name, logoUrl?, category?, ice?, verified? }`. |
+| **Implementation** | `POST /business/brands/link` (path differs). `BrandSearchHitDto { id, name, socialHandle?, website?, country?, logoUrl?, alreadyLinked }`. |
+| **Severity** | Low — paths and field names differ; semantics equivalent |
+| **Reason** | Parent agent spec: `/business/brands/link` aligns with `/business/brands/...` family. Search hit exposes the fields needed by the wireframe (BRAND/WEBSITE/COUNTRY) instead of `category`/`verified` which are not displayed in the link modal. |
+| **Resolution plan** | Tech Lead to relocate the link endpoint and broaden the `BrandSearchHit` schema in `openapi.yaml`. |
+
 ---
 
 ## Resolved entries

@@ -157,6 +157,128 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/business/brands": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-171] List brands linked to my org */
+        readonly get: operations["BrandController_listBrands"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/brands/{id}/access": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-173] List members with access to a brand */
+        readonly get: operations["BrandController_listAccess"];
+        readonly put?: never;
+        /** [US-173] Grant a brand access to a user */
+        readonly post: operations["BrandController_grantAccess"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/brands/link": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-172] Link an existing brand to my org */
+        readonly post: operations["BrandController_linkBrand"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/brands/search": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-172] Search brand catalogue (max 10 hits) */
+        readonly get: operations["BrandController_searchBrands"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/me": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-170] Get business account information */
+        readonly get: operations["BusinessProfileController_getAccountInfo"];
+        readonly put?: never;
+        readonly post?: never;
+        /** [US-174] Soft-delete my business account */
+        readonly delete: operations["BusinessProfileController_deleteAccount"];
+        readonly options?: never;
+        readonly head?: never;
+        /** [US-170] Update business account info (email + businessInfo are read-only) */
+        readonly patch: operations["BusinessProfileController_updateAccountInfo"];
+        readonly trace?: never;
+    };
+    readonly "/api/business/me/dashboard-kpis": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-100] Read business dashboard KPI counters */
+        readonly get: operations["BusinessProfileController_getDashboardKpis"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/me/password/change": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-170] Change my business account password */
+        readonly post: operations["BusinessProfileController_changePassword"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/api/creator/me": {
         readonly parameters: {
             readonly query?: never;
@@ -414,6 +536,118 @@ export interface components {
             readonly expiresIn: number;
             readonly refreshToken: string;
         };
+        readonly BrandAccessDto: {
+            /** Format: date-time */
+            readonly acceptedAt?: string;
+            /** Format: email */
+            readonly email: string;
+            readonly fullName?: string;
+            /** Format: date-time */
+            readonly invitedAt: string;
+            /** @enum {string} */
+            readonly role: "OWNER" | "EDITOR" | "VIEWER";
+            /** Format: uuid */
+            readonly userId: string;
+        };
+        readonly BrandAccessSummaryDto: {
+            /** @description Total number of members with access */
+            readonly members: number;
+            /**
+             * @description Role of the current caller on this brand
+             * @enum {string}
+             */
+            readonly myRole: "OWNER" | "EDITOR" | "VIEWER";
+        };
+        readonly BrandSearchHitDto: {
+            /** @description True when this brand is already linked to the caller org */
+            readonly alreadyLinked: boolean;
+            /**
+             * @description ISO-3166-1 alpha-2
+             * @example MA
+             */
+            readonly country?: string;
+            /** Format: uuid */
+            readonly id: string;
+            /** Format: uri */
+            readonly logoUrl?: string;
+            readonly name: string;
+            readonly socialHandle?: string;
+            /** Format: uri */
+            readonly website?: string;
+        };
+        readonly BrandSummaryDto: {
+            readonly accessControl: components["schemas"]["BrandAccessSummaryDto"];
+            /**
+             * @description ISO-3166-1 alpha-2
+             * @example MA
+             */
+            readonly country?: string;
+            /** Format: uuid */
+            readonly id: string;
+            /** Format: uri */
+            readonly logoUrl?: string;
+            readonly name: string;
+            /** @description Marketing handle, e.g. @nuxe_official */
+            readonly socialHandle?: string;
+            /** Format: uri */
+            readonly website?: string;
+        };
+        readonly BusinessAccountInfoDto: {
+            /**
+             * @example BUSINESS_ACCOUNT
+             * @enum {string}
+             */
+            readonly accountType: "BUSINESS_ACCOUNT";
+            readonly address?: string;
+            readonly businessInfo: components["schemas"]["BusinessInfoDto"];
+            /**
+             * Format: email
+             * @description Read-only after onboarding
+             */
+            readonly email: string;
+            readonly fullName: string;
+            /** @enum {string} */
+            readonly gender?: "M" | "F";
+            /** @description Moroccan phone format +212XXXXXXXXX */
+            readonly phone?: string;
+        };
+        readonly BusinessDashboardKpisDto: {
+            /** @description Campaigns with status ACTIVE */
+            readonly active: number;
+            /** @description Campaigns with status COMPLETED */
+            readonly completed: number;
+            /**
+             * @example MAD
+             * @enum {string}
+             */
+            readonly currency: "MAD";
+            /** @description Campaigns with status DRAFT */
+            readonly draft: number;
+            /** @description Total number of campaigns owned by this business */
+            readonly numberOfCampaigns: number;
+            /** @description Campaigns with status ON_HOLD */
+            readonly onHold: number;
+        };
+        readonly BusinessInfoDto: {
+            readonly companyAddress: string;
+            readonly companyName: string;
+            /** @description Moroccan ICE — 15 digits */
+            readonly ice: string;
+            /** @description IF — 7 to 9 digits */
+            readonly ifNumber: string;
+            /** @description Juridical form (SARL, SA, AE, …) */
+            readonly juridicalForm: string;
+            /** @description RC — digits only */
+            readonly rc: string;
+            /** @description TVA — digits only */
+            readonly tva: string;
+        };
+        readonly ChangeBusinessPasswordDto: {
+            /** @description Current password */
+            readonly currentPassword: string;
+            /** @description New password — ≥ 8 chars, 1 uppercase, 1 digit */
+            readonly newPassword: string;
+        };
         readonly ChangePasswordDto: {
             /** @description Current password */
             readonly currentPassword: string;
@@ -502,6 +736,12 @@ export interface components {
             /** @description CSRF state token (optional in MVP) */
             readonly state?: string;
         };
+        readonly GrantBrandAccessDto: {
+            /** Format: email */
+            readonly email: string;
+            /** @enum {string} */
+            readonly role: "OWNER" | "EDITOR" | "VIEWER";
+        };
         readonly IceApproveDto: {
             /** @example 000000000000001 */
             readonly ice: string;
@@ -517,6 +757,13 @@ export interface components {
             readonly companyName: string;
             readonly ice: string;
             readonly juridicalForm: string;
+        };
+        readonly LinkBrandDto: {
+            /**
+             * Format: uuid
+             * @description ID of an existing brand
+             */
+            readonly brandId: string;
         };
         readonly LinkSocialAccountDto: {
             /**
@@ -684,6 +931,14 @@ export interface components {
              */
             readonly dateOfExpiry: string;
         };
+        readonly UpdateBusinessAccountInfoDto: {
+            readonly address?: string;
+            readonly fullName?: string;
+            /** @enum {string} */
+            readonly gender?: "M" | "F";
+            /** @description Moroccan phone format +212XXXXXXXXX */
+            readonly phone?: string;
+        };
         readonly UpdateCreatorAccountInfoDto: {
             readonly address?: string;
             readonly fullName?: string;
@@ -748,6 +1003,14 @@ export interface components {
 }
 export type SchemaAuthSessionDto = components['schemas']['AuthSessionDto'];
 export type SchemaAuthTokensDto = components['schemas']['AuthTokensDto'];
+export type SchemaBrandAccessDto = components['schemas']['BrandAccessDto'];
+export type SchemaBrandAccessSummaryDto = components['schemas']['BrandAccessSummaryDto'];
+export type SchemaBrandSearchHitDto = components['schemas']['BrandSearchHitDto'];
+export type SchemaBrandSummaryDto = components['schemas']['BrandSummaryDto'];
+export type SchemaBusinessAccountInfoDto = components['schemas']['BusinessAccountInfoDto'];
+export type SchemaBusinessDashboardKpisDto = components['schemas']['BusinessDashboardKpisDto'];
+export type SchemaBusinessInfoDto = components['schemas']['BusinessInfoDto'];
+export type SchemaChangeBusinessPasswordDto = components['schemas']['ChangeBusinessPasswordDto'];
 export type SchemaChangePasswordDto = components['schemas']['ChangePasswordDto'];
 export type SchemaCinStatusDto = components['schemas']['CinStatusDto'];
 export type SchemaCreatorAccountInfoDto = components['schemas']['CreatorAccountInfoDto'];
@@ -756,9 +1019,11 @@ export type SchemaCreatorDashboardKpisDto = components['schemas']['CreatorDashbo
 export type SchemaCreatorProfileOverviewDto = components['schemas']['CreatorProfileOverviewDto'];
 export type SchemaEmailLocaleDto = components['schemas']['EmailLocaleDto'];
 export type SchemaGoogleCallbackDto = components['schemas']['GoogleCallbackDto'];
+export type SchemaGrantBrandAccessDto = components['schemas']['GrantBrandAccessDto'];
 export type SchemaIceApproveDto = components['schemas']['IceApproveDto'];
 export type SchemaIceSearchDto = components['schemas']['IceSearchDto'];
 export type SchemaIceSearchResultDto = components['schemas']['IceSearchResultDto'];
+export type SchemaLinkBrandDto = components['schemas']['LinkBrandDto'];
 export type SchemaLinkSocialAccountDto = components['schemas']['LinkSocialAccountDto'];
 export type SchemaLoginDto = components['schemas']['LoginDto'];
 export type SchemaLogoutDto = components['schemas']['LogoutDto'];
@@ -774,6 +1039,7 @@ export type SchemaRoleOptionsResponseDto = components['schemas']['RoleOptionsRes
 export type SchemaSocialAccountDto = components['schemas']['SocialAccountDto'];
 export type SchemaSocialCoverageRowDto = components['schemas']['SocialCoverageRowDto'];
 export type SchemaSubmitCinDto = components['schemas']['SubmitCinDto'];
+export type SchemaUpdateBusinessAccountInfoDto = components['schemas']['UpdateBusinessAccountInfoDto'];
 export type SchemaUpdateCreatorAccountInfoDto = components['schemas']['UpdateCreatorAccountInfoDto'];
 export type SchemaUpdateCreatorProfileOverviewDto = components['schemas']['UpdateCreatorProfileOverviewDto'];
 export type SchemaUpdatePricingDto = components['schemas']['UpdatePricingDto'];
@@ -1043,6 +1309,426 @@ export interface operations {
                 content: {
                     readonly "application/json": components["schemas"]["RoleOptionsResponseDto"];
                 };
+            };
+        };
+    };
+    readonly BrandController_listBrands: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": readonly components["schemas"]["BrandSummaryDto"][];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a business / agency */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BrandController_listAccess: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": readonly components["schemas"]["BrandAccessDto"][];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a business / agency or brand not linked */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description BRAND_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BrandController_grantAccess: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["GrantBrandAccessDto"];
+            };
+        };
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["BrandAccessDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a business / agency or brand not linked */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description BRAND_NOT_FOUND or USER_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BrandController_linkBrand: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["LinkBrandDto"];
+            };
+        };
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["BrandSummaryDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a business / agency */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description BRAND_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description BRAND_ALREADY_LINKED */
+            readonly 409: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BrandController_searchBrands: {
+        readonly parameters: {
+            readonly query: {
+                readonly q: string;
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": readonly components["schemas"]["BrandSearchHitDto"][];
+                };
+            };
+            /** @description Missing/empty query */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a business / agency */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BusinessProfileController_getAccountInfo: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["BusinessAccountInfoDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a business / agency */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BusinessProfileController_deleteAccount: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Account deleted */
+            readonly 204: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a business / agency */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BusinessProfileController_updateAccountInfo: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["UpdateBusinessAccountInfoDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["BusinessAccountInfoDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a business / agency */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BusinessProfileController_getDashboardKpis: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["BusinessDashboardKpisDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a business / agency */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BusinessProfileController_changePassword: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["ChangeBusinessPasswordDto"];
+            };
+        };
+        readonly responses: {
+            /** @description Password updated */
+            readonly 204: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Current password invalid */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a business / agency */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description New password is too weak */
+            readonly 422: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
