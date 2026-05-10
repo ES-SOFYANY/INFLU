@@ -48,6 +48,7 @@ import { BusinessApiService } from './data/business-api.service';
             #searchInput
             type="search"
             class="input"
+            role="combobox"
             aria-autocomplete="list"
             aria-controls="influ-search-list"
             [attr.aria-expanded]="suggestionsOpen()"

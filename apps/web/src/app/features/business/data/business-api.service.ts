@@ -8,6 +8,7 @@ import type {
   SchemaBusinessDashboardKpisDto,
   SchemaChangePasswordDto,
   SchemaDiscoveryCreatorItemDto,
+  SchemaDiscoveryPublicCreatorProfileDto,
   SchemaGrantBrandAccessDto,
   SchemaLinkBrandDto,
   SchemaPaginatedCampaignsDto,
@@ -101,6 +102,40 @@ export class BusinessApiService {
     dto: SchemaGrantBrandAccessDto,
   ): Observable<SchemaBrandAccessDto> {
     return this.api.post<SchemaBrandAccessDto>(`/business/brands/${brandId}/access`, dto);
+  }
+
+  // US-130 / US-131 — Discovery search
+  searchDiscoveryCreators(query: {
+    q?: string;
+    platforms?: readonly ('INSTAGRAM' | 'YOUTUBE' | 'TIKTOK' | 'TWITTER')[];
+    categories?: readonly string[];
+    range?: readonly ('NANO' | 'MICRO' | 'MID' | 'MACRO' | 'MEGA' | 'CELEBRITY')[];
+    gender?: readonly ('M' | 'F')[];
+    location?: string;
+    seed?: string;
+    page?: number;
+    limit?: number;
+  }): Observable<SchemaPaginatedDiscoveryCreatorsDto> {
+    const params: Record<string, string | number | readonly string[]> = {};
+    if (query.q) params['q'] = query.q;
+    if (query.platforms && query.platforms.length > 0) params['platforms'] = query.platforms;
+    if (query.categories && query.categories.length > 0) params['categories'] = query.categories;
+    if (query.range && query.range.length > 0) params['range'] = query.range;
+    if (query.gender && query.gender.length > 0) params['gender'] = query.gender;
+    if (query.location) params['location'] = query.location;
+    if (query.seed) params['seed'] = query.seed;
+    if (query.page) params['page'] = query.page;
+    if (query.limit) params['limit'] = query.limit;
+    return this.api.get<SchemaPaginatedDiscoveryCreatorsDto>('/business/discovery/creators', {
+      params,
+    });
+  }
+
+  // US-132 — Public creator profile (business view)
+  getDiscoveryCreatorProfile(id: string): Observable<SchemaDiscoveryPublicCreatorProfileDto> {
+    return this.api.get<SchemaDiscoveryPublicCreatorProfileDto>(
+      `/business/discovery/creators/${id}`,
+    );
   }
 }
 

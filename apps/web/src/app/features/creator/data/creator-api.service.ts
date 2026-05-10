@@ -1,6 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
 import type {
+  SchemaAiCoachSessionDto,
+  SchemaApplicationDto,
   SchemaChangePasswordDto,
   SchemaCinStatusDto,
   SchemaCreatorAccountInfoDto,
@@ -11,8 +13,11 @@ import type {
   SchemaIceApproveDto,
   SchemaIceSearchDto,
   SchemaIceSearchResultDto,
+  SchemaMarketplaceProductDetailDto,
   SchemaPaginatedCollaborationsDto,
+  SchemaPaginatedMarketplaceProductsDto,
   SchemaPricingDto,
+  SchemaSendMessageResponseDto,
   SchemaSocialCoverageRowDto,
   SchemaSubmitCinDto,
   SchemaUpdateCreatorAccountInfoDto,
@@ -144,5 +149,54 @@ export class CreatorApiService {
       filename,
       contentType,
     });
+  }
+
+  // US-030 — Marketplace list (creator side)
+  listMarketplaceProducts(query: {
+    q?: string;
+    page?: number;
+    limit?: number;
+  }): Observable<SchemaPaginatedMarketplaceProductsDto> {
+    const params: Record<string, string | number> = {};
+    if (query.q) params['q'] = query.q;
+    if (query.page) params['page'] = query.page;
+    if (query.limit) params['limit'] = query.limit;
+    return this.api.get<SchemaPaginatedMarketplaceProductsDto>('/marketplace/products', {
+      params,
+    });
+  }
+
+  // US-031 — Marketplace product detail
+  getMarketplaceProduct(id: string): Observable<SchemaMarketplaceProductDetailDto> {
+    return this.api.get<SchemaMarketplaceProductDetailDto>(`/marketplace/products/${id}`);
+  }
+
+  // US-033 — Apply to a marketplace product
+  applyToMarketplaceProduct(id: string): Observable<SchemaApplicationDto> {
+    return this.api.post<SchemaApplicationDto>(`/marketplace/products/${id}/apply`, {});
+  }
+
+  // US-050 — AI Coach: start a new session
+  createAiCoachSession(): Observable<SchemaAiCoachSessionDto> {
+    return this.api.post<SchemaAiCoachSessionDto>('/creator/me/ai-coach/sessions', {});
+  }
+
+  // US-051 — AI Coach: send a message
+  sendAiCoachMessage(
+    sessionId: string,
+    content: string,
+  ): Observable<SchemaSendMessageResponseDto> {
+    return this.api.post<SchemaSendMessageResponseDto>(
+      `/creator/me/ai-coach/sessions/${sessionId}/messages`,
+      { content },
+    );
+  }
+
+  // US-051 — AI Coach: restart a session
+  restartAiCoachSession(sessionId: string): Observable<SchemaAiCoachSessionDto> {
+    return this.api.post<SchemaAiCoachSessionDto>(
+      `/creator/me/ai-coach/sessions/${sessionId}/restart`,
+      {},
+    );
   }
 }

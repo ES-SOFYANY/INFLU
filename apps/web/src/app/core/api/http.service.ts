@@ -1,8 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
+
+type ParamPrimitive = string | number | boolean;
+type ParamValue = ParamPrimitive | readonly ParamPrimitive[];
 
 /**
  * Thin typed wrapper around HttpClient. Feature services should depend on this
@@ -14,8 +17,22 @@ export class ApiClient {
   private readonly http = inject(HttpClient);
   private readonly base = environment.apiUrl;
 
-  get<T>(path: string, options?: { params?: Record<string, string | number | boolean> }): Observable<T> {
-    return this.http.get<T>(this.url(path), { params: options?.params as never });
+  get<T>(path: string, options?: { params?: Record<string, ParamValue> }): Observable<T> {
+    const params = options?.params ? this.buildParams(options.params) : undefined;
+    return this.http.get<T>(this.url(path), params ? { params } : undefined);
+  }
+
+  private buildParams(input: Record<string, ParamValue>): HttpParams {
+    let params = new HttpParams();
+    for (const [key, value] of Object.entries(input)) {
+      if (value === undefined || value === null) continue;
+      if (Array.isArray(value)) {
+        for (const v of value) params = params.append(key, String(v));
+      } else {
+        params = params.set(key, String(value));
+      }
+    }
+    return params;
   }
 
   post<T>(path: string, body: unknown): Observable<T> {
