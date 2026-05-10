@@ -1,0 +1,28 @@
+@import './styles/tokens.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* RTL helpers */
+html[dir='rtl'] body {
+  direction: rtl;
+}
+html[lang='ar'] body {
+  font-family: var(--font-arabic);
+}
+
+/* Skip link (a11y) */
+.skip-link {
+  position: absolute;
+  inset-inline-start: -9999px;
+}
+.skip-link:focus {
+  inset-inline-start: 1rem;
+  top: 1rem;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-focus);
+  border-radius: var(--radius-sm);
+}

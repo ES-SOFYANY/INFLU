@@ -1,0 +1,41 @@
+{
+  "common": {
+    "skipToContent": "تخطي إلى المحتوى",
+    "loading": "جارٍ التحميل…",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "submit": "إرسال",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "search": "بحث",
+    "back": "رجوع",
+    "next": "التالي",
+    "yes": "نعم",
+    "no": "لا",
+    "errors": {
+      "required": "حقل مطلوب",
+      "generic": "حدث خطأ ما",
+      "network": "خطأ في الشبكة",
+      "unauthorized": "غير مصرح",
+      "forbidden": "الوصول مرفوض",
+      "notFound": "غير موجود"
+    }
+  },
+  "header": {
+    "logIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "logout": "تسجيل الخروج",
+    "notifications": "الإشعارات",
+    "language": "اللغة",
+    "menu": "القائمة"
+  },
+  "sidebar": {
+    "dashboard": "لوحة التحكم",
+    "marketplace": "السوق",
+    "discovery": "الاكتشاف",
+    "messaging": "المراسلة",
+    "payments": "المدفوعات",
+    "support": "الدعم",
+    "account": "حسابي"
+  }
+}

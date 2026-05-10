@@ -1,0 +1,41 @@
+{
+  "common": {
+    "skipToContent": "Aller au contenu",
+    "loading": "Chargement…",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "submit": "Valider",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "search": "Rechercher",
+    "back": "Retour",
+    "next": "Suivant",
+    "yes": "Oui",
+    "no": "Non",
+    "errors": {
+      "required": "Champ obligatoire",
+      "generic": "Une erreur est survenue",
+      "network": "Erreur réseau",
+      "unauthorized": "Non autorisé",
+      "forbidden": "Accès refusé",
+      "notFound": "Introuvable"
+    }
+  },
+  "header": {
+    "logIn": "Connexion",
+    "signUp": "Inscription",
+    "logout": "Déconnexion",
+    "notifications": "Notifications",
+    "language": "Langue",
+    "menu": "Menu"
+  },
+  "sidebar": {
+    "dashboard": "Tableau de bord",
+    "marketplace": "Marketplace",
+    "discovery": "Découverte",
+    "messaging": "Messagerie",
+    "payments": "Paiements",
+    "support": "Support",
+    "account": "Mon compte"
+  }
+}

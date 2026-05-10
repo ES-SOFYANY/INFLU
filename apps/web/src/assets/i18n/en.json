@@ -1,0 +1,41 @@
+{
+  "common": {
+    "skipToContent": "Skip to content",
+    "loading": "Loading…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "back": "Back",
+    "next": "Next",
+    "yes": "Yes",
+    "no": "No",
+    "errors": {
+      "required": "Required field",
+      "generic": "Something went wrong",
+      "network": "Network error",
+      "unauthorized": "Unauthorized",
+      "forbidden": "Access denied",
+      "notFound": "Not found"
+    }
+  },
+  "header": {
+    "logIn": "Log in",
+    "signUp": "Sign up",
+    "logout": "Log out",
+    "notifications": "Notifications",
+    "language": "Language",
+    "menu": "Menu"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "marketplace": "Marketplace",
+    "discovery": "Discovery",
+    "messaging": "Messaging",
+    "payments": "Payments",
+    "support": "Support",
+    "account": "My account"
+  }
+}
