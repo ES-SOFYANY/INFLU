@@ -379,22 +379,24 @@ export class CreatorMarketplaceDetailPage implements OnInit {
       error: (err: unknown) => {
         this.applying.set(false);
         const code = this.extractCode(err);
-        const status = this.extractStatus(err);
-        if (status === 410) {
+        // BUG-MAN-002 fix: errors are normalized by errorInterceptor into
+        // { code, message, details, traceId } — there is no .status nor
+        // .error.code anymore. Map by `code` only.
+        if (code === 'PRODUCT_EXPIRED') {
           this.applyError.set('PRODUCT_EXPIRED');
           this.product.update((p) => (p ? { ...p, isExpired: true } : p));
           return;
         }
-        if (status === 409 && code === 'NO_SLOTS_LEFT') {
+        if (code === 'NO_SLOTS_LEFT') {
           this.applyError.set('NO_SLOTS_LEFT');
           this.product.update((p) => (p ? { ...p, slotsLeft: 0 } : p));
           return;
         }
-        if (status === 409 && code === 'ALREADY_APPLIED') {
+        if (code === 'ALREADY_APPLIED') {
           this.applyError.set('ALREADY_APPLIED');
           return;
         }
-        if (status === 409 && code === 'PROFILE_INCOMPLETE') {
+        if (code === 'PROFILE_INCOMPLETE') {
           this.applyError.set('PROFILE_INCOMPLETE');
           const missing = this.extractMissing(err);
           this.ribMissing.set(missing.includes('RIB'));
@@ -447,12 +449,20 @@ export class CreatorMarketplaceDetailPage implements OnInit {
 
   private extractCode(err: unknown): string | null {
     if (typeof err !== 'object' || err === null) return null;
+    // Post-interceptor shape: { code, message, details, traceId }
+    const direct = (err as { code?: string }).code;
+    if (typeof direct === 'string') return direct;
+    // Fallback for raw HttpErrorResponse: err.error.code
     const body = (err as { error?: { code?: string } }).error;
     return body?.code ?? null;
   }
 
   private extractMissing(err: unknown): string[] {
     if (typeof err !== 'object' || err === null) return [];
+    // Post-interceptor: details.missing
+    const details = (err as { details?: { missing?: string[] } }).details;
+    if (Array.isArray(details?.missing)) return details!.missing;
+    // Fallback raw: error.missing or error.details.missing
     const body = (err as { error?: { missing?: string[]; details?: { missing?: string[] } } }).error;
     return body?.missing ?? body?.details?.missing ?? [];
   }
