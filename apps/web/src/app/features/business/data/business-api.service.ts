@@ -1,19 +1,28 @@
 import { inject, Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
 import type {
+  SchemaAiCampaignMessageResponseDto,
   SchemaBrandAccessDto,
   SchemaBrandSearchHitDto,
   SchemaBrandSummaryDto,
   SchemaBusinessAccountInfoDto,
   SchemaBusinessDashboardKpisDto,
+  SchemaCampaignDto,
   SchemaChangePasswordDto,
+  SchemaCreateMarketplaceProductDto,
   SchemaDiscoveryCreatorItemDto,
   SchemaDiscoveryPublicCreatorProfileDto,
   SchemaGrantBrandAccessDto,
   SchemaLinkBrandDto,
+  SchemaMarketplaceProductWizardDto,
   SchemaPaginatedCampaignsDto,
   SchemaPaginatedDiscoveryCreatorsDto,
+  SchemaPaginatedMarketplaceProductsDto,
+  SchemaSendCampaignMessageDto,
+  SchemaStartAiCampaignSessionResponseDto,
   SchemaUpdateBusinessAccountInfoDto,
+  SchemaUpdateCampaignStatusDto,
+  SchemaUpdateMarketplaceProductDto,
 } from '@my-app/shared-types';
 
 import { ApiClient } from '../../../core/api/http.service';
@@ -136,6 +145,86 @@ export class BusinessApiService {
     return this.api.get<SchemaDiscoveryPublicCreatorProfileDto>(
       `/business/discovery/creators/${id}`,
     );
+  }
+
+  // US-110 — AI Campaign chat
+  startAiCampaignSession(): Observable<SchemaStartAiCampaignSessionResponseDto> {
+    return this.api.post<SchemaStartAiCampaignSessionResponseDto>(
+      '/business/ai-campaign/sessions',
+      {},
+    );
+  }
+
+  sendAiCampaignMessage(
+    sessionId: string,
+    body: SchemaSendCampaignMessageDto,
+  ): Observable<SchemaAiCampaignMessageResponseDto> {
+    return this.api.post<SchemaAiCampaignMessageResponseDto>(
+      `/business/ai-campaign/sessions/${sessionId}/messages`,
+      body,
+    );
+  }
+
+  // US-111 — AI Manager: list/get/status (reuses existing /business/ai-campaigns)
+  getCampaign(id: string): Observable<SchemaCampaignDto> {
+    return this.api.get<SchemaCampaignDto>(`/business/ai-campaigns/${id}`);
+  }
+
+  updateCampaignStatus(
+    id: string,
+    body: SchemaUpdateCampaignStatusDto,
+  ): Observable<SchemaCampaignDto> {
+    return this.api.patch<SchemaCampaignDto>(`/business/ai-campaigns/${id}/status`, body);
+  }
+
+  // US-120/121/122 — Marketplace products (business owner)
+  listMyProducts(query: {
+    q?: string;
+    brand?: string;
+    status?: 'DRAFT' | 'PUBLISHED' | 'EXPIRED' | 'CLOSED';
+    page?: number;
+    limit?: number;
+  }): Observable<SchemaPaginatedMarketplaceProductsDto> {
+    const params: Record<string, string | number> = {};
+    if (query.q) params['q'] = query.q;
+    if (query.brand) params['brand'] = query.brand;
+    if (query.status) params['status'] = query.status;
+    if (query.page) params['page'] = query.page;
+    if (query.limit) params['limit'] = query.limit;
+    return this.api.get<SchemaPaginatedMarketplaceProductsDto>('/business/marketplace/products', {
+      params,
+    });
+  }
+
+  createDraftProduct(
+    dto: SchemaCreateMarketplaceProductDto,
+  ): Observable<SchemaMarketplaceProductWizardDto> {
+    return this.api.post<SchemaMarketplaceProductWizardDto>('/business/marketplace/products', dto);
+  }
+
+  getDraftProduct(id: string): Observable<SchemaMarketplaceProductWizardDto> {
+    return this.api.get<SchemaMarketplaceProductWizardDto>(`/business/marketplace/products/${id}`);
+  }
+
+  saveProductStep(
+    id: string,
+    dto: SchemaUpdateMarketplaceProductDto,
+  ): Observable<SchemaMarketplaceProductWizardDto> {
+    return this.api.patch<SchemaMarketplaceProductWizardDto>(
+      `/business/marketplace/products/${id}`,
+      dto,
+    );
+  }
+
+  publishProduct(id: string): Observable<SchemaMarketplaceProductWizardDto> {
+    return this.api.post<SchemaMarketplaceProductWizardDto>(
+      `/business/marketplace/products/${id}/publish`,
+      {},
+    );
+  }
+
+  deleteProduct(id: string): Observable<void> {
+    return this.api.delete<void>(`/business/marketplace/products/${id}`);
   }
 }
 
