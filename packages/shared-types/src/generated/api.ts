@@ -157,6 +157,41 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/creator/me/dashboard-kpis": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-020] Read the 10 creator dashboard KPIs */
+        readonly get: operations["CreatorProfileController_getDashboardKpis"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/profile-overview": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-041] Read the creator profile overview */
+        readonly get: operations["CreatorProfileController_getProfileOverview"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        /** [US-041] Update the creator profile overview */
+        readonly patch: operations["CreatorProfileController_updateProfileOverview"];
+        readonly trace?: never;
+    };
     readonly "/api/creator/me/social-accounts/{platform}/link": {
         readonly parameters: {
             readonly query?: never;
@@ -168,6 +203,23 @@ export interface paths {
         readonly put?: never;
         /** [US-017] Link a social account (mock OAuth) */
         readonly post: operations["CreatorProfileController_linkSocial"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/social-coverage": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-041] Read the social coverage table */
+        readonly get: operations["CreatorProfileController_getSocialCoverage"];
+        readonly put?: never;
+        readonly post?: never;
         readonly delete?: never;
         readonly options?: never;
         readonly head?: never;
@@ -187,6 +239,42 @@ export interface components {
             /** @description Access token TTL in seconds */
             readonly expiresIn: number;
             readonly refreshToken: string;
+        };
+        readonly CreatorDashboardKpisDto: {
+            readonly contentToPublish: number;
+            readonly contentToSubmit: number;
+            /** @enum {string} */
+            readonly currency: "MAD";
+            /** @description INFLU Score, null if not yet computed */
+            readonly influScore?: Record<string, never> | null;
+            /** @description null when the Matchings feature is off (US-022-01) */
+            readonly pendingMatchings?: Record<string, never> | null;
+            readonly pendingOpportunities: number;
+            /** @description Pending payments amount (Dhs / MAD) */
+            readonly pendingPayments: number;
+            /** @description ISO date or null if no upcoming publication */
+            readonly publicationDeadline?: Record<string, never> | null;
+            /** @description Total revenue generated, displayed with "Dhs" suffix (AC-020-02) */
+            readonly revenueGenerated: number;
+            /** @description ISO date or null if no upcoming submission */
+            readonly submissionDeadline?: Record<string, never> | null;
+            readonly totalCollaborations: number;
+        };
+        readonly CreatorProfileOverviewDto: {
+            /** Format: uri */
+            readonly avatarUrl?: string;
+            readonly bio?: string;
+            readonly category?: string;
+            readonly country?: string;
+            /** Format: uri */
+            readonly coverUrl?: string;
+            /** @description Long descriptive paragraph (≤ 2000 chars) */
+            readonly description?: string;
+            readonly fullName: string;
+            /** @enum {string} */
+            readonly gender?: "M" | "F";
+            /** Format: uuid */
+            readonly id: string;
         };
         readonly EmailLocaleDto: {
             /** Format: email */
@@ -310,6 +398,29 @@ export interface components {
             /** @enum {string} */
             readonly tier: "NANO" | "MICRO" | "MID" | "MACRO" | "MEGA" | "CELEBRITY";
         };
+        readonly SocialCoverageRowDto: {
+            /** @description Average views per post */
+            readonly averageViews?: Record<string, never> | null;
+            /** @description Average likes+comments per post */
+            readonly engagementAverage?: Record<string, never> | null;
+            /** @description Null if not yet computable (US-022) */
+            readonly engagementRate?: Record<string, never> | null;
+            readonly followers: number;
+            /** @description Null if not yet computable (US-022) */
+            readonly growth?: Record<string, never> | null;
+            readonly handle: string;
+            /** @enum {string} */
+            readonly platform: "INSTAGRAM" | "YOUTUBE" | "TIKTOK" | "TWITTER";
+        };
+        readonly UpdateCreatorProfileOverviewDto: {
+            /** Format: uri */
+            readonly avatarUrl?: string;
+            readonly bio?: string;
+            readonly category?: string;
+            /** Format: uri */
+            readonly coverUrl?: string;
+            readonly description?: string;
+        };
         readonly UserPublicDto: {
             /** Format: email */
             readonly email: string;
@@ -337,6 +448,8 @@ export interface components {
 }
 export type SchemaAuthSessionDto = components['schemas']['AuthSessionDto'];
 export type SchemaAuthTokensDto = components['schemas']['AuthTokensDto'];
+export type SchemaCreatorDashboardKpisDto = components['schemas']['CreatorDashboardKpisDto'];
+export type SchemaCreatorProfileOverviewDto = components['schemas']['CreatorProfileOverviewDto'];
 export type SchemaEmailLocaleDto = components['schemas']['EmailLocaleDto'];
 export type SchemaGoogleCallbackDto = components['schemas']['GoogleCallbackDto'];
 export type SchemaLinkSocialAccountDto = components['schemas']['LinkSocialAccountDto'];
@@ -349,6 +462,8 @@ export type SchemaRegisterCreatorDto = components['schemas']['RegisterCreatorDto
 export type SchemaRoleOptionDto = components['schemas']['RoleOptionDto'];
 export type SchemaRoleOptionsResponseDto = components['schemas']['RoleOptionsResponseDto'];
 export type SchemaSocialAccountDto = components['schemas']['SocialAccountDto'];
+export type SchemaSocialCoverageRowDto = components['schemas']['SocialCoverageRowDto'];
+export type SchemaUpdateCreatorProfileOverviewDto = components['schemas']['UpdateCreatorProfileOverviewDto'];
 export type SchemaUserPublicDto = components['schemas']['UserPublicDto'];
 export type $defs = Record<string, never>;
 export interface operations {
@@ -617,6 +732,116 @@ export interface operations {
             };
         };
     };
+    readonly CreatorProfileController_getDashboardKpis: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CreatorDashboardKpisDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_getProfileOverview: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CreatorProfileOverviewDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_updateProfileOverview: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["UpdateCreatorProfileOverviewDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CreatorProfileOverviewDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     readonly CreatorProfileController_linkSocial: {
         readonly parameters: {
             readonly query?: never;
@@ -663,6 +888,39 @@ export interface operations {
             };
             /** @description SOCIAL_ALREADY_LINKED */
             readonly 409: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_getSocialCoverage: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": readonly components["schemas"]["SocialCoverageRowDto"][];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
                 headers: {
                     readonly [name: string]: unknown;
                 };

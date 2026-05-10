@@ -9,7 +9,14 @@ import {
 } from '../../shared/social/social.module';
 
 import { CreatorProfileRepository } from './creator-profile.repository';
-import type { LinkSocialAccountDto, SocialAccountDto } from './dto';
+import type {
+  CreatorDashboardKpisDto,
+  CreatorProfileOverviewDto,
+  LinkSocialAccountDto,
+  SocialAccountDto,
+  SocialCoverageRowDto,
+  UpdateCreatorProfileOverviewDto,
+} from './dto';
 
 import type { SocialPlatform } from '@my-app/shared-types';
 
@@ -86,5 +93,95 @@ export class CreatorProfileService {
       tier,
       linkedAt,
     };
+  }
+
+  /**
+   * US-020 — Aggregate the 10 KPIs for the creator dashboard.
+   * MVP: counters return 0 when no data, deadlines & influScore null,
+   * pendingMatchings null (feature off — AC-022-01), currency = 'MAD'.
+   */
+  async getDashboardKpis(_userId: string): Promise<CreatorDashboardKpisDto> {
+    return {
+      totalCollaborations: 0,
+      pendingOpportunities: 0,
+      pendingMatchings: null,
+      contentToSubmit: 0,
+      submissionDeadline: null,
+      contentToPublish: 0,
+      publicationDeadline: null,
+      pendingPayments: 0,
+      revenueGenerated: 0,
+      influScore: null,
+      currency: 'MAD',
+    };
+  }
+
+  /**
+   * US-041 — Read the creator profile overview (header + bio + categorisation).
+   */
+  async getProfileOverview(userId: string): Promise<CreatorProfileOverviewDto> {
+    const row = await this.repo.getUserRow(userId);
+    if (!row) {
+      throw new BusinessException(
+        ERROR_CODES.NOT_FOUND,
+        'Creator profile not found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return {
+      id: row.id as string,
+      fullName: (row.fullName as string) ?? '',
+      bio: (row.bio as string | undefined) ?? undefined,
+      description: (row.description as string | undefined) ?? undefined,
+      category: (row.category as string | undefined) ?? undefined,
+      country: (row.country as string | undefined) ?? undefined,
+      gender: (row.gender as 'M' | 'F' | undefined) ?? undefined,
+      avatarUrl: (row.avatarUrl as string | undefined) ?? undefined,
+      coverUrl: (row.coverUrl as string | undefined) ?? undefined,
+    };
+  }
+
+  /**
+   * US-041 — Update the editable fields of the profile overview.
+   * Whitelist: bio, description, category, avatarUrl, coverUrl.
+   */
+  async updateProfileOverview(
+    userId: string,
+    dto: UpdateCreatorProfileOverviewDto,
+  ): Promise<CreatorProfileOverviewDto> {
+    const patch: Record<string, unknown> = {};
+    if (dto.bio !== undefined) patch.bio = dto.bio;
+    if (dto.description !== undefined) patch.description = dto.description;
+    if (dto.category !== undefined) patch.category = dto.category;
+    if (dto.avatarUrl !== undefined) patch.avatarUrl = dto.avatarUrl;
+    if (dto.coverUrl !== undefined) patch.coverUrl = dto.coverUrl;
+
+    if (Object.keys(patch).length > 0) {
+      await this.repo.updateProfileFields(userId, patch);
+      await this.audit.append({
+        actorUserId: userId,
+        action: 'CREATOR_PROFILE_OVERVIEW_UPDATE',
+        resource: `USER#${userId}`,
+        details: { fields: Object.keys(patch) },
+      });
+    }
+    return this.getProfileOverview(userId);
+  }
+
+  /**
+   * US-041 — Social Coverage table (one row per linked platform).
+   */
+  async getSocialCoverage(userId: string): Promise<SocialCoverageRowDto[]> {
+    const accounts = await this.repo.listSocialAccounts(userId);
+    return accounts.map((a) => ({
+      platform: a.platform,
+      handle: a.handle,
+      followers: a.followers,
+      engagementRate: typeof a.engagementRate === 'number' ? a.engagementRate : null,
+      growth: typeof a.growthRate === 'number' ? a.growthRate : null,
+      engagementAverage:
+        typeof a.engagementAverage === 'number' ? a.engagementAverage : null,
+      averageViews: typeof a.averageViews === 'number' ? a.averageViews : null,
+    }));
   }
 }
