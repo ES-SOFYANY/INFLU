@@ -787,10 +787,10 @@
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_yassir_ride_001"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000001"},
           "SK": {"S": "META"},
           "entity": {"S": "MarketplaceProduct"},
-          "id": {"S": "mkt_yassir_ride_001"},
+          "id": {"S": "11111111-aaaa-4aaa-aaaa-000000000001"},
           "ownerUserId": {"S": "u_business_yassir_020"},
           "brandId": {"S": "b_yassir_001"},
           "brandDescription": {"S": "Yassir, super-app MENA — VTC, livraison, paiements."},
@@ -805,7 +805,7 @@
           ]},
           "hashtags": {"SS": ["#ad", "#partenariat_rémunéré", "#YassirRide", "#RAMADAN26"]},
           "callToAction": {"S": "Téléchargez Yassir et utilisez RAMADAN26 pour 30% de réduction."},
-          "images": {"L": [{"S": "products/mkt_yassir_ride_001/1.jpg"}]},
+          "images": {"L": [{"S": "products/11111111-aaaa-4aaa-aaaa-000000000001/1.jpg"}]},
           "targetTier": {"S": "MICRO"},
           "slotsTotal": {"N": "5"},
           "slotsLeft": {"N": "3"},
@@ -818,16 +818,16 @@
           "createdAt": {"S": "2026-04-01T08:00:00Z"},
           "updatedAt": {"S": "2026-04-15T11:00:00Z"},
           "GSI2PK": {"S": "BRAND#b_yassir_001"},
-          "GSI2SK": {"S": "MKT#2026-04-01T09:00:00Z#mkt_yassir_ride_001"},
+          "GSI2SK": {"S": "MKT#2026-04-01T09:00:00Z#11111111-aaaa-4aaa-aaaa-000000000001"},
           "GSI4PK": {"S": "MKT#STATUS#PUBLISHED"},
-          "GSI4SK": {"S": "2026-04-01T09:00:00Z#mkt_yassir_ride_001"}
+          "GSI4SK": {"S": "2026-04-01T09:00:00Z#11111111-aaaa-4aaa-aaaa-000000000001"}
         }
       }
     },
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_yassir_ride_001"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000001"},
           "SK": {"S": "DELIV#del_001a"},
           "entity": {"S": "MarketplaceDeliverable"},
           "deliverableId": {"S": "del_001a"},
@@ -846,7 +846,7 @@
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_yassir_ride_001"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000001"},
           "SK": {"S": "DELIV#del_001b"},
           "entity": {"S": "MarketplaceDeliverable"},
           "deliverableId": {"S": "del_001b"},
@@ -865,10 +865,10 @@
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_eucerin_skin_002"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000002"},
           "SK": {"S": "META"},
           "entity": {"S": "MarketplaceProduct"},
-          "id": {"S": "mkt_eucerin_skin_002"},
+          "id": {"S": "11111111-aaaa-4aaa-aaaa-000000000002"},
           "ownerUserId": {"S": "u_business_agency_021"},
           "brandId": {"S": "b_eucerin_002"},
           "brandDescription": {"S": "Eucerin — soins dermatologiques."},
@@ -882,7 +882,7 @@
           ]},
           "hashtags": {"SS": ["#ad", "#sponsorisé", "#Eucerin", "#HyaluronFiller"]},
           "callToAction": {"S": "Découvrez la nouvelle formule en pharmacie."},
-          "images": {"L": [{"S": "products/mkt_eucerin_skin_002/1.jpg"}]},
+          "images": {"L": [{"S": "products/11111111-aaaa-4aaa-aaaa-000000000002/1.jpg"}]},
           "targetTier": {"S": "MICRO"},
           "slotsTotal": {"N": "8"},
           "slotsLeft": {"N": "8"},
@@ -895,16 +895,16 @@
           "createdAt": {"S": "2026-04-19T08:00:00Z"},
           "updatedAt": {"S": "2026-04-20T10:00:00Z"},
           "GSI2PK": {"S": "BRAND#b_eucerin_002"},
-          "GSI2SK": {"S": "MKT#2026-04-20T10:00:00Z#mkt_eucerin_skin_002"},
+          "GSI2SK": {"S": "MKT#2026-04-20T10:00:00Z#11111111-aaaa-4aaa-aaaa-000000000002"},
           "GSI4PK": {"S": "MKT#STATUS#PUBLISHED"},
-          "GSI4SK": {"S": "2026-04-20T10:00:00Z#mkt_eucerin_skin_002"}
+          "GSI4SK": {"S": "2026-04-20T10:00:00Z#11111111-aaaa-4aaa-aaaa-000000000002"}
         }
       }
     },
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_eucerin_skin_002"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000002"},
           "SK": {"S": "DELIV#del_002a"},
           "entity": {"S": "MarketplaceDeliverable"},
           "deliverableId": {"S": "del_002a"},
@@ -923,10 +923,10 @@
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_nuxe_oil_003"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000003"},
           "SK": {"S": "META"},
           "entity": {"S": "MarketplaceProduct"},
-          "id": {"S": "mkt_nuxe_oil_003"},
+          "id": {"S": "11111111-aaaa-4aaa-aaaa-000000000003"},
           "ownerUserId": {"S": "u_business_agency_021"},
           "brandId": {"S": "b_nuxe_003"},
           "brandDescription": {"S": "NUXE — cosmétiques naturels."},
@@ -937,7 +937,7 @@
           "acceptanceCriteria": {"L": [{"S": "Tournage en lumière naturelle"}]},
           "hashtags": {"SS": ["#ad", "#NUXE", "#HuileProdigieuse"]},
           "callToAction": {"S": "Disponible en parapharmacie."},
-          "images": {"L": [{"S": "products/mkt_nuxe_oil_003/1.jpg"}]},
+          "images": {"L": [{"S": "products/11111111-aaaa-4aaa-aaaa-000000000003/1.jpg"}]},
           "targetTier": {"S": "NANO"},
           "slotsTotal": {"N": "10"},
           "slotsLeft": {"N": "9"},
@@ -950,19 +950,19 @@
           "createdAt": {"S": "2026-04-25T08:00:00Z"},
           "updatedAt": {"S": "2026-04-25T10:00:00Z"},
           "GSI2PK": {"S": "BRAND#b_nuxe_003"},
-          "GSI2SK": {"S": "MKT#2026-04-25T10:00:00Z#mkt_nuxe_oil_003"},
+          "GSI2SK": {"S": "MKT#2026-04-25T10:00:00Z#11111111-aaaa-4aaa-aaaa-000000000003"},
           "GSI4PK": {"S": "MKT#STATUS#PUBLISHED"},
-          "GSI4SK": {"S": "2026-04-25T10:00:00Z#mkt_nuxe_oil_003"}
+          "GSI4SK": {"S": "2026-04-25T10:00:00Z#11111111-aaaa-4aaa-aaaa-000000000003"}
         }
       }
     },
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_lasalle_open_004"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000004"},
           "SK": {"S": "META"},
           "entity": {"S": "MarketplaceProduct"},
-          "id": {"S": "mkt_lasalle_open_004"},
+          "id": {"S": "11111111-aaaa-4aaa-aaaa-000000000004"},
           "ownerUserId": {"S": "u_business_agency_021"},
           "brandId": {"S": "b_lasalle_004"},
           "brandDescription": {"S": "LA SALLE — école de management."},
@@ -973,7 +973,7 @@
           "acceptanceCriteria": {"L": [{"S": "Présence sur place obligatoire"}]},
           "hashtags": {"SS": ["#ad", "#LaSalleOpenDay"]},
           "callToAction": {"S": "Inscrivez-vous sur lasalle.ma"},
-          "images": {"L": [{"S": "products/mkt_lasalle_open_004/1.jpg"}]},
+          "images": {"L": [{"S": "products/11111111-aaaa-4aaa-aaaa-000000000004/1.jpg"}]},
           "targetTier": {"S": "MID"},
           "slotsTotal": {"N": "3"},
           "slotsLeft": {"N": "3"},
@@ -986,19 +986,19 @@
           "createdAt": {"S": "2026-05-01T08:00:00Z"},
           "updatedAt": {"S": "2026-05-01T10:00:00Z"},
           "GSI2PK": {"S": "BRAND#b_lasalle_004"},
-          "GSI2SK": {"S": "MKT#2026-05-01T10:00:00Z#mkt_lasalle_open_004"},
+          "GSI2SK": {"S": "MKT#2026-05-01T10:00:00Z#11111111-aaaa-4aaa-aaaa-000000000004"},
           "GSI4PK": {"S": "MKT#STATUS#PUBLISHED"},
-          "GSI4SK": {"S": "2026-05-01T10:00:00Z#mkt_lasalle_open_004"}
+          "GSI4SK": {"S": "2026-05-01T10:00:00Z#11111111-aaaa-4aaa-aaaa-000000000004"}
         }
       }
     },
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_yassir_food_005"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000005"},
           "SK": {"S": "META"},
           "entity": {"S": "MarketplaceProduct"},
-          "id": {"S": "mkt_yassir_food_005"},
+          "id": {"S": "11111111-aaaa-4aaa-aaaa-000000000005"},
           "ownerUserId": {"S": "u_business_yassir_020"},
           "brandId": {"S": "b_yassir_001"},
           "brandDescription": {"S": "Yassir Express — livraison de repas."},
@@ -1009,7 +1009,7 @@
           "acceptanceCriteria": {"L": [{"S": "Format vertical 60s max"}]},
           "hashtags": {"SS": ["#ad", "#YassirExpress"]},
           "callToAction": {"S": "Commandez sur l'app Yassir."},
-          "images": {"L": [{"S": "products/mkt_yassir_food_005/1.jpg"}]},
+          "images": {"L": [{"S": "products/11111111-aaaa-4aaa-aaaa-000000000005/1.jpg"}]},
           "targetTier": {"S": "MID"},
           "slotsTotal": {"N": "4"},
           "slotsLeft": {"N": "4"},
@@ -1022,19 +1022,19 @@
           "createdAt": {"S": "2026-05-05T08:00:00Z"},
           "updatedAt": {"S": "2026-05-08T10:00:00Z"},
           "GSI2PK": {"S": "BRAND#b_yassir_001"},
-          "GSI2SK": {"S": "MKT#DRAFT#mkt_yassir_food_005"},
+          "GSI2SK": {"S": "MKT#DRAFT#11111111-aaaa-4aaa-aaaa-000000000005"},
           "GSI4PK": {"S": "MKT#STATUS#DRAFT"},
-          "GSI4SK": {"S": "2026-05-05T08:00:00Z#mkt_yassir_food_005"}
+          "GSI4SK": {"S": "2026-05-05T08:00:00Z#11111111-aaaa-4aaa-aaaa-000000000005"}
         }
       }
     },
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_bledcraft_pottery_006"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000006"},
           "SK": {"S": "META"},
           "entity": {"S": "MarketplaceProduct"},
-          "id": {"S": "mkt_bledcraft_pottery_006"},
+          "id": {"S": "11111111-aaaa-4aaa-aaaa-000000000006"},
           "ownerUserId": {"S": "u_business_small_022"},
           "brandId": {"S": "b_lasalle_004"},
           "brandDescription": {"S": "BledCraft — artisanat marocain."},
@@ -1045,7 +1045,7 @@
           "acceptanceCriteria": {"L": [{"S": "Photo lifestyle haute qualité"}]},
           "hashtags": {"SS": ["#ad", "#BledCraft"]},
           "callToAction": {"S": "Achetez sur bledcraft.ma"},
-          "images": {"L": [{"S": "products/mkt_bledcraft_pottery_006/1.jpg"}]},
+          "images": {"L": [{"S": "products/11111111-aaaa-4aaa-aaaa-000000000006/1.jpg"}]},
           "targetTier": {"S": "NANO"},
           "slotsTotal": {"N": "6"},
           "slotsLeft": {"N": "5"},
@@ -1058,20 +1058,20 @@
           "createdAt": {"S": "2026-04-10T08:00:00Z"},
           "updatedAt": {"S": "2026-04-22T11:00:00Z"},
           "GSI2PK": {"S": "BRAND#b_lasalle_004"},
-          "GSI2SK": {"S": "MKT#2026-04-10T10:00:00Z#mkt_bledcraft_pottery_006"},
+          "GSI2SK": {"S": "MKT#2026-04-10T10:00:00Z#11111111-aaaa-4aaa-aaaa-000000000006"},
           "GSI4PK": {"S": "MKT#STATUS#PUBLISHED"},
-          "GSI4SK": {"S": "2026-04-10T10:00:00Z#mkt_bledcraft_pottery_006"}
+          "GSI4SK": {"S": "2026-04-10T10:00:00Z#11111111-aaaa-4aaa-aaaa-000000000006"}
         }
       }
     },
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_yassir_ride_001"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000001"},
           "SK": {"S": "APP#u_creator_micro_011"},
           "entity": {"S": "Application"},
           "applicationId": {"S": "app_001"},
-          "productId": {"S": "mkt_yassir_ride_001"},
+          "productId": {"S": "11111111-aaaa-4aaa-aaaa-000000000001"},
           "creatorId": {"S": "u_creator_micro_011"},
           "brandId": {"S": "b_yassir_001"},
           "ownerUserId": {"S": "u_business_yassir_020"},
@@ -1084,18 +1084,18 @@
           "paymentId": {"S": "pay_001"},
           "tier": {"S": "MICRO"},
           "GSI2PK": {"S": "USER#u_creator_micro_011"},
-          "GSI2SK": {"S": "APP#2026-04-05T10:00:00Z#mkt_yassir_ride_001"}
+          "GSI2SK": {"S": "APP#2026-04-05T10:00:00Z#11111111-aaaa-4aaa-aaaa-000000000001"}
         }
       }
     },
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_yassir_ride_001"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000001"},
           "SK": {"S": "APP#u_creator_mid_012"},
           "entity": {"S": "Application"},
           "applicationId": {"S": "app_002"},
-          "productId": {"S": "mkt_yassir_ride_001"},
+          "productId": {"S": "11111111-aaaa-4aaa-aaaa-000000000001"},
           "creatorId": {"S": "u_creator_mid_012"},
           "brandId": {"S": "b_yassir_001"},
           "ownerUserId": {"S": "u_business_yassir_020"},
@@ -1104,18 +1104,18 @@
           "respondedAt": {"S": "2026-04-13T10:00:00Z"},
           "tier": {"S": "MID"},
           "GSI2PK": {"S": "USER#u_creator_mid_012"},
-          "GSI2SK": {"S": "APP#2026-04-12T10:00:00Z#mkt_yassir_ride_001"}
+          "GSI2SK": {"S": "APP#2026-04-12T10:00:00Z#11111111-aaaa-4aaa-aaaa-000000000001"}
         }
       }
     },
     {
       "PutRequest": {
         "Item": {
-          "PK": {"S": "MKT#mkt_eucerin_skin_002"},
+          "PK": {"S": "MKT#11111111-aaaa-4aaa-aaaa-000000000002"},
           "SK": {"S": "APP#u_creator_nano_010"},
           "entity": {"S": "Application"},
           "applicationId": {"S": "app_003"},
-          "productId": {"S": "mkt_eucerin_skin_002"},
+          "productId": {"S": "11111111-aaaa-4aaa-aaaa-000000000002"},
           "creatorId": {"S": "u_creator_nano_010"},
           "brandId": {"S": "b_eucerin_002"},
           "ownerUserId": {"S": "u_business_agency_021"},
@@ -1123,7 +1123,7 @@
           "appliedAt": {"S": "2026-05-01T15:00:00Z"},
           "tier": {"S": "NANO"},
           "GSI2PK": {"S": "USER#u_creator_nano_010"},
-          "GSI2SK": {"S": "APP#2026-05-01T15:00:00Z#mkt_eucerin_skin_002"}
+          "GSI2SK": {"S": "APP#2026-05-01T15:00:00Z#11111111-aaaa-4aaa-aaaa-000000000002"}
         }
       }
     },
@@ -1278,7 +1278,7 @@
           "convId": {"S": "conv_yassir_lina_001"},
           "participantIds": {"SS": ["u_business_yassir_020", "u_creator_micro_011"]},
           "brandId": {"S": "b_yassir_001"},
-          "productId": {"S": "mkt_yassir_ride_001"},
+          "productId": {"S": "11111111-aaaa-4aaa-aaaa-000000000001"},
           "applicationId": {"S": "app_001"},
           "lastMessagePreview": {"S": "Parfait, on attend ton reel d'ici le 22."},
           "lastMessageAt": {"S": "2026-04-15T16:30:00Z"},
@@ -1352,7 +1352,7 @@
           "convId": {"S": "conv_eucerin_amine_002"},
           "participantIds": {"SS": ["u_business_agency_021", "u_creator_nano_010"]},
           "brandId": {"S": "b_eucerin_002"},
-          "productId": {"S": "mkt_eucerin_skin_002"},
+          "productId": {"S": "11111111-aaaa-4aaa-aaaa-000000000002"},
           "applicationId": {"S": "app_003"},
           "lastMessagePreview": {"S": "Merci pour ta candidature, on revient vers toi."},
           "lastMessageAt": {"S": "2026-05-02T09:00:00Z"},
@@ -1617,7 +1617,7 @@
           "sizeBytes": {"N": "987654"},
           "cinNumber": {"S": "K012345"},
           "cinExpiry": {"S": "2031-05-01"},
-          "status": {"S": "PENDING"},
+          "status": {"S": "PENDING_VALIDATION"},
           "createdAt": {"S": "2026-05-02T10:00:00Z"}
         }
       }
