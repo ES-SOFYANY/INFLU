@@ -11,6 +11,6 @@ import { BrandService } from './brand.service';
 @Module({
   controllers: [BrandController],
   providers: [BrandService, BrandRepository],
-  exports: [BrandService],
+  exports: [BrandService, BrandRepository],
 })
 export class BrandModule {}

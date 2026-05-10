@@ -522,10 +522,73 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/marketplace/products": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-030] List published marketplace products */
+        readonly get: operations["MarketplaceController_listProducts"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/marketplace/products/{id}": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-031][US-034][US-035] Get a marketplace opportunity (paidByInflu=true, isExpired computed) */
+        readonly get: operations["MarketplaceController_getProduct"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/marketplace/products/{id}/apply": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-032][US-033] Apply to a marketplace opportunity (CIN+RIB+ICE required) */
+        readonly post: operations["MarketplaceController_apply"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        readonly ApplicationDto: {
+            /** Format: date-time */
+            readonly appliedAt: string;
+            /** Format: uuid */
+            readonly creatorId: string;
+            /** Format: uuid */
+            readonly id: string;
+            /** Format: uuid */
+            readonly productId: string;
+            /** @enum {string} */
+            readonly status: "APPLIED";
+        };
         readonly AuthSessionDto: {
             readonly tokens: components["schemas"]["AuthTokensDto"];
             readonly user: components["schemas"]["UserPublicDto"];
@@ -797,6 +860,96 @@ export interface components {
             /** @enum {string} */
             readonly locale?: "fr" | "en" | "ar";
         };
+        readonly MarketplaceBrandSummaryDto: {
+            /** Format: uri */
+            readonly avatarUrl?: string;
+            /** @description Brand description (US-031 detail only) */
+            readonly description?: string;
+            /** Format: uuid */
+            readonly id: string;
+            readonly name: string;
+        };
+        readonly MarketplaceDeliverableDto: {
+            /** @enum {string} */
+            readonly contentType: "reel" | "post" | "story" | "video" | "short" | "carousel" | "live";
+            /**
+             * Format: date
+             * @description ISO 8601 publication date
+             */
+            readonly datePublication: string;
+            /**
+             * Format: date
+             * @description ISO 8601 reception date
+             */
+            readonly dateReception: string;
+            /** @enum {string} */
+            readonly platform: "INSTAGRAM" | "YOUTUBE" | "TIKTOK" | "TWITTER";
+            readonly quantity: number;
+            /** @description @handle to tag in the publication */
+            readonly taggedAccount: string;
+            readonly unitPrice: number;
+        };
+        readonly MarketplaceProductCardDto: {
+            readonly brand: components["schemas"]["MarketplaceBrandSummaryDto"];
+            /** @description Sum of unitPrice × quantity across deliverables, in MAD */
+            readonly compensationDhs: number;
+            /**
+             * @default MAD
+             * @enum {string}
+             */
+            readonly currency: "MAD";
+            /**
+             * Format: date-time
+             * @description ISO 8601 expiration timestamp
+             */
+            readonly expiresAt: string;
+            /** Format: uuid */
+            readonly id: string;
+            /** @description Computed: true when expiresAt < now (US-035) */
+            readonly isExpired: boolean;
+            /** @enum {string} */
+            readonly platform: "INSTAGRAM" | "YOUTUBE" | "TIKTOK" | "TWITTER";
+            readonly productName: string;
+            /**
+             * @description Tier targeted by the brand for slot segmentation
+             * @enum {string}
+             */
+            readonly segmentTier: "NANO" | "MICRO" | "MID" | "MACRO" | "MEGA" | "CELEBRITY";
+            readonly slotsLeft: number;
+        };
+        readonly MarketplaceProductDetailDto: {
+            readonly brand: components["schemas"]["MarketplaceBrandSummaryDto"];
+            readonly callToAction: string;
+            /**
+             * @default MAD
+             * @enum {string}
+             */
+            readonly currency: "MAD";
+            readonly deliverables: readonly components["schemas"]["MarketplaceDeliverableDto"][];
+            /** Format: date-time */
+            readonly expiresAt: string;
+            readonly hashtags: readonly string[];
+            /** Format: uuid */
+            readonly id: string;
+            /** @description true when expiresAt < now (US-035) */
+            readonly isExpired: boolean;
+            readonly miniScript: string;
+            /**
+             * @description US-034 — INFLU is always the payer for marketplace deals
+             * @default true
+             */
+            readonly paidByInflu: boolean;
+            /** @enum {string} */
+            readonly platform: "INSTAGRAM" | "YOUTUBE" | "TIKTOK" | "TWITTER";
+            readonly productDescription: string;
+            readonly productName: string;
+            readonly requestedContent: string;
+            /** @enum {string} */
+            readonly segmentTier: "NANO" | "MICRO" | "MID" | "MACRO" | "MEGA" | "CELEBRITY";
+            readonly slotsLeft: number;
+            /** @description Sum of unitPrice × quantity across all deliverables, in MAD */
+            readonly totalCompensationDhs: number;
+        };
         readonly OnboardBusinessDto: {
             /** @description Must be true (legal mentions & privacy) */
             readonly acceptLegal: boolean;
@@ -828,6 +981,13 @@ export interface components {
             readonly phone: string;
             readonly rc: string;
             readonly tva: string;
+        };
+        readonly PaginatedMarketplaceProductsDto: {
+            readonly items: readonly components["schemas"]["MarketplaceProductCardDto"][];
+            readonly limit: number;
+            readonly page: number;
+            /** @description Total number of products available */
+            readonly total: number;
         };
         readonly PricingDto: {
             readonly lines: readonly components["schemas"]["PricingLineDto"][];
@@ -1001,6 +1161,7 @@ export interface components {
     headers: never;
     pathItems: never;
 }
+export type SchemaApplicationDto = components['schemas']['ApplicationDto'];
 export type SchemaAuthSessionDto = components['schemas']['AuthSessionDto'];
 export type SchemaAuthTokensDto = components['schemas']['AuthTokensDto'];
 export type SchemaBrandAccessDto = components['schemas']['BrandAccessDto'];
@@ -1029,7 +1190,12 @@ export type SchemaLoginDto = components['schemas']['LoginDto'];
 export type SchemaLogoutDto = components['schemas']['LogoutDto'];
 export type SchemaMagicLinkConsumeDto = components['schemas']['MagicLinkConsumeDto'];
 export type SchemaMagicLinkRequestDto = components['schemas']['MagicLinkRequestDto'];
+export type SchemaMarketplaceBrandSummaryDto = components['schemas']['MarketplaceBrandSummaryDto'];
+export type SchemaMarketplaceDeliverableDto = components['schemas']['MarketplaceDeliverableDto'];
+export type SchemaMarketplaceProductCardDto = components['schemas']['MarketplaceProductCardDto'];
+export type SchemaMarketplaceProductDetailDto = components['schemas']['MarketplaceProductDetailDto'];
 export type SchemaOnboardBusinessDto = components['schemas']['OnboardBusinessDto'];
+export type SchemaPaginatedMarketplaceProductsDto = components['schemas']['PaginatedMarketplaceProductsDto'];
 export type SchemaPricingDto = components['schemas']['PricingDto'];
 export type SchemaPricingLineDto = components['schemas']['PricingLineDto'];
 export type SchemaPricingSuggestedRangeDto = components['schemas']['PricingSuggestedRangeDto'];
@@ -2328,6 +2494,142 @@ export interface operations {
             };
             /** @description Caller is not a creator */
             readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly MarketplaceController_listProducts: {
+        readonly parameters: {
+            readonly query?: {
+                readonly limit?: number;
+                readonly page?: number;
+                /** @description Free-text search on product name */
+                readonly q?: string;
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedMarketplaceProductsDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly MarketplaceController_getProduct: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["MarketplaceProductDetailDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description PRODUCT_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly MarketplaceController_apply: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["ApplicationDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description PRODUCT_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description PROFILE_INCOMPLETE | NO_SLOTS_LEFT | ALREADY_APPLIED */
+            readonly 409: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description PRODUCT_EXPIRED */
+            readonly 410: {
                 headers: {
                     readonly [name: string]: unknown;
                 };
