@@ -1,18 +1,20 @@
-import { ChangeDetectionStrategy } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideRouter } from '@angular/router';
 
 import { LegalBrandPage } from './legal-brand.page';
 
 describe('LegalBrandPage', () => {
-  it('renders', async () => {
+  it('[AC-004-01] renders the brand legal mentions sections', async () => {
     await TestBed.configureTestingModule({
-      imports: [LegalBrandPage, TranslateModule.forRoot()],
-    })
-      .overrideComponent(LegalBrandPage, { set: { changeDetection: ChangeDetectionStrategy.Default } })
-      .compileComponents();
+      imports: [LegalBrandPage],
+      providers: [provideRouter([])],
+    }).compileComponents();
     const fixture = TestBed.createComponent(LegalBrandPage);
     fixture.detectChanges();
-    expect(fixture.nativeElement).toBeTruthy();
+    const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(text).toContain('Brand legal mentions');
+    expect(text).toContain('1. Operator');
+    expect(text).toContain('4. Payment terms');
+    expect(text).toContain('6. Termination');
   });
 });
