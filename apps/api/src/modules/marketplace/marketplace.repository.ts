@@ -1,15 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import {
+  DeleteCommand,
   GetCommand,
   PutCommand,
   QueryCommand,
   ScanCommand,
   TransactWriteCommand,
+  UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 
 import { DynamoDbService } from '../../shared/dynamodb/dynamodb.service';
 
 import type { SocialPlatform, Tier } from '@my-app/shared-types';
+
+import type {
+  DeliverableContentType,
+  MarketplaceWizardStep,
+} from './dto/wizard.dto';
 
 export type MarketplaceProductStatus =
   | 'DRAFT'
@@ -22,10 +29,12 @@ export interface MarketplaceProductRecord {
   id: string;
   ownerUserId: string;
   brandId: string;
+  brandDescription?: string;
   productName: string;
   productDescription: string;
   requestedContent: string;
   miniScript: string;
+  acceptanceCriteria?: string[];
   hashtags: string[];
   callToAction: string;
   /** Single primary platform shown on the card (US-030). Derived from the first deliverable. */
@@ -37,6 +46,8 @@ export interface MarketplaceProductRecord {
   currency: 'MAD';
   paidByInflu: true;
   status: MarketplaceProductStatus;
+  /** Last completed wizard step while in DRAFT (US-120). */
+  currentStep?: MarketplaceWizardStep;
   publishedAt: string;
   expiresAt: string;
   createdAt: string;
@@ -47,7 +58,7 @@ export interface MarketplaceDeliverableRecord {
   productId: string;
   deliverableId: string;
   platform: SocialPlatform;
-  contentType: string;
+  contentType: DeliverableContentType | string;
   quantity: number;
   unitPriceMad: number;
   taggedAccount: string;
@@ -288,6 +299,122 @@ export class MarketplaceRepository {
             },
           },
         ],
+      }),
+    );
+  }
+
+  // ------------- Owner-side queries (US-122 / US-120) -------------
+
+  /**
+   * US-122 — List products owned by a business user. Soft-deleted products
+   * (`DELETED`) are excluded; everything else (`DRAFT|PUBLISHED|EXPIRED|CLOSED`)
+   * is returned so the UI can show pending drafts and expired campaigns.
+   */
+  async listProductsByOwner(opts: {
+    ownerUserId: string;
+    brandId?: string;
+    status?: MarketplaceProductStatus;
+    page: number;
+    limit: number;
+  }): Promise<{ items: MarketplaceProductRecord[]; total: number }> {
+    const all: MarketplaceProductRecord[] = [];
+    let cursor: Record<string, unknown> | undefined;
+    do {
+      const res = await this.db.client.send(
+        new ScanCommand({
+          TableName: this.db.mainTable,
+          ExclusiveStartKey: cursor,
+          FilterExpression:
+            '#e = :p AND ownerUserId = :owner AND #st <> :del',
+          ExpressionAttributeNames: { '#e': 'entity', '#st': 'status' },
+          ExpressionAttributeValues: {
+            ':p': 'MarketplaceProduct',
+            ':owner': opts.ownerUserId,
+            ':del': 'DELETED',
+          },
+        }),
+      );
+      for (const it of res.Items ?? []) {
+        const {
+          PK: _p,
+          SK: _s,
+          entity: _e,
+          GSI2PK: _g2p,
+          GSI2SK: _g2s,
+          GSI4PK: _g4p,
+          GSI4SK: _g4s,
+          ...rest
+        } = it;
+        all.push(rest as unknown as MarketplaceProductRecord);
+      }
+      cursor = res.LastEvaluatedKey;
+    } while (cursor);
+
+    let filtered = all;
+    if (opts.brandId) {
+      filtered = filtered.filter((p) => p.brandId === opts.brandId);
+    }
+    if (opts.status) {
+      filtered = filtered.filter((p) => p.status === opts.status);
+    }
+    filtered.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+    const start = (opts.page - 1) * opts.limit;
+    return {
+      items: filtered.slice(start, start + opts.limit),
+      total: filtered.length,
+    };
+  }
+
+  async deleteDeliverable(productId: string, deliverableId: string): Promise<void> {
+    await this.db.client.send(
+      new DeleteCommand({
+        TableName: this.db.mainTable,
+        Key: {
+          PK: MarketplaceRepository.productPk(productId),
+          SK: MarketplaceRepository.deliverableSk(deliverableId),
+        },
+      }),
+    );
+  }
+
+  /**
+   * Replace the deliverables of a product: deletes existing rows and
+   * re-inserts the provided ones. Used by wizard step DELIVERABLES.
+   */
+  async replaceDeliverables(
+    productId: string,
+    deliverables: MarketplaceDeliverableRecord[],
+  ): Promise<void> {
+    const existing = await this.listDeliverables(productId);
+    for (const d of existing) {
+      await this.deleteDeliverable(productId, d.deliverableId);
+    }
+    for (const d of deliverables) {
+      await this.putDeliverable({ ...d, productId });
+    }
+  }
+
+  /**
+   * US-120 — Soft delete: set status to `DELETED` (`UpdateCommand`). The row
+   * itself is kept so audits and existing applications still resolve.
+   */
+  async softDeleteProduct(
+    productId: string,
+    nowIso: string,
+  ): Promise<void> {
+    await this.db.client.send(
+      new UpdateCommand({
+        TableName: this.db.mainTable,
+        Key: { PK: MarketplaceRepository.productPk(productId), SK: 'META' },
+        UpdateExpression:
+          'SET #st = :del, GSI4PK = :g4p, updatedAt = :now',
+        ExpressionAttributeNames: { '#st': 'status' },
+        ExpressionAttributeValues: {
+          ':del': 'DELETED',
+          ':g4p': 'MKT#STATUS#DELETED',
+          ':now': nowIso,
+        },
+        ConditionExpression: 'attribute_exists(PK)',
       }),
     );
   }

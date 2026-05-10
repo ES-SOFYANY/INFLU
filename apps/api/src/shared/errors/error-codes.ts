@@ -51,6 +51,10 @@ export const ERROR_CODES = {
 
   // Discovery
   INVALID_DISC_FILTER: 'INVALID_DISC_FILTER',
+
+  // Marketplace wizard (US-120 / US-121)
+  WIZARD_INCOMPLETE: 'WIZARD_INCOMPLETE',
+  INVALID_DELIVERABLE: 'INVALID_DELIVERABLE',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

@@ -157,6 +157,91 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/business/ai-campaign/sessions": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-110] Start a new AI Campaign chat session */
+        readonly post: operations["AiCampaignController_startSession"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/ai-campaign/sessions/{id}/messages": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-110] Send a chat message (content and/or selectedScopes). Creates a Campaign DRAFT when the AI marks the brief as ready. */
+        readonly post: operations["AiCampaignController_sendMessage"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/ai-campaigns": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-111] List my AI campaigns (AI Manager) */
+        readonly get: operations["AiCampaignController_listCampaigns"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/ai-campaigns/{id}": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-111] Get one of my AI campaigns */
+        readonly get: operations["AiCampaignController_getCampaign"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/ai-campaigns/{id}/status": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        /** [US-111] Transition campaign status (DRAFT→ACTIVE, ACTIVE↔ON_HOLD, *→COMPLETED) */
+        readonly patch: operations["AiCampaignController_updateStatus"];
+        readonly trace?: never;
+    };
     readonly "/api/business/brands": {
         readonly parameters: {
             readonly query?: never;
@@ -254,6 +339,60 @@ export interface paths {
         readonly get: operations["DiscoveryController_getPublicProfile"];
         readonly put?: never;
         readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/marketplace/products": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-122] List my marketplace products */
+        readonly get: operations["BusinessMarketplaceController_listMine"];
+        readonly put?: never;
+        /** [US-120] Create a DRAFT marketplace product (step BRAND_INFO) */
+        readonly post: operations["BusinessMarketplaceController_createDraft"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/marketplace/products/{id}": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-120/US-122] Get one of my marketplace products */
+        readonly get: operations["BusinessMarketplaceController_getMine"];
+        readonly put?: never;
+        readonly post?: never;
+        /** [US-120] Soft-delete a marketplace product */
+        readonly delete: operations["BusinessMarketplaceController_remove"];
+        readonly options?: never;
+        readonly head?: never;
+        /** [US-120/US-121] Save a wizard step (BRAND_INFO|PRODUCT_DETAILS|ACCEPTANCE_CRITERIA|DELIVERABLES|DATES) */
+        readonly patch: operations["BusinessMarketplaceController_saveStep"];
+        readonly trace?: never;
+    };
+    readonly "/api/business/marketplace/products/{id}/publish": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-120] Publish a draft marketplace product */
+        readonly post: operations["BusinessMarketplaceController_publish"];
         readonly delete?: never;
         readonly options?: never;
         readonly head?: never;
@@ -679,6 +818,35 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        readonly AiCampaignChatMessageDto: {
+            readonly content: string;
+            /** Format: date-time */
+            readonly createdAt: string;
+            /** Format: uuid */
+            readonly id: string;
+            /** @enum {string} */
+            readonly role: "USER" | "ASSISTANT" | "SYSTEM";
+        };
+        readonly AiCampaignMessageResponseDto: {
+            readonly aiResponse: components["schemas"]["AiCampaignChatMessageDto"];
+            /** @description Set when the AI flow completed and a draft Campaign was created. */
+            readonly campaign?: components["schemas"]["CampaignDto"];
+            readonly session: components["schemas"]["AiCampaignSessionDto"];
+            readonly userMessage?: components["schemas"]["AiCampaignChatMessageDto"];
+        };
+        readonly AiCampaignSessionDto: {
+            /** Format: uuid */
+            readonly campaignId?: string;
+            /** Format: date-time */
+            readonly createdAt: string;
+            readonly selectedScopes: readonly ("BRANDING" | "VISIBILITY_AWARENESS" | "POSITIONING_STORYTELLING" | "NEW_PRODUCT_LAUNCH" | "PROMOTIONS" | "EVENT_PROMOTION" | "ENGAGEMENT_INTERACTIONS")[];
+            /** Format: uuid */
+            readonly sessionId: string;
+            /** @enum {string} */
+            readonly status: "DRAFT" | "IN_PROGRESS" | "BRIEF_READY" | "COMPLETED";
+            /** Format: date-time */
+            readonly updatedAt: string;
+        };
         readonly AiCoachSessionDto: {
             /**
              * @description First assistant question (always returned in French)
@@ -819,6 +987,23 @@ export interface components {
             /** @description TVA — digits only */
             readonly tva: string;
         };
+        readonly CampaignDto: {
+            /** Format: uuid */
+            readonly brandId?: string;
+            /** Format: date-time */
+            readonly createdAt: string;
+            /** Format: uuid */
+            readonly id: string;
+            readonly name: string;
+            /** @enum {string} */
+            readonly source: "AI_CAMPAIGN" | "MARKETPLACE";
+            /** Format: uuid */
+            readonly sourceId?: string;
+            /** @enum {string} */
+            readonly status: "DRAFT" | "ACTIVE" | "ON_HOLD" | "COMPLETED";
+            /** Format: date-time */
+            readonly updatedAt: string;
+        };
         readonly ChangeBusinessPasswordDto: {
             /** @description Current password */
             readonly currentPassword: string;
@@ -850,6 +1035,11 @@ export interface components {
             readonly dateOfExpiry?: string;
             /** @enum {string} */
             readonly status: "NONE" | "PENDING_VALIDATION" | "VALIDATED" | "CANCELLED";
+        };
+        readonly CreateMarketplaceProductDto: {
+            readonly brandDescription: string;
+            /** Format: uuid */
+            readonly brandId: string;
         };
         readonly CreatorAccountInfoDto: {
             /**
@@ -919,6 +1109,22 @@ export interface components {
             readonly posts: readonly Record<string, never>[];
             readonly profile: components["schemas"]["CreatorProfileOverviewDto"];
             readonly socialCoverage: readonly components["schemas"]["SocialCoverageRowDto"][];
+        };
+        readonly DeliverableInputDto: {
+            /** @enum {string} */
+            readonly contentType: "post" | "carousel" | "story" | "reel" | "live" | "video" | "short";
+            /** Format: date */
+            readonly datePublication: string;
+            /** Format: date */
+            readonly dateReception: string;
+            /** Format: uuid */
+            readonly id?: string;
+            /** @enum {string} */
+            readonly platform: "INSTAGRAM" | "YOUTUBE" | "TIKTOK" | "TWITTER";
+            readonly quantity: number;
+            readonly taggedAccount: string;
+            /** @description Unit price in MAD */
+            readonly unitPrice: number;
         };
         readonly DiscoveryCreatorItemDto: {
             /** Format: uri */
@@ -1133,6 +1339,34 @@ export interface components {
             /** @description Sum of unitPrice × quantity across all deliverables, in MAD */
             readonly totalCompensationDhs: number;
         };
+        readonly MarketplaceProductWizardDto: {
+            readonly acceptanceCriteria?: readonly string[];
+            readonly brandDescription?: string;
+            /** Format: uuid */
+            readonly brandId: string;
+            readonly callToAction?: string;
+            /** Format: date-time */
+            readonly createdAt: string;
+            /** @enum {string} */
+            readonly currentStep: "BRAND_INFO" | "PRODUCT_DETAILS" | "ACCEPTANCE_CRITERIA" | "DELIVERABLES" | "DATES";
+            readonly deliverables?: readonly components["schemas"]["DeliverableInputDto"][];
+            /** Format: date-time */
+            readonly expiresAt?: string;
+            readonly hashtags?: readonly string[];
+            /** Format: uuid */
+            readonly id: string;
+            readonly miniScript?: string;
+            readonly productDescription?: string;
+            readonly productName?: string;
+            /** Format: date-time */
+            readonly publishedAt?: string;
+            readonly requestedContent?: string;
+            readonly slotsLeft?: number;
+            /** @enum {string} */
+            readonly status: "DRAFT" | "PUBLISHED" | "EXPIRED" | "CLOSED" | "DELETED";
+            /** Format: date-time */
+            readonly updatedAt: string;
+        };
         readonly OnboardBusinessDto: {
             /** @description Must be true (legal mentions & privacy) */
             readonly acceptLegal: boolean;
@@ -1164,6 +1398,12 @@ export interface components {
             readonly phone: string;
             readonly rc: string;
             readonly tva: string;
+        };
+        readonly PaginatedCampaignsDto: {
+            readonly items: readonly components["schemas"]["CampaignDto"][];
+            readonly limit: number;
+            readonly page: number;
+            readonly total: number;
         };
         readonly PaginatedDiscoveryCreatorsDto: {
             readonly items: readonly components["schemas"]["DiscoveryCreatorItemDto"][];
@@ -1241,6 +1481,10 @@ export interface components {
         readonly RoleOptionsResponseDto: {
             readonly roles: readonly components["schemas"]["RoleOptionDto"][];
         };
+        readonly SendCampaignMessageDto: {
+            readonly content?: string;
+            readonly selectedScopes?: readonly ("BRANDING" | "VISIBILITY_AWARENESS" | "POSITIONING_STORYTELLING" | "NEW_PRODUCT_LAUNCH" | "PROMOTIONS" | "EVENT_PROMOTION" | "ENGAGEMENT_INTERACTIONS")[];
+        };
         readonly SendMessageDto: {
             readonly content: string;
         };
@@ -1276,6 +1520,13 @@ export interface components {
             /** @enum {string} */
             readonly platform: "INSTAGRAM" | "YOUTUBE" | "TIKTOK" | "TWITTER";
         };
+        readonly StartAiCampaignSessionResponseDto: {
+            /** @example What kind of campaign would you like to launch, and what scope are you aiming for? */
+            readonly firstMessage: string;
+            readonly scopeOptions: readonly ("BRANDING" | "VISIBILITY_AWARENESS" | "POSITIONING_STORYTELLING" | "NEW_PRODUCT_LAUNCH" | "PROMOTIONS" | "EVENT_PROMOTION" | "ENGAGEMENT_INTERACTIONS")[];
+            /** Format: uuid */
+            readonly sessionId: string;
+        };
         readonly SubmitCinDto: {
             /**
              * @description Moroccan CIN — 1 or 2 letters then 5 or 6 digits
@@ -1296,6 +1547,10 @@ export interface components {
             /** @description Moroccan phone format +212XXXXXXXXX */
             readonly phone?: string;
         };
+        readonly UpdateCampaignStatusDto: {
+            /** @enum {string} */
+            readonly status: "DRAFT" | "ACTIVE" | "ON_HOLD" | "COMPLETED";
+        };
         readonly UpdateCreatorAccountInfoDto: {
             readonly address?: string;
             readonly fullName?: string;
@@ -1312,6 +1567,21 @@ export interface components {
             /** Format: uri */
             readonly coverUrl?: string;
             readonly description?: string;
+        };
+        readonly UpdateMarketplaceProductDto: {
+            readonly acceptanceCriteria?: readonly string[];
+            readonly brandDescription?: string;
+            /** Format: uuid */
+            readonly brandId?: string;
+            readonly callToAction?: string;
+            readonly deliverables?: readonly components["schemas"]["DeliverableInputDto"][];
+            readonly hashtags?: readonly string[];
+            readonly miniScript?: string;
+            readonly productDescription?: string;
+            readonly productName?: string;
+            readonly requestedContent?: string;
+            /** @enum {string} */
+            readonly step: "BRAND_INFO" | "PRODUCT_DETAILS" | "ACCEPTANCE_CRITERIA" | "DELIVERABLES" | "DATES";
         };
         readonly UpdatePricingDto: {
             readonly lines: readonly components["schemas"]["PricingLineDto"][];
@@ -1358,6 +1628,9 @@ export interface components {
     headers: never;
     pathItems: never;
 }
+export type SchemaAiCampaignChatMessageDto = components['schemas']['AiCampaignChatMessageDto'];
+export type SchemaAiCampaignMessageResponseDto = components['schemas']['AiCampaignMessageResponseDto'];
+export type SchemaAiCampaignSessionDto = components['schemas']['AiCampaignSessionDto'];
 export type SchemaAiCoachSessionDto = components['schemas']['AiCoachSessionDto'];
 export type SchemaApplicationDto = components['schemas']['ApplicationDto'];
 export type SchemaAuthSessionDto = components['schemas']['AuthSessionDto'];
@@ -1369,15 +1642,18 @@ export type SchemaBrandSummaryDto = components['schemas']['BrandSummaryDto'];
 export type SchemaBusinessAccountInfoDto = components['schemas']['BusinessAccountInfoDto'];
 export type SchemaBusinessDashboardKpisDto = components['schemas']['BusinessDashboardKpisDto'];
 export type SchemaBusinessInfoDto = components['schemas']['BusinessInfoDto'];
+export type SchemaCampaignDto = components['schemas']['CampaignDto'];
 export type SchemaChangeBusinessPasswordDto = components['schemas']['ChangeBusinessPasswordDto'];
 export type SchemaChangePasswordDto = components['schemas']['ChangePasswordDto'];
 export type SchemaChatMessageDto = components['schemas']['ChatMessageDto'];
 export type SchemaCinStatusDto = components['schemas']['CinStatusDto'];
+export type SchemaCreateMarketplaceProductDto = components['schemas']['CreateMarketplaceProductDto'];
 export type SchemaCreatorAccountInfoDto = components['schemas']['CreatorAccountInfoDto'];
 export type SchemaCreatorBillingDto = components['schemas']['CreatorBillingDto'];
 export type SchemaCreatorDashboardKpisDto = components['schemas']['CreatorDashboardKpisDto'];
 export type SchemaCreatorProfileOverviewDto = components['schemas']['CreatorProfileOverviewDto'];
 export type SchemaCreatorReportDto = components['schemas']['CreatorReportDto'];
+export type SchemaDeliverableInputDto = components['schemas']['DeliverableInputDto'];
 export type SchemaDiscoveryCreatorItemDto = components['schemas']['DiscoveryCreatorItemDto'];
 export type SchemaDiscoveryPlatformInfoDto = components['schemas']['DiscoveryPlatformInfoDto'];
 export type SchemaDiscoveryPublicCreatorProfileDto = components['schemas']['DiscoveryPublicCreatorProfileDto'];
@@ -1397,7 +1673,9 @@ export type SchemaMarketplaceBrandSummaryDto = components['schemas']['Marketplac
 export type SchemaMarketplaceDeliverableDto = components['schemas']['MarketplaceDeliverableDto'];
 export type SchemaMarketplaceProductCardDto = components['schemas']['MarketplaceProductCardDto'];
 export type SchemaMarketplaceProductDetailDto = components['schemas']['MarketplaceProductDetailDto'];
+export type SchemaMarketplaceProductWizardDto = components['schemas']['MarketplaceProductWizardDto'];
 export type SchemaOnboardBusinessDto = components['schemas']['OnboardBusinessDto'];
+export type SchemaPaginatedCampaignsDto = components['schemas']['PaginatedCampaignsDto'];
 export type SchemaPaginatedDiscoveryCreatorsDto = components['schemas']['PaginatedDiscoveryCreatorsDto'];
 export type SchemaPaginatedMarketplaceProductsDto = components['schemas']['PaginatedMarketplaceProductsDto'];
 export type SchemaPricingDto = components['schemas']['PricingDto'];
@@ -1406,14 +1684,18 @@ export type SchemaPricingSuggestedRangeDto = components['schemas']['PricingSugge
 export type SchemaRegisterCreatorDto = components['schemas']['RegisterCreatorDto'];
 export type SchemaRoleOptionDto = components['schemas']['RoleOptionDto'];
 export type SchemaRoleOptionsResponseDto = components['schemas']['RoleOptionsResponseDto'];
+export type SchemaSendCampaignMessageDto = components['schemas']['SendCampaignMessageDto'];
 export type SchemaSendMessageDto = components['schemas']['SendMessageDto'];
 export type SchemaSendMessageResponseDto = components['schemas']['SendMessageResponseDto'];
 export type SchemaSocialAccountDto = components['schemas']['SocialAccountDto'];
 export type SchemaSocialCoverageRowDto = components['schemas']['SocialCoverageRowDto'];
+export type SchemaStartAiCampaignSessionResponseDto = components['schemas']['StartAiCampaignSessionResponseDto'];
 export type SchemaSubmitCinDto = components['schemas']['SubmitCinDto'];
 export type SchemaUpdateBusinessAccountInfoDto = components['schemas']['UpdateBusinessAccountInfoDto'];
+export type SchemaUpdateCampaignStatusDto = components['schemas']['UpdateCampaignStatusDto'];
 export type SchemaUpdateCreatorAccountInfoDto = components['schemas']['UpdateCreatorAccountInfoDto'];
 export type SchemaUpdateCreatorProfileOverviewDto = components['schemas']['UpdateCreatorProfileOverviewDto'];
+export type SchemaUpdateMarketplaceProductDto = components['schemas']['UpdateMarketplaceProductDto'];
 export type SchemaUpdatePricingDto = components['schemas']['UpdatePricingDto'];
 export type SchemaUploadUrlDto = components['schemas']['UploadUrlDto'];
 export type SchemaUserPublicDto = components['schemas']['UserPublicDto'];
@@ -1681,6 +1963,240 @@ export interface operations {
                 content: {
                     readonly "application/json": components["schemas"]["RoleOptionsResponseDto"];
                 };
+            };
+        };
+    };
+    readonly AiCampaignController_startSession: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["StartAiCampaignSessionResponseDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly AiCampaignController_sendMessage: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["SendCampaignMessageDto"];
+            };
+        };
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["AiCampaignMessageResponseDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Session not found */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description EMPTY_MESSAGE */
+            readonly 422: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly AiCampaignController_listCampaigns: {
+        readonly parameters: {
+            readonly query?: {
+                readonly limit?: number;
+                readonly page?: number;
+                /** @description Free-text search on campaign name */
+                readonly q?: string;
+                readonly status?: "DRAFT" | "ACTIVE" | "ON_HOLD" | "COMPLETED";
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedCampaignsDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly AiCampaignController_getCampaign: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CampaignDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not the owner */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Campaign not found */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly AiCampaignController_updateStatus: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["UpdateCampaignStatusDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CampaignDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not the owner */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Campaign not found */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description INVALID_TRANSITION */
+            readonly 409: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -2000,6 +2516,288 @@ export interface operations {
             };
             /** @description Creator not found */
             readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BusinessMarketplaceController_listMine: {
+        readonly parameters: {
+            readonly query?: {
+                /** @description Filter by brand id */
+                readonly brand?: string;
+                readonly limit?: number;
+                readonly page?: number;
+                readonly status?: "DRAFT" | "PUBLISHED" | "EXPIRED" | "CLOSED";
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedMarketplaceProductsDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BusinessMarketplaceController_createDraft: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["CreateMarketplaceProductDto"];
+            };
+        };
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["MarketplaceProductWizardDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description BRAND_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BusinessMarketplaceController_getMine: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["MarketplaceProductWizardDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not the owner */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description PRODUCT_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BusinessMarketplaceController_remove: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Deleted */
+            readonly 204: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not the owner */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description PRODUCT_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BusinessMarketplaceController_saveStep: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["UpdateMarketplaceProductDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["MarketplaceProductWizardDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not the owner */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description PRODUCT_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description WIZARD_INCOMPLETE | INVALID_DELIVERABLE */
+            readonly 422: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly BusinessMarketplaceController_publish: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["MarketplaceProductWizardDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not the owner */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description PRODUCT_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description WIZARD_INCOMPLETE */
+            readonly 422: {
                 headers: {
                     readonly [name: string]: unknown;
                 };

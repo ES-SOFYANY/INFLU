@@ -3,7 +3,10 @@ import { Module } from '@nestjs/common';
 import { BrandModule } from '../brand/brand.module';
 import { CreatorProfileModule } from '../creator-profile/creator-profile.module';
 
-import { MarketplaceController } from './marketplace.controller';
+import {
+  BusinessMarketplaceController,
+  MarketplaceController,
+} from './marketplace.controller';
 import { MarketplaceRepository } from './marketplace.repository';
 import { MarketplaceService } from './marketplace.service';
 
@@ -13,7 +16,7 @@ import { MarketplaceService } from './marketplace.service';
  */
 @Module({
   imports: [BrandModule, CreatorProfileModule],
-  controllers: [MarketplaceController],
+  controllers: [MarketplaceController, BusinessMarketplaceController],
   providers: [MarketplaceService, MarketplaceRepository],
   exports: [MarketplaceService, MarketplaceRepository],
 })

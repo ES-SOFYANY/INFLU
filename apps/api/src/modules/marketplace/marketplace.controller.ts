@@ -1,11 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -25,9 +27,13 @@ import type { AuthenticatedUser } from '../../shared/auth/types';
 
 import {
   ApplicationDto,
+  CreateMarketplaceProductDto,
   ListMarketplaceProductsQueryDto,
+  ListMyMarketplaceProductsQueryDto,
   MarketplaceProductDetailDto,
+  MarketplaceProductWizardDto,
   PaginatedMarketplaceProductsDto,
+  UpdateMarketplaceProductDto,
 } from './dto';
 import { MarketplaceService } from './marketplace.service';
 
@@ -95,5 +101,131 @@ export class MarketplaceController {
     @Body() _body: Record<string, never> = {},
   ): Promise<ApplicationDto> {
     return this.service.applyToProduct(user.userId, id);
+  }
+}
+
+/**
+ * US-120 / US-121 / US-122 — Business-side endpoints (`/business/marketplace`).
+ * Mounted as a separate controller so role guards (`BUSINESS|AGENCY`) and
+ * URL prefix differ from the public creator-facing endpoints above.
+ */
+@ApiTags('marketplace')
+@Controller('business/marketplace')
+export class BusinessMarketplaceController {
+  constructor(private readonly service: MarketplaceService) {}
+
+  // ----- US-122: My Marketplace -----
+  @Get('products')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('BUSINESS', 'AGENCY')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-122] List my marketplace products' })
+  @ApiResponse({ status: 200, type: PaginatedMarketplaceProductsDto })
+  @ApiResponse({ status: 401, description: 'Missing or invalid bearer token' })
+  @ApiResponse({ status: 403, description: 'Caller is not BUSINESS/AGENCY' })
+  listMine(
+    @CurrentUser() user: AuthenticatedUser,
+    @Query() query: ListMyMarketplaceProductsQueryDto,
+  ): Promise<PaginatedMarketplaceProductsDto> {
+    return this.service.listMyProducts(user.userId, query);
+  }
+
+  // ----- US-120: Create draft (wizard step 1) -----
+  @Post('products')
+  @HttpCode(HttpStatus.CREATED)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('BUSINESS', 'AGENCY')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-120] Create a DRAFT marketplace product (step BRAND_INFO)' })
+  @ApiResponse({ status: 201, type: MarketplaceProductWizardDto })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid bearer token' })
+  @ApiResponse({ status: 403, description: 'Caller is not BUSINESS/AGENCY' })
+  @ApiResponse({ status: 404, description: 'BRAND_NOT_FOUND' })
+  createDraft(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: CreateMarketplaceProductDto,
+  ): Promise<MarketplaceProductWizardDto> {
+    return this.service.createDraftProduct(user.userId, dto);
+  }
+
+  // ----- US-120: Get one of my products -----
+  @Get('products/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('BUSINESS', 'AGENCY')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-120/US-122] Get one of my marketplace products' })
+  @ApiResponse({ status: 200, type: MarketplaceProductWizardDto })
+  @ApiResponse({ status: 401, description: 'Missing or invalid bearer token' })
+  @ApiResponse({ status: 403, description: 'Caller is not the owner' })
+  @ApiResponse({ status: 404, description: 'PRODUCT_NOT_FOUND' })
+  getMine(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): Promise<MarketplaceProductWizardDto> {
+    return this.service.getOwnedProduct(user.userId, id);
+  }
+
+  // ----- US-120 / US-121: Save wizard step -----
+  @Patch('products/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('BUSINESS', 'AGENCY')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary:
+      '[US-120/US-121] Save a wizard step (BRAND_INFO|PRODUCT_DETAILS|ACCEPTANCE_CRITERIA|DELIVERABLES|DATES)',
+  })
+  @ApiResponse({ status: 200, type: MarketplaceProductWizardDto })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid bearer token' })
+  @ApiResponse({ status: 403, description: 'Caller is not the owner' })
+  @ApiResponse({ status: 404, description: 'PRODUCT_NOT_FOUND' })
+  @ApiResponse({
+    status: 422,
+    description: 'WIZARD_INCOMPLETE | INVALID_DELIVERABLE',
+  })
+  saveStep(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() dto: UpdateMarketplaceProductDto,
+  ): Promise<MarketplaceProductWizardDto> {
+    return this.service.updateWizardStep(user.userId, id, dto);
+  }
+
+  // ----- US-120: Publish -----
+  @Post('products/:id/publish')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('BUSINESS', 'AGENCY')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-120] Publish a draft marketplace product' })
+  @ApiResponse({ status: 200, type: MarketplaceProductWizardDto })
+  @ApiResponse({ status: 401, description: 'Missing or invalid bearer token' })
+  @ApiResponse({ status: 403, description: 'Caller is not the owner' })
+  @ApiResponse({ status: 404, description: 'PRODUCT_NOT_FOUND' })
+  @ApiResponse({ status: 422, description: 'WIZARD_INCOMPLETE' })
+  publish(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): Promise<MarketplaceProductWizardDto> {
+    return this.service.publishProduct(user.userId, id);
+  }
+
+  // ----- US-120: Soft-delete -----
+  @Delete('products/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('BUSINESS', 'AGENCY')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-120] Soft-delete a marketplace product' })
+  @ApiResponse({ status: 204, description: 'Deleted' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid bearer token' })
+  @ApiResponse({ status: 403, description: 'Caller is not the owner' })
+  @ApiResponse({ status: 404, description: 'PRODUCT_NOT_FOUND' })
+  async remove(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): Promise<void> {
+    await this.service.deleteProduct(user.userId, id);
   }
 }
