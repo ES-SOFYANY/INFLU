@@ -195,6 +195,69 @@ pushUser(main, {
 ]);
 
 // ───────────────────────────────────────────────────────────────────────────
+// 2.b) Reconcile CreatorProfile eligibility flags with API contract.
+//      The API repository (creator-eligibility.service) reads
+//      `ribUploaded` / `billingIce` from the User row (SK=PROFILE) and CIN
+//      from a doc at SK=DOCUMENT#CIN. The hand-written seed stores those flags
+//      on CREATOR#PROFILE and uses time-stamped DOC#CIN#<ts> SKs. We patch the
+//      payload here so eligible creators (CIN VALIDATED + RIB + ICE) can
+//      actually pass marketplace `apply` checks.
+// ───────────────────────────────────────────────────────────────────────────
+{
+  const items = main;
+  const profilesByUser = new Map();
+  for (const it of items) {
+    if (it.entity === 'CreatorProfile' && it.userId) {
+      profilesByUser.set(it.userId, it);
+    }
+  }
+  const cinDocByUser = new Map();
+  for (const it of items) {
+    if (it.entity === 'CreatorDocument' && typeof it.SK === 'string' && it.SK.startsWith('DOC#CIN')) {
+      // Normalise SK to canonical DOCUMENT#CIN expected by the API repo.
+      it.SK = 'DOCUMENT#CIN';
+      const userId = typeof it.PK === 'string' ? it.PK.replace('USER#', '') : null;
+      if (userId) cinDocByUser.set(userId, it);
+    }
+  }
+  for (const it of items) {
+    if (it.entity !== 'User' || it.role !== 'CREATOR') continue;
+    const userId = it.id;
+    const prof = profilesByUser.get(userId);
+    if (!prof) continue;
+    if (prof.ribUploaded === true && it.ribUploaded === undefined) {
+      it.ribUploaded = true;
+    }
+    if (prof.iceFilled === true && !it.billingIce) {
+      // Deterministic 15-digit ICE derived from the userId hash for traceability.
+      const tail = String(userId).replace(/\D/g, '').padStart(15, '0').slice(-15);
+      it.billingIce = tail || '000000000000010';
+    }
+    // Inject a CreatorDocument(CIN) row if the profile says VALIDATED but no doc exists.
+    if (prof.cinStatus === 'VALIDATED' && !cinDocByUser.has(userId)) {
+      items.push({
+        PK: `USER#${userId}`,
+        SK: 'DOCUMENT#CIN',
+        entity: 'CreatorDocument',
+        userId,
+        documentId: `doc_cin_${userId}`,
+        type: 'CIN',
+        s3Bucket: 'influ-private-dev',
+        s3Key: `documents/${userId}/cin/doc_cin_${userId}.pdf`,
+        mimeType: 'application/pdf',
+        sizeBytes: 1245678,
+        cinNumber: 'AB000000',
+        cinExpiry: '2030-12-31',
+        status: 'VALIDATED',
+        validatedBy: 'u_admin_001',
+        validatedAt: '2026-02-17T10:00:00Z',
+        createdAt: '2026-02-16T09:00:00Z',
+      });
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────────────
 // 3) Idempotency check
 // ───────────────────────────────────────────────────────────────────────────
 
