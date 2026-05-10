@@ -227,11 +227,17 @@ a:hover { color: var(--color-primary); text-decoration: underline; }
 .btn-ghost:hover { background: var(--bg-overlay); border-color: var(--border-default); }
 
 .btn-danger {
-  background: var(--color-danger);
+  /* BUG-UI-002 follow-up: white-on-#EF4444 = 3.76:1 fails WCAG 2.1 AA (need ≥ 4.5:1).
+     #DC2626 (Tailwind red-600) on #FFFFFF = 4.83:1 ✅ AA. Token --color-danger is
+     kept at #EF4444 because it is consumed elsewhere as a tinted background
+     (alert-danger, toast-error, badge-danger via rgba(...,0.08..0.4) overlays)
+     where contrast does not apply, and as text on dark surfaces (.error-text,
+     5.42:1 on bg-base) where #EF4444 already passes. */
+  background: #DC2626;
   color: #fff;
   box-shadow: var(--glow-danger);
 }
-.btn-danger:hover { background: #DC2626; }
+.btn-danger:hover { background: #B91C1C; }
 
 .btn-sm { padding: 0.4rem 0.875rem; font-size: var(--text-xs); }
 .btn-lg { padding: 0.875rem 1.75rem; font-size: var(--text-body); }
