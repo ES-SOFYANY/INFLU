@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
+  BatchWriteCommand,
   DeleteCommand,
   GetCommand,
   PutCommand,
@@ -10,6 +11,8 @@ import {
 import { DynamoDbService } from '../../shared/dynamodb/dynamodb.service';
 
 import type { SocialPlatform } from '@my-app/shared-types';
+import type { ContentFormat } from './dto/pricing.dto';
+import type { CreatorCinStatus } from './dto/cin-status.dto';
 
 export interface SocialAccountRecord {
   userId: string;
@@ -156,4 +159,165 @@ export class CreatorProfileRepository {
     );
     return res.Item ?? null;
   }
+
+  // ---------------------------------------------------------------------
+  // US-073 — Creator pricing grid
+  // ---------------------------------------------------------------------
+
+  static pricingSk(
+    accountHandle: string,
+    platform: SocialPlatform,
+    contentFormat: ContentFormat,
+  ): string {
+    const handle = accountHandle.startsWith('@')
+      ? accountHandle.slice(1)
+      : accountHandle;
+    return `PRICING#${handle.toLowerCase()}#${platform}#${contentFormat}`;
+  }
+
+  async listPricingLines(userId: string): Promise<PricingLineRecord[]> {
+    const res = await this.db.client.send(
+      new QueryCommand({
+        TableName: this.db.mainTable,
+        KeyConditionExpression: 'PK = :pk AND begins_with(SK, :sk)',
+        ExpressionAttributeValues: {
+          ':pk': DynamoDbService.userPk(userId),
+          ':sk': 'PRICING#',
+        },
+      }),
+    );
+    return (res.Items ?? []).map((it) => {
+      const { PK: _pk, SK: _sk, entity: _e, ...rest } = it;
+      return rest as unknown as PricingLineRecord;
+    });
+  }
+
+  /**
+   * Replace all pricing lines: delete the existing ones then put the new set.
+   * Done in DynamoDB BatchWrite chunks of 25 to stay within service limits.
+   */
+  async replacePricingLines(
+    userId: string,
+    lines: PricingLineRecord[],
+  ): Promise<void> {
+    const existing = await this.listPricingLines(userId);
+    const table = this.db.mainTable;
+    const pk = DynamoDbService.userPk(userId);
+
+    const deleteRequests = existing.map((l) => ({
+      DeleteRequest: {
+        Key: {
+          PK: pk,
+          SK: CreatorProfileRepository.pricingSk(
+            l.accountHandle,
+            l.platform,
+            l.contentFormat,
+          ),
+        },
+      },
+    }));
+
+    const putRequests = lines.map((l) => ({
+      PutRequest: {
+        Item: {
+          PK: pk,
+          SK: CreatorProfileRepository.pricingSk(
+            l.accountHandle,
+            l.platform,
+            l.contentFormat,
+          ),
+          entity: 'CreatorPricing',
+          accountHandle: l.accountHandle,
+          platform: l.platform,
+          contentFormat: l.contentFormat,
+          rateMin: l.rateMin,
+          rateMax: l.rateMax,
+          currency: l.currency,
+        },
+      },
+    }));
+
+    const all = [...deleteRequests, ...putRequests];
+    for (let i = 0; i < all.length; i += 25) {
+      const chunk = all.slice(i, i + 25);
+      if (chunk.length === 0) continue;
+      await this.db.client.send(
+        new BatchWriteCommand({ RequestItems: { [table]: chunk } }),
+      );
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // US-074/075 — Creator CIN document status
+  // ---------------------------------------------------------------------
+
+  static cinDocSk(): string {
+    return 'DOCUMENT#CIN';
+  }
+
+  async getCinDocument(userId: string): Promise<CinDocumentRecord | null> {
+    const res = await this.db.client.send(
+      new GetCommand({
+        TableName: this.db.mainTable,
+        Key: {
+          PK: DynamoDbService.userPk(userId),
+          SK: CreatorProfileRepository.cinDocSk(),
+        },
+      }),
+    );
+    if (!res.Item) return null;
+    const { PK: _p, SK: _s, entity: _e, ...rest } = res.Item;
+    return rest as unknown as CinDocumentRecord;
+  }
+
+  async putCinDocument(record: CinDocumentRecord): Promise<void> {
+    await this.db.client.send(
+      new PutCommand({
+        TableName: this.db.mainTable,
+        Item: {
+          PK: DynamoDbService.userPk(record.userId),
+          SK: CreatorProfileRepository.cinDocSk(),
+          entity: 'CreatorDocument',
+          ...record,
+        },
+      }),
+    );
+  }
+
+  async updateCinStatus(userId: string, status: CreatorCinStatus): Promise<void> {
+    await this.db.client.send(
+      new UpdateCommand({
+        TableName: this.db.mainTable,
+        Key: {
+          PK: DynamoDbService.userPk(userId),
+          SK: CreatorProfileRepository.cinDocSk(),
+        },
+        UpdateExpression: 'SET #s = :s, updatedAt = :ts',
+        ExpressionAttributeNames: { '#s': 'status' },
+        ExpressionAttributeValues: {
+          ':s': status,
+          ':ts': new Date().toISOString(),
+        },
+        ConditionExpression: 'attribute_exists(PK)',
+      }),
+    );
+  }
+}
+
+export interface PricingLineRecord {
+  accountHandle: string;
+  platform: SocialPlatform;
+  contentFormat: ContentFormat;
+  rateMin: number;
+  rateMax: number;
+  currency: 'MAD';
+}
+
+export interface CinDocumentRecord {
+  userId: string;
+  cinNumber: string;
+  dateOfExpiry: string;
+  status: CreatorCinStatus;
+  submittedAt: string;
+  updatedAt: string;
 }

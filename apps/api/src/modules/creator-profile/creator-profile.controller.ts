@@ -1,12 +1,14 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
   Param,
   Patch,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -21,12 +23,24 @@ import { ERROR_CODES } from '../../shared/errors/error-codes';
 
 import { CreatorProfileService } from './creator-profile.service';
 import {
+  ChangePasswordDto,
+  CinStatusDto,
+  CreatorAccountInfoDto,
+  CreatorBillingDto,
   CreatorDashboardKpisDto,
   CreatorProfileOverviewDto,
+  IceApproveDto,
+  IceSearchDto,
+  IceSearchResultDto,
   LinkSocialAccountDto,
+  PricingDto,
   SocialAccountDto,
   SocialCoverageRowDto,
+  SubmitCinDto,
+  UpdateCreatorAccountInfoDto,
   UpdateCreatorProfileOverviewDto,
+  UpdatePricingDto,
+  UploadUrlDto,
 } from './dto';
 
 import type { SocialPlatform } from '@my-app/shared-types';
@@ -132,5 +146,211 @@ export class CreatorProfileController {
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<SocialCoverageRowDto[]> {
     return this.service.getSocialCoverage(user.userId);
+  }
+
+  // ===== US-070: Account information =====
+  @Get('me')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-070] Get creator account information' })
+  @ApiResponse({ status: 200, type: CreatorAccountInfoDto })
+  @ApiResponse({ status: 401, description: 'Missing or invalid bearer token' })
+  @ApiResponse({ status: 403, description: 'Caller is not a creator' })
+  getAccountInfo(
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<CreatorAccountInfoDto> {
+    return this.service.getAccountInfo(user.userId);
+  }
+
+  @Patch('me')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary:
+      '[US-070] Update creator account information (email is read-only and silently ignored)',
+  })
+  @ApiBody({ type: UpdateCreatorAccountInfoDto })
+  @ApiResponse({ status: 200, type: CreatorAccountInfoDto })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid bearer token' })
+  @ApiResponse({ status: 403, description: 'Caller is not a creator' })
+  updateAccountInfo(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: UpdateCreatorAccountInfoDto,
+  ): Promise<CreatorAccountInfoDto> {
+    return this.service.updateAccountInfo(user.userId, dto);
+  }
+
+  // ===== US-076: Soft-delete account =====
+  @Delete('me')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-076] Soft-delete my creator account' })
+  @ApiResponse({ status: 204, description: 'Account deleted' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid bearer token' })
+  @ApiResponse({ status: 403, description: 'Caller is not a creator' })
+  async deleteAccount(@CurrentUser() user: AuthenticatedUser): Promise<void> {
+    await this.service.deleteAccount(user.userId);
+  }
+
+  // ===== US-071: Change password =====
+  @Post('me/password/change')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-071] Change my password' })
+  @ApiBody({ type: ChangePasswordDto })
+  @ApiResponse({ status: 204, description: 'Password updated' })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 401, description: 'Current password invalid' })
+  @ApiResponse({ status: 403, description: 'Caller is not a creator' })
+  @ApiResponse({ status: 422, description: 'New password is too weak' })
+  async changePassword(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: ChangePasswordDto,
+  ): Promise<void> {
+    await this.service.changePassword(user.userId, dto);
+  }
+
+  // ===== US-072: Billing / ICE =====
+  @Post('me/billing/ice/search')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-072] Lookup an ICE in the registry (mock)' })
+  @ApiBody({ type: IceSearchDto })
+  @ApiResponse({ status: 200, type: IceSearchResultDto })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  @ApiResponse({ status: 404, description: 'ICE_NOT_FOUND' })
+  searchIce(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: IceSearchDto,
+  ): Promise<IceSearchResultDto> {
+    return this.service.searchIce(user.userId, dto);
+  }
+
+  @Post('me/billing/ice/approve')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-072] Approve an ICE for my billing profile' })
+  @ApiBody({ type: IceApproveDto })
+  @ApiResponse({ status: 200, type: CreatorBillingDto })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  approveIce(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: IceApproveDto,
+  ): Promise<CreatorBillingDto> {
+    return this.service.approveIce(user.userId, dto);
+  }
+
+  @Get('me/billing')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-072] Get my billing profile' })
+  @ApiResponse({ status: 200, type: CreatorBillingDto })
+  getBilling(
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<CreatorBillingDto> {
+    return this.service.getBilling(user.userId);
+  }
+
+  // ===== US-073: Pricing =====
+  @Get('me/pricing')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-073] Get my pricing grid' })
+  @ApiResponse({ status: 200, type: PricingDto })
+  getPricing(@CurrentUser() user: AuthenticatedUser): Promise<PricingDto> {
+    return this.service.getPricing(user.userId);
+  }
+
+  @Put('me/pricing')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-073] Replace my pricing grid' })
+  @ApiBody({ type: UpdatePricingDto })
+  @ApiResponse({ status: 200, type: PricingDto })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  updatePricing(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: UpdatePricingDto,
+  ): Promise<PricingDto> {
+    return this.service.updatePricing(user.userId, dto);
+  }
+
+  // ===== US-074 / US-075: CIN documents =====
+  @Get('me/documents/cin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-074] Get my CIN status' })
+  @ApiResponse({ status: 200, type: CinStatusDto })
+  getCin(@CurrentUser() user: AuthenticatedUser): Promise<CinStatusDto> {
+    return this.service.getCin(user.userId);
+  }
+
+  @Post('me/documents/cin')
+  @HttpCode(HttpStatus.CREATED)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-074] Submit my CIN for admin validation' })
+  @ApiBody({ type: SubmitCinDto })
+  @ApiResponse({ status: 201, type: CinStatusDto })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
+  submitCin(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: SubmitCinDto,
+  ): Promise<CinStatusDto> {
+    return this.service.submitCin(user.userId, dto);
+  }
+
+  @Post('me/documents/cin/cancel')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-075] Cancel my pending CIN validation' })
+  @ApiResponse({ status: 200, type: CinStatusDto })
+  @ApiResponse({ status: 409, description: 'INVALID_CIN_TRANSITION' })
+  cancelCin(@CurrentUser() user: AuthenticatedUser): Promise<CinStatusDto> {
+    return this.service.cancelCin(user.userId);
+  }
+
+  @Post('me/documents/rib/upload-url')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-074] Request a mock pre-signed S3 URL for RIB upload' })
+  @ApiResponse({ status: 200, type: UploadUrlDto })
+  ribUploadUrl(@CurrentUser() _user: AuthenticatedUser): UploadUrlDto {
+    return this.service.ribUploadUrl();
+  }
+
+  @Post('me/documents/tax-certificate/upload-url')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary:
+      '[US-074] Request a mock pre-signed S3 URL for tax-certificate upload',
+  })
+  @ApiResponse({ status: 200, type: UploadUrlDto })
+  taxCertificateUploadUrl(@CurrentUser() _user: AuthenticatedUser): UploadUrlDto {
+    return this.service.taxCertificateUploadUrl();
   }
 }

@@ -11,6 +11,6 @@ import { AdminValidationService } from './admin-validation.service';
 @Module({
   controllers: [AdminValidationController],
   providers: [AdminValidationService, AdminValidationRepository],
-  exports: [AdminValidationService],
+  exports: [AdminValidationService, AdminValidationRepository],
 })
 export class AdminValidationModule {}

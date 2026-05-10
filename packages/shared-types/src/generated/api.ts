@@ -157,6 +157,76 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/creator/me": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-070] Get creator account information */
+        readonly get: operations["CreatorProfileController_getAccountInfo"];
+        readonly put?: never;
+        readonly post?: never;
+        /** [US-076] Soft-delete my creator account */
+        readonly delete: operations["CreatorProfileController_deleteAccount"];
+        readonly options?: never;
+        readonly head?: never;
+        /** [US-070] Update creator account information (email is read-only and silently ignored) */
+        readonly patch: operations["CreatorProfileController_updateAccountInfo"];
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/billing": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-072] Get my billing profile */
+        readonly get: operations["CreatorProfileController_getBilling"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/billing/ice/approve": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-072] Approve an ICE for my billing profile */
+        readonly post: operations["CreatorProfileController_approveIce"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/billing/ice/search": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-072] Lookup an ICE in the registry (mock) */
+        readonly post: operations["CreatorProfileController_searchIce"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/api/creator/me/dashboard-kpis": {
         readonly parameters: {
             readonly query?: never;
@@ -167,6 +237,110 @@ export interface paths {
         /** [US-020] Read the 10 creator dashboard KPIs */
         readonly get: operations["CreatorProfileController_getDashboardKpis"];
         readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/documents/cin": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-074] Get my CIN status */
+        readonly get: operations["CreatorProfileController_getCin"];
+        readonly put?: never;
+        /** [US-074] Submit my CIN for admin validation */
+        readonly post: operations["CreatorProfileController_submitCin"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/documents/cin/cancel": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-075] Cancel my pending CIN validation */
+        readonly post: operations["CreatorProfileController_cancelCin"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/documents/rib/upload-url": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-074] Request a mock pre-signed S3 URL for RIB upload */
+        readonly post: operations["CreatorProfileController_ribUploadUrl"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/documents/tax-certificate/upload-url": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-074] Request a mock pre-signed S3 URL for tax-certificate upload */
+        readonly post: operations["CreatorProfileController_taxCertificateUploadUrl"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/password/change": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-071] Change my password */
+        readonly post: operations["CreatorProfileController_changePassword"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/creator/me/pricing": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-073] Get my pricing grid */
+        readonly get: operations["CreatorProfileController_getPricing"];
+        /** [US-073] Replace my pricing grid */
+        readonly put: operations["CreatorProfileController_updatePricing"];
         readonly post?: never;
         readonly delete?: never;
         readonly options?: never;
@@ -240,6 +414,46 @@ export interface components {
             readonly expiresIn: number;
             readonly refreshToken: string;
         };
+        readonly ChangePasswordDto: {
+            /** @description Current password */
+            readonly currentPassword: string;
+            /** @description New password — ≥ 8 chars, 1 uppercase, 1 digit */
+            readonly newPassword: string;
+        };
+        readonly CinStatusDto: {
+            /** @description Moroccan CIN number (e.g. AB123456) */
+            readonly cinNumber?: string;
+            /**
+             * @description ISO 8601 date (YYYY-MM-DD) of CIN expiry
+             * @example 2030-01-15
+             */
+            readonly dateOfExpiry?: string;
+            /** @enum {string} */
+            readonly status: "NONE" | "PENDING_VALIDATION" | "VALIDATED" | "CANCELLED";
+        };
+        readonly CreatorAccountInfoDto: {
+            /**
+             * @example CONTENT_CREATOR
+             * @enum {string}
+             */
+            readonly accountType: "CONTENT_CREATOR";
+            readonly address?: string;
+            /**
+             * Format: email
+             * @description Read-only on the frontend
+             */
+            readonly email: string;
+            readonly fullName: string;
+            /** @enum {string} */
+            readonly gender?: "M" | "F";
+            /** @description Moroccan phone format +212XXXXXXXXX */
+            readonly phone?: string;
+        };
+        readonly CreatorBillingDto: {
+            /** @enum {string|null} */
+            readonly billingProfile?: "BUSINESS" | "AUTO_ENTREPRENEUR" | null;
+            readonly ice: string | null;
+        };
         readonly CreatorDashboardKpisDto: {
             readonly contentToPublish: number;
             readonly contentToSubmit: number;
@@ -287,6 +501,22 @@ export interface components {
             readonly idToken: string;
             /** @description CSRF state token (optional in MVP) */
             readonly state?: string;
+        };
+        readonly IceApproveDto: {
+            /** @example 000000000000001 */
+            readonly ice: string;
+        };
+        readonly IceSearchDto: {
+            /**
+             * @description Moroccan ICE — exactly 15 digits
+             * @example 000000000000001
+             */
+            readonly ice: string;
+        };
+        readonly IceSearchResultDto: {
+            readonly companyName: string;
+            readonly ice: string;
+            readonly juridicalForm: string;
         };
         readonly LinkSocialAccountDto: {
             /**
@@ -352,6 +582,36 @@ export interface components {
             readonly rc: string;
             readonly tva: string;
         };
+        readonly PricingDto: {
+            readonly lines: readonly components["schemas"]["PricingLineDto"][];
+            readonly suggestedRange: components["schemas"]["PricingSuggestedRangeDto"];
+        };
+        readonly PricingLineDto: {
+            /**
+             * @description @handle of the social account
+             * @example @janedoe
+             */
+            readonly accountHandle: string;
+            /** @enum {string} */
+            readonly contentFormat: "POST" | "CAROUSEL" | "STORY" | "REEL" | "LIVE" | "VIDEO" | "SHORT";
+            /**
+             * @example MAD
+             * @enum {string}
+             */
+            readonly currency: "MAD";
+            /** @enum {string} */
+            readonly platform: "INSTAGRAM" | "YOUTUBE" | "TIKTOK" | "TWITTER";
+            /** @description Max rate in MAD (≥ rateMin) */
+            readonly rateMax: number;
+            /** @description Min rate in MAD */
+            readonly rateMin: number;
+        };
+        readonly PricingSuggestedRangeDto: {
+            /** @enum {string} */
+            readonly currency: "MAD";
+            readonly max: number;
+            readonly min: number;
+        };
         readonly RegisterCreatorDto: {
             /** @description Must be true (legal mentions & privacy) */
             readonly acceptLegal: boolean;
@@ -412,6 +672,26 @@ export interface components {
             /** @enum {string} */
             readonly platform: "INSTAGRAM" | "YOUTUBE" | "TIKTOK" | "TWITTER";
         };
+        readonly SubmitCinDto: {
+            /**
+             * @description Moroccan CIN — 1 or 2 letters then 5 or 6 digits
+             * @example AB123456
+             */
+            readonly cinNumber: string;
+            /**
+             * @description CIN expiry date — ISO 8601 (YYYY-MM-DD)
+             * @example 2030-01-15
+             */
+            readonly dateOfExpiry: string;
+        };
+        readonly UpdateCreatorAccountInfoDto: {
+            readonly address?: string;
+            readonly fullName?: string;
+            /** @enum {string} */
+            readonly gender?: "M" | "F";
+            /** @description Moroccan phone format +212XXXXXXXXX */
+            readonly phone?: string;
+        };
         readonly UpdateCreatorProfileOverviewDto: {
             /** Format: uri */
             readonly avatarUrl?: string;
@@ -420,6 +700,26 @@ export interface components {
             /** Format: uri */
             readonly coverUrl?: string;
             readonly description?: string;
+        };
+        readonly UpdatePricingDto: {
+            readonly lines: readonly components["schemas"]["PricingLineDto"][];
+        };
+        readonly UploadUrlDto: {
+            /**
+             * @description TTL in seconds before the upload URL expires
+             * @example 900
+             */
+            readonly expiresIn: number;
+            /**
+             * @description Object key under which the file will live in the bucket
+             * @example creator-documents/abc123.pdf
+             */
+            readonly objectKey: string;
+            /**
+             * Format: uri
+             * @description Pre-signed S3 PUT URL (mock in dev/test)
+             */
+            readonly uploadUrl: string;
         };
         readonly UserPublicDto: {
             /** Format: email */
@@ -448,22 +748,36 @@ export interface components {
 }
 export type SchemaAuthSessionDto = components['schemas']['AuthSessionDto'];
 export type SchemaAuthTokensDto = components['schemas']['AuthTokensDto'];
+export type SchemaChangePasswordDto = components['schemas']['ChangePasswordDto'];
+export type SchemaCinStatusDto = components['schemas']['CinStatusDto'];
+export type SchemaCreatorAccountInfoDto = components['schemas']['CreatorAccountInfoDto'];
+export type SchemaCreatorBillingDto = components['schemas']['CreatorBillingDto'];
 export type SchemaCreatorDashboardKpisDto = components['schemas']['CreatorDashboardKpisDto'];
 export type SchemaCreatorProfileOverviewDto = components['schemas']['CreatorProfileOverviewDto'];
 export type SchemaEmailLocaleDto = components['schemas']['EmailLocaleDto'];
 export type SchemaGoogleCallbackDto = components['schemas']['GoogleCallbackDto'];
+export type SchemaIceApproveDto = components['schemas']['IceApproveDto'];
+export type SchemaIceSearchDto = components['schemas']['IceSearchDto'];
+export type SchemaIceSearchResultDto = components['schemas']['IceSearchResultDto'];
 export type SchemaLinkSocialAccountDto = components['schemas']['LinkSocialAccountDto'];
 export type SchemaLoginDto = components['schemas']['LoginDto'];
 export type SchemaLogoutDto = components['schemas']['LogoutDto'];
 export type SchemaMagicLinkConsumeDto = components['schemas']['MagicLinkConsumeDto'];
 export type SchemaMagicLinkRequestDto = components['schemas']['MagicLinkRequestDto'];
 export type SchemaOnboardBusinessDto = components['schemas']['OnboardBusinessDto'];
+export type SchemaPricingDto = components['schemas']['PricingDto'];
+export type SchemaPricingLineDto = components['schemas']['PricingLineDto'];
+export type SchemaPricingSuggestedRangeDto = components['schemas']['PricingSuggestedRangeDto'];
 export type SchemaRegisterCreatorDto = components['schemas']['RegisterCreatorDto'];
 export type SchemaRoleOptionDto = components['schemas']['RoleOptionDto'];
 export type SchemaRoleOptionsResponseDto = components['schemas']['RoleOptionsResponseDto'];
 export type SchemaSocialAccountDto = components['schemas']['SocialAccountDto'];
 export type SchemaSocialCoverageRowDto = components['schemas']['SocialCoverageRowDto'];
+export type SchemaSubmitCinDto = components['schemas']['SubmitCinDto'];
+export type SchemaUpdateCreatorAccountInfoDto = components['schemas']['UpdateCreatorAccountInfoDto'];
 export type SchemaUpdateCreatorProfileOverviewDto = components['schemas']['UpdateCreatorProfileOverviewDto'];
+export type SchemaUpdatePricingDto = components['schemas']['UpdatePricingDto'];
+export type SchemaUploadUrlDto = components['schemas']['UploadUrlDto'];
 export type SchemaUserPublicDto = components['schemas']['UserPublicDto'];
 export type $defs = Record<string, never>;
 export interface operations {
@@ -732,6 +1046,201 @@ export interface operations {
             };
         };
     };
+    readonly CreatorProfileController_getAccountInfo: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CreatorAccountInfoDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_deleteAccount: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Account deleted */
+            readonly 204: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_updateAccountInfo: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["UpdateCreatorAccountInfoDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CreatorAccountInfoDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_getBilling: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CreatorBillingDto"];
+                };
+            };
+        };
+    };
+    readonly CreatorProfileController_approveIce: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["IceApproveDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CreatorBillingDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_searchIce: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["IceSearchDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["IceSearchResultDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description ICE_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     readonly CreatorProfileController_getDashboardKpis: {
         readonly parameters: {
             readonly query?: never;
@@ -758,6 +1267,218 @@ export interface operations {
             };
             /** @description Caller is not a creator */
             readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_getCin: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CinStatusDto"];
+                };
+            };
+        };
+    };
+    readonly CreatorProfileController_submitCin: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["SubmitCinDto"];
+            };
+        };
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CinStatusDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_cancelCin: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CinStatusDto"];
+                };
+            };
+            /** @description INVALID_CIN_TRANSITION */
+            readonly 409: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_ribUploadUrl: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["UploadUrlDto"];
+                };
+            };
+        };
+    };
+    readonly CreatorProfileController_taxCertificateUploadUrl: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["UploadUrlDto"];
+                };
+            };
+        };
+    };
+    readonly CreatorProfileController_changePassword: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["ChangePasswordDto"];
+            };
+        };
+        readonly responses: {
+            /** @description Password updated */
+            readonly 204: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Current password invalid */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description New password is too weak */
+            readonly 422: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CreatorProfileController_getPricing: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PricingDto"];
+                };
+            };
+        };
+    };
+    readonly CreatorProfileController_updatePricing: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["UpdatePricingDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PricingDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
                 headers: {
                     readonly [name: string]: unknown;
                 };
