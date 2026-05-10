@@ -5,9 +5,13 @@ import type {
   SchemaAuthSessionDto,
   SchemaEmailLocaleDto,
   SchemaGoogleCallbackDto,
+  SchemaLinkSocialAccountDto,
   SchemaLoginDto,
+  SchemaMagicLinkConsumeDto,
+  SchemaOnboardBusinessDto,
   SchemaRegisterCreatorDto,
   SchemaResetPasswordDto,
+  SchemaSocialAccountDto,
   SchemaUserPublicDto,
 } from '@my-app/shared-types';
 
@@ -61,6 +65,31 @@ export class AuthApiService {
   /** US-016 — Register an influencer (step 1, no password). */
   registerInfluencer(dto: SchemaRegisterCreatorDto): Observable<SchemaUserPublicDto> {
     return this.api.post<SchemaUserPublicDto>('/auth/register/CREATOR', dto);
+  }
+
+  /** US-013 — Consume a creator magic link to set the initial password and sign in. */
+  consumeMagicLink(dto: SchemaMagicLinkConsumeDto): Observable<SchemaAuthSessionDto> {
+    return this.api
+      .post<SchemaAuthSessionDto>('/auth/magic-link/consume', dto)
+      .pipe(tap((session) => this.persistSession(session)));
+  }
+
+  /** US-018 — Onboard a business / agency / small business and sign in. */
+  onboardBusiness(dto: SchemaOnboardBusinessDto): Observable<SchemaAuthSessionDto> {
+    return this.api
+      .post<SchemaAuthSessionDto>('/auth/onboard/business', dto)
+      .pipe(tap((session) => this.persistSession(session)));
+  }
+
+  /** US-017 — Link a social account (mock OAuth in dev). */
+  linkSocialAccount(
+    platform: 'instagram' | 'youtube' | 'tiktok' | 'twitter',
+    dto: SchemaLinkSocialAccountDto,
+  ): Observable<SchemaSocialAccountDto> {
+    return this.api.post<SchemaSocialAccountDto>(
+      `/creator/me/social-accounts/${platform}/link`,
+      dto,
+    );
   }
 
   /** Resolve the post-login destination from a user role. */

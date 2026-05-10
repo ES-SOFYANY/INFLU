@@ -37,5 +37,31 @@
     "payments": "Paiements",
     "support": "Support",
     "account": "Mon compte"
+  },
+  "auth": {
+    "magicLinkSent": {
+      "title": "Vérifiez votre boîte mail",
+      "bodyWithEmail": "Nous avons envoyé un lien magique à {{email}}. Cliquez dessus pour définir votre mot de passe et vous connecter.",
+      "bodyGeneric": "Nous vous avons envoyé un lien magique. Cliquez dessus pour définir votre mot de passe et vous connecter.",
+      "backToSignIn": "Retour à la connexion"
+    },
+    "magicLinkConsume": {
+      "title": "Définir votre mot de passe",
+      "submit": "Définir le mot de passe et continuer",
+      "expired": "Ce lien magique est invalide ou a expiré. Veuillez en demander un nouveau."
+    },
+    "social": {
+      "title": "Associer votre compte",
+      "subtitle": "Liez au moins un compte social pour que les marques puissent vous découvrir.",
+      "finish": "Terminer l'inscription",
+      "requireOne": "Vous devez lier au moins un compte social (Instagram / YouTube / TikTok / Twitter)."
+    },
+    "onboard": {
+      "title": "Rejoindre INFLU en tant qu'entreprise",
+      "subtitle": "Configurez votre espace de travail business.",
+      "accountSection": "Informations du compte",
+      "businessSection": "Informations de l'entreprise",
+      "submit": "Créer le compte"
+    }
   }
 }

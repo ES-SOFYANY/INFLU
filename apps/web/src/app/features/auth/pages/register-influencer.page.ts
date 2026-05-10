@@ -276,8 +276,8 @@ export class RegisterInfluencerPage {
     this.authApi.registerInfluencer(dto).subscribe({
       next: () => {
         this.submitting.set(false);
-        // US-017 lives in Wave 2; route to step 2 placeholder.
-        void this.router.navigateByUrl('/auth/onboard');
+        // US-013 — confirm via "Check your inbox" page; magic link will redirect to step 2.
+        void this.router.navigate(['/auth/magic-link-sent'], { queryParams: { email: v.email } });
       },
       error: (err: { message?: string; error?: { message?: string } }) => {
         this.submitting.set(false);

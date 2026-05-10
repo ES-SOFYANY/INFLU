@@ -14,6 +14,13 @@ export const AUTH_ROUTES: Routes = [
     loadComponent: () => import('./pages/register-influencer.page').then((m) => m.RegisterInfluencerPage),
   },
   {
+    path: 'register/influencer/social',
+    loadComponent: () =>
+      import('./pages/register-influencer-social.page').then(
+        (m) => m.RegisterInfluencerSocialPage,
+      ),
+  },
+  {
     path: 'register/business',
     loadComponent: () => import('./pages/register-business.page').then((m) => m.RegisterBusinessPage),
   },
@@ -28,6 +35,11 @@ export const AUTH_ROUTES: Routes = [
   {
     path: 'magic-link-sent',
     loadComponent: () => import('./pages/magic-link-sent.page').then((m) => m.MagicLinkSentPage),
+  },
+  {
+    path: 'magic-link/consume',
+    loadComponent: () =>
+      import('./pages/magic-link-consume.page').then((m) => m.MagicLinkConsumePage),
   },
   {
     path: 'onboard',

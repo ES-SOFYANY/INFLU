@@ -37,5 +37,31 @@
     "payments": "Payments",
     "support": "Support",
     "account": "My account"
+  },
+  "auth": {
+    "magicLinkSent": {
+      "title": "Check your inbox",
+      "bodyWithEmail": "We sent a magic link to {{email}}. Click it to set your password and sign in.",
+      "bodyGeneric": "We sent you a magic link. Click it to set your password and sign in.",
+      "backToSignIn": "Back to sign in"
+    },
+    "magicLinkConsume": {
+      "title": "Set your password",
+      "submit": "Set password and continue",
+      "expired": "This magic link is invalid or has expired. Please request a new one."
+    },
+    "social": {
+      "title": "Assign your account",
+      "subtitle": "Link at least one social account so brands can discover your reach.",
+      "finish": "Finish registration",
+      "requireOne": "You must link at least one social account (Instagram / YouTube / TikTok / Twitter)."
+    },
+    "onboard": {
+      "title": "Join INFLU as a Business",
+      "subtitle": "Set up your business workspace.",
+      "accountSection": "Account Information",
+      "businessSection": "Business Information",
+      "submit": "Create account"
+    }
   }
 }

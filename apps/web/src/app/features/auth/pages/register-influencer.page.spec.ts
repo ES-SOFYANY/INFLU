@@ -93,8 +93,8 @@ describe('RegisterInfluencerPage', () => {
     ).not.toBeNull();
   });
 
-  it('[AC-016-04] posts to /auth/register/CREATOR and redirects to step 2', fakeAsync(() => {
-    const navSpy = spyOn(router, 'navigateByUrl').and.resolveTo(true);
+  it('[AC-016-04] posts to /auth/register/CREATOR and redirects to magic-link-sent', fakeAsync(() => {
+    const navSpy = spyOn(router, 'navigate').and.resolveTo(true);
     fillValid();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
     const req = http.expectOne('/api/auth/register/CREATOR');
@@ -104,7 +104,9 @@ describe('RegisterInfluencerPage', () => {
     expect(req.request.body.ageOver18).toBe(true);
     req.flush({ id: 'u1', email: 'jane@example.com', role: 'CREATOR', status: 'PENDING_PASSWORD' });
     tick();
-    expect(navSpy).toHaveBeenCalledWith('/auth/onboard');
+    expect(navSpy).toHaveBeenCalledWith(['/auth/magic-link-sent'], {
+      queryParams: { email: 'jane@example.com' },
+    });
   }));
 
   it('shows API error message on 4xx', fakeAsync(() => {
