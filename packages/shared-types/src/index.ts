@@ -8,3 +8,4 @@
 export * from './manual/enums';
 export * from './manual/notification-types';
 export * from './manual/domain-events';
+export * from './manual/issue-types';

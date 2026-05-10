@@ -122,6 +122,17 @@ must be either **resolved** (implementation aligned to contract) or
 | **Reason** | Parent agent spec: `/business/brands/link` aligns with `/business/brands/...` family. Search hit exposes the fields needed by the wireframe (BRAND/WEBSITE/COUNTRY) instead of `category`/`verified` which are not displayed in the link modal. |
 | **Resolution plan** | Tech Lead to relocate the link endpoint and broaden the `BrandSearchHit` schema in `openapi.yaml`. |
 
+### DRIFT-080 — Support FAQ requires authentication and `PaginatedReports` shape (US-080, US-081, US-180, US-181)
+
+| Field | Status |
+|---|---|
+| **Endpoints** | `GET /support/faq`, `GET /support/reports`, `POST /support/reports` |
+| **Contract** | `GET /support/faq` is **public** (`security: []`) and accepts a `locale` query param. `PaginatedReports` extends `Paginated { items, nextCursor }`. `CreateReportRequest` requires only `title.minLength=3` and `description.minLength=10`. |
+| **Implementation** | `GET /support/faq` requires `JwtAuthGuard` (returns 401 without bearer). FAQ is hardcoded in English only (5 entries mandated by AC-080-02). `PaginatedReportsDto = { items, total }` (no cursor — full list returned, low write volume). `CreateReportDto` adds upper bounds `title.maxLength=200` / `description.maxLength=5000` per parent agent spec. |
+| **Severity** | Low — additive constraints + auth requirement + simpler pagination |
+| **Reason** | Parent agent spec (Wave Support): "FAQ peut rester authentifiée pour simplicité". Title/description upper bounds prevent abuse and align with the wireframe textareas. `total` is needed by the UI to render the "X report(s)" counter required by AC-080-01 / AC-180-02; cursor pagination is overkill for a feature where each user submits a handful of reports. |
+| **Resolution plan** | Tech Lead to (a) make `/support/faq` authenticated in `openapi.yaml`, (b) add `maxLength` to `CreateReportRequest`, (c) replace `PaginatedReports` with a simple `{ items, total }` shape (or document a `total` extension on `Paginated`) for the support feature. |
+
 ---
 
 ## Resolved entries

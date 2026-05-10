@@ -989,6 +989,41 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/support/faq": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-080,US-180] Get FAQ entries (static, English MVP) */
+        readonly get: operations["SupportController_getFaq"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/support/reports": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-080,US-180] List my support reports (newest first) */
+        readonly get: operations["SupportController_listReports"];
+        readonly put?: never;
+        /** [US-081,US-181] Submit a support report */
+        readonly post: operations["SupportController_submitReport"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1282,6 +1317,12 @@ export interface components {
             /** Format: uuid */
             readonly brandId: string;
         };
+        readonly CreateReportDto: {
+            readonly description: string;
+            /** @enum {string} */
+            readonly issueType: "BUG" | "FEATURE_REQUEST" | "PERFORMANCE" | "UI_ISSUE" | "CAMPAIGN_ISSUE" | "OTHER";
+            readonly title: string;
+        };
         readonly CreatorAccountInfoDto: {
             /**
              * @example CONTENT_CREATOR
@@ -1452,6 +1493,12 @@ export interface components {
             readonly email: string;
             /** @enum {string} */
             readonly locale?: "fr" | "en" | "ar";
+        };
+        readonly FaqEntryDto: {
+            readonly answer: string;
+            /** @description Stable id (slug) */
+            readonly id: string;
+            readonly question: string;
         };
         readonly GoogleCallbackDto: {
             /** @description Google ID token (JWT). In dev, accepts "mock-google-success-<email>". */
@@ -1758,6 +1805,10 @@ export interface components {
             /** @description Total unread notifications for badge */
             readonly unreadCount: number;
         };
+        readonly PaginatedReportsDto: {
+            readonly items: readonly components["schemas"]["SupportReportDto"][];
+            readonly total: number;
+        };
         readonly PaymentBrandSummaryDto: {
             /** Format: uuid */
             readonly id: string;
@@ -1932,6 +1983,18 @@ export interface components {
              */
             readonly dateOfExpiry: string;
         };
+        readonly SupportReportDto: {
+            /** Format: date-time */
+            readonly createdAt: string;
+            readonly description: string;
+            /** Format: uuid */
+            readonly id: string;
+            /** @enum {string} */
+            readonly issueType: "BUG" | "FEATURE_REQUEST" | "PERFORMANCE" | "UI_ISSUE" | "CAMPAIGN_ISSUE" | "OTHER";
+            /** @enum {string} */
+            readonly status: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
+            readonly title: string;
+        };
         readonly UpdateBusinessAccountInfoDto: {
             readonly address?: string;
             readonly fullName?: string;
@@ -2049,6 +2112,7 @@ export type SchemaConversationLastMessageDto = components['schemas']['Conversati
 export type SchemaConversationProfileDto = components['schemas']['ConversationProfileDto'];
 export type SchemaCreateCrmListDto = components['schemas']['CreateCrmListDto'];
 export type SchemaCreateMarketplaceProductDto = components['schemas']['CreateMarketplaceProductDto'];
+export type SchemaCreateReportDto = components['schemas']['CreateReportDto'];
 export type SchemaCreatorAccountInfoDto = components['schemas']['CreatorAccountInfoDto'];
 export type SchemaCreatorBillingDto = components['schemas']['CreatorBillingDto'];
 export type SchemaCreatorDashboardKpisDto = components['schemas']['CreatorDashboardKpisDto'];
@@ -2062,6 +2126,7 @@ export type SchemaDiscoveryCreatorItemDto = components['schemas']['DiscoveryCrea
 export type SchemaDiscoveryPlatformInfoDto = components['schemas']['DiscoveryPlatformInfoDto'];
 export type SchemaDiscoveryPublicCreatorProfileDto = components['schemas']['DiscoveryPublicCreatorProfileDto'];
 export type SchemaEmailLocaleDto = components['schemas']['EmailLocaleDto'];
+export type SchemaFaqEntryDto = components['schemas']['FaqEntryDto'];
 export type SchemaGoogleCallbackDto = components['schemas']['GoogleCallbackDto'];
 export type SchemaGrantBrandAccessDto = components['schemas']['GrantBrandAccessDto'];
 export type SchemaIceApproveDto = components['schemas']['IceApproveDto'];
@@ -2091,6 +2156,7 @@ export type SchemaPaginatedDiscoveryCreatorsDto = components['schemas']['Paginat
 export type SchemaPaginatedMarketplaceProductsDto = components['schemas']['PaginatedMarketplaceProductsDto'];
 export type SchemaPaginatedMessagesDto = components['schemas']['PaginatedMessagesDto'];
 export type SchemaPaginatedNotificationsDto = components['schemas']['PaginatedNotificationsDto'];
+export type SchemaPaginatedReportsDto = components['schemas']['PaginatedReportsDto'];
 export type SchemaPaymentBrandSummaryDto = components['schemas']['PaymentBrandSummaryDto'];
 export type SchemaPaymentBusinessRowDto = components['schemas']['PaymentBusinessRowDto'];
 export type SchemaPaymentCreatorRowDto = components['schemas']['PaymentCreatorRowDto'];
@@ -2109,6 +2175,7 @@ export type SchemaSocialAccountDto = components['schemas']['SocialAccountDto'];
 export type SchemaSocialCoverageRowDto = components['schemas']['SocialCoverageRowDto'];
 export type SchemaStartAiCampaignSessionResponseDto = components['schemas']['StartAiCampaignSessionResponseDto'];
 export type SchemaSubmitCinDto = components['schemas']['SubmitCinDto'];
+export type SchemaSupportReportDto = components['schemas']['SupportReportDto'];
 export type SchemaUpdateBusinessAccountInfoDto = components['schemas']['UpdateBusinessAccountInfoDto'];
 export type SchemaUpdateCampaignStatusDto = components['schemas']['UpdateCampaignStatusDto'];
 export type SchemaUpdateCreatorAccountInfoDto = components['schemas']['UpdateCreatorAccountInfoDto'];
@@ -4962,6 +5029,95 @@ export interface operations {
             };
             /** @description NOTIFICATION_NOT_FOUND */
             readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly SupportController_getFaq: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": readonly components["schemas"]["FaqEntryDto"][];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly SupportController_listReports: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedReportsDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly SupportController_submitReport: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["CreateReportDto"];
+            };
+        };
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["SupportReportDto"];
+                };
+            };
+            /** @description VALIDATION_FAILED */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
                 headers: {
                     readonly [name: string]: unknown;
                 };
