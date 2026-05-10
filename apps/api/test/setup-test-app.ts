@@ -96,8 +96,19 @@ async function purgeTable(client: DynamoDBDocumentClient, table: string): Promis
 
 export async function resetDb(): Promise<void> {
   const client = rawClient();
-  await Promise.all([
-    purgeTable(client, process.env.DYNAMODB_TABLE_MAIN ?? 'influ_main'),
-    purgeTable(client, process.env.DYNAMODB_TABLE_SESSIONS ?? 'influ_sessions'),
-  ]);
+  const tables = [
+    process.env.DYNAMODB_TABLE_MAIN ?? 'influ_main',
+    process.env.DYNAMODB_TABLE_SESSIONS ?? 'influ_sessions',
+  ];
+  // Retry on transient DDB Local connection issues (ECONNRESET / unhealthy container)
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      await Promise.all(tables.map((t) => purgeTable(client, t)));
+      return;
+    } catch (err) {
+      if (attempt === maxAttempts) throw err;
+      await new Promise((r) => setTimeout(r, 500 * attempt));
+    }
+  }
 }

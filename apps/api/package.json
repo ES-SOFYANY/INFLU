@@ -71,6 +71,7 @@
     "collectCoverageFrom": ["src/**/*.(t|j)s"],
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
+    "testTimeout": 30000,
     "moduleNameMapper": {
       "^@my-app/shared-types$": "<rootDir>/../../packages/shared-types/src/index.ts"
     }
