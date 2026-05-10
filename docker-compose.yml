@@ -1,0 +1,45 @@
+services:
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    container_name: influ-dynamodb-local
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/data"]
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./.docker/dynamodb:/data
+    working_dir: /home/dynamodblocal
+    networks:
+      - influ-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/ || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Optional — usually we run `npm run dev:api` directly on the host for hot-reload.
+  # Uncomment to run the API inside Docker.
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/api/Dockerfile.local
+  #   container_name: influ-api
+  #   depends_on:
+  #     dynamodb-local:
+  #       condition: service_started
+  #   environment:
+  #     NODE_ENV: development
+  #     PORT: 3000
+  #     AWS_REGION: eu-west-3
+  #     AWS_ACCESS_KEY_ID: local
+  #     AWS_SECRET_ACCESS_KEY: local
+  #     DYNAMODB_ENDPOINT: http://dynamodb-local:8000
+  #     JWT_SECRET: dev-secret-change-me-32-bytes-minimum
+  #     AI_PROVIDER: mock
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - influ-net
+
+networks:
+  influ-net:
+    driver: bridge

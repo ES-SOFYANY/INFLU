@@ -10,7 +10,19 @@ import {
 
 const REGION = process.env.AWS_REGION ?? 'eu-west-3';
 const STAGE = process.env.STAGE ?? 'dev';
-const ddb = new DynamoDBClient({ region: REGION });
+const ENDPOINT = process.env.DYNAMODB_ENDPOINT;
+const ddb = new DynamoDBClient({
+  region: REGION,
+  ...(ENDPOINT
+    ? {
+        endpoint: ENDPOINT,
+        credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? 'local',
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? 'local',
+        },
+      }
+    : {}),
+});
 
 function gsi(name, pk, sk, projType, nonKey) {
   return {
