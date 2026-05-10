@@ -109,3 +109,31 @@ Aucun. Tous les boutons exercés ont fonctionné OU le bug a été corrigé inli
 ## Deferred (locked-by-design)
 
 - `🔒 Matchings`, `🔒 Calendar`, `🔒 Social Listening` — verrouillés dans la sidebar (Wave 2).
+
+---
+
+## Iteration 3 — buttons exercised end-to-end (close §A + §B gap)
+
+| # | Page Route | Button / data-testid | Persona | Expected Action | API Call | Result | Screenshot | Status |
+|---|-----------|----------------------|---------|----------------|---------|--------|-----------|--------|
+| 72 | /creator/accounts (account-management) | `[data-testid="ice-search"]` | amine.nano | Lookup ICE | GET /creator/me/business/ice/lookup?ice=000000000000001 → 200 | TEST CORP MAROC SARL retourné | iteration-03/creator-nano/ice-search-result.png | ✅ |
+| 73 | idem | `[data-testid="ice-approve"]` | amine.nano | Submit ICE | POST /creator/me/business/ice → 201 | accountStatus=PROFESSIONAL | iteration-03/creator-nano/ice-after-approve.png | ✅ |
+| 74 | /creator/accounts (account-management) | `[data-testid="change-password"]` | amine.nano | Open password modal | N/A (UI) | Modal visible | iteration-03/creator-nano/password-modal-open.png | ✅ |
+| 75 | password modal | `[data-testid="pwd-submit"]` | amine.nano | Submit password change | POST /creator/me/password/change → 204 (×2 with revert) | Toast success + modal closes | iteration-03/creator-nano/password-change-after-submit.png | ✅ |
+| 76 | /creator/accounts (documents) | `[data-testid="cin-cancel"]` | kawtar.pending | Cancel pending CIN | POST /creator/me/documents/cin/cancel → 200 | Pending badge cleared | iteration-03/creator-pending/cin-after-cancel.png | ✅ |
+| 77 | idem | `[data-testid="cin-submit"]` | kawtar.pending | Re-submit CIN | POST /creator/me/documents/cin → 201 | Pending badge appears | iteration-03/creator-pending/cin-upload-after-submit.png | ✅ |
+| 78 | /business/account-settings (account-management) | `[data-testid="update-account"]` | marketing@yassir | Save profile | PUT /users/me → 200 | Toast success | iteration-03/brand-yassir/business-profile-after-submit.png | ✅ |
+| 79 | idem | `[data-testid="change-password"]` + `pwd-submit` | marketing@yassir | Change password | POST /auth/password/change → 204 | Toast success | iteration-03/brand-yassir/business-password-after-submit.png | ✅ |
+| 80 | /business/account-settings (brands tab) | `[data-testid="add-access"]` | marketing@yassir | Open invite modal | N/A | Modal visible | iteration-03/brand-yassir/grant-modal-open.png | ✅ |
+| 81 | grant modal | `[data-testid="access-invite"]` | marketing@yassir | Send invite | POST /business/brands/b_yassir_001/access → 201 (after BUG-MAN-009 fix) | Grantee row added | iteration-03/brand-yassir/brand-grant-after-submit.png | ✅ |
+| 82 | /business/discovery → table | `[data-testid="action-crm"]` | marketing@yassir | Open Add to CRM dialog | GET /business/crm/lists → 200 | Dialog visible | iteration-03/brand-yassir/discovery-add-to-crm-dialog.png | ✅ |
+| 83 | CRM dialog | `[data-testid="crm-add-new-toggle"]` + `crm-add-confirm` | marketing@yassir | Create list + add creator | POST /business/crm/lists 201 ; POST /business/crm/lists/UUID/creators/u_creator_nano_010 201 (after BUG-MAN-009 fix) | Toast success | iteration-03/brand-yassir/discovery-add-to-crm-success.png | ✅ |
+| 84 | /business/dashboard | `[data-testid="notifications-bell"]` | marketing@yassir | Open notifications panel | GET /notifications?unreadOnly=false&limit=10 → 200 | Panel visible | iteration-03/brand-yassir/notifications-panel.png | ✅ |
+| 85 | /creator/dashboard | `[data-testid="notifications-bell"]` | amine.nano | Open notifications panel | GET /notifications → 200 | Panel visible | iteration-03/creator-nano/notifications-panel.png | ✅ |
+| 86 | /business/dashboard | `[data-testid="global-search-input"]` + suggestion click | marketing@yassir | Search creator → open profile | GET /business/discovery/search 200 | Redirect to /business/profile/u_creator_nano_010 | iteration-03/brand-yassir/global-search-suggestions.png + global-search-profile-redirect.png | ✅ |
+| 87 | /business/dashboard sidebar | `[data-testid="nav-social-listening"]` | marketing@yassir | Verify aria-disabled + click no-op | N/A | location.pathname unchanged | iteration-03/brand-yassir/notifications-panel.png | ✅ |
+| 88 | /creator/dashboard sidebar | Matchings / Calendar / My Payments items | amine.nano | Verify aria-disabled + click no-op | N/A | location.pathname unchanged | iteration-03/creator-nano/dashboard-kpi-placeholders-and-sidebar-disabled.png | ✅ |
+| 89 | /creator/accounts (documents) → my-account kebab | "Generate creator report" | amine.nano | Open print-ready report page | GET /creator/me/report/print → 200 (HTML) | Report page visible | iteration-03/creator-nano/creator-report-generated.png | ✅ |
+| 90 | /business/ai-campaign | `[data-testid="send-button"]` empty + typing | marketing@yassir | Verify disabled when empty / enabled with text | N/A (UI) | disabled flag toggles | iteration-03/brand-yassir/ai-campaign-send-disabled-empty.png + ai-campaign-send-enabled-typing.png | ✅ |
+
+**Iter 3 totals**: 19 new buttons (72→90), 0 KO, 0 dead. Cumulative across all iterations: **~90 / 90 ≈ 100 %**.

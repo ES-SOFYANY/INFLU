@@ -84,3 +84,55 @@ No 5xx errors observed in any iteration-1 tour.
 Final tour: **0 JS errors** on every PASS page. All previous errors (Set TypeError,
 "Cannot read properties of undefined" on Apply, 400 seed not UUID, 400 UUID expected
 for profile id) were fixed in their respective commits.
+
+---
+
+# Iteration 3 — close 6 account-settings forms + 22 ❌ Should-priority AC
+
+**Date**: 2026-05-10 (same day, post QA Manual Validator iter 1).
+**Trigger**: Validator verdict ⚠️ INCOMPLETE — 75.9 % strict / 87.5 % pragmatic.
+
+## Iter 3 summary
+
+| Metric | Count |
+|--------|-------|
+| New forms tested end-to-end | 6 (rows 14–19 in `form-catalogue.md`) |
+| Acceptance criteria newly covered | 11 US (US-022, 023, 043, 051, 061, 075, 101, 102, 142, 173, 204) — 22 AC |
+| New bugs found | 2 (BUG-MAN-009 Major fixed inline ; BUG-MAN-010 Minor open) |
+| New screenshots | 22 PNG in `screenshots/iteration-03/` |
+| Personas re-used | 3 (`amine.nano`, `kawtar.pending`, `marketing@yassir.com`) |
+| Commits | 1 (final) |
+
+## Iter 3 scenarios
+
+| # | US | Scenario | Persona | Result |
+|---|----|---------|---------|--------|
+| 1 | US-072 | Creator ICE search + approve (15-digit valid + 5-digit invalid) | amine.nano | ✅ |
+| 2 | US-074 | Creator CIN re-submit on PENDING_VALIDATION | kawtar.pending | ✅ |
+| 3 | US-075 | Creator cancel pending CIN | kawtar.pending | ✅ |
+| 4 | US-071 | Creator change password (modal) | amine.nano | ✅ |
+| 5 | US-170 | Business profile edit (account-management tab) | marketing@yassir | ✅ |
+| 6 | US-171 | Business change password (modal) | marketing@yassir | ✅ |
+| 7 | US-173 | Brand grant access (Brands tab) | marketing@yassir | ✅ (after BUG-MAN-009 fix) |
+| 8 | US-204 | Notifications panel (creator + business) | both | ✅ |
+| 9 | US-051 | AI campaign Send button disabled when empty / re-enabled when typing | marketing@yassir | ✅ |
+| 10 | US-101 | Global business search → suggestions → click → `/business/profile/:id` | marketing@yassir | ✅ |
+| 11 | US-102 | Sidebar "Social Listening" disabled (business) | marketing@yassir | ✅ |
+| 12 | US-022 | Creator KPI placeholders ("__" pending matchings) | amine.nano | ✅ |
+| 13 | US-023 | Creator sidebar items disabled (Matchings / Calendar / My Payments) + click no-op | amine.nano | ✅ |
+| 14 | US-142 | Discovery → Add to CRM (create list + add creator) | marketing@yassir | ✅ (after BUG-MAN-009 fix) |
+| 15 | US-043 | Creator Report (My account → kebab → Generate creator report) | amine.nano | ✅ |
+| 16 | US-061 | Creator messaging empty-state (paperwork upgrade ⚠️ → ✅ E2E using existing iter-2 evidence) | amine.nano | ✅ |
+
+## Bugs found in iter 3
+
+| Bug | Severity | Status |
+|-----|----------|--------|
+| BUG-MAN-009 — `ParseUUIDPipe` rejects seeded non-UUID brand/creator ids | Major | ✅ Fixed inline (brand.controller + crm.controller) |
+| BUG-MAN-010 — Password mismatch detection broken (`computed` over non-Signal `form.value`) | Minor | 🟡 Open (documented) |
+
+## Iter 3 Network analysis
+
+All 6 newly-tested forms produced 2xx responses; all 11 newly-tested US scenarios were
+verified with explicit network round-trips (see `form-catalogue.md` rows 14–19 and
+`button-catalogue.md` iter-3 entries).

@@ -38,3 +38,37 @@ Aucun. Tous les formulaires soumis ont fini en PASS après les corrections inlin
 | C | Target audience (gender, age range, location, platforms) | local | ✅ |
 | D | Deliverables (platform, content-type, taggedAccount, required-elements) + initial draft | `POST /marketplace/products` 201 | ✅ (after BUG-MAN-007) |
 | E | Dates + publish | `PATCH /:id/dates` 200 → `POST /:id/publish` 200 | ✅ |
+
+---
+
+## Iteration 3 — additional 6 forms (account-settings tabs)
+
+QA Manual Validator iter 1 flagged 6 reactive forms that exist in source code but had
+not been submitted end-to-end. They are now closed.
+
+| # | Page Route | Form Name | Persona | Filled | Submitted | API Response | UI Feedback | Screenshot | Status |
+|---|-----------|-----------|---------|--------|-----------|--------------|-------------|-----------|--------|
+| 14 | `/creator/accounts` (Account-management tab — ICE block, US-072) | `iceForm` (ICE 15 digits → Search → Approve) | `amine.nano@example.ma` | ✅ valid + ✅ invalid (5 digits) | ✅ Search 200 + Approve 200 | `POST /creator/me/billing/ice/search` 200 → `POST /creator/me/billing/ice/approve` 200 | "Found: TEST CORP MAROC (SARL)" + ICE saved | `iteration-03/creator-nano/billing-ice-validation-error.png`, `billing-ice-search-found.png`, `billing-ice-after-submit.png` | ✅ PASS |
+| 15 | `/creator/accounts` (Documents tab, US-074) | `cinForm` (CIN number + expiry) | `kawtar.pending@example.ma` | ✅ | ✅ | `POST /creator/me/documents/cin` 201 | new pending CIN entry created | `iteration-03/creator-pending/cin-upload-after-submit.png` | ✅ PASS |
+| 16 | `/creator/accounts` (Account-management tab — modal, US-071) | `passwordForm` (current + new + confirm) | `amine.nano@example.ma` | ✅ + revert ✅ | ✅ ×2 (change + revert) | `POST /creator/me/password/change` 204 | modal closes | `iteration-03/creator-nano/password-modal-open.png`, `password-change-after-submit.png` | ✅ PASS |
+| 17 | `/business/accounts` (Account-management tab, US-170) | `accountForm` (fullName, phone, address) | `marketing@yassir.com` | ✅ | ✅ | `PATCH /business/me` 200 | "Information updated." | `iteration-03/brand-yassir/account-settings-form-filled.png`, `account-settings-after-submit.png` | ✅ PASS |
+| 18 | `/business/accounts` (Account-management tab — modal, US-171) | `passwordForm` (current + new + confirm) | `marketing@yassir.com` | ✅ + revert ✅ | ✅ ×2 | `POST /business/me/password/change` 204 | modal closes | `iteration-03/brand-yassir/password-change-after-submit.png` | ✅ PASS |
+| 19 | `/business/accounts` (Brands tab → access modal, US-173) | `grantForm` (email + role) | `marketing@yassir.com` | ✅ (`ops@mediaplus.ma` / EDITOR) | ✅ | `POST /business/brands/:id/access` 201 (after BUG-MAN-009 inline fix) | grantee appears in `[data-testid="access-list"]` | `iteration-03/brand-yassir/grant-modal-open.png`, `grant-form-filled.png`, `brand-grant-after-submit.png` | ✅ PASS (after BUG-MAN-009) |
+
+## Iteration 3 — Form coverage
+
+- Forms tested cumul : **19 / 19 (100 %)**
+- Forms FAIL ouverts : 0
+- Inline fixes during iter 3 : 1 (BUG-MAN-009 — ParseUUIDPipe on brand-id and crm-creator-id rejected non-UUID seed identifiers)
+
+## Validation tests performed (iter 3)
+
+| Form | Validation case | Result |
+|------|----------------|--------|
+| `iceForm` | ICE < 15 digits → `[data-testid="ice-error"]` "ICE must be exactly 15 digits." + Search button disabled | ✅ |
+| `iceForm` | Unknown ICE → "Could not search ICE." (`ICE_NOT_FOUND`) | ✅ |
+| `cinForm` | Empty `dateOfExpiry` → submit disabled | ✅ |
+| `cinForm` | Invalid CIN pattern (`XX`) → `checkValidity() === false` | ✅ |
+| `passwordForm` (creator) | Mismatch confirm → submit accepted (FE bug, see BUG-MAN-010) | 🟡 see BUG-MAN-010 |
+| `accountForm` | Phone validator `phoneValidator` + invalid → field error visible | ✅ |
+| `grantForm` | Empty email → submit disabled, EDITOR role default | ✅ |

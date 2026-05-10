@@ -245,3 +245,106 @@ durci de la même manière. Régression couverte par `[BUG-MAN-008]` dans
 **Commit**: (voir fix-log)
 **Screenshots**: `screenshots/iteration-02/brand-yassir/marketplace-create-step4-deliverables.png` (before, QA),
 `docs/11-bugfix-general/screenshots/BUG-MAN-008-after.png` (after)
+
+---
+
+## Iteration 3 — additions
+
+**Total cumul** : 10 bugs (BUG-MAN-001..010).
+**Fixed inline iter 3** : 1 (BUG-MAN-009).
+**Open** : 1 (BUG-MAN-010 — Minor UX, password mismatch detection broken).
+
+---
+
+## BUG-MAN-009 — `ParseUUIDPipe` rejects seeded non-UUID identifiers (US-173 grant + US-142 CRM add)
+
+- **US**: US-173, US-142
+- **Severity**: Major (blocks 2 features end-to-end)
+- **Component**: Backend
+- **Endpoint / Page**:
+  - `GET  /api/v1/business/brands/:id/access` → 400 `VALIDATION_FAILED` "uuid is expected"
+  - `POST /api/v1/business/brands/:id/access` → 400 `VALIDATION_FAILED` "uuid is expected"
+  - `POST /api/v1/business/crm/lists/:id/creators/:creatorId` → 400 `VALIDATION_FAILED` "uuid is expected"
+- **Persona**: `marketing@yassir.com`
+- **Environment**: local
+
+**Reproduction**
+1. Login as `marketing@yassir.com`.
+2. Open `/business/accounts` → tab Brands → "Add access" (yassir brand id is `b_yassir_001`).
+3. Submit any email + role → 400 from `POST /business/brands/b_yassir_001/access`.
+4. Same on Discovery → action "Add to CRM" → creator id `u_creator_nano_010` rejected.
+
+**Root cause**
+The two controllers used `@Param('id', new ParseUUIDPipe())` /
+`@Param('creatorId', new ParseUUIDPipe())`, but the seed (`scripts/db/seed.js`) uses
+human-readable IDs like `b_yassir_001`, `u_creator_nano_010`. The pipe rejects any
+non-UUID identifier with HTTP 400 before reaching the service.
+
+**Fix applied (this iteration)**
+- `apps/api/src/modules/brand/brand.controller.ts` : removed `ParseUUIDPipe` on
+  `:id` for `GET /:id/access` and `POST /:id/access` (kept service-side existence
+  check which already returns proper 404 / 403).
+- `apps/api/src/modules/crm/crm.controller.ts` : removed `ParseUUIDPipe` on
+  `:creatorId` for `POST /lists/:id/creators/:creatorId` and
+  `DELETE /lists/:id/creators/:creatorId`. The list `:id` itself is a real UUID
+  generated server-side, so the pipe was kept there.
+- Removed unused import.
+
+**Verification**
+- Grant: `POST /business/brands/b_yassir_001/access` → 201 Created
+  (screenshot `iteration-03/brand-yassir/brand-grant-after-submit.png`,
+  list shows "Hassan Tazi — ops@mediaplus.ma EDITOR").
+- CRM: `POST /business/crm/lists/<UUID>/creators/u_creator_nano_010` → 201 Created
+  (screenshot `iteration-03/brand-yassir/discovery-add-to-crm-success.png`).
+
+**Status**: ✅ **Fixed inline**.
+
+---
+
+## BUG-MAN-010 — Password change "confirm" mismatch silently ignored (creator + business modals)
+
+- **US**: US-071 (creator) + US-171 (business)
+- **Severity**: Minor (UX / data-integrity)
+- **Component**: Frontend
+- **Files**:
+  - `apps/web/src/app/features/creator/pages/accounts.page.ts` (lines around 714)
+  - `apps/web/src/app/features/business/pages/account-settings.page.ts` (similar)
+
+**Reproduction**
+1. Login as creator (`amine.nano@example.ma`).
+2. `/creator/accounts` → "Change password" → fill:
+   - currentPassword: `Test1234!`
+   - newPassword: `NewPass99!`
+   - confirmPassword: `Different99!` (deliberate mismatch)
+3. Click "Save".
+
+**Expected**: `[data-testid="confirm-pw-error"]` displays "Passwords do not match." and
+submit button stays disabled (`passwordMismatch()` returns `true`).
+**Observed**: submit button stays enabled, request `POST /creator/me/password/change`
+fires with `{currentPassword, newPassword}` (note: the DTO drops `confirmPassword`),
+backend returns 204, password is silently changed to `newPassword`.
+
+**Network evidence**
+- Request body: `{"currentPassword":"Test1234!","newPassword":"NewPass99!"}` (no `confirmPassword`)
+- Response: `204 No Content`
+
+**Root cause**
+```ts
+protected readonly passwordMismatch = computed(() => {
+  const v = this.passwordForm.value;
+  return !!v.confirmPassword && v.newPassword !== v.confirmPassword;
+});
+```
+`this.passwordForm.value` is **not** a Signal source. The `computed` registers no
+dependency, so it is evaluated once at construction (when the form is empty) and
+never recomputes. Result: `passwordMismatch()` always returns `false`.
+
+**Suggested fix** (not applied — out of scope for this QA iteration; trivial change but
+touches both creator + business pages and would benefit from a small unit test):
+- Convert `passwordForm` value into a Signal via `toSignal(this.passwordForm.valueChanges, { initialValue: this.passwordForm.value })` and read that signal inside the `computed`.
+- Or add a custom group-level Validator (`passwordMatchValidator`) so that `passwordForm.invalid` already covers the mismatch and `[disabled]="passwordForm.invalid"` works.
+
+**Mitigation**: backend ignores `confirmPassword`, so the user simply ends up with the
+typed `newPassword`. No data corruption. Severity **Minor**.
+
+**Status**: 🟡 **Open** (Minor — documented for follow-up).

@@ -145,7 +145,7 @@ export class CrmController {
   addCreator(
     @CurrentUser() user: AuthenticatedUser,
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Param('creatorId', new ParseUUIDPipe()) creatorId: string,
+    @Param('creatorId') creatorId: string,
   ): Promise<{ listId: string; creatorId: string; addedAt: string }> {
     return this.service.addCreatorToList(user.userId, id, creatorId);
   }
@@ -164,7 +164,7 @@ export class CrmController {
   async removeCreator(
     @CurrentUser() user: AuthenticatedUser,
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Param('creatorId', new ParseUUIDPipe()) creatorId: string,
+    @Param('creatorId') creatorId: string,
   ): Promise<void> {
     await this.service.removeCreatorFromList(user.userId, id, creatorId);
   }

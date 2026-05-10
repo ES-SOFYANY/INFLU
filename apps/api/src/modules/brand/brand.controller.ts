@@ -5,7 +5,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseUUIDPipe,
   Post,
   Query,
   UseGuards,
@@ -106,7 +105,7 @@ export class BrandController {
   @ApiResponse({ status: 404, description: 'BRAND_NOT_FOUND' })
   listAccess(
     @CurrentUser() user: AuthenticatedUser,
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id') id: string,
   ): Promise<BrandAccessDto[]> {
     return this.service.listAccess(user.userId, id);
   }
@@ -129,7 +128,7 @@ export class BrandController {
   @ApiResponse({ status: 404, description: 'BRAND_NOT_FOUND or USER_NOT_FOUND' })
   grantAccess(
     @CurrentUser() user: AuthenticatedUser,
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id') id: string,
     @Body() dto: GrantBrandAccessDto,
   ): Promise<BrandAccessDto> {
     return this.service.grantAccess(user.userId, id, dto);
