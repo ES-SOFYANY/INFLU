@@ -1,0 +1,266 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  GitHub Actions OIDC provider + per-environment deployment role for INFLU.ai.
+  Deploy once per AWS account (admin). Outputs the role ARN to paste in GitHub repo Variables.
+
+Parameters:
+  GitHubOrg:
+    Type: String
+    Description: GitHub organization or username owning the repo (e.g. my-org).
+  GitHubRepo:
+    Type: String
+    Description: GitHub repository name (e.g. influ-ai).
+  Stage:
+    Type: String
+    AllowedValues: [dev, staging, prod]
+    Description: Environment this role can deploy to.
+  AllowedRefs:
+    Type: CommaDelimitedList
+    Description: >
+      List of git refs allowed to assume this role (e.g. "refs/heads/develop"
+      for dev, "refs/tags/staging-*" for staging, "refs/tags/v*" + "refs/heads/main" for prod).
+  CreateOidcProvider:
+    Type: String
+    Default: 'true'
+    AllowedValues: ['true', 'false']
+    Description: Set 'false' if the GitHub OIDC provider already exists in this account.
+
+Conditions:
+  ShouldCreateOidcProvider: !Equals [!Ref CreateOidcProvider, 'true']
+
+Resources:
+  GitHubOidcProvider:
+    Condition: ShouldCreateOidcProvider
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        # GitHub Actions OIDC root CA — fingerprint not strictly required for STS but kept for compat.
+        - 6938fd4d98bab03faadb97b34396831e3780aea1
+        - 1c58a3a8518e8759bf075b76b750d4f2df264fcd
+
+  DeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub influ-gha-deploy-${Stage}
+      Description: !Sub GitHub Actions OIDC deploy role for INFLU.ai (${Stage}).
+      MaxSessionDuration: 3600
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Split
+                  - ','
+                  - !Sub
+                    - 'repo:${GitHubOrg}/${GitHubRepo}:ref:${joined}'
+                    - joined: !Join
+                        - ',repo:${GitHubOrg}/${GitHubRepo}:ref:'
+                        - !Ref AllowedRefs
+      Policies:
+        - PolicyName: SamDeploy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # CloudFormation
+              - Effect: Allow
+                Action:
+                  - cloudformation:CreateStack
+                  - cloudformation:UpdateStack
+                  - cloudformation:DeleteStack
+                  - cloudformation:DescribeStacks
+                  - cloudformation:DescribeStackEvents
+                  - cloudformation:DescribeStackResource
+                  - cloudformation:DescribeStackResources
+                  - cloudformation:GetTemplate
+                  - cloudformation:GetTemplateSummary
+                  - cloudformation:ValidateTemplate
+                  - cloudformation:CreateChangeSet
+                  - cloudformation:DescribeChangeSet
+                  - cloudformation:ExecuteChangeSet
+                  - cloudformation:DeleteChangeSet
+                  - cloudformation:ListStackResources
+                  - cloudformation:ContinueUpdateRollback
+                Resource:
+                  - !Sub arn:${AWS::Partition}:cloudformation:*:${AWS::AccountId}:stack/influ-${Stage}/*
+                  - !Sub arn:${AWS::Partition}:cloudformation:*:${AWS::AccountId}:stack/influ-${Stage}/*/*
+                  - !Sub arn:${AWS::Partition}:cloudformation:*:${AWS::AccountId}:changeSet/*
+                  - !Sub arn:${AWS::Partition}:cloudformation:*:aws:transform/Serverless-2016-10-31
+              - Effect: Allow
+                Action:
+                  - cloudformation:ListStacks
+                  - cloudformation:ListExports
+                Resource: '*'
+              # S3 — SAM artifacts bucket + Web bucket
+              - Effect: Allow
+                Action:
+                  - s3:CreateBucket
+                  - s3:GetBucketLocation
+                  - s3:ListBucket
+                  - s3:GetBucketPolicy
+                  - s3:PutBucketPolicy
+                  - s3:PutBucketVersioning
+                  - s3:PutBucketTagging
+                  - s3:PutBucketPublicAccessBlock
+                  - s3:PutBucketEncryption
+                  - s3:PutBucketOwnershipControls
+                  - s3:DeleteBucket
+                  - s3:GetEncryptionConfiguration
+                  - s3:PutEncryptionConfiguration
+                Resource:
+                  - !Sub arn:${AWS::Partition}:s3:::aws-sam-cli-managed-*
+                  - !Sub arn:${AWS::Partition}:s3:::sam-influ-${Stage}-*
+                  - !Sub arn:${AWS::Partition}:s3:::influ-web-${Stage}-*
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:DeleteObject
+                  - s3:ListBucket
+                  - s3:AbortMultipartUpload
+                Resource:
+                  - !Sub arn:${AWS::Partition}:s3:::aws-sam-cli-managed-*
+                  - !Sub arn:${AWS::Partition}:s3:::aws-sam-cli-managed-*/*
+                  - !Sub arn:${AWS::Partition}:s3:::sam-influ-${Stage}-*
+                  - !Sub arn:${AWS::Partition}:s3:::sam-influ-${Stage}-*/*
+                  - !Sub arn:${AWS::Partition}:s3:::influ-web-${Stage}-*
+                  - !Sub arn:${AWS::Partition}:s3:::influ-web-${Stage}-*/*
+              # Lambda
+              - Effect: Allow
+                Action:
+                  - lambda:CreateFunction
+                  - lambda:UpdateFunctionCode
+                  - lambda:UpdateFunctionConfiguration
+                  - lambda:DeleteFunction
+                  - lambda:GetFunction
+                  - lambda:GetFunctionConfiguration
+                  - lambda:ListVersionsByFunction
+                  - lambda:PublishVersion
+                  - lambda:AddPermission
+                  - lambda:RemovePermission
+                  - lambda:TagResource
+                  - lambda:UntagResource
+                  - lambda:ListTags
+                Resource:
+                  - !Sub arn:${AWS::Partition}:lambda:*:${AWS::AccountId}:function:influ-${Stage}-*
+              # API Gateway v2
+              - Effect: Allow
+                Action:
+                  - apigateway:*
+                Resource:
+                  - !Sub arn:${AWS::Partition}:apigateway:*::/apis*
+                  - !Sub arn:${AWS::Partition}:apigateway:*::/tags/*
+              # DynamoDB
+              - Effect: Allow
+                Action:
+                  - dynamodb:CreateTable
+                  - dynamodb:DeleteTable
+                  - dynamodb:DescribeTable
+                  - dynamodb:UpdateTable
+                  - dynamodb:DescribeContinuousBackups
+                  - dynamodb:UpdateContinuousBackups
+                  - dynamodb:DescribeTimeToLive
+                  - dynamodb:UpdateTimeToLive
+                  - dynamodb:DescribeContributorInsights
+                  - dynamodb:TagResource
+                  - dynamodb:UntagResource
+                  - dynamodb:ListTagsOfResource
+                  - dynamodb:UpdateContinuousBackups
+                Resource:
+                  - !Sub arn:${AWS::Partition}:dynamodb:*:${AWS::AccountId}:table/influ_*
+                  - !Sub arn:${AWS::Partition}:dynamodb:*:${AWS::AccountId}:table/influ_*/index/*
+              # CloudFront
+              - Effect: Allow
+                Action:
+                  - cloudfront:CreateDistribution
+                  - cloudfront:UpdateDistribution
+                  - cloudfront:DeleteDistribution
+                  - cloudfront:GetDistribution
+                  - cloudfront:GetDistributionConfig
+                  - cloudfront:CreateOriginAccessControl
+                  - cloudfront:GetOriginAccessControl
+                  - cloudfront:UpdateOriginAccessControl
+                  - cloudfront:DeleteOriginAccessControl
+                  - cloudfront:CreateInvalidation
+                  - cloudfront:GetInvalidation
+                  - cloudfront:TagResource
+                  - cloudfront:UntagResource
+                  - cloudfront:ListTagsForResource
+                Resource: '*'
+              # CloudWatch / Logs
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:DeleteLogGroup
+                  - logs:DescribeLogGroups
+                  - logs:PutRetentionPolicy
+                  - logs:TagResource
+                  - logs:TagLogGroup
+                  - logs:UntagLogGroup
+                Resource: !Sub arn:${AWS::Partition}:logs:*:${AWS::AccountId}:log-group:/aws/*
+              - Effect: Allow
+                Action:
+                  - cloudwatch:PutMetricAlarm
+                  - cloudwatch:DeleteAlarms
+                  - cloudwatch:DescribeAlarms
+                  - cloudwatch:TagResource
+                Resource: '*'
+              # SNS
+              - Effect: Allow
+                Action:
+                  - sns:CreateTopic
+                  - sns:DeleteTopic
+                  - sns:GetTopicAttributes
+                  - sns:SetTopicAttributes
+                  - sns:Subscribe
+                  - sns:Unsubscribe
+                  - sns:ListSubscriptionsByTopic
+                  - sns:TagResource
+                Resource: !Sub arn:${AWS::Partition}:sns:*:${AWS::AccountId}:influ-${Stage}-*
+              # IAM (managed by SAM for Lambda execution roles)
+              - Effect: Allow
+                Action:
+                  - iam:CreateRole
+                  - iam:DeleteRole
+                  - iam:GetRole
+                  - iam:PassRole
+                  - iam:AttachRolePolicy
+                  - iam:DetachRolePolicy
+                  - iam:PutRolePolicy
+                  - iam:DeleteRolePolicy
+                  - iam:GetRolePolicy
+                  - iam:TagRole
+                  - iam:UntagRole
+                Resource:
+                  - !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:role/influ-${Stage}-*
+                  - !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:role/influ-*-ApiFunctionRole-*
+              # Secrets Manager — read only for declared secret usage
+              - Effect: Allow
+                Action:
+                  - secretsmanager:DescribeSecret
+                  - secretsmanager:GetSecretValue
+                Resource: !Sub arn:${AWS::Partition}:secretsmanager:*:${AWS::AccountId}:secret:influ/${Stage}/*
+              # SSM Parameter Store
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                  - ssm:GetParameters
+                  - ssm:PutParameter
+                Resource: !Sub arn:${AWS::Partition}:ssm:*:${AWS::AccountId}:parameter/influ/${Stage}/*
+
+Outputs:
+  DeployRoleArn:
+    Description: >
+      Paste this ARN into GitHub repo Variables as AWS_DEPLOY_ROLE_<STAGE>.
+    Value: !GetAtt DeployRole.Arn
+  OidcProviderArn:
+    Condition: ShouldCreateOidcProvider
+    Value: !Ref GitHubOidcProvider
