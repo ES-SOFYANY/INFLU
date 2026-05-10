@@ -172,8 +172,8 @@
           "status": {"S": "VALIDATED"},
           "decidedBy": {"S": "u_admin_001"},
           "decidedAt": {"S": "2026-02-17T10:00:00Z"},
-          "GSI5PK": {"S": "STATUS#VALIDATED"},
-          "GSI5SK": {"S": "2026-02-16T09:00:00Z#u_creator_nano_010"}
+          "GSI1PK": {"S": "ADMINVAL#CIN#VALIDATED"},
+          "GSI1SK": {"S": "2026-02-16T09:00:00Z"}
         }
       }
     },
@@ -1633,8 +1633,8 @@
           "cinNumber": {"S": "K012345"},
           "submittedAt": {"S": "2026-05-02T10:00:00Z"},
           "status": {"S": "PENDING"},
-          "GSI5PK": {"S": "STATUS#PENDING"},
-          "GSI5SK": {"S": "2026-05-02T10:00:00Z#u_creator_pending_014"}
+          "GSI1PK": {"S": "ADMINVAL#CIN#PENDING"},
+          "GSI1SK": {"S": "2026-05-02T10:00:00Z"}
         }
       }
     },
