@@ -1,0 +1,48 @@
+version = 0.1
+
+[default.deploy.parameters]
+region = "eu-west-3"
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = false
+fail_on_empty_changeset = false
+resolve_s3 = true
+
+[dev.deploy.parameters]
+stack_name = "influ-dev"
+s3_prefix = "influ-dev"
+region = "eu-west-3"
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = false
+fail_on_empty_changeset = false
+resolve_s3 = true
+parameter_overrides = "Stage=dev"
+tags = "Project=INFLU Env=dev"
+
+[staging.deploy.parameters]
+stack_name = "influ-staging"
+s3_prefix = "influ-staging"
+region = "eu-west-3"
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = false
+fail_on_empty_changeset = false
+resolve_s3 = true
+parameter_overrides = "Stage=staging"
+tags = "Project=INFLU Env=staging"
+
+[prod.deploy.parameters]
+stack_name = "influ-prod"
+s3_prefix = "influ-prod"
+region = "eu-west-3"
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+fail_on_empty_changeset = false
+resolve_s3 = true
+parameter_overrides = "Stage=prod"
+tags = "Project=INFLU Env=prod"
+
+[default.build.parameters]
+cached = true
+parallel = true
+
+[default.validate.parameters]
+lint = true
