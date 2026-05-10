@@ -1,4 +1,5 @@
 export * from './application.dto';
+export * from './collaboration.dto';
 export * from './list-marketplace-products.query';
 export * from './list-my-marketplace-products.query';
 export * from './marketplace-deliverable.dto';

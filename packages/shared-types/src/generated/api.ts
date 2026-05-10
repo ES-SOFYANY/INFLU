@@ -311,6 +311,61 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/business/crm/lists": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-140] List my CRM lists */
+        readonly get: operations["CrmController_listLists"];
+        readonly put?: never;
+        /** [US-141] Create a CRM list */
+        readonly post: operations["CrmController_createList"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/crm/lists/{id}": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-140] Get a CRM list with creators */
+        readonly get: operations["CrmController_getList"];
+        /** [US-141] Update a CRM list (title/description) */
+        readonly put: operations["CrmController_updateList"];
+        readonly post?: never;
+        /** [US-141] Soft-delete a CRM list */
+        readonly delete: operations["CrmController_deleteList"];
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/business/crm/lists/{id}/creators/{creatorId}": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly get?: never;
+        readonly put?: never;
+        /** [US-142] Add a creator to a CRM list */
+        readonly post: operations["CrmController_addCreator"];
+        /** [US-142] Remove a creator from a CRM list */
+        readonly delete: operations["CrmController_removeCreator"];
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/api/business/discovery/creators": {
         readonly parameters: {
             readonly query?: never;
@@ -573,6 +628,23 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/creator/me/collaborations": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-040] List my collaborations (creator) */
+        readonly get: operations["CreatorCollaborationsController_listMyCollaborations"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/api/creator/me/creator-report": {
         readonly parameters: {
             readonly query?: never;
@@ -814,6 +886,41 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/api/messaging/conversations": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-060/US-061/US-150] List my conversations */
+        readonly get: operations["MessagingController_listConversations"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/api/messaging/conversations/{id}/messages": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /** [US-060] List messages of a conversation */
+        readonly get: operations["MessagingController_listMessages"];
+        readonly put?: never;
+        /** [US-060] Post a message in a conversation */
+        readonly post: operations["MessagingController_postMessage"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1036,6 +1143,72 @@ export interface components {
             /** @enum {string} */
             readonly status: "NONE" | "PENDING_VALIDATION" | "VALIDATED" | "CANCELLED";
         };
+        readonly CollaborationBrandDto: {
+            /** Format: uri */
+            readonly avatarUrl?: string;
+            /** Format: uuid */
+            readonly id: string;
+            readonly name: string;
+        };
+        readonly CollaborationCampaignDto: {
+            /** Format: uuid */
+            readonly id: string;
+            readonly name: string;
+        };
+        readonly CollaborationItemDto: {
+            readonly brand: components["schemas"]["CollaborationBrandDto"];
+            readonly campaign: components["schemas"]["CollaborationCampaignDto"];
+            /**
+             * Format: date-time
+             * @description Collaboration end date (product expiresAt snapshot)
+             */
+            readonly endDate: string;
+            /**
+             * Format: uuid
+             * @description Application id
+             */
+            readonly id: string;
+            /**
+             * Format: date-time
+             * @description Collaboration start date (product publishedAt snapshot)
+             */
+            readonly startDate: string;
+            /**
+             * @description Application status snapshot
+             * @enum {string}
+             */
+            readonly status: "APPLIED" | "ACCEPTED" | "REJECTED" | "CONTENT_SUBMITTED" | "MODIFICATION_REQUESTED" | "CONTENT_VALIDATED" | "PAID";
+        };
+        readonly ConversationCampaignDto: {
+            /** Format: uuid */
+            readonly id: string;
+            readonly name: string;
+        };
+        readonly ConversationItemDto: {
+            readonly campaign?: components["schemas"]["ConversationCampaignDto"] | null;
+            /** Format: uuid */
+            readonly id: string;
+            readonly lastMessage?: components["schemas"]["ConversationLastMessageDto"] | null;
+            readonly profile: components["schemas"]["ConversationProfileDto"];
+            /** @enum {string} */
+            readonly status: "OPEN" | "CLOSED";
+        };
+        readonly ConversationLastMessageDto: {
+            readonly content: string;
+            /** Format: date-time */
+            readonly createdAt: string;
+        };
+        readonly ConversationProfileDto: {
+            /** Format: uri */
+            readonly avatarUrl?: string;
+            /** Format: uuid */
+            readonly id: string;
+            readonly name: string;
+        };
+        readonly CreateCrmListDto: {
+            readonly description: string;
+            readonly title: string;
+        };
         readonly CreateMarketplaceProductDto: {
             readonly brandDescription: string;
             /** Format: uuid */
@@ -1109,6 +1282,36 @@ export interface components {
             readonly posts: readonly Record<string, never>[];
             readonly profile: components["schemas"]["CreatorProfileOverviewDto"];
             readonly socialCoverage: readonly components["schemas"]["SocialCoverageRowDto"][];
+        };
+        readonly CrmListDetailDto: {
+            /** Format: date-time */
+            readonly createdAt: string;
+            readonly creators: readonly components["schemas"]["CrmListMemberDto"][];
+            readonly creatorsCount: number;
+            readonly description: string;
+            /** Format: uuid */
+            readonly id: string;
+            readonly title: string;
+        };
+        readonly CrmListDto: {
+            /** Format: date-time */
+            readonly createdAt: string;
+            /** @description Number of creators in the list */
+            readonly creatorsCount: number;
+            readonly description: string;
+            /** Format: uuid */
+            readonly id: string;
+            readonly title: string;
+        };
+        readonly CrmListMemberDto: {
+            /** Format: date-time */
+            readonly addedAt: string;
+            /** Format: uri */
+            readonly avatarUrl?: string;
+            /** Format: uuid */
+            readonly id: string;
+            readonly mainCategory?: string;
+            readonly name: string;
         };
         readonly DeliverableInputDto: {
             /** @enum {string} */
@@ -1367,6 +1570,17 @@ export interface components {
             /** Format: date-time */
             readonly updatedAt: string;
         };
+        readonly MessageDto: {
+            readonly content: string;
+            /** Format: uuid */
+            readonly conversationId: string;
+            /** Format: date-time */
+            readonly createdAt: string;
+            /** Format: uuid */
+            readonly id: string;
+            /** Format: uuid */
+            readonly senderId: string;
+        };
         readonly OnboardBusinessDto: {
             /** @description Must be true (legal mentions & privacy) */
             readonly acceptLegal: boolean;
@@ -1405,6 +1619,24 @@ export interface components {
             readonly page: number;
             readonly total: number;
         };
+        readonly PaginatedCollaborationsDto: {
+            readonly items: readonly components["schemas"]["CollaborationItemDto"][];
+            readonly limit: number;
+            readonly page: number;
+            readonly total: number;
+        };
+        readonly PaginatedConversationsDto: {
+            readonly items: readonly components["schemas"]["ConversationItemDto"][];
+            readonly limit: number;
+            readonly page: number;
+            readonly total: number;
+        };
+        readonly PaginatedCrmListsDto: {
+            readonly items: readonly components["schemas"]["CrmListDto"][];
+            readonly limit: number;
+            readonly page: number;
+            readonly total: number;
+        };
         readonly PaginatedDiscoveryCreatorsDto: {
             readonly items: readonly components["schemas"]["DiscoveryCreatorItemDto"][];
             readonly limit: number;
@@ -1418,6 +1650,15 @@ export interface components {
             readonly page: number;
             /** @description Total number of products available */
             readonly total: number;
+        };
+        readonly PaginatedMessagesDto: {
+            readonly items: readonly components["schemas"]["MessageDto"][];
+            readonly limit: number;
+            readonly page: number;
+            readonly total: number;
+        };
+        readonly PostMessageDto: {
+            readonly content: string;
         };
         readonly PricingDto: {
             readonly lines: readonly components["schemas"]["PricingLineDto"][];
@@ -1647,12 +1888,23 @@ export type SchemaChangeBusinessPasswordDto = components['schemas']['ChangeBusin
 export type SchemaChangePasswordDto = components['schemas']['ChangePasswordDto'];
 export type SchemaChatMessageDto = components['schemas']['ChatMessageDto'];
 export type SchemaCinStatusDto = components['schemas']['CinStatusDto'];
+export type SchemaCollaborationBrandDto = components['schemas']['CollaborationBrandDto'];
+export type SchemaCollaborationCampaignDto = components['schemas']['CollaborationCampaignDto'];
+export type SchemaCollaborationItemDto = components['schemas']['CollaborationItemDto'];
+export type SchemaConversationCampaignDto = components['schemas']['ConversationCampaignDto'];
+export type SchemaConversationItemDto = components['schemas']['ConversationItemDto'];
+export type SchemaConversationLastMessageDto = components['schemas']['ConversationLastMessageDto'];
+export type SchemaConversationProfileDto = components['schemas']['ConversationProfileDto'];
+export type SchemaCreateCrmListDto = components['schemas']['CreateCrmListDto'];
 export type SchemaCreateMarketplaceProductDto = components['schemas']['CreateMarketplaceProductDto'];
 export type SchemaCreatorAccountInfoDto = components['schemas']['CreatorAccountInfoDto'];
 export type SchemaCreatorBillingDto = components['schemas']['CreatorBillingDto'];
 export type SchemaCreatorDashboardKpisDto = components['schemas']['CreatorDashboardKpisDto'];
 export type SchemaCreatorProfileOverviewDto = components['schemas']['CreatorProfileOverviewDto'];
 export type SchemaCreatorReportDto = components['schemas']['CreatorReportDto'];
+export type SchemaCrmListDetailDto = components['schemas']['CrmListDetailDto'];
+export type SchemaCrmListDto = components['schemas']['CrmListDto'];
+export type SchemaCrmListMemberDto = components['schemas']['CrmListMemberDto'];
 export type SchemaDeliverableInputDto = components['schemas']['DeliverableInputDto'];
 export type SchemaDiscoveryCreatorItemDto = components['schemas']['DiscoveryCreatorItemDto'];
 export type SchemaDiscoveryPlatformInfoDto = components['schemas']['DiscoveryPlatformInfoDto'];
@@ -1674,10 +1926,16 @@ export type SchemaMarketplaceDeliverableDto = components['schemas']['Marketplace
 export type SchemaMarketplaceProductCardDto = components['schemas']['MarketplaceProductCardDto'];
 export type SchemaMarketplaceProductDetailDto = components['schemas']['MarketplaceProductDetailDto'];
 export type SchemaMarketplaceProductWizardDto = components['schemas']['MarketplaceProductWizardDto'];
+export type SchemaMessageDto = components['schemas']['MessageDto'];
 export type SchemaOnboardBusinessDto = components['schemas']['OnboardBusinessDto'];
 export type SchemaPaginatedCampaignsDto = components['schemas']['PaginatedCampaignsDto'];
+export type SchemaPaginatedCollaborationsDto = components['schemas']['PaginatedCollaborationsDto'];
+export type SchemaPaginatedConversationsDto = components['schemas']['PaginatedConversationsDto'];
+export type SchemaPaginatedCrmListsDto = components['schemas']['PaginatedCrmListsDto'];
 export type SchemaPaginatedDiscoveryCreatorsDto = components['schemas']['PaginatedDiscoveryCreatorsDto'];
 export type SchemaPaginatedMarketplaceProductsDto = components['schemas']['PaginatedMarketplaceProductsDto'];
+export type SchemaPaginatedMessagesDto = components['schemas']['PaginatedMessagesDto'];
+export type SchemaPostMessageDto = components['schemas']['PostMessageDto'];
 export type SchemaPricingDto = components['schemas']['PricingDto'];
 export type SchemaPricingLineDto = components['schemas']['PricingLineDto'];
 export type SchemaPricingSuggestedRangeDto = components['schemas']['PricingSuggestedRangeDto'];
@@ -2421,6 +2679,315 @@ export interface operations {
             };
             /** @description Caller is not a business / agency */
             readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CrmController_listLists: {
+        readonly parameters: {
+            readonly query?: {
+                readonly limit?: number;
+                readonly page?: number;
+                /** @description Search on list title */
+                readonly q?: string;
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedCrmListsDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CrmController_createList: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["CreateCrmListDto"];
+            };
+        };
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CrmListDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CrmController_getList: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CrmListDetailDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description LIST_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CrmController_updateList: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["CreateCrmListDto"];
+            };
+        };
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["CrmListDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description LIST_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CrmController_deleteList: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Deleted */
+            readonly 204: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description LIST_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CrmController_addCreator: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly creatorId: string;
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Added */
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description LIST_NOT_FOUND | CREATOR_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description ALREADY_IN_LIST */
+            readonly 409: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly CrmController_removeCreator: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly creatorId: string;
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Removed */
+            readonly 204: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not BUSINESS/AGENCY */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description LIST_NOT_FOUND | CREATOR_NOT_FOUND */
+            readonly 404: {
                 headers: {
                     readonly [name: string]: unknown;
                 };
@@ -3327,6 +3894,48 @@ export interface operations {
             };
         };
     };
+    readonly CreatorCollaborationsController_listMyCollaborations: {
+        readonly parameters: {
+            readonly query?: {
+                /** @description Filter by brand id */
+                readonly brand?: string;
+                readonly limit?: number;
+                readonly page?: number;
+                /** @description Free-text search on campaign name */
+                readonly q?: string;
+                /** @description Filter by application status */
+                readonly status?: "APPLIED" | "ACCEPTED" | "REJECTED" | "CONTENT_SUBMITTED" | "MODIFICATION_REQUESTED" | "CONTENT_VALIDATED" | "PAID";
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedCollaborationsDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller is not a creator */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     readonly CreatorProfileController_getCreatorReport: {
         readonly parameters: {
             readonly query?: never;
@@ -3897,6 +4506,152 @@ export interface operations {
             };
             /** @description PRODUCT_EXPIRED */
             readonly 410: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly MessagingController_listConversations: {
+        readonly parameters: {
+            readonly query?: {
+                /** @description Filter by linked brand id */
+                readonly brand?: string;
+                readonly limit?: number;
+                readonly page?: number;
+                /** @description Search on counterpart name */
+                readonly q?: string;
+                readonly status?: "OPEN" | "CLOSED";
+            };
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedConversationsDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Caller has insufficient role */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly MessagingController_listMessages: {
+        readonly parameters: {
+            readonly query?: {
+                readonly limit?: number;
+                readonly page?: number;
+            };
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["PaginatedMessagesDto"];
+                };
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN — not a participant */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description CONVERSATION_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly MessagingController_postMessage: {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                readonly id: string;
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": components["schemas"]["PostMessageDto"];
+            };
+        };
+        readonly responses: {
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["MessageDto"];
+                };
+            };
+            /** @description Validation failed */
+            readonly 400: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid bearer token */
+            readonly 401: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN — not a participant */
+            readonly 403: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description CONVERSATION_NOT_FOUND */
+            readonly 404: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description EMPTY_MESSAGE */
+            readonly 422: {
                 headers: {
                     readonly [name: string]: unknown;
                 };

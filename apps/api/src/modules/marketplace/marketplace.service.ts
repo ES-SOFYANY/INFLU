@@ -10,6 +10,7 @@ import {
   ApplicationDto,
   CreateMarketplaceProductDto,
   DeliverableInputDto,
+  ListCollaborationsQueryDto,
   ListMarketplaceProductsQueryDto,
   ListMyMarketplaceProductsQueryDto,
   MARKETPLACE_WIZARD_STEPS,
@@ -17,6 +18,7 @@ import {
   MarketplaceProductDetailDto,
   MarketplaceProductWizardDto,
   MarketplaceWizardStep,
+  PaginatedCollaborationsDto,
   PaginatedMarketplaceProductsDto,
   UpdateMarketplaceProductDto,
 } from './dto';
@@ -725,5 +727,98 @@ export class MarketplaceService {
       createdAt: p.createdAt,
       updatedAt: p.updatedAt,
     };
+  }
+
+  // =====================================================================
+  // US-040 — Creator collaborations
+  // =====================================================================
+
+  /**
+   * US-040 — List my (creator) collaborations. One row per `Application`
+   * submitted by the creator, joined with the marketplace product (campaign)
+   * and brand summary. Filters: `q` (campaign name contains, case-insensitive),
+   * `brand` (brand id), `status` (application status). Sorted by `appliedAt` DESC.
+   */
+  async listMyCollaborations(
+    creatorId: string,
+    query: ListCollaborationsQueryDto,
+  ): Promise<PaginatedCollaborationsDto> {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 20;
+
+    const applications = await this.repo.listApplicationsByCreator(creatorId);
+
+    // Hydrate product + brand for each application.
+    const productCache = new Map<string, MarketplaceProductRecord | null>();
+    const brandCache = new Map<
+      string,
+      { id: string; name: string; avatarUrl?: string }
+    >();
+    type Hydrated = {
+      app: ApplicationRecord;
+      product: MarketplaceProductRecord | null;
+      brand: { id: string; name: string; avatarUrl?: string };
+    };
+    const hydrated: Hydrated[] = [];
+    for (const app of applications) {
+      let product = productCache.get(app.productId);
+      if (product === undefined) {
+        product = await this.repo.getProduct(app.productId);
+        productCache.set(app.productId, product);
+      }
+      let brand = brandCache.get(app.brandId);
+      if (!brand) {
+        const b = await this.brandRepo.getBrand(app.brandId);
+        brand = {
+          id: app.brandId,
+          name: b?.name ?? '',
+          avatarUrl: b?.logoUrl,
+        };
+        brandCache.set(app.brandId, brand);
+      }
+      hydrated.push({ app, product, brand });
+    }
+
+    // Apply filters in-memory (MVP scale).
+    let filtered = hydrated;
+    if (query.q && query.q.trim().length > 0) {
+      const needle = query.q.toLowerCase();
+      filtered = filtered.filter((h) =>
+        (h.product?.productName ?? '').toLowerCase().includes(needle),
+      );
+    }
+    if (query.brand) {
+      filtered = filtered.filter((h) => h.app.brandId === query.brand);
+    }
+    if (query.status) {
+      filtered = filtered.filter((h) => h.app.status === query.status);
+    }
+
+    // Sort by appliedAt DESC for stable creator timeline.
+    filtered.sort((a, b) =>
+      a.app.appliedAt < b.app.appliedAt ? 1 : -1,
+    );
+
+    const total = filtered.length;
+    const start = (page - 1) * limit;
+    const items = filtered.slice(start, start + limit).map((h) => ({
+      id: h.app.applicationId,
+      brand: {
+        id: h.brand.id,
+        name: h.brand.name,
+        avatarUrl: h.brand.avatarUrl,
+      },
+      campaign: {
+        id: h.app.productId,
+        name: h.product?.productName ?? '',
+      },
+      status: h.app.status,
+      // Snapshot of the campaign window. Uses product timestamps because the
+      // collaboration window is the marketplace product publication period.
+      startDate: h.product?.publishedAt ?? h.app.appliedAt,
+      endDate: h.product?.expiresAt ?? h.app.appliedAt,
+    }));
+
+    return { items, page, limit, total };
   }
 }

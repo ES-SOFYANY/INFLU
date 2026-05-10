@@ -418,4 +418,34 @@ export class MarketplaceRepository {
       }),
     );
   }
+
+  // ------------- Creator-side queries (US-040) -------------
+
+  /**
+   * US-040 — List applications submitted by a creator. Stored at
+   * `PK=USER#<creatorId>, SK=APPLICATION#<productId>`.
+   */
+  async listApplicationsByCreator(creatorId: string): Promise<ApplicationRecord[]> {
+    const res = await this.db.client.send(
+      new QueryCommand({
+        TableName: this.db.mainTable,
+        KeyConditionExpression: 'PK = :pk AND begins_with(SK, :sk)',
+        ExpressionAttributeValues: {
+          ':pk': DynamoDbService.userPk(creatorId),
+          ':sk': 'APPLICATION#',
+        },
+      }),
+    );
+    return (res.Items ?? []).map((it) => {
+      const {
+        PK: _p,
+        SK: _s,
+        entity: _e,
+        GSI2PK: _g2p,
+        GSI2SK: _g2s,
+        ...rest
+      } = it;
+      return rest as unknown as ApplicationRecord;
+    });
+  }
 }

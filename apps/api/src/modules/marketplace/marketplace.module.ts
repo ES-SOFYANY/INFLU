@@ -5,6 +5,7 @@ import { CreatorProfileModule } from '../creator-profile/creator-profile.module'
 
 import {
   BusinessMarketplaceController,
+  CreatorCollaborationsController,
   MarketplaceController,
 } from './marketplace.controller';
 import { MarketplaceRepository } from './marketplace.repository';
@@ -16,7 +17,11 @@ import { MarketplaceService } from './marketplace.service';
  */
 @Module({
   imports: [BrandModule, CreatorProfileModule],
-  controllers: [MarketplaceController, BusinessMarketplaceController],
+  controllers: [
+    MarketplaceController,
+    BusinessMarketplaceController,
+    CreatorCollaborationsController,
+  ],
   providers: [MarketplaceService, MarketplaceRepository],
   exports: [MarketplaceService, MarketplaceRepository],
 })

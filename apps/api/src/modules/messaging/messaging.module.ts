@@ -11,6 +11,6 @@ import { MessagingService } from './messaging.service';
 @Module({
   controllers: [MessagingController],
   providers: [MessagingService, MessagingRepository],
-  exports: [MessagingService],
+  exports: [MessagingService, MessagingRepository],
 })
 export class MessagingModule {}

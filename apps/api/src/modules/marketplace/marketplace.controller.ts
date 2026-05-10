@@ -28,10 +28,12 @@ import type { AuthenticatedUser } from '../../shared/auth/types';
 import {
   ApplicationDto,
   CreateMarketplaceProductDto,
+  ListCollaborationsQueryDto,
   ListMarketplaceProductsQueryDto,
   ListMyMarketplaceProductsQueryDto,
   MarketplaceProductDetailDto,
   MarketplaceProductWizardDto,
+  PaginatedCollaborationsDto,
   PaginatedMarketplaceProductsDto,
   UpdateMarketplaceProductDto,
 } from './dto';
@@ -227,5 +229,31 @@ export class BusinessMarketplaceController {
     @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<void> {
     await this.service.deleteProduct(user.userId, id);
+  }
+}
+
+/**
+ * US-040 — Creator-side collaboration list (`/creator/me/collaborations`).
+ * Mounted as a separate controller from `CreatorProfileController` to avoid a
+ * circular dependency between Marketplace and CreatorProfile modules.
+ */
+@ApiTags('creator-profile')
+@Controller('creator')
+export class CreatorCollaborationsController {
+  constructor(private readonly service: MarketplaceService) {}
+
+  @Get('me/collaborations')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('CREATOR')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '[US-040] List my collaborations (creator)' })
+  @ApiResponse({ status: 200, type: PaginatedCollaborationsDto })
+  @ApiResponse({ status: 401, description: 'Missing or invalid bearer token' })
+  @ApiResponse({ status: 403, description: 'Caller is not a creator' })
+  listMyCollaborations(
+    @CurrentUser() user: AuthenticatedUser,
+    @Query() query: ListCollaborationsQueryDto,
+  ): Promise<PaginatedCollaborationsDto> {
+    return this.service.listMyCollaborations(user.userId, query);
   }
 }
