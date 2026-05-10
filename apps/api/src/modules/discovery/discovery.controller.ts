@@ -60,7 +60,7 @@ export class DiscoveryController {
   @ApiResponse({ status: 403, description: 'Caller is not BUSINESS / AGENCY' })
   @ApiResponse({ status: 404, description: 'Creator not found' })
   getPublicProfile(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('id') id: string,
   ): Promise<DiscoveryPublicCreatorProfileDto> {
     return this.service.getPublicProfile(id);
   }
