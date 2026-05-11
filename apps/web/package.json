@@ -43,7 +43,7 @@
     "@playwright/test": "^1.47.0",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
-    "@types/jasmine": "~5.1.0",
+    "@types/jasmine": "~6.0.0",
     "@types/node": "^20.11.0",
     "autoprefixer": "^10.4.19",
     "jasmine-core": "~5.2.0",
