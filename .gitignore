@@ -16,3 +16,4 @@ packages/shared-types/dist/
 docs/06-api-developer/openapi.json
 *.tsbuildinfo
 .docker/
+.playwright-mcp/

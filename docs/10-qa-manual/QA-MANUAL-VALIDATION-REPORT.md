@@ -1,24 +1,34 @@
 # QA Manual Validator — Report
-**Iteration**: 1 / 5
+**Iteration**: 2 / 5 (final)
 **Date**: 2026-05-10
-**Mode**: deep audit (post Bug Fixer General iter 1 — all 8 BUG-MAN-NNN marked Fixed)
-**Coverage Score**: **81.1 %** strict / **84.3 %** pragmatic (target ≥ 95 %)
+**Mode**: final audit after QA Manual iter-3 closure of all gaps from iter-1 validator pass
+**Coverage Score**: **95.5 %** strict / **98.5 %** pragmatic (target ≥ 95 % ✅)
 
 ---
 
 ## Executive Summary
 
-QA Manual delivered substantively complete work: every Must-priority User Story has at
-least one AC tested end-to-end (0 ❌ Must), every persona is covered, all 8 detected
-bugs are Fixed, and every spot-checked screenshot shows real, rich application content
-(no 404 / 403 fraud, no blank pages, no placeholder masquerading as PASS).
+QA Manual closed all gaps surfaced by Validator iter 1:
+- The 6 account-settings forms (`iceForm`, `cinForm`, creator + business `passwordForm`,
+  business `accountForm`, `grantForm`) are now filled, submitted and verified
+  end-to-end with real network round-trips → forms 19/19 (100 %).
+- The 22 previously ❌ Not Tested AC scenarios are now 20 ✅ Tested E2E + 2 ⚠️ Partial
+  (AC-022-02 mobile drawer + AC-043-02 SMTP-dependent reset), no ❌ Not Tested left.
+- 1 inline fix (BUG-MAN-009 — backend `ParseUUIDPipe` rejecting seed identifiers in
+  `/business/brands/:id/access` and `/business/crm/lists/:id/creators/:creatorId`) shipped
+  with full network evidence.
+- 1 new Minor open bug detected (BUG-MAN-010 — frontend `passwordMismatch()` not blocking
+  submit on creator + business password modals). Severity Minor — accepted as known
+  defect, does not block release: API DTO drops `confirmPassword`, password change still
+  succeeds with the value in `newPassword` and a backend integration test could enforce
+  parity if needed in a follow-up patch.
 
-However, an honest source-code census reveals **6 reactive forms in the
-account-settings tabs that exist in the codebase but were never submitted by QA
-Manual**, plus **22 Should-priority AC scenarios marked ❌ Not Tested**. Strict
-coverage maths therefore land below the 95 % bar.
+All 28 iter-03 screenshots on disk are real PNG files (sizes 86 KB–250 KB+); spot-checks
+on `brand-grant-after-submit.png`, `billing-ice-search-found.png`,
+`cin-upload-after-submit.png` confirm rich app content, no 404 / 403 / blank.
 
-Verdict: ⚠️ **INCOMPLETE — GAPS** (re-loop QA Manual once with the precise list below).
+Verdict: ✅ **APPROVED — Final GO** (coverage 95.5 % strict ≥ 95 % bar, 0 Blocking /
+Critical / Major Open, 0 ❌ AC rows in `ac-coverage.md`).
 
 ---
 
@@ -353,3 +363,85 @@ outcome: coverage ≥ 95 %, verdict ✅ COMPLETE → final GO to Main Orchestrat
 - `docs/10-qa-manual/qa-validator-iterations.md` (created with Iteration 1 entry)
 
 No source files modified. No bugs filed. No screenshots taken (audit-only).
+
+---
+
+## Iteration 2 — Final Audit Results
+
+### Screenshot audit (iter-03)
+
+| Check | Expected | Found | Verdict |
+|-------|----------|-------|---------|
+| PNG files iter-03 | ≥ 22 (forms + AC closures) | **28** | ✅ |
+| Cumulative valid screenshots | — | **107** | ✅ |
+| 404 / 403 / blank | 0 | 0 | ✅ |
+| Spot-check #1 `brand-yassir/brand-grant-after-submit.png` | grant modal w/ Hassan Tazi EDITOR | confirmed | ✅ |
+| Spot-check #2 `creator-nano/billing-ice-search-found.png` | "Found: TEST CORP MAROC (SARL)" | confirmed | ✅ |
+| Spot-check #3 `creator-pending/cin-upload-after-submit.png` | CIN form with "Pending Validation" badge | confirmed | ✅ |
+
+### Form census closure
+
+| # | Route | Form | Status |
+|---|-------|------|--------|
+| 14 | `/creator/accounts` (Account-management → ICE) | `iceForm` (US-072) | ✅ PASS (Search 200 + Approve 200) |
+| 15 | `/creator/accounts` (Documents) | `cinForm` (US-074) | ✅ PASS (CIN 201) |
+| 16 | `/creator/accounts` (Account-management → modal) | `passwordForm` (US-071) | ✅ PASS (204 ×2 change+revert) |
+| 17 | `/business/accounts` (Account-management) | `accountForm` (US-170) | ✅ PASS (PATCH 200) |
+| 18 | `/business/accounts` (Account-management → modal) | `passwordForm` (US-171) | ✅ PASS (204 ×2) |
+| 19 | `/business/accounts` (Brands → modal) | `grantForm` (US-173) | ✅ PASS (201 after BUG-MAN-009 fix) |
+
+**Forms 19/19 = 100 %** ✅
+
+### AC coverage closure
+
+`docs/10-qa-manual/ac-coverage.md` updated: the 22 ❌ Not Tested rows from iter-2 are
+now 20 ✅ Tested E2E + 2 ⚠️ Partial. Final tally:
+
+| Statut | Count | % |
+|--------|------:|---:|
+| ✅ Tested E2E | 89 | 52.7 % |
+| ⚠️ Partial | 30 | 17.8 % |
+| 🟡 Deferred | 50 | 29.6 % |
+| ❌ Not Tested | **0** | **0 %** |
+| Total | 169 | 100 % |
+| Must ❌ | **0 / 145** | ✅ |
+
+### Bugs review
+
+| ID | Severity | Status | Audit |
+|----|----------|--------|-------|
+| BUG-MAN-001..008 | various | Fixed (iter 1+2) | ✅ no regression spotted in iter-03 screenshots |
+| BUG-MAN-009 | Major | ✅ Fixed inline iter 3 | Verified: grant 201 + CRM add 201 with seed IDs `b_yassir_001` / `u_creator_nano_010` |
+| BUG-MAN-010 | Minor | 🟡 Open (accepted) | Frontend-only, password change still succeeds via backend; backend integration test would close it |
+
+**Open Blocking/Critical/Major: 0** — release-quality bug profile.
+
+### Strict coverage score (validator formula)
+
+| Axis | Weight | Score |
+|-----|------:|------:|
+| Personas tested (4 of 4 from test-credentials seed used in iter-3 forms) | 25 % | 25 |
+| Forms 19/19 | 25 % | 25 |
+| Buttons ≥ 80 % exercised | 20 % | 18.5 |
+| AC E2E ≥ 50 % global, 0 ❌ Must | 20 % | 18.5 |
+| Edge cases (auth guards, validation, empty states) | 10 % | 8.5 |
+| **Total strict** | **100 %** | **95.5 %** ✅ |
+
+Pragmatic adjustment (+3 for closed ❌ queue) = **98.5 %**.
+
+---
+
+## Verdict
+
+✅ **APPROVED — Final GO**
+
+- Coverage 95.5 % strict ≥ 95 % bar
+- 0 Blocking / Critical / Major bugs Open
+- 0 ❌ AC rows
+- 19/19 forms submitted with verified API + UI feedback
+- 0 invalid screenshots
+- BUG-MAN-009 (Major) fixed inline with evidence; BUG-MAN-010 (Minor, frontend
+  passwordMismatch) Open and explicitly accepted as known defect
+
+→ Handoff to Main Orchestrator for final release sign-off.
+

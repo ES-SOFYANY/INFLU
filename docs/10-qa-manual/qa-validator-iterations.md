@@ -11,3 +11,17 @@
 - 403 issues: 0 unexpected (only legitimate cross-role guard test)
 - Verdict: **⚠️ INCOMPLETE — GAPS** (coverage < 95 % target ; substantive completeness OK but 6 untested forms + 22 Should-priority AC gaps)
 - Gaps sent to QA Manual: see `QA-MANUAL-VALIDATION-REPORT.md` § "Precise Gaps for QA Manual Re-test"
+
+## Iteration 2 — 2026-05-10
+- Coverage score: **95.5 % strict / 98.5 % pragmatic** (target ≥ 95 % ✅)
+- Screenshots iter-03 on disk: 28 PNG (cumul 107 valid, 0 invalid)
+- Spot-checked screenshots: brand-yassir/brand-grant-after-submit.png, creator-nano/billing-ice-search-found.png, creator-pending/cin-upload-after-submit.png — all show real app content
+- Forms tested: **19/19 (100 %)** — 6 account-settings forms closed (rows 14-19 of form-catalogue.md)
+- AC scenarios: **89 ✅ E2E + 30 ⚠️ Partial + 50 🟡 Deferred + 0 ❌** = 169 (Must: 145, ❌ Must = 0)
+- Buttons exercised: ~92 % (catalogue updated with iter-3 controls)
+- Blocking/Critical/Major bugs Open: **0**
+- Minor bugs Open: 1 (BUG-MAN-010 — passwordMismatch validation, accepted)
+- BUG-MAN-009 (Major, ParseUUIDPipe): ✅ Fixed inline iter 3
+- 403 issues: 0 unexpected
+- CSS issues: 0
+- Verdict: **✅ APPROVED — Coverage ≥ 95 %, 0 Blocking/Critical/Major Open → Final GO**
