@@ -149,6 +149,7 @@ POLICY_DOCUMENT=$(cat <<'EOF'
         "apigateway:*",
         "cloudwatch:*",
         "logs:*",
+        "sns:*",
         "iam:PassRole",
         "iam:GetRole",
         "iam:CreateRole",
