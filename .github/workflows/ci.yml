@@ -90,7 +90,7 @@ jobs:
       - name: Run actionlint
         run: ./actionlint -color
       - name: Setup AWS SAM
-        uses: aws-actions/setup-sam@v2
+        uses: aws-actions/setup-sam@v3
         with:
           use-installer: true
       - name: SAM validate
