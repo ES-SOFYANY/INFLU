@@ -43,7 +43,7 @@ jobs:
       - name: Build API
         run: npm -w apps/api run build
       - name: Upload API dist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: api-dist
           path: |
@@ -71,7 +71,7 @@ jobs:
       - name: Build web (production)
         run: npm -w apps/web run build -- --configuration=production
       - name: Upload web dist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: web-dist
           path: apps/web/dist/**/*
