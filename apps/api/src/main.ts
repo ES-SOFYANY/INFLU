@@ -59,8 +59,8 @@ export const handler = async (event: any, context: any): Promise<any> => {
   if (!cachedServerlessHandler) {
     const app = await createApp();
     await app.init();
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
     // Dynamically import to avoid top-level import in Lambda
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { default: serverlessExpress }: { default: any } = await import('@vendia/serverless-express');
     cachedServerlessHandler = serverlessExpress({ app: app.getHttpAdapter().getInstance() });
   }
