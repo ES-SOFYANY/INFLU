@@ -42,7 +42,7 @@ describe('RegisterInfluencerSocialPage (US-017)', () => {
 
   it('[AC-017-02] links Instagram and shows handle + followers + tier', fakeAsync(() => {
     el().querySelector<HTMLButtonElement>('[data-testid="link-instagram"]')!.click();
-    const req = http.expectOne('/api/creator/me/social-accounts/instagram/link');
+    const req = http.expectOne('/api/v1/creator/me/social-accounts/instagram/link');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ oauthCode: 'mock-success-janedoe' });
     req.flush({
@@ -67,7 +67,7 @@ describe('RegisterInfluencerSocialPage (US-017)', () => {
 
   it('shows an error on 409 SOCIAL_ALREADY_LINKED', fakeAsync(() => {
     el().querySelector<HTMLButtonElement>('[data-testid="link-instagram"]')!.click();
-    const req = http.expectOne('/api/creator/me/social-accounts/instagram/link');
+    const req = http.expectOne('/api/v1/creator/me/social-accounts/instagram/link');
     req.flush(
       { code: 'SOCIAL_ALREADY_LINKED', message: 'duplicate' },
       { status: 409, statusText: 'Conflict' },
@@ -81,7 +81,7 @@ describe('RegisterInfluencerSocialPage (US-017)', () => {
 
   it('shows OAuth-failed message on 401', fakeAsync(() => {
     el().querySelector<HTMLButtonElement>('[data-testid="link-instagram"]')!.click();
-    const req = http.expectOne('/api/creator/me/social-accounts/instagram/link');
+    const req = http.expectOne('/api/v1/creator/me/social-accounts/instagram/link');
     req.flush({ code: 'OAUTH_FAILED' }, { status: 401, statusText: 'Unauthorized' });
     tick();
     fixture.detectChanges();
@@ -93,7 +93,7 @@ describe('RegisterInfluencerSocialPage (US-017)', () => {
   it('navigates to /creator once at least one account is linked and Finish is clicked', fakeAsync(() => {
     const navSpy = spyOn(router, 'navigateByUrl').and.resolveTo(true);
     el().querySelector<HTMLButtonElement>('[data-testid="link-instagram"]')!.click();
-    const req = http.expectOne('/api/creator/me/social-accounts/instagram/link');
+    const req = http.expectOne('/api/v1/creator/me/social-accounts/instagram/link');
     req.flush({
       platform: 'INSTAGRAM',
       handle: 'janedoe',

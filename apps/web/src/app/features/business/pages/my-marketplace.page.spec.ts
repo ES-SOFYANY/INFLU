@@ -33,7 +33,7 @@ describe('BusinessMyMarketplacePage', () => {
     fixture = TestBed.createComponent(BusinessMyMarketplacePage);
     http = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
-    http.expectOne('/api/business/brands').flush([{ id: 'b1', name: 'Eucerin' }]);
+    http.expectOne('/api/v1/business/brands').flush([{ id: 'b1', name: 'Eucerin' }]);
   });
 
   afterEach(() => http.verify());
@@ -43,7 +43,7 @@ describe('BusinessMyMarketplacePage', () => {
   }
 
   function flushProducts(items: ReadonlyArray<unknown>): void {
-    const req = http.expectOne((r) => r.url === '/api/business/marketplace/products');
+    const req = http.expectOne((r) => r.url === '/api/v1/business/marketplace/products');
     req.flush({ items, total: items.length, page: 1, limit: 10 });
     fixture.detectChanges();
   }
@@ -93,7 +93,7 @@ describe('BusinessMyMarketplacePage', () => {
 
     el().querySelector<HTMLButtonElement>('[data-testid="delete-confirm"]')!.click();
     fixture.detectChanges();
-    const req = http.expectOne('/api/business/marketplace/products/p1');
+    const req = http.expectOne('/api/v1/business/marketplace/products/p1');
     expect(req.request.method).toBe('DELETE');
     req.flush(null);
     fixture.detectChanges();
@@ -108,7 +108,7 @@ describe('BusinessMyMarketplacePage', () => {
     el().querySelector<HTMLButtonElement>('[data-testid="delete-cancel"]')!.click();
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="delete-modal"]')).toBeNull();
-    http.expectNone('/api/business/marketplace/products/p1');
+    http.expectNone('/api/v1/business/marketplace/products/p1');
   });
 
   it('Brand + Status filters propagate to query params', () => {
@@ -117,7 +117,7 @@ describe('BusinessMyMarketplacePage', () => {
     brandSelect.value = brandSelect.options[1].value;
     brandSelect.dispatchEvent(new Event('change'));
     fixture.detectChanges();
-    let req = http.expectOne((r) => r.url === '/api/business/marketplace/products');
+    let req = http.expectOne((r) => r.url === '/api/v1/business/marketplace/products');
     expect(req.request.params.get('brand')).toBe('b1');
     req.flush({ items: [], total: 0, page: 1, limit: 10 });
 
@@ -125,14 +125,14 @@ describe('BusinessMyMarketplacePage', () => {
     statusSelect.value = 'PUBLISHED';
     statusSelect.dispatchEvent(new Event('change'));
     fixture.detectChanges();
-    req = http.expectOne((r) => r.url === '/api/business/marketplace/products');
+    req = http.expectOne((r) => r.url === '/api/v1/business/marketplace/products');
     expect(req.request.params.get('status')).toBe('PUBLISHED');
     req.flush({ items: [], total: 0, page: 1, limit: 10 });
   });
 
   it('shows error banner when products fetch fails', () => {
     http
-      .expectOne((r) => r.url === '/api/business/marketplace/products')
+      .expectOne((r) => r.url === '/api/v1/business/marketplace/products')
       .flush({}, { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="error"]')).toBeTruthy();

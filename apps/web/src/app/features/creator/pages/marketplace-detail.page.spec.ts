@@ -77,11 +77,11 @@ describe('CreatorMarketplaceDetailPage', () => {
     cin?: { status: string };
     billing?: { ice: string | null };
   } = {}): void {
-    http.expectOne((r) => r.url === `/api/marketplace/products/${PRODUCT_ID}`).flush(
+    http.expectOne((r) => r.url === `/api/v1/marketplace/products/${PRODUCT_ID}`).flush(
       (opts.product ?? makeProduct()) as object,
     );
-    http.expectOne('/api/creator/me/documents/cin').flush(opts.cin ?? { status: 'VALIDATED' });
-    http.expectOne('/api/creator/me/billing').flush(opts.billing ?? { ice: '000000000000001' });
+    http.expectOne('/api/v1/creator/me/documents/cin').flush(opts.cin ?? { status: 'VALIDATED' });
+    http.expectOne('/api/v1/creator/me/billing').flush(opts.billing ?? { ice: '000000000000001' });
     fixture.detectChanges();
   }
 
@@ -167,7 +167,7 @@ describe('CreatorMarketplaceDetailPage', () => {
     flush();
     const navSpy = spyOn(router, 'navigateByUrl').and.resolveTo(true);
     el().querySelector<HTMLButtonElement>('[data-testid="apply-button"]')!.click();
-    const req = http.expectOne(`/api/marketplace/products/${PRODUCT_ID}/apply`);
+    const req = http.expectOne(`/api/v1/marketplace/products/${PRODUCT_ID}/apply`);
     req.flush({ id: 'app-1', creatorId: 'c1', productId: PRODUCT_ID, appliedAt: new Date().toISOString(), status: 'APPLIED' });
     expect(navSpy).toHaveBeenCalledWith('/creator/collaborations');
   });
@@ -180,7 +180,7 @@ describe('CreatorMarketplaceDetailPage', () => {
   it('handles 409 PROFILE_INCOMPLETE missing=[RIB] by showing the RIB row as missing', () => {
     flush();
     el().querySelector<HTMLButtonElement>('[data-testid="apply-button"]')!.click();
-    http.expectOne(`/api/marketplace/products/${PRODUCT_ID}/apply`).flush(
+    http.expectOne(`/api/v1/marketplace/products/${PRODUCT_ID}/apply`).flush(
       { code: 'PROFILE_INCOMPLETE', missing: ['RIB'] },
       { status: 409, statusText: 'Conflict' },
     );
@@ -193,7 +193,7 @@ describe('CreatorMarketplaceDetailPage', () => {
   it('handles 409 NO_SLOTS_LEFT', () => {
     flush();
     el().querySelector<HTMLButtonElement>('[data-testid="apply-button"]')!.click();
-    http.expectOne(`/api/marketplace/products/${PRODUCT_ID}/apply`).flush(
+    http.expectOne(`/api/v1/marketplace/products/${PRODUCT_ID}/apply`).flush(
       { code: 'NO_SLOTS_LEFT' },
       { status: 409, statusText: 'Conflict' },
     );
@@ -204,7 +204,7 @@ describe('CreatorMarketplaceDetailPage', () => {
   it('handles 410 PRODUCT_EXPIRED', () => {
     flush();
     el().querySelector<HTMLButtonElement>('[data-testid="apply-button"]')!.click();
-    http.expectOne(`/api/marketplace/products/${PRODUCT_ID}/apply`).flush(
+    http.expectOne(`/api/v1/marketplace/products/${PRODUCT_ID}/apply`).flush(
       { code: 'PRODUCT_EXPIRED' },
       { status: 410, statusText: 'Gone' },
     );
@@ -215,7 +215,7 @@ describe('CreatorMarketplaceDetailPage', () => {
   it('handles 409 ALREADY_APPLIED', () => {
     flush();
     el().querySelector<HTMLButtonElement>('[data-testid="apply-button"]')!.click();
-    http.expectOne(`/api/marketplace/products/${PRODUCT_ID}/apply`).flush(
+    http.expectOne(`/api/v1/marketplace/products/${PRODUCT_ID}/apply`).flush(
       { code: 'ALREADY_APPLIED' },
       { status: 409, statusText: 'Conflict' },
     );

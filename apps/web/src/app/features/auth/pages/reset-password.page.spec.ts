@@ -58,7 +58,7 @@ describe('ResetPasswordPage', () => {
     fixture.detectChanges();
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('[data-testid="pwd-error"]')).not.toBeNull();
-    http.expectNone('/api/auth/reset-password');
+    http.expectNone('/api/v1/auth/reset-password');
   });
 
   it('submits a strong matching password and redirects on success', fakeAsync(() => {
@@ -68,7 +68,7 @@ describe('ResetPasswordPage', () => {
     setValue('#pwd2', 'Sup3rSecret');
     fixture.detectChanges();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
-    const req = http.expectOne('/api/auth/reset-password');
+    const req = http.expectOne('/api/v1/auth/reset-password');
     expect(req.request.body).toEqual({ token: 'valid-token-123', newPassword: 'Sup3rSecret' });
     req.flush({
       user: { id: 'u1', email: 'a@b.c', role: 'CREATOR', status: 'ACTIVE' },
@@ -84,7 +84,7 @@ describe('ResetPasswordPage', () => {
     setValue('#pwd2', 'Sup3rSecret');
     fixture.detectChanges();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
-    const req = http.expectOne('/api/auth/reset-password');
+    const req = http.expectOne('/api/v1/auth/reset-password');
     req.flush(
       { code: 'INVALID_RESET_TOKEN', message: 'expired' },
       { status: 401, statusText: 'Unauthorized' },

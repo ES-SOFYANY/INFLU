@@ -50,8 +50,8 @@ describe('CreatorMyAccountPage', () => {
     http = TestBed.inject(HttpTestingController);
     router = TestBed.inject(Router);
     fixture.detectChanges();
-    http.expectOne('/api/creator/me/profile-overview').flush(profile);
-    http.expectOne('/api/creator/me/social-coverage').flush(social);
+    http.expectOne('/api/v1/creator/me/profile-overview').flush(profile);
+    http.expectOne('/api/v1/creator/me/social-coverage').flush(social);
     fixture.detectChanges();
   });
 

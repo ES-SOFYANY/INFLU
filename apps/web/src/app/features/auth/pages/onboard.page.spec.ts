@@ -103,7 +103,7 @@ describe('OnboardPage (US-018)', () => {
     fixture.detectChanges();
     submit();
     fixture.detectChanges();
-    http.expectNone('/api/auth/onboard/business');
+    http.expectNone('/api/v1/auth/onboard/business');
     expect(el().querySelector('[data-testid="ice-error"]')).not.toBeNull();
   });
 
@@ -113,7 +113,7 @@ describe('OnboardPage (US-018)', () => {
     fixture.detectChanges();
     submit();
     fixture.detectChanges();
-    http.expectNone('/api/auth/onboard/business');
+    http.expectNone('/api/v1/auth/onboard/business');
     expect(el().querySelector('[data-testid="password-error"]')).not.toBeNull();
   });
 
@@ -123,7 +123,7 @@ describe('OnboardPage (US-018)', () => {
     fixture.detectChanges();
     submit();
     fixture.detectChanges();
-    http.expectNone('/api/auth/onboard/business');
+    http.expectNone('/api/v1/auth/onboard/business');
     expect(el().querySelector('[data-testid="phone-error"]')).not.toBeNull();
   });
 
@@ -131,7 +131,7 @@ describe('OnboardPage (US-018)', () => {
     const navSpy = spyOn(router, 'navigateByUrl').and.resolveTo(true);
     fillValid();
     submit();
-    const req = http.expectOne('/api/auth/onboard/business');
+    const req = http.expectOne('/api/v1/auth/onboard/business');
     expect(req.request.method).toBe('POST');
     expect(req.request.body.accountType).toBe('brand');
     expect(req.request.body.phone).toBe('+212600000000');
@@ -148,7 +148,7 @@ describe('OnboardPage (US-018)', () => {
   it('shows an error when the email is already used (409 EMAIL_ALREADY_USED)', fakeAsync(() => {
     fillValid();
     submit();
-    const req = http.expectOne('/api/auth/onboard/business');
+    const req = http.expectOne('/api/v1/auth/onboard/business');
     req.flush(
       { code: 'EMAIL_ALREADY_USED', message: 'duplicate' },
       { status: 409, statusText: 'Conflict' },
@@ -163,7 +163,7 @@ describe('OnboardPage (US-018)', () => {
   it('shows an error when ICE is already used (409 ICE_ALREADY_USED)', fakeAsync(() => {
     fillValid();
     submit();
-    const req = http.expectOne('/api/auth/onboard/business');
+    const req = http.expectOne('/api/v1/auth/onboard/business');
     req.flush(
       { code: 'ICE_ALREADY_USED', message: 'duplicate' },
       { status: 409, statusText: 'Conflict' },

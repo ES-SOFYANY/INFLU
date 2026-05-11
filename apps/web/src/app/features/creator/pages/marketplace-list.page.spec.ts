@@ -42,7 +42,7 @@ describe('CreatorMarketplaceListPage', () => {
   }
 
   function flushList(items: unknown[] = []): void {
-    const req = http.expectOne((r) => r.url === '/api/marketplace/products');
+    const req = http.expectOne((r) => r.url === '/api/v1/marketplace/products');
     req.flush({ items, page: 1, limit: 20, total: items.length });
   }
 
@@ -87,12 +87,12 @@ describe('CreatorMarketplaceListPage', () => {
     search.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     tick();
-    http.expectOne((r) => r.url === '/api/marketplace/products' && r.params.get('q') === 'eucerin').flush({ items: [], page: 1, limit: 20, total: 0 });
+    http.expectOne((r) => r.url === '/api/v1/marketplace/products' && r.params.get('q') === 'eucerin').flush({ items: [], page: 1, limit: 20, total: 0 });
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="filter-clear"]')!.click();
     fixture.detectChanges();
     tick();
-    http.expectOne((r) => r.url === '/api/marketplace/products' && !r.params.has('q')).flush({ items: [makeCard()], page: 1, limit: 20, total: 1 });
+    http.expectOne((r) => r.url === '/api/v1/marketplace/products' && !r.params.has('q')).flush({ items: [makeCard()], page: 1, limit: 20, total: 1 });
     fixture.detectChanges();
     expect(search.value).toBe('');
     expect(el().querySelectorAll('[data-testid="marketplace-card"]').length).toBe(1);
@@ -105,7 +105,7 @@ describe('CreatorMarketplaceListPage', () => {
   });
 
   it('shows error banner when API fails', () => {
-    const req = http.expectOne((r) => r.url === '/api/marketplace/products');
+    const req = http.expectOne((r) => r.url === '/api/v1/marketplace/products');
     req.flush({ message: 'boom' }, { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="marketplace-error"]')).not.toBeNull();

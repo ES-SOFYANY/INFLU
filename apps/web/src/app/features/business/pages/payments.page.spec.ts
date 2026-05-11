@@ -34,7 +34,7 @@ describe('BusinessPaymentsPage (US-160 / US-161)', () => {
     fixture = TestBed.createComponent(BusinessPaymentsPage);
     http = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
-    http.expectOne('/api/business/brands').flush([{ id: 'b1', name: 'Eucerin' }]);
+    http.expectOne('/api/v1/business/brands').flush([{ id: 'b1', name: 'Eucerin' }]);
   });
 
   afterEach(() => http.verify());
@@ -44,7 +44,7 @@ describe('BusinessPaymentsPage (US-160 / US-161)', () => {
   }
 
   function flushPayments(items: ReadonlyArray<unknown>, expectedType = 'MARKETPLACE'): void {
-    const req = http.expectOne((r) => r.url === '/api/business/payments');
+    const req = http.expectOne((r) => r.url === '/api/v1/business/payments');
     expect(req.request.params.get('type')).toBe(expectedType);
     req.flush({ items, total: items.length, page: 1, limit: 20 });
     fixture.detectChanges();
@@ -85,7 +85,7 @@ describe('BusinessPaymentsPage (US-160 / US-161)', () => {
     brandSelect.value = brandSelect.options[1].value;
     brandSelect.dispatchEvent(new Event('change'));
     fixture.detectChanges();
-    let req = http.expectOne((r) => r.url === '/api/business/payments');
+    let req = http.expectOne((r) => r.url === '/api/v1/business/payments');
     expect(req.request.params.get('brand')).toBe('b1');
     req.flush({ items: [], total: 0, page: 1, limit: 20 });
     fixture.detectChanges();
@@ -94,14 +94,14 @@ describe('BusinessPaymentsPage (US-160 / US-161)', () => {
     statusSelect.value = 'COMPLETED';
     statusSelect.dispatchEvent(new Event('change'));
     fixture.detectChanges();
-    req = http.expectOne((r) => r.url === '/api/business/payments');
+    req = http.expectOne((r) => r.url === '/api/v1/business/payments');
     expect(req.request.params.get('status')).toBe('COMPLETED');
     req.flush({ items: [], total: 0, page: 1, limit: 20 });
     fixture.detectChanges();
 
     el().querySelector<HTMLButtonElement>('[data-testid="filter-clear"]')!.click();
     fixture.detectChanges();
-    req = http.expectOne((r) => r.url === '/api/business/payments');
+    req = http.expectOne((r) => r.url === '/api/v1/business/payments');
     expect(req.request.params.get('brand')).toBeNull();
     expect(req.request.params.get('status')).toBeNull();
     req.flush({ items: [], total: 0, page: 1, limit: 20 });
@@ -148,7 +148,7 @@ describe('BusinessPaymentsPage (US-160 / US-161)', () => {
 
   it('shows error banner when payments fetch fails', () => {
     http
-      .expectOne((r) => r.url === '/api/business/payments')
+      .expectOne((r) => r.url === '/api/v1/business/payments')
       .flush({}, { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="error"]')).toBeTruthy();

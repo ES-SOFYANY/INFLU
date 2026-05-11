@@ -41,7 +41,7 @@ describe('CreatorMessagingPage', () => {
   }
 
   function flushList(items: unknown[] = [], total = items.length): void {
-    http.expectOne((r) => r.url === '/api/messaging/conversations').flush({
+    http.expectOne((r) => r.url === '/api/v1/messaging/conversations').flush({
       items,
       page: 1,
       limit: 20,
@@ -58,7 +58,7 @@ describe('CreatorMessagingPage', () => {
   });
 
   it('[AC-061-02] no filter is pre-applied on first arrival', () => {
-    const req = http.expectOne((r) => r.url === '/api/messaging/conversations');
+    const req = http.expectOne((r) => r.url === '/api/v1/messaging/conversations');
     expect(req.request.params.has('q')).toBe(false);
     expect(req.request.params.has('brand')).toBe(false);
     expect(req.request.params.has('status')).toBe(false);
@@ -80,7 +80,7 @@ describe('CreatorMessagingPage', () => {
     flushList([makeConv()]);
     el().querySelector<HTMLButtonElement>('[data-testid="msg-open"]')!.click();
     fixture.detectChanges();
-    http.expectOne((r) => r.url === '/api/messaging/conversations/conv-1/messages').flush({
+    http.expectOne((r) => r.url === '/api/v1/messaging/conversations/conv-1/messages').flush({
       items: [
         { id: 'm-1', conversationId: 'conv-1', senderId: 'me', content: 'Hi', createdAt: '' },
       ],
@@ -97,7 +97,7 @@ describe('CreatorMessagingPage', () => {
     flushList([makeConv()]);
     el().querySelector<HTMLButtonElement>('[data-testid="msg-open"]')!.click();
     fixture.detectChanges();
-    http.expectOne((r) => r.url === '/api/messaging/conversations/conv-1/messages').flush({
+    http.expectOne((r) => r.url === '/api/v1/messaging/conversations/conv-1/messages').flush({
       items: [],
       page: 1,
       limit: 100,
@@ -112,7 +112,7 @@ describe('CreatorMessagingPage', () => {
     flushList([makeConv()]);
     el().querySelector<HTMLButtonElement>('[data-testid="msg-open"]')!.click();
     fixture.detectChanges();
-    http.expectOne((r) => r.url === '/api/messaging/conversations/conv-1/messages').flush({
+    http.expectOne((r) => r.url === '/api/v1/messaging/conversations/conv-1/messages').flush({
       items: [],
       page: 1,
       limit: 100,
@@ -128,7 +128,7 @@ describe('CreatorMessagingPage', () => {
     );
     tick();
     const post = http.expectOne(
-      (r) => r.method === 'POST' && r.url === '/api/messaging/conversations/conv-1/messages',
+      (r) => r.method === 'POST' && r.url === '/api/v1/messaging/conversations/conv-1/messages',
     );
     expect(post.request.body).toEqual({ content: 'Hello brand' });
     post.flush({
@@ -142,7 +142,7 @@ describe('CreatorMessagingPage', () => {
   }));
 
   it('[AC-060-01] backend error on list shows an inline error', () => {
-    http.expectOne((r) => r.url === '/api/messaging/conversations').error(
+    http.expectOne((r) => r.url === '/api/v1/messaging/conversations').error(
       new ProgressEvent('error'),
       { status: 500, statusText: 'Server Error' },
     );

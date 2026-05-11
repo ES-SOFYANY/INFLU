@@ -41,7 +41,7 @@ describe('BusinessCrmPage', () => {
   }
 
   function flushList(items: unknown[] = [], total = items.length): void {
-    http.expectOne((r) => r.url === '/api/business/crm/lists').flush({
+    http.expectOne((r) => r.url === '/api/v1/business/crm/lists').flush({
       items,
       page: 1,
       limit: 50,
@@ -66,7 +66,7 @@ describe('BusinessCrmPage', () => {
     fixture.detectChanges();
     tick();
     const req = http.expectOne(
-      (r) => r.url === '/api/business/crm/lists' && r.params.get('q') === 'beauty',
+      (r) => r.url === '/api/v1/business/crm/lists' && r.params.get('q') === 'beauty',
     );
     req.flush({ items: [makeList()], page: 1, limit: 50, total: 1 });
     fixture.detectChanges();
@@ -103,7 +103,7 @@ describe('BusinessCrmPage', () => {
     el().querySelector<HTMLButtonElement>('[data-testid="crm-modal-submit"]')!.click();
     tick();
     const post = http.expectOne(
-      (r) => r.method === 'POST' && r.url === '/api/business/crm/lists',
+      (r) => r.method === 'POST' && r.url === '/api/v1/business/crm/lists',
     );
     expect(post.request.body).toEqual({
       title: 'Beauty MA Q2',
@@ -140,7 +140,7 @@ describe('BusinessCrmPage', () => {
     el().querySelector<HTMLButtonElement>('[data-testid="crm-modal-submit"]')!.click();
     tick();
     const put = http.expectOne(
-      (r) => r.method === 'PUT' && r.url === '/api/business/crm/lists/l-1',
+      (r) => r.method === 'PUT' && r.url === '/api/v1/business/crm/lists/l-1',
     );
     expect(put.request.body).toEqual({
       title: 'Beauty MA Q3',
@@ -157,7 +157,7 @@ describe('BusinessCrmPage', () => {
     el().querySelector<HTMLButtonElement>('[data-testid="crm-kebab"]')!.click();
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="crm-delete"]')!.click();
-    http.expectOne((r) => r.method === 'DELETE' && r.url === '/api/business/crm/lists/l-1').flush(
+    http.expectOne((r) => r.method === 'DELETE' && r.url === '/api/v1/business/crm/lists/l-1').flush(
       null,
     );
     fixture.detectChanges();
@@ -167,7 +167,7 @@ describe('BusinessCrmPage', () => {
 
   it('[AC-140-01] backend error renders an inline alert', () => {
     http
-      .expectOne((r) => r.url === '/api/business/crm/lists')
+      .expectOne((r) => r.url === '/api/v1/business/crm/lists')
       .error(new ProgressEvent('error'), { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="crm-error"]')).not.toBeNull();

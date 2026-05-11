@@ -30,10 +30,10 @@ describe('SupportPage (US-080 / US-180)', () => {
   }
 
   function flushFaq(items: Array<{ id: string; question: string; answer: string }> = []): void {
-    http.expectOne('/api/support/faq').flush(items);
+    http.expectOne('/api/v1/support/faq').flush(items);
   }
   function flushReports(items: unknown[] = []): void {
-    http.expectOne('/api/support/reports').flush({ items, page: 1, limit: 20, total: items.length });
+    http.expectOne('/api/v1/support/reports').flush({ items, page: 1, limit: 20, total: items.length });
   }
 
   it('renders the EXACT title and subtitle', () => {
@@ -99,7 +99,7 @@ describe('SupportPage (US-080 / US-180)', () => {
   });
 
   it('shows an error state when GET /support/faq fails', () => {
-    http.expectOne('/api/support/faq').flush({}, { status: 500, statusText: 'ISE' });
+    http.expectOne('/api/v1/support/faq').flush({}, { status: 500, statusText: 'ISE' });
     flushReports();
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="faq-error"]')).not.toBeNull();
@@ -107,7 +107,7 @@ describe('SupportPage (US-080 / US-180)', () => {
 
   it('shows an error state when GET /support/reports fails', () => {
     flushFaq();
-    http.expectOne('/api/support/reports').flush({}, { status: 500, statusText: 'ISE' });
+    http.expectOne('/api/v1/support/reports').flush({}, { status: 500, statusText: 'ISE' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="reports-error"]')).not.toBeNull();
   });

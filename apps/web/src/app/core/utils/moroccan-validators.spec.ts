@@ -4,7 +4,7 @@ import { MoroccoValidators } from './moroccan-validators';
 
 describe('MoroccoValidators', () => {
   it('validates ICE (15 digits)', () => {
-    expect(MoroccoValidators.ice(new FormControl('003'))).toBeNull();
+    expect(MoroccoValidators.ice(new FormControl('000000000000001'))).toBeNull();
     expect(MoroccoValidators.ice(new FormControl('123'))).toEqual({ invalidIce: true });
   });
 

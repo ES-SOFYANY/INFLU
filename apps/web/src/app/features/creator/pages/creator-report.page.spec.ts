@@ -45,7 +45,7 @@ describe('CreatorReportPage', () => {
   }
 
   it('[AC-043-01] renders INFLU logo, generation date, profile and social coverage', () => {
-    http.expectOne('/api/creator/me/creator-report').flush(buildReport(2));
+    http.expectOne('/api/v1/creator/me/creator-report').flush(buildReport(2));
     fixture.detectChanges();
     const text = el().textContent ?? '';
     expect(text).toContain('INFLU.ai');
@@ -55,14 +55,14 @@ describe('CreatorReportPage', () => {
   });
 
   it('[AC-043-02] paginates social coverage when rows exceed page size', () => {
-    http.expectOne('/api/creator/me/creator-report').flush(buildReport(15));
+    http.expectOne('/api/v1/creator/me/creator-report').flush(buildReport(15));
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="report-pagination"]')).not.toBeNull();
     expect(el().querySelectorAll('[data-testid="report-social-coverage"] tbody tr').length).toBe(10);
   });
 
   it('shows error banner when report API fails', () => {
-    http.expectOne('/api/creator/me/creator-report').flush(
+    http.expectOne('/api/v1/creator/me/creator-report').flush(
       { message: 'boom' },
       { status: 500, statusText: 'Server Error' },
     );

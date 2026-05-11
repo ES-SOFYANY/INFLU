@@ -59,7 +59,7 @@ describe('LoginPage', () => {
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('[data-testid="email-error"]')).not.toBeNull();
     expect(el.querySelector('[data-testid="password-error"]')).not.toBeNull();
-    http.expectNone('/api/auth/login');
+    http.expectNone('/api/v1/auth/login');
   });
 
   it('[AC-010-01] navigates to /creator after successful CREATOR login', fakeAsync(() => {
@@ -68,7 +68,7 @@ describe('LoginPage', () => {
     setPassword('Sup3rSecret!');
     fixture.detectChanges();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
-    const req = http.expectOne('/api/auth/login');
+    const req = http.expectOne('/api/v1/auth/login');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ email: 'jane@example.com', password: 'Sup3rSecret!' });
     req.flush({
@@ -85,7 +85,7 @@ describe('LoginPage', () => {
     setPassword('Sup3rSecret!');
     fixture.detectChanges();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
-    const req = http.expectOne('/api/auth/login');
+    const req = http.expectOne('/api/v1/auth/login');
     req.flush({
       user: { id: 'u2', email: 'biz@example.com', role: 'BUSINESS', status: 'ACTIVE' },
       tokens: { accessToken: 'a', refreshToken: 'r', expiresIn: 900 },
@@ -99,7 +99,7 @@ describe('LoginPage', () => {
     setPassword('badpassword');
     fixture.detectChanges();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
-    const req = http.expectOne('/api/auth/login');
+    const req = http.expectOne('/api/v1/auth/login');
     req.flush(
       { code: 'INVALID_CREDENTIALS', message: 'bad' },
       { status: 401, statusText: 'Unauthorized' },
@@ -117,7 +117,7 @@ describe('LoginPage', () => {
     (fixture.nativeElement as HTMLElement)
       .querySelector<HTMLButtonElement>('[data-testid="google-button"]')!
       .click();
-    const req = http.expectOne('/api/auth/google/callback');
+    const req = http.expectOne('/api/v1/auth/google/callback');
     expect(req.request.body).toEqual({ idToken: 'mock-google-success-jane@example.com' });
     req.flush({
       user: { id: 'u3', email: 'jane@example.com', role: 'CREATOR', status: 'ACTIVE' },

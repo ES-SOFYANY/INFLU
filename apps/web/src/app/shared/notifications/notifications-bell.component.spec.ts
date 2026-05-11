@@ -52,14 +52,14 @@ describe('NotificationsBellComponent (US-204)', () => {
   it('renders the bell with aria-label="Notifications" and does NOT fetch on init', () => {
     const btn = el().querySelector('[aria-label="Notifications"]');
     expect(btn).not.toBeNull();
-    http.expectNone((r) => r.url === '/api/notifications');
+    http.expectNone((r) => r.url === '/api/v1/notifications');
   });
 
   it('[AC-204-01] opens panel on click and lists last notifications (limit=10, unreadOnly=false)', () => {
     clickBell();
     const req = http.expectOne(
       (r) =>
-        r.url === '/api/notifications' &&
+        r.url === '/api/v1/notifications' &&
         r.params.get('limit') === '10' &&
         r.params.get('unreadOnly') === 'false',
     );
@@ -87,7 +87,7 @@ describe('NotificationsBellComponent (US-204)', () => {
 
   it('[AC-204-02] clicking a notification marks it read and navigates to its link', () => {
     clickBell();
-    http.expectOne((r) => r.url === '/api/notifications').flush({
+    http.expectOne((r) => r.url === '/api/v1/notifications').flush({
       items: [notif('n1', { isRead: false, link: '/business/messaging' })],
       page: 1,
       limit: 10,
@@ -102,7 +102,7 @@ describe('NotificationsBellComponent (US-204)', () => {
     el().querySelector<HTMLButtonElement>('[data-testid="notifications-item-n1"]')!.click();
     fixture.detectChanges();
 
-    const post = http.expectOne('/api/notifications/n1/read');
+    const post = http.expectOne('/api/v1/notifications/n1/read');
     expect(post.request.method).toBe('POST');
     post.flush(null);
     expect(navSpy).toHaveBeenCalledWith('/business/messaging');
@@ -110,7 +110,7 @@ describe('NotificationsBellComponent (US-204)', () => {
 
   it('does not navigate when notification has no link', () => {
     clickBell();
-    http.expectOne((r) => r.url === '/api/notifications').flush({
+    http.expectOne((r) => r.url === '/api/v1/notifications').flush({
       items: [notif('n1', { link: undefined, isRead: false })],
       page: 1,
       limit: 10,
@@ -122,13 +122,13 @@ describe('NotificationsBellComponent (US-204)', () => {
     const spy = spyOn(router, 'navigateByUrl');
     el().querySelector<HTMLButtonElement>('[data-testid="notifications-item-n1"]')!.click();
     fixture.detectChanges();
-    http.expectOne('/api/notifications/n1/read').flush(null);
+    http.expectOne('/api/v1/notifications/n1/read').flush(null);
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('shows empty state when no notifications', () => {
     clickBell();
-    http.expectOne((r) => r.url === '/api/notifications').flush({
+    http.expectOne((r) => r.url === '/api/v1/notifications').flush({
       items: [],
       page: 1,
       limit: 10,
@@ -142,7 +142,7 @@ describe('NotificationsBellComponent (US-204)', () => {
   it('shows error banner when list fails', () => {
     clickBell();
     http
-      .expectOne((r) => r.url === '/api/notifications')
+      .expectOne((r) => r.url === '/api/v1/notifications')
       .flush({}, { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="notifications-error"]')).toBeTruthy();
@@ -150,7 +150,7 @@ describe('NotificationsBellComponent (US-204)', () => {
 
   it('"Mark all as read" sends POST for each unread and clears the badge', () => {
     clickBell();
-    http.expectOne((r) => r.url === '/api/notifications').flush({
+    http.expectOne((r) => r.url === '/api/v1/notifications').flush({
       items: [
         notif('n1', { isRead: false }),
         notif('n2', { isRead: false }),
@@ -166,8 +166,8 @@ describe('NotificationsBellComponent (US-204)', () => {
       .querySelector<HTMLButtonElement>('[data-testid="notifications-mark-all-read"]')!
       .click();
     fixture.detectChanges();
-    http.expectOne('/api/notifications/n1/read').flush(null);
-    http.expectOne('/api/notifications/n2/read').flush(null);
+    http.expectOne('/api/v1/notifications/n1/read').flush(null);
+    http.expectOne('/api/v1/notifications/n2/read').flush(null);
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="notifications-unread-badge"]')).toBeNull();
   });

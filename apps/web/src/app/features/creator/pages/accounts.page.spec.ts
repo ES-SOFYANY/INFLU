@@ -16,7 +16,7 @@ describe('CreatorAccountsPage', () => {
     router = TestBed.inject(Router);
     fixture.detectChanges();
     // 4 GETs on init: account info, billing, pricing, cin
-    http.expectOne('/api/creator/me').flush({
+    http.expectOne('/api/v1/creator/me').flush({
       accountType: 'CONTENT_CREATOR',
       email: 'ali@example.com',
       fullName: 'Ali',
@@ -24,8 +24,8 @@ describe('CreatorAccountsPage', () => {
       phone: '+212600000000',
       address: 'Casablanca',
     });
-    http.expectOne('/api/creator/me/billing').flush({ ice: null, billingProfile: null });
-    http.expectOne('/api/creator/me/pricing').flush({
+    http.expectOne('/api/v1/creator/me/billing').flush({ ice: null, billingProfile: null });
+    http.expectOne('/api/v1/creator/me/pricing').flush({
       lines: [
         {
           accountHandle: '@ali.cycling',
@@ -38,7 +38,7 @@ describe('CreatorAccountsPage', () => {
       ],
       suggestedRange: { currency: 'MAD', min: 50, max: 500 },
     });
-    http.expectOne('/api/creator/me/documents/cin').flush({ status: 'PENDING_VALIDATION', cinNumber: 'AB123456', dateOfExpiry: '2030-01-15' });
+    http.expectOne('/api/v1/creator/me/documents/cin').flush({ status: 'PENDING_VALIDATION', cinNumber: 'AB123456', dateOfExpiry: '2030-01-15' });
     fixture.detectChanges();
   }
 
@@ -89,7 +89,7 @@ describe('CreatorAccountsPage', () => {
     phone.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     el().querySelector<HTMLFormElement>('form')!.dispatchEvent(new Event('submit'));
-    const req = http.expectOne((r) => r.method === 'PATCH' && r.url === '/api/creator/me');
+    const req = http.expectOne((r) => r.method === 'PATCH' && r.url === '/api/v1/creator/me');
     expect(req.request.body.phone).toBe('+212612345678');
     req.flush({
       accountType: 'CONTENT_CREATOR',
@@ -135,7 +135,7 @@ describe('CreatorAccountsPage', () => {
     set('[data-testid="confirm-pw"]', 'NewPass123');
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="pwd-submit"]')!.click();
-    const req = http.expectOne('/api/creator/me/password/change');
+    const req = http.expectOne('/api/v1/creator/me/password/change');
     expect(req.request.body).toEqual({ currentPassword: 'OldPass1!', newPassword: 'NewPass123' });
     req.flush(null);
     tick();
@@ -162,7 +162,7 @@ describe('CreatorAccountsPage', () => {
     fixture.detectChanges();
     expect(el().querySelector<HTMLButtonElement>('[data-testid="ice-search"]')!.disabled).toBe(false);
     el().querySelector<HTMLButtonElement>('[data-testid="ice-search"]')!.click();
-    const req = http.expectOne('/api/creator/me/billing/ice/search');
+    const req = http.expectOne('/api/v1/creator/me/billing/ice/search');
     req.flush({ ice: '000000000000001', companyName: 'Acme', juridicalForm: 'SARL' });
     tick();
     fixture.detectChanges();
@@ -185,7 +185,7 @@ describe('CreatorAccountsPage', () => {
     el().querySelector<HTMLButtonElement>('[data-testid="acc-tab-pricing"]')!.click();
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="save-pricing-0"]')!.click();
-    const req = http.expectOne('/api/creator/me/pricing');
+    const req = http.expectOne('/api/v1/creator/me/pricing');
     expect(req.request.method).toBe('PUT');
     req.flush({
       lines: [
@@ -217,7 +217,7 @@ describe('CreatorAccountsPage', () => {
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="cin-status-badge"]')?.textContent).toContain('Pending Validation');
     el().querySelector<HTMLFormElement>('form')!.dispatchEvent(new Event('submit'));
-    const req = http.expectOne('/api/creator/me/documents/cin');
+    const req = http.expectOne('/api/v1/creator/me/documents/cin');
     expect(req.request.method).toBe('POST');
     req.flush({ status: 'PENDING_VALIDATION', cinNumber: 'AB123456', dateOfExpiry: '2030-01-15' });
     tick();
@@ -237,7 +237,7 @@ describe('CreatorAccountsPage', () => {
     const btn = el().querySelector<HTMLButtonElement>('[data-testid="cin-cancel"]')!;
     expect(btn.disabled).toBe(false);
     btn.click();
-    const req = http.expectOne('/api/creator/me/documents/cin/cancel');
+    const req = http.expectOne('/api/v1/creator/me/documents/cin/cancel');
     req.flush({ status: 'CANCELLED' });
     tick();
     fixture.detectChanges();
@@ -258,7 +258,7 @@ describe('CreatorAccountsPage', () => {
     el().querySelector<HTMLButtonElement>('[data-testid="delete-account-btn"]')!.click();
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="delete-confirm"]')!.click();
-    const req = http.expectOne('/api/creator/me');
+    const req = http.expectOne('/api/v1/creator/me');
     expect(req.request.method).toBe('DELETE');
     req.flush(null);
     tick();
@@ -290,7 +290,7 @@ describe('CreatorAccountsPage', () => {
     ice.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="ice-search"]')!.click();
-    const req = http.expectOne('/api/creator/me/billing/ice/search');
+    const req = http.expectOne('/api/v1/creator/me/billing/ice/search');
     req.flush({ message: 'not found' }, { status: 404, statusText: 'Not Found' });
     tick();
     fixture.detectChanges();
@@ -315,7 +315,7 @@ describe('CreatorAccountsPage', () => {
     input.dispatchEvent(new Event('change'));
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="rib-upload"]')!.click();
-    const req = http.expectOne('/api/creator/me/documents/rib/upload-url');
+    const req = http.expectOne('/api/v1/creator/me/documents/rib/upload-url');
     expect(req.request.method).toBe('POST');
     req.flush({ uploadUrl: 'https://x', objectKey: 'k', expiresIn: 900 });
     tick();
@@ -330,7 +330,7 @@ describe('CreatorAccountsPage', () => {
     min.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="save-pricing-0"]')!.click();
-    const req = http.expectOne('/api/creator/me/pricing');
+    const req = http.expectOne('/api/v1/creator/me/pricing');
     expect(req.request.body.lines[0].rateMin).toBe(200);
     req.flush({
       lines: [

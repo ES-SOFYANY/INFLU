@@ -57,11 +57,11 @@ describe('BusinessAccountSettingsPage', () => {
   }
 
   function flushAccount(info: Record<string, unknown> = ACCOUNT_INFO): void {
-    http.expectOne('/api/business/me').flush(info);
+    http.expectOne('/api/v1/business/me').flush(info);
   }
 
   function flushBrands(items: unknown[] = []): void {
-    http.expectOne('/api/business/brands').flush(items as never);
+    http.expectOne('/api/v1/business/brands').flush(items as never);
   }
 
   function signalQueryMap(value: string) {
@@ -117,7 +117,7 @@ describe('BusinessAccountSettingsPage', () => {
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="update-account"]')!.click();
     tick();
-    const req = http.expectOne((r) => r.url === '/api/business/me' && r.method === 'PATCH');
+    const req = http.expectOne((r) => r.url === '/api/v1/business/me' && r.method === 'PATCH');
     req.flush({ ...ACCOUNT_INFO, fullName: 'Renamed' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="account-success"]')?.textContent).toContain(
@@ -155,7 +155,7 @@ describe('BusinessAccountSettingsPage', () => {
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="delete-confirm"]')!.click();
     tick();
-    const req = http.expectOne((r) => r.url === '/api/business/me' && r.method === 'DELETE');
+    const req = http.expectOne((r) => r.url === '/api/v1/business/me' && r.method === 'DELETE');
     req.flush({});
   }));
 
@@ -182,7 +182,7 @@ describe('BusinessAccountSettingsPage', () => {
     el().querySelector<HTMLButtonElement>('[data-testid="pwd-submit"]')!.click();
     tick();
     const req = http.expectOne(
-      (r) => r.url === '/api/business/me/password/change' && r.method === 'POST',
+      (r) => r.url === '/api/v1/business/me/password/change' && r.method === 'POST',
     );
     req.flush({});
   }));
@@ -236,7 +236,7 @@ describe('BusinessAccountSettingsPage', () => {
     fixture.detectChanges();
     tick(250);
     const searchReq = http.expectOne(
-      (r) => r.url === '/api/business/brands/search' && r.params.get('q') === 'nu',
+      (r) => r.url === '/api/v1/business/brands/search' && r.params.get('q') === 'nu',
     );
     searchReq.flush([
       { id: 'b1', name: 'Nuxe', alreadyLinked: false, country: 'MA' },
@@ -252,7 +252,7 @@ describe('BusinessAccountSettingsPage', () => {
     confirm.click();
     tick();
     const linkReq = http.expectOne(
-      (r) => r.url === '/api/business/brands/link' && r.method === 'POST',
+      (r) => r.url === '/api/v1/business/brands/link' && r.method === 'POST',
     );
     expect(linkReq.request.body).toEqual({ brandId: 'b1' });
     linkReq.flush({
@@ -284,7 +284,7 @@ describe('BusinessAccountSettingsPage', () => {
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="manage-access"]')!.click();
     fixture.detectChanges();
-    const req = http.expectOne((r) => r.url === '/api/business/brands/b1/access');
+    const req = http.expectOne((r) => r.url === '/api/v1/business/brands/b1/access');
     req.flush([
       {
         userId: 'u1',
@@ -316,7 +316,7 @@ describe('BusinessAccountSettingsPage', () => {
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="add-access"]')!.click();
     fixture.detectChanges();
-    http.expectOne((r) => r.url === '/api/business/brands/b1/access').flush([]);
+    http.expectOne((r) => r.url === '/api/v1/business/brands/b1/access').flush([]);
     fixture.detectChanges();
     const email = el().querySelector<HTMLInputElement>('[data-testid="invite-email"]')!;
     email.value = 'new@example.com';
@@ -328,7 +328,7 @@ describe('BusinessAccountSettingsPage', () => {
     el().querySelector<HTMLButtonElement>('[data-testid="access-invite"]')!.click();
     tick();
     const req = http.expectOne(
-      (r) => r.url === '/api/business/brands/b1/access' && r.method === 'POST',
+      (r) => r.url === '/api/v1/business/brands/b1/access' && r.method === 'POST',
     );
     expect(req.request.body).toEqual({ email: 'new@example.com', role: 'EDITOR' });
     req.flush({

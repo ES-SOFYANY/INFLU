@@ -26,7 +26,7 @@ describe('CreatorDashboardPage', () => {
   }
 
   function flushKpis(overrides: Partial<Record<string, unknown>> = {}): void {
-    const req = http.expectOne('/api/creator/me/dashboard-kpis');
+    const req = http.expectOne('/api/v1/creator/me/dashboard-kpis');
     req.flush({
       totalCollaborations: 0,
       pendingOpportunities: 0,
@@ -44,7 +44,7 @@ describe('CreatorDashboardPage', () => {
   }
 
   function flushCollabs(items: unknown[] = []): void {
-    const req = http.expectOne((r) => r.url === '/api/creator/me/collaborations');
+    const req = http.expectOne((r) => r.url === '/api/v1/creator/me/collaborations');
     req.flush({ items, page: 1, limit: 20, total: items.length });
   }
 
@@ -106,13 +106,13 @@ describe('CreatorDashboardPage', () => {
     search.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     tick();
-    const reqWithQ = http.expectOne((r) => r.url === '/api/creator/me/collaborations' && r.params.get('q') === 'nike');
+    const reqWithQ = http.expectOne((r) => r.url === '/api/v1/creator/me/collaborations' && r.params.get('q') === 'nike');
     reqWithQ.flush({ items: [], page: 1, limit: 20, total: 0 });
 
     el().querySelector<HTMLButtonElement>('[data-testid="filter-clear"]')!.click();
     fixture.detectChanges();
     tick();
-    const reqClear = http.expectOne((r) => r.url === '/api/creator/me/collaborations' && !r.params.has('q'));
+    const reqClear = http.expectOne((r) => r.url === '/api/v1/creator/me/collaborations' && !r.params.has('q'));
     reqClear.flush({ items: [], page: 1, limit: 20, total: 0 });
     fixture.detectChanges();
     expect(search.value).toBe('');
@@ -154,7 +154,7 @@ describe('CreatorDashboardPage', () => {
 
   it('shows error banner when collaborations API fails', () => {
     flushKpis();
-    const req = http.expectOne((r) => r.url === '/api/creator/me/collaborations');
+    const req = http.expectOne((r) => r.url === '/api/v1/creator/me/collaborations');
     req.flush({ message: 'boom' }, { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="campaigns-error"]')).not.toBeNull();

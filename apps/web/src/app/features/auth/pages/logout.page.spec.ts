@@ -45,7 +45,7 @@ describe('LogoutPage', () => {
     (fixture.nativeElement as HTMLElement)
       .querySelector<HTMLButtonElement>('[data-testid="confirm-logout"]')!
       .click();
-    const req = http.expectOne('/api/auth/logout');
+    const req = http.expectOne('/api/v1/auth/logout');
     expect(req.request.method).toBe('POST');
     req.flush(null);
     tick();

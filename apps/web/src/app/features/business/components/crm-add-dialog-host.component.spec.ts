@@ -30,7 +30,7 @@ describe('CrmAddDialogHostComponent (US-142)', () => {
   it('[AC-142-01] opening the dialog loads existing CRM lists', () => {
     service.open('cr-42').subscribe();
     fixture.detectChanges();
-    const req = http.expectOne((r) => r.url === '/api/business/crm/lists');
+    const req = http.expectOne((r) => r.url === '/api/v1/business/crm/lists');
     req.flush({
       items: [{ id: 'l-1', title: 'Beauty MA', description: 'd', creatorsCount: 0, createdAt: '' }],
       page: 1,
@@ -47,7 +47,7 @@ describe('CrmAddDialogHostComponent (US-142)', () => {
     let received: { listId: string; creatorId: string } | null = null;
     service.open('cr-42').subscribe((res) => (received = res));
     fixture.detectChanges();
-    http.expectOne((r) => r.url === '/api/business/crm/lists').flush({
+    http.expectOne((r) => r.url === '/api/v1/business/crm/lists').flush({
       items: [{ id: 'l-1', title: 'Beauty MA', description: 'd', creatorsCount: 0, createdAt: '' }],
       page: 1,
       limit: 100,
@@ -63,7 +63,7 @@ describe('CrmAddDialogHostComponent (US-142)', () => {
     http
       .expectOne(
         (r) =>
-          r.method === 'POST' && r.url === '/api/business/crm/lists/l-1/creators/cr-42',
+          r.method === 'POST' && r.url === '/api/v1/business/crm/lists/l-1/creators/cr-42',
       )
       .flush({
         id: 'l-1',
@@ -83,7 +83,7 @@ describe('CrmAddDialogHostComponent (US-142)', () => {
   it('[AC-142-01] handles 409 ALREADY_IN_LIST as inline error', fakeAsync(() => {
     service.open('cr-42').subscribe();
     fixture.detectChanges();
-    http.expectOne((r) => r.url === '/api/business/crm/lists').flush({
+    http.expectOne((r) => r.url === '/api/v1/business/crm/lists').flush({
       items: [{ id: 'l-1', title: 'Beauty MA', description: 'd', creatorsCount: 0, createdAt: '' }],
       page: 1,
       limit: 100,
@@ -99,7 +99,7 @@ describe('CrmAddDialogHostComponent (US-142)', () => {
     http
       .expectOne(
         (r) =>
-          r.method === 'POST' && r.url === '/api/business/crm/lists/l-1/creators/cr-42',
+          r.method === 'POST' && r.url === '/api/v1/business/crm/lists/l-1/creators/cr-42',
       )
       .error(new ProgressEvent('error'), { status: 409, statusText: 'Conflict' });
     fixture.detectChanges();
@@ -112,7 +112,7 @@ describe('CrmAddDialogHostComponent (US-142)', () => {
     let received: { listId: string; creatorId: string } | null = null;
     service.open('cr-42').subscribe((res) => (received = res));
     fixture.detectChanges();
-    http.expectOne((r) => r.url === '/api/business/crm/lists').flush({
+    http.expectOne((r) => r.url === '/api/v1/business/crm/lists').flush({
       items: [{ id: 'l-2', title: 'Tech', description: 'd', creatorsCount: 0, createdAt: '' }],
       page: 1,
       limit: 100,
@@ -127,7 +127,7 @@ describe('CrmAddDialogHostComponent (US-142)', () => {
     tick();
     http
       .expectOne(
-        (r) => r.method === 'POST' && r.url === '/api/business/crm/lists/l-2/creators/cr-42',
+        (r) => r.method === 'POST' && r.url === '/api/v1/business/crm/lists/l-2/creators/cr-42',
       )
       .flush({
         id: 'l-2',

@@ -44,7 +44,7 @@ describe('BusinessLayoutPage', () => {
     fixture.detectChanges();
     tick(250);
     const req = http.expectOne(
-      (r) => r.url === '/api/business/discovery/creators' && r.params.get('q') === 'jane',
+      (r) => r.url === '/api/v1/business/discovery/creators' && r.params.get('q') === 'jane',
     );
     req.flush({
       items: [{ id: 'c1', name: 'Jane Doe', categories: [], engagementRate: 0, averageViews: 0, posts: 0, platforms: [] }],
@@ -68,7 +68,7 @@ describe('BusinessLayoutPage', () => {
     fixture.detectChanges();
     tick(250);
     http
-      .expectOne((r) => r.url === '/api/business/discovery/creators')
+      .expectOne((r) => r.url === '/api/v1/business/discovery/creators')
       .flush({
         items: [
           {

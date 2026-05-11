@@ -34,7 +34,7 @@ describe('ForgotPasswordPage', () => {
     fixture.detectChanges();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
     fixture.detectChanges();
-    http.expectNone('/api/auth/forgot-password');
+    http.expectNone('/api/v1/auth/forgot-password');
     expect(
       (fixture.nativeElement as HTMLElement).querySelector('[data-testid="email-error"]'),
     ).not.toBeNull();
@@ -46,7 +46,7 @@ describe('ForgotPasswordPage', () => {
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
-    const req = http.expectOne('/api/auth/forgot-password');
+    const req = http.expectOne('/api/v1/auth/forgot-password');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ email: 'jane@example.com', locale: 'fr' });
     req.flush({ message: 'ok' });

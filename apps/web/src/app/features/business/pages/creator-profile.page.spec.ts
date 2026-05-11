@@ -66,7 +66,7 @@ describe('BusinessCreatorProfilePage', () => {
   }
 
   function flush(over: Partial<Record<string, unknown>> = {}): void {
-    http.expectOne(`/api/business/discovery/creators/${CREATOR_ID}`).flush(makeProfile(over) as object);
+    http.expectOne(`/api/v1/business/discovery/creators/${CREATOR_ID}`).flush(makeProfile(over) as object);
     fixture.detectChanges();
   }
 
@@ -103,7 +103,7 @@ describe('BusinessCreatorProfilePage', () => {
 
   it('shows error banner when profile API fails', () => {
     http
-      .expectOne(`/api/business/discovery/creators/${CREATOR_ID}`)
+      .expectOne(`/api/v1/business/discovery/creators/${CREATOR_ID}`)
       .flush({ message: 'boom' }, { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="profile-error"]')).not.toBeNull();

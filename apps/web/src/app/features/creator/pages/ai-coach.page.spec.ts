@@ -29,7 +29,7 @@ describe('CreatorAiCoachPage', () => {
   }
 
   function startSession(firstMessage: string = FIRST_MESSAGE): void {
-    http.expectOne('/api/creator/me/ai-coach/sessions').flush({
+    http.expectOne('/api/v1/creator/me/ai-coach/sessions').flush({
       sessionId: SESSION_ID,
       firstMessage,
     });
@@ -61,7 +61,7 @@ describe('CreatorAiCoachPage', () => {
     fixture.detectChanges();
     el().querySelector<HTMLFormElement>('form')!.requestSubmit();
     fixture.detectChanges();
-    const req = http.expectOne(`/api/creator/me/ai-coach/sessions/${SESSION_ID}/messages`);
+    const req = http.expectOne(`/api/v1/creator/me/ai-coach/sessions/${SESSION_ID}/messages`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ content: 'Je crée du contenu lifestyle.' });
     req.flush({
@@ -83,14 +83,14 @@ describe('CreatorAiCoachPage', () => {
     fixture.detectChanges();
     el().querySelector<HTMLFormElement>('form')!.requestSubmit();
     fixture.detectChanges();
-    http.expectOne(`/api/creator/me/ai-coach/sessions/${SESSION_ID}/messages`).flush({
+    http.expectOne(`/api/v1/creator/me/ai-coach/sessions/${SESSION_ID}/messages`).flush({
       userMessage: { id: 'u1', role: 'USER', content: 'hello', createdAt: new Date().toISOString() },
       aiResponse: { id: 'a1', role: 'ASSISTANT', content: 'Réponse 2', createdAt: new Date().toISOString() },
     });
     fixture.detectChanges();
     el().querySelector<HTMLButtonElement>('[data-testid="restart-button"]')!.click();
     fixture.detectChanges();
-    const req = http.expectOne(`/api/creator/me/ai-coach/sessions/${SESSION_ID}/restart`);
+    const req = http.expectOne(`/api/v1/creator/me/ai-coach/sessions/${SESSION_ID}/restart`);
     expect(req.request.method).toBe('POST');
     req.flush({ sessionId: 'sess-2', firstMessage: FIRST_MESSAGE });
     fixture.detectChanges();

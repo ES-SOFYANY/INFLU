@@ -75,7 +75,7 @@ describe('RegisterInfluencerPage', () => {
     fixture.detectChanges();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
     fixture.detectChanges();
-    http.expectNone('/api/auth/register/CREATOR');
+    http.expectNone('/api/v1/auth/register/CREATOR');
     expect(
       (fixture.nativeElement as HTMLElement).querySelector('[data-testid="checkbox-error"]'),
     ).not.toBeNull();
@@ -87,7 +87,7 @@ describe('RegisterInfluencerPage', () => {
     fixture.detectChanges();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
     fixture.detectChanges();
-    http.expectNone('/api/auth/register/CREATOR');
+    http.expectNone('/api/v1/auth/register/CREATOR');
     expect(
       (fixture.nativeElement as HTMLElement).querySelector('[data-testid="phone-error"]'),
     ).not.toBeNull();
@@ -97,7 +97,7 @@ describe('RegisterInfluencerPage', () => {
     const navSpy = spyOn(router, 'navigate').and.resolveTo(true);
     fillValid();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
-    const req = http.expectOne('/api/auth/register/CREATOR');
+    const req = http.expectOne('/api/v1/auth/register/influencer');
     expect(req.request.method).toBe('POST');
     expect(req.request.body.phone).toBe('+212600000000');
     expect(req.request.body.acceptLegal).toBe(true);
@@ -112,7 +112,7 @@ describe('RegisterInfluencerPage', () => {
   it('shows API error message on 4xx', fakeAsync(() => {
     fillValid();
     (fixture.nativeElement as HTMLElement).querySelector('form')!.dispatchEvent(new Event('submit'));
-    const req = http.expectOne('/api/auth/register/CREATOR');
+    const req = http.expectOne('/api/v1/auth/register/influencer');
     req.flush(
       { code: 'EMAIL_ALREADY_USED', message: 'Email is already registered' },
       { status: 409, statusText: 'Conflict' },

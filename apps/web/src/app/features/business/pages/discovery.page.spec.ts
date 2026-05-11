@@ -52,7 +52,7 @@ describe('BusinessDiscoveryPage', () => {
   }
 
   function flush(items: unknown[] = [makeCreator()], total = 1): void {
-    http.expectOne((r) => r.url === '/api/business/discovery/creators').flush({
+    http.expectOne((r) => r.url === '/api/v1/business/discovery/creators').flush({
       items,
       page: 1,
       limit: 20,
@@ -93,7 +93,7 @@ describe('BusinessDiscoveryPage', () => {
     fixture.detectChanges();
     tick();
     http
-      .expectOne((r) => r.url === '/api/business/discovery/creators' && r.params.get('q') === 'beauty')
+      .expectOne((r) => r.url === '/api/v1/business/discovery/creators' && r.params.get('q') === 'beauty')
       .flush({ items: [], page: 1, limit: 20, total: 0 });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="filter-reset"]')?.textContent).toContain('Reset (1)');
@@ -102,7 +102,7 @@ describe('BusinessDiscoveryPage', () => {
     fixture.detectChanges();
     tick();
     http
-      .expectOne((r) => r.url === '/api/business/discovery/creators' && !r.params.has('q'))
+      .expectOne((r) => r.url === '/api/v1/business/discovery/creators' && !r.params.has('q'))
       .flush({ items: [makeCreator()], page: 1, limit: 20, total: 1 });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="filter-reset"]')?.textContent).toContain('Reset (0)');
@@ -117,7 +117,7 @@ describe('BusinessDiscoveryPage', () => {
     fixture.detectChanges();
     tick();
     http
-      .expectOne((r) => r.url === '/api/business/discovery/creators' && r.params.get('q') === 'beauty')
+      .expectOne((r) => r.url === '/api/v1/business/discovery/creators' && r.params.get('q') === 'beauty')
       .flush({ items: [], page: 1, limit: 20, total: 0 });
     expect(navSpy).toHaveBeenCalled();
     const call = navSpy.calls.mostRecent();
@@ -156,7 +156,7 @@ describe('BusinessDiscoveryPage', () => {
 
   it('shows error banner when API fails', () => {
     http
-      .expectOne((r) => r.url === '/api/business/discovery/creators')
+      .expectOne((r) => r.url === '/api/v1/business/discovery/creators')
       .flush({ message: 'boom' }, { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="discovery-error"]')).not.toBeNull();

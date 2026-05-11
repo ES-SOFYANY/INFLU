@@ -30,7 +30,7 @@ describe('BusinessAiCampaignPage', () => {
   }
 
   function startSession(firstMessage: string = FIRST_QUESTION): void {
-    http.expectOne('/api/business/ai-campaign/sessions').flush({
+    http.expectOne('/api/v1/business/ai-campaign/sessions').flush({
       sessionId: SESSION_ID,
       firstMessage,
       scopeOptions: [
@@ -86,7 +86,7 @@ describe('BusinessAiCampaignPage', () => {
 
     el().querySelector<HTMLFormElement>('form')!.requestSubmit();
     fixture.detectChanges();
-    const req = http.expectOne(`/api/business/ai-campaign/sessions/${SESSION_ID}/messages`);
+    const req = http.expectOne(`/api/v1/business/ai-campaign/sessions/${SESSION_ID}/messages`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({
       selectedScopes: ['BRANDING', 'VISIBILITY_AWARENESS'],
@@ -120,7 +120,7 @@ describe('BusinessAiCampaignPage', () => {
     fixture.detectChanges();
     el().querySelector<HTMLFormElement>('form')!.requestSubmit();
     fixture.detectChanges();
-    http.expectOne(`/api/business/ai-campaign/sessions/${SESSION_ID}/messages`).flush({
+    http.expectOne(`/api/v1/business/ai-campaign/sessions/${SESSION_ID}/messages`).flush({
       session: {
         sessionId: SESSION_ID,
         status: 'COMPLETED',
@@ -155,7 +155,7 @@ describe('BusinessAiCampaignPage', () => {
     fixture.detectChanges();
     const send = el().querySelector<HTMLButtonElement>('[data-testid="send-button"]')!;
     expect(send.disabled).toBeTrue();
-    http.expectOne(`/api/business/ai-campaign/sessions/${SESSION_ID}/messages`).flush({
+    http.expectOne(`/api/v1/business/ai-campaign/sessions/${SESSION_ID}/messages`).flush({
       session: {
         sessionId: SESSION_ID,
         status: 'IN_PROGRESS',

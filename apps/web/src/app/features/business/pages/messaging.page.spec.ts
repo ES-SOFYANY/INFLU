@@ -30,7 +30,7 @@ describe('BusinessMessagingPage', () => {
   }
 
   it('[AC-150-01] table exposes Profile / Campaign / Last Message / Actions and three filters', () => {
-    http.expectOne((r) => r.url === '/api/messaging/conversations').flush({
+    http.expectOne((r) => r.url === '/api/v1/messaging/conversations').flush({
       items: [
         {
           id: 'c-1',
@@ -56,7 +56,7 @@ describe('BusinessMessagingPage', () => {
 
   it('[AC-150-01] empty state displays the EXACT text', () => {
     http
-      .expectOne((r) => r.url === '/api/messaging/conversations')
+      .expectOne((r) => r.url === '/api/v1/messaging/conversations')
       .flush({ items: [], page: 1, limit: 20, total: 0 });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="msg-empty"]')?.textContent).toContain(
@@ -66,7 +66,7 @@ describe('BusinessMessagingPage', () => {
 
   it('[AC-150-01] backend error renders an inline alert', () => {
     http
-      .expectOne((r) => r.url === '/api/messaging/conversations')
+      .expectOne((r) => r.url === '/api/v1/messaging/conversations')
       .error(new ProgressEvent('error'), { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="msg-list-error"]')).not.toBeNull();

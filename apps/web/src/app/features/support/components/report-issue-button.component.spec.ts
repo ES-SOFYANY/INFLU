@@ -95,7 +95,7 @@ describe('ReportIssueButtonComponent (US-081 / US-181)', () => {
     submit.click();
     fixture.detectChanges();
 
-    const req = http.expectOne('/api/support/reports');
+    const req = http.expectOne('/api/v1/support/reports');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({
       issueType: 'BUG',
@@ -131,7 +131,7 @@ describe('ReportIssueButtonComponent (US-081 / US-181)', () => {
 
     doc.querySelector<HTMLButtonElement>('[data-testid="report-submit"]')!.click();
     fixture.detectChanges();
-    const req = http.expectOne('/api/support/reports');
+    const req = http.expectOne('/api/v1/support/reports');
     req.flush({ message: 'boom' }, { status: 500, statusText: 'ISE' });
     tick();
     fixture.detectChanges();

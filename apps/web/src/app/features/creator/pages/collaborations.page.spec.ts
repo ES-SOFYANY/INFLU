@@ -26,7 +26,7 @@ describe('CreatorCollaborationsPage', () => {
   }
 
   function flush(items: unknown[] = []): void {
-    http.expectOne((r) => r.url === '/api/creator/me/collaborations').flush({
+    http.expectOne((r) => r.url === '/api/v1/creator/me/collaborations').flush({
       items,
       page: 1,
       limit: 20,
@@ -67,13 +67,13 @@ describe('CreatorCollaborationsPage', () => {
     fixture.detectChanges();
     tick();
     http
-      .expectOne((r) => r.url === '/api/creator/me/collaborations' && r.params.get('q') === 'eucerin')
+      .expectOne((r) => r.url === '/api/v1/creator/me/collaborations' && r.params.get('q') === 'eucerin')
       .flush({ items: [], page: 1, limit: 20, total: 0 });
   }));
 
   it('shows error banner when API fails', () => {
     http
-      .expectOne((r) => r.url === '/api/creator/me/collaborations')
+      .expectOne((r) => r.url === '/api/v1/creator/me/collaborations')
       .flush({ message: 'boom' }, { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="collab-error"]')).not.toBeNull();

@@ -26,7 +26,7 @@ describe('BusinessDashboardPage', () => {
   }
 
   function flushKpis(overrides: Partial<Record<string, unknown>> = {}): void {
-    const req = http.expectOne('/api/business/me/dashboard-kpis');
+    const req = http.expectOne('/api/v1/business/me/dashboard-kpis');
     req.flush({
       numberOfCampaigns: 0,
       active: 0,
@@ -39,12 +39,12 @@ describe('BusinessDashboardPage', () => {
   }
 
   function flushBrands(items: unknown[] = []): void {
-    const req = http.expectOne('/api/business/brands');
+    const req = http.expectOne('/api/v1/business/brands');
     req.flush(items);
   }
 
   function flushCampaigns(items: unknown[] = []): void {
-    const req = http.expectOne((r) => r.url === '/api/business/ai-campaigns');
+    const req = http.expectOne((r) => r.url === '/api/v1/business/ai-campaigns');
     req.flush({ items, page: 1, limit: 20, total: items.length });
   }
 
@@ -119,7 +119,7 @@ describe('BusinessDashboardPage', () => {
     fixture.detectChanges();
     tick();
     const req = http.expectOne(
-      (r) => r.url === '/api/business/ai-campaigns' && r.params.get('q') === 'nuxe',
+      (r) => r.url === '/api/v1/business/ai-campaigns' && r.params.get('q') === 'nuxe',
     );
     req.flush({ items: [], page: 1, limit: 20, total: 0 });
   }));
@@ -135,13 +135,13 @@ describe('BusinessDashboardPage', () => {
     fixture.detectChanges();
     tick();
     http
-      .expectOne((r) => r.url === '/api/business/ai-campaigns' && r.params.get('q') === 'x')
+      .expectOne((r) => r.url === '/api/v1/business/ai-campaigns' && r.params.get('q') === 'x')
       .flush({ items: [], page: 1, limit: 20, total: 0 });
     el().querySelector<HTMLButtonElement>('[data-testid="filter-clear"]')!.click();
     fixture.detectChanges();
     tick();
     http
-      .expectOne((r) => r.url === '/api/business/ai-campaigns' && !r.params.has('q'))
+      .expectOne((r) => r.url === '/api/v1/business/ai-campaigns' && !r.params.has('q'))
       .flush({ items: [], page: 1, limit: 20, total: 0 });
     expect(search.value).toBe('');
   }));
@@ -159,7 +159,7 @@ describe('BusinessDashboardPage', () => {
   it('shows error banner when campaigns API fails', () => {
     flushKpis();
     flushBrands();
-    const req = http.expectOne((r) => r.url === '/api/business/ai-campaigns');
+    const req = http.expectOne((r) => r.url === '/api/v1/business/ai-campaigns');
     req.flush({ message: 'boom' }, { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
     expect(el().querySelector('[data-testid="campaigns-error"]')).not.toBeNull();

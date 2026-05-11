@@ -55,7 +55,7 @@ describe('MagicLinkConsumePage (US-013)', () => {
     fixture.detectChanges();
     submit();
     fixture.detectChanges();
-    http.expectNone('/api/auth/magic-link/consume');
+    http.expectNone('/api/v1/auth/magic-link/consume');
     expect(
       (fixture.nativeElement as HTMLElement).querySelector('[data-testid="pwd-error"]'),
     ).not.toBeNull();
@@ -67,7 +67,7 @@ describe('MagicLinkConsumePage (US-013)', () => {
     fixture.detectChanges();
     submit();
     fixture.detectChanges();
-    http.expectNone('/api/auth/magic-link/consume');
+    http.expectNone('/api/v1/auth/magic-link/consume');
     expect(
       (fixture.nativeElement as HTMLElement).querySelector('[data-testid="match-error"]'),
     ).not.toBeNull();
@@ -79,7 +79,7 @@ describe('MagicLinkConsumePage (US-013)', () => {
     setValue('#confirmPassword', 'Sup3rSecret!');
     fixture.detectChanges();
     submit();
-    const req = http.expectOne('/api/auth/magic-link/consume');
+    const req = http.expectOne('/api/v1/auth/magic-link/consume');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ token: 'jwt-magic', newPassword: 'Sup3rSecret!' });
     req.flush({
@@ -95,7 +95,7 @@ describe('MagicLinkConsumePage (US-013)', () => {
     setValue('#confirmPassword', 'Sup3rSecret!');
     fixture.detectChanges();
     submit();
-    const req = http.expectOne('/api/auth/magic-link/consume');
+    const req = http.expectOne('/api/v1/auth/magic-link/consume');
     req.flush(
       { code: 'INVALID_MAGIC_LINK', message: 'expired' },
       { status: 401, statusText: 'Unauthorized' },
