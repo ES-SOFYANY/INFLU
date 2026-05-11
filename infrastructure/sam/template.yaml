@@ -74,7 +74,7 @@ Resources:
     Properties:
       TableName: !Sub influ_main_${Stage}
       BillingMode: PROVISIONED
-      ProvisionedThroughputCapacity:
+      ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
       DeletionProtectionEnabled: !If [IsProd, true, false]
@@ -107,7 +107,7 @@ Resources:
             - { AttributeName: GSI1PK, KeyType: HASH }
             - { AttributeName: GSI1SK, KeyType: RANGE }
           Projection: { ProjectionType: KEYS_ONLY }
-          ProvisionedThroughputCapacity:
+          ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
         - IndexName: GSI2
@@ -115,7 +115,7 @@ Resources:
             - { AttributeName: GSI2PK, KeyType: HASH }
             - { AttributeName: GSI2SK, KeyType: RANGE }
           Projection: { ProjectionType: ALL }
-          ProvisionedThroughputCapacity:
+          ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
         - IndexName: GSI3
@@ -135,7 +135,7 @@ Resources:
               - country
               - city
               - verified
-          ProvisionedThroughputCapacity:
+          ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
         - IndexName: GSI4
@@ -143,7 +143,7 @@ Resources:
             - { AttributeName: GSI4PK, KeyType: HASH }
             - { AttributeName: GSI4SK, KeyType: RANGE }
           Projection: { ProjectionType: ALL }
-          ProvisionedThroughputCapacity:
+          ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
         - IndexName: GSI5
@@ -151,7 +151,7 @@ Resources:
             - { AttributeName: GSI5PK, KeyType: HASH }
             - { AttributeName: GSI5SK, KeyType: RANGE }
           Projection: { ProjectionType: ALL }
-          ProvisionedThroughputCapacity:
+          ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
       Tags:
@@ -167,7 +167,7 @@ Resources:
     Properties:
       TableName: !Sub influ_audit_${Stage}
       BillingMode: PROVISIONED
-      ProvisionedThroughputCapacity:
+      ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
       DeletionProtectionEnabled: !If [IsProd, true, false]
@@ -197,7 +197,7 @@ Resources:
     Properties:
       TableName: !Sub influ_sessions_${Stage}
       BillingMode: PROVISIONED
-      ProvisionedThroughputCapacity:
+      ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
       DeletionProtectionEnabled: !If [IsProd, true, false]
