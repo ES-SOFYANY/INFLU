@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+import { HealthController } from './health.controller';
+
 import { AppConfigModule } from './config/config.module';
 import { AdminValidationModule } from './modules/admin-validation/admin-validation.module';
 import { AiCampaignModule } from './modules/ai-campaign/ai-campaign.module';
@@ -26,6 +28,7 @@ import { SocialModule } from './shared/social/social.module';
 import { StorageModule } from './shared/storage/storage.module';
 
 @Module({
+  controllers: [HealthController],
   imports: [
     // Cross-cutting
     AppConfigModule,

@@ -27,42 +27,39 @@ if [ ! -d "$API_DIR/dist" ]; then
 fi
 
 echo "→ Copying API dist + manifests"
-cp -R "$API_DIR/dist" "$OUT_DIR/dist"
+cp -R "$API_DIR/dist/." "$OUT_DIR/"
 cp "$API_DIR/package.json" "$OUT_DIR/package.json"
 [ -f "$API_DIR/package-lock.json" ] && cp "$API_DIR/package-lock.json" "$OUT_DIR/package-lock.json"
 
-# Inline the shared-types workspace dep so npm ci works outside the monorepo.
-if [ -d "$SHARED_DIR/dist" ] || [ -f "$SHARED_DIR/package.json" ]; then
-  echo "→ Vendoring @my-app/shared-types into bundle"
-  mkdir -p "$OUT_DIR/node_modules/@my-app/shared-types"
-  cp -R "$SHARED_DIR/." "$OUT_DIR/node_modules/@my-app/shared-types/"
-  # Remove the workspace entry from package.json before npm ci
-  node -e "
-    const fs=require('fs');
-    const p=require('$OUT_DIR/package.json');
-    if (p.dependencies && p.dependencies['@my-app/shared-types']) {
-      delete p.dependencies['@my-app/shared-types'];
-    }
-    fs.writeFileSync('$OUT_DIR/package.json', JSON.stringify(p, null, 2));
-  "
-  # Remove lock — it's monorepo-specific and references workspace paths
-  rm -f "$OUT_DIR/package-lock.json"
-fi
+# Remove the workspace entry from package.json before npm install (can't resolve workspace: protocol outside monorepo)
+node -e "
+  const fs=require('fs');
+  const p=JSON.parse(fs.readFileSync('$OUT_DIR/package.json','utf8'));
+  if (p.dependencies && p.dependencies['@my-app/shared-types']) {
+    delete p.dependencies['@my-app/shared-types'];
+  }
+  fs.writeFileSync('$OUT_DIR/package.json', JSON.stringify(p, null, 2));
+"
+# Remove lock — it's monorepo-specific and references workspace paths
+rm -f "$OUT_DIR/package-lock.json"
 
 echo "→ Installing production dependencies"
 (
   cd "$OUT_DIR"
-  if [ -f package-lock.json ]; then
-    npm ci --omit=dev --no-audit --no-fund
-  else
-    npm install --omit=dev --no-audit --no-fund --no-package-lock
-  fi
+  npm install --omit=dev --no-audit --no-fund --no-package-lock
 )
+
+# Vendor @my-app/shared-types AFTER npm install so it is not pruned as extraneous
+if [ -d "$SHARED_DIR/dist" ]; then
+  echo "→ Vendoring @my-app/shared-types into bundle"
+  mkdir -p "$OUT_DIR/node_modules/@my-app/shared-types"
+  cp -R "$SHARED_DIR/." "$OUT_DIR/node_modules/@my-app/shared-types/"
+fi
 
 echo "→ Pruning maps and tests"
 find "$OUT_DIR" -name '*.map' -delete || true
-find "$OUT_DIR/dist" -name '*.spec.js' -delete || true
-find "$OUT_DIR/dist" -name '*.test.js' -delete || true
+find "$OUT_DIR" -name '*.spec.js' -not -path '*/node_modules/*' -delete || true
+find "$OUT_DIR" -name '*.test.js' -not -path '*/node_modules/*' -delete || true
 
 SIZE=$(du -sh "$OUT_DIR" | awk '{print $1}')
 echo "✔ Lambda bundle ready: $OUT_DIR ($SIZE)"

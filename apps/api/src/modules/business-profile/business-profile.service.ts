@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 import { AuditService } from '../../shared/audit/audit.module';
 import { BusinessException } from '../../shared/errors/business.exception';

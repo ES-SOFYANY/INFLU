@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 import { AuthRepository, type UserRecord } from '../../auth/auth.repository';
 import { v4 as uuidv4 } from '../../auth/uuid';

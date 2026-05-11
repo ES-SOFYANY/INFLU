@@ -2,7 +2,7 @@ import { createHash, randomBytes } from 'crypto';
 
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 import { AppConfigService } from '../../config/app-config.service';
 import { AuditService } from '../../shared/audit/audit.module';

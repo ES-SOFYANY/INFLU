@@ -281,7 +281,7 @@ Resources:
   HttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
-      StageName: !Ref Stage
+      StageName: $default
       CorsConfiguration:
         AllowOrigins: !Ref CorsAllowedOrigins
         AllowHeaders: ['Authorization', 'Content-Type', 'X-Requested-With']
@@ -399,7 +399,7 @@ Resources:
             Resource: !Sub ${WebBucket.Arn}/*
             Condition:
               StringEquals:
-                "aws:SourceArn": !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/*"
+                "aws:SourceArn": !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/${WebDistribution}"
 
   # ───────────────────────── Observability ─────────────────────────
 

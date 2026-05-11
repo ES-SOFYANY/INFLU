@@ -1,6 +1,6 @@
 import { createHash } from 'crypto';
 
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 
 import { AuthRepository, type UserRecord } from '../auth.repository';

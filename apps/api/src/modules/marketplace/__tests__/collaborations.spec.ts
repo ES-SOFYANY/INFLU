@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
 import { PutCommand } from '@aws-sdk/lib-dynamodb';
 
