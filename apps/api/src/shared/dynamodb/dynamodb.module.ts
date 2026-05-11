@@ -14,14 +14,17 @@ import { DYNAMODB_DOC_CLIENT } from './dynamodb.tokens';
       provide: DYNAMODB_DOC_CLIENT,
       inject: [AppConfigService],
       useFactory: (cfg: AppConfigService): DynamoDBDocumentClient => {
-        const client = new DynamoDBClient({
+        const clientConfig: ConstructorParameters<typeof DynamoDBClient>[0] = {
           region: cfg.awsRegion,
-          endpoint: cfg.dynamoDbEndpoint,
-          credentials: {
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? 'local',
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? 'local',
-          },
-        });
+          ...(cfg.dynamoDbEndpoint && {
+            endpoint: cfg.dynamoDbEndpoint,
+            credentials: {
+              accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? 'local',
+              secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? 'local',
+            },
+          }),
+        };
+        const client = new DynamoDBClient(clientConfig);
         return DynamoDBDocumentClient.from(client, {
           marshallOptions: { removeUndefinedValues: true, convertClassInstanceToMap: true },
         });
