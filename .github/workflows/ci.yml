@@ -19,10 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     services:
       dynamodb:
-        image: amazon/dynamodb-local:latest
+        image: amazon/dynamodb-local:2.0.0
         ports:
           - 8000:8000
-        options: --health-cmd "curl -f http://localhost:8000 || exit 1" --health-interval 5s --health-timeout 10s --health-retries 20 --health-start-period 30s
+        options: --health-cmd "curl -f http://localhost:8000 || exit 1" --health-interval 10s --health-timeout 5s --health-retries 30 --health-start-period 60s
     env:
       AWS_REGION: eu-west-3
       AWS_ACCESS_KEY_ID: local
