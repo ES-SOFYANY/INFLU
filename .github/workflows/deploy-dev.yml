@@ -52,14 +52,12 @@ jobs:
         with:
           use-installer: true
 
-      - name: SAM build
-        run: sam build --template infrastructure/sam/template.yaml
-
       - name: SAM deploy
         id: deploy
         run: |
           set -euo pipefail
           sam deploy \
+            --template infrastructure/sam/template.yaml \
             --stack-name "$STACK_NAME" \
             --region "$AWS_REGION" \
             --capabilities CAPABILITY_IAM \
