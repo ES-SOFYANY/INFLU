@@ -8,10 +8,8 @@ import {
   setupTestApp,
   type TestApp,
 } from '../../../../test/setup-test-app';
-import {
-  NotificationRecord,
-  NotificationsRepository,
-} from '../notifications.repository';
+import type { NotificationRecord } from '../notifications.repository';
+import { NotificationsRepository } from '../notifications.repository';
 
 import type { NotificationType, Role } from '@my-app/shared-types';
 

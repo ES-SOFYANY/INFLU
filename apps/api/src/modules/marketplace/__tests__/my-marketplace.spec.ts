@@ -9,10 +9,8 @@ import {
   setupTestApp,
   type TestApp,
 } from '../../../../test/setup-test-app';
-import {
-  MarketplaceProductRecord,
-  MarketplaceRepository,
-} from '../marketplace.repository';
+import type { MarketplaceProductRecord } from '../marketplace.repository';
+import { MarketplaceRepository } from '../marketplace.repository';
 
 import type { Role } from '@my-app/shared-types';
 

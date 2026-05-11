@@ -9,7 +9,7 @@ import {
 } from '../../auth/auth.repository';
 import { v4 as uuidv4 } from '../../auth/uuid';
 import { DynamoDbService } from '../../../shared/dynamodb/dynamodb.service';
-import { resetDb, setupTestApp, type TestApp } from '../../../../test/setup-test-app';
+import { resetDb, type TestApp } from '../../../../test/setup-test-app';
 
 import type { Role } from '@my-app/shared-types';
 

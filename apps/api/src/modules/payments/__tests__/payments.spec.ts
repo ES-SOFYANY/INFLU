@@ -9,10 +9,8 @@ import {
   setupTestApp,
   type TestApp,
 } from '../../../../test/setup-test-app';
-import {
-  PaymentRecord,
-  PaymentsRepository,
-} from '../payments.repository';
+import type { PaymentRecord } from '../payments.repository';
+import { PaymentsRepository } from '../payments.repository';
 
 import type { Role } from '@my-app/shared-types';
 

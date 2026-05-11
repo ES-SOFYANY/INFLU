@@ -59,7 +59,8 @@ export const handler = async (event: any, context: any): Promise<any> => {
     const app = await createApp();
     await app.init();
     // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
-    const serverlessExpress: (opts: { app: any }) => (event: any, context: any) => Promise<any> = require('@vendia/serverless-express');
+    // Dynamically import to avoid top-level import in Lambda
+    const { default: serverlessExpress }: { default: (opts: { app: unknown }) => (event: unknown, context: unknown) => Promise<unknown> } = await import('@vendia/serverless-express');
     cachedServerlessHandler = serverlessExpress({ app: app.getHttpAdapter().getInstance() });
   }
   // Strip stage prefix for HTTP API v2 named stages (API GW sends /stage/path, NestJS expects /path)

@@ -5,11 +5,11 @@ import { AuthRepository, type UserRecord } from '../../auth/auth.repository';
 import { v4 as uuidv4 } from '../../auth/uuid';
 import { resetDb, setupTestApp, type TestApp } from '../../../../test/setup-test-app';
 
-import {
+import type {
   ConversationRecord,
   MessageRecord,
-  MessagingRepository,
 } from '../messaging.repository';
+import { MessagingRepository } from '../messaging.repository';
 
 import type { Role } from '@my-app/shared-types';
 

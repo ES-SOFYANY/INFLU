@@ -7,11 +7,11 @@ import { BrandRepository } from '../../brand/brand.repository';
 import { CreatorProfileRepository } from '../../creator-profile/creator-profile.repository';
 import { resetDb, setupTestApp, type TestApp } from '../../../../test/setup-test-app';
 
-import {
+import type {
   ApplicationRecord,
   MarketplaceProductRecord,
-  MarketplaceRepository,
 } from '../marketplace.repository';
+import { MarketplaceRepository } from '../marketplace.repository';
 
 import type { Role } from '@my-app/shared-types';
 

@@ -34,7 +34,6 @@ import type {
   UpdatePricingDto,
   UploadUrlDto,
 } from './dto';
-import type { CreatorCinStatus } from './dto/cin-status.dto';
 import type { PricingLineRecord } from './creator-profile.repository';
 
 import type { SocialPlatform } from '@my-app/shared-types';
