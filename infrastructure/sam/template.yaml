@@ -228,7 +228,7 @@ Resources:
     Properties:
       FunctionName: !Sub influ-${Stage}-api
       CodeUri: ../../build/lambda/
-      Handler: main.lambda.handler
+      Handler: main.handler
       Description: !Sub INFLU.ai NestJS API (${Stage})
       Environment:
         Variables:
