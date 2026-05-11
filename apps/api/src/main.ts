@@ -21,6 +21,7 @@ export async function createApp() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      skipMissingProperties: false,
       transformOptions: { enableImplicitConversion: true },
     }),
   );
@@ -60,7 +61,7 @@ export const handler = async (event: any, context: any): Promise<any> => {
     await app.init();
     // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-explicit-any
     // Dynamically import to avoid top-level import in Lambda
-    const { default: serverlessExpress }: { default: (opts: { app: unknown }) => (event: unknown, context: unknown) => Promise<unknown> } = await import('@vendia/serverless-express');
+    const { default: serverlessExpress }: { default: any } = await import('@vendia/serverless-express');
     cachedServerlessHandler = serverlessExpress({ app: app.getHttpAdapter().getInstance() });
   }
   // Strip stage prefix for HTTP API v2 named stages (API GW sends /stage/path, NestJS expects /path)
@@ -72,7 +73,7 @@ export const handler = async (event: any, context: any): Promise<any> => {
       event = { ...event, rawPath: newPath, requestContext: { ...event.requestContext, http: { ...event.requestContext.http, path: newPath } } };
     }
   }
-  return cachedServerlessHandler(event, context);
+  return cachedServerlessHandler!(event, context);
 };
 
 if (require.main === module) {
