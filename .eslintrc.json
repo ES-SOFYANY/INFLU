@@ -13,6 +13,7 @@
       "files": ["apps/api/**/*.ts", "packages/shared-types/**/*.ts"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
+        "ecmaVersion": 2020,
         "project": ["./apps/api/tsconfig.json", "./packages/shared-types/tsconfig.json"],
         "sourceType": "module"
       },

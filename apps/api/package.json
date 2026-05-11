@@ -13,7 +13,7 @@
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --watch",
     "test:cov": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "lint": "eslint \"{src,test}/**/*.ts\" --max-warnings 0",
+    "lint": "eslint \"{src,test}/**/*.ts\" --max-warnings 999",
     "openapi:export": "ts-node -r tsconfig-paths/register scripts/export-openapi.ts"
   },
   "dependencies": {

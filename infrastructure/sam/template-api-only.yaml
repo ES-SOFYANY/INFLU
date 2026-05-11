@@ -1,0 +1,524 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  INFLU.ai — AWS SAM stack (NestJS API Lambda + HttpApi + Angular SPA on S3/CloudFront
+  + DynamoDB single-table + audit + sessions + CloudWatch alarms).
+  Region target: eu-west-3 (Paris) — RGPD / Loi 09-08 Maroc (ADR-002).
+
+Parameters:
+  Stage:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, staging, prod]
+    Description: Deployment environment.
+  JwtSecretArn:
+    Type: String
+    Description: ARN of the Secrets Manager secret holding JWT_SECRET (key 'JWT_SECRET').
+  AlertEmail:
+    Type: String
+    Default: ''
+    Description: Email to subscribe to the alerts SNS topic. Leave empty to skip subscription.
+  CorsAllowedOrigins:
+    Type: CommaDelimitedList
+    Default: '*'
+    Description: List of CORS allowed origins (e.g. https://app.influ.ai).
+  AcmCertificateArn:
+    Type: String
+    Default: ''
+    Description: Optional ACM certificate ARN in us-east-1 for CloudFront custom domain.
+  DomainName:
+    Type: String
+    Default: ''
+    Description: Optional custom domain (must match AcmCertificateArn).
+  LogRetentionDays:
+    Type: Number
+    Default: 30
+    AllowedValues: [1, 3, 7, 14, 30, 60, 90, 180, 365]
+
+Conditions:
+  IsProd: !Equals [!Ref Stage, prod]
+  IsProtected: !Or [!Equals [!Ref Stage, prod], !Equals [!Ref Stage, staging]]
+  HasAlertEmail: !Not [!Equals [!Ref AlertEmail, '']]
+  HasCustomDomain: !And
+    - !Not [!Equals [!Ref AcmCertificateArn, '']]
+    - !Not [!Equals [!Ref DomainName, '']]
+
+Globals:
+  Function:
+    Runtime: nodejs22.x
+    MemorySize: 1024
+    Timeout: 30
+    Architectures: [arm64]
+    Tracing: Active
+    Environment:
+      Variables:
+        NODE_ENV: production
+        STAGE: !Ref Stage
+        DYNAMODB_TABLE_MAIN: !Ref MainTable
+        DYNAMODB_TABLE_AUDIT: !Ref AuditTable
+        DYNAMODB_TABLE_SESSIONS: !Ref SessionsTable
+        JWT_SECRET_ARN: !Ref JwtSecretArn
+    Tags:
+      Project: INFLU
+      Env: !Ref Stage
+      Region: !Ref AWS::Region
+
+Resources:
+
+  # ───────────────────────── DynamoDB ─────────────────────────
+
+  MainTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: !If [IsProtected, Retain, Delete]
+    UpdateReplacePolicy: !If [IsProtected, Retain, Delete]
+    Properties:
+      TableName: !Sub influ_main_${Stage}
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      DeletionProtectionEnabled: !If [IsProd, true, false]
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+        SSEType: KMS
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      AttributeDefinitions:
+        - { AttributeName: PK, AttributeType: S }
+        - { AttributeName: SK, AttributeType: S }
+        - { AttributeName: GSI1PK, AttributeType: S }
+        - { AttributeName: GSI1SK, AttributeType: S }
+        - { AttributeName: GSI2PK, AttributeType: S }
+        - { AttributeName: GSI2SK, AttributeType: S }
+        - { AttributeName: GSI3PK, AttributeType: S }
+        - { AttributeName: GSI3SK, AttributeType: S }
+        - { AttributeName: GSI4PK, AttributeType: S }
+        - { AttributeName: GSI4SK, AttributeType: S }
+        - { AttributeName: GSI5PK, AttributeType: S }
+        - { AttributeName: GSI5SK, AttributeType: S }
+      KeySchema:
+        - { AttributeName: PK, KeyType: HASH }
+        - { AttributeName: SK, KeyType: RANGE }
+      GlobalSecondaryIndexes:
+        - IndexName: GSI1
+          KeySchema:
+            - { AttributeName: GSI1PK, KeyType: HASH }
+            - { AttributeName: GSI1SK, KeyType: RANGE }
+          Projection: { ProjectionType: KEYS_ONLY }
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+        - IndexName: GSI2
+          KeySchema:
+            - { AttributeName: GSI2PK, KeyType: HASH }
+            - { AttributeName: GSI2SK, KeyType: RANGE }
+          Projection: { ProjectionType: ALL }
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+        - IndexName: GSI3
+          KeySchema:
+            - { AttributeName: GSI3PK, KeyType: HASH }
+            - { AttributeName: GSI3SK, KeyType: RANGE }
+          Projection:
+            ProjectionType: INCLUDE
+            NonKeyAttributes:
+              - fullName
+              - avatarKey
+              - tier
+              - categories
+              - platforms
+              - gender
+              - engagementRate
+              - country
+              - city
+              - verified
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+        - IndexName: GSI4
+          KeySchema:
+            - { AttributeName: GSI4PK, KeyType: HASH }
+            - { AttributeName: GSI4SK, KeyType: RANGE }
+          Projection: { ProjectionType: ALL }
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+        - IndexName: GSI5
+          KeySchema:
+            - { AttributeName: GSI5PK, KeyType: HASH }
+            - { AttributeName: GSI5SK, KeyType: RANGE }
+          Projection: { ProjectionType: ALL }
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+      Tags:
+        - { Key: Project, Value: INFLU }
+        - { Key: Env, Value: !Ref Stage }
+        - { Key: Component, Value: main }
+        - { Key: DataClassification, Value: Confidential }
+
+  AuditTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Sub influ_audit_${Stage}
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      DeletionProtectionEnabled: !If [IsProd, true, false]
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+        SSEType: KMS
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+      AttributeDefinitions:
+        - { AttributeName: PK, AttributeType: S }
+        - { AttributeName: SK, AttributeType: S }
+      KeySchema:
+        - { AttributeName: PK, KeyType: HASH }
+        - { AttributeName: SK, KeyType: RANGE }
+      Tags:
+        - { Key: Project, Value: INFLU }
+        - { Key: Env, Value: !Ref Stage }
+        - { Key: Component, Value: audit }
+        - { Key: DataClassification, Value: Restricted }
+
+  SessionsTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: !If [IsProtected, Retain, Delete]
+    UpdateReplacePolicy: !If [IsProtected, Retain, Delete]
+    Properties:
+      TableName: !Sub influ_sessions_${Stage}
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      DeletionProtectionEnabled: !If [IsProd, true, false]
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+        SSEType: KMS
+      TimeToLiveSpecification:
+        AttributeName: expiresAt
+        Enabled: true
+      AttributeDefinitions:
+        - { AttributeName: PK, AttributeType: S }
+        - { AttributeName: SK, AttributeType: S }
+      KeySchema:
+        - { AttributeName: PK, KeyType: HASH }
+        - { AttributeName: SK, KeyType: RANGE }
+      Tags:
+        - { Key: Project, Value: INFLU }
+        - { Key: Env, Value: !Ref Stage }
+        - { Key: Component, Value: sessions }
+        - { Key: DataClassification, Value: Confidential }
+
+  # ───────────────────────── API Lambda + HttpApi ─────────────────────────
+
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub influ-${Stage}-api
+      CodeUri: ../../build/lambda/
+      Handler: dist/main.lambda.handler
+      Description: !Sub INFLU.ai NestJS API (${Stage})
+      Environment:
+        Variables:
+          CORS_ALLOWED_ORIGINS: !Join [',', !Ref CorsAllowedOrigins]
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref MainTable }
+        - DynamoDBCrudPolicy: { TableName: !Ref AuditTable }
+        - DynamoDBCrudPolicy: { TableName: !Ref SessionsTable }
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+                - dynamodb:Scan
+              Resource:
+                - !Sub ${MainTable.Arn}/index/*
+                - !Sub ${AuditTable.Arn}/index/*
+                - !Sub ${SessionsTable.Arn}/index/*
+        - Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+              Resource: !Ref JwtSecretArn
+        - Statement:
+            - Effect: Allow
+              Action:
+                - ssm:GetParameter
+                - ssm:GetParameters
+                - ssm:GetParametersByPath
+              Resource: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/influ/${Stage}/*
+      Events:
+        ApiAny:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /{proxy+}
+            Method: ANY
+        ApiRoot:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Path: /
+            Method: ANY
+
+  ApiLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/influ-${Stage}-api
+      RetentionInDays: !Ref LogRetentionDays
+
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: !Ref Stage
+      CorsConfiguration:
+        AllowOrigins: !Ref CorsAllowedOrigins
+        AllowHeaders: ['Authorization', 'Content-Type', 'X-Requested-With']
+        AllowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+        MaxAge: 600
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 500
+        ThrottlingRateLimit: 1000
+      AccessLogSettings:
+        DestinationArn: !GetAtt HttpApiAccessLogGroup.Arn
+        Format: >
+          {"requestId":"$context.requestId","ip":"$context.identity.sourceIp","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","path":"$context.path","status":"$context.status","responseLatency":"$context.responseLatency","integrationStatus":"$context.integrationStatus","integrationLatency":"$context.integrationLatency","userAgent":"$context.identity.userAgent"}
+
+  HttpApiAccessLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/apigateway/influ-${Stage}-api
+      RetentionInDays: !Ref LogRetentionDays
+
+  # ───────────────────────── Frontend hosting (S3 + CloudFront) ─────────────────────────
+
+  # WebBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: !If [IsProtected, Retain, Delete]
+    UpdateReplacePolicy: !If [IsProtected, Retain, Delete]
+    Properties:
+      BucketName: !Sub influ-web-${Stage}-${AWS::AccountId}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: { SSEAlgorithm: AES256 }
+      VersioningConfiguration:
+        Status: !If [IsProtected, Enabled, Suspended]
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      Tags:
+        - { Key: Project, Value: INFLU }
+        - { Key: Env, Value: !Ref Stage }
+        - { Key: Component, Value: web }
+
+  # WebOAC:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub influ-web-${Stage}-oac
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  # WebDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub INFLU.ai web (${Stage})
+        DefaultRootObject: index.html
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        PriceClass: PriceClass_100
+        Aliases: !If
+          - HasCustomDomain
+          - [!Ref DomainName]
+          - !Ref AWS::NoValue
+        ViewerCertificate: !If
+          - HasCustomDomain
+          - AcmCertificateArn: !Ref AcmCertificateArn
+            SslSupportMethod: sni-only
+            MinimumProtocolVersion: TLSv1.2_2021
+          - CloudFrontDefaultCertificate: true
+        Origins:
+          - Id: WebS3Origin
+            DomainName: !GetAtt WebBucket.RegionalDomainName
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+            OriginAccessControlId: !GetAtt WebOAC.Id
+        DefaultCacheBehavior:
+          TargetOriginId: WebS3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD, OPTIONS]
+          CachedMethods: [GET, HEAD]
+          Compress: true
+          # Managed CachingOptimized policy
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          # Managed SecurityHeadersPolicy
+          ResponseHeadersPolicyId: 67f7725c-6f97-4210-82d7-5512b31e9d03
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 10
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 10
+      Tags:
+        - { Key: Project, Value: INFLU }
+        - { Key: Env, Value: !Ref Stage }
+
+  # WebBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowCloudFrontServicePrincipalRead
+            Effect: Allow
+            Principal: { Service: cloudfront.amazonaws.com }
+            Action: s3:GetObject
+            Resource: !Sub ${WebBucket.Arn}/*
+            Condition:
+              StringEquals:
+                "aws:SourceArn": !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/*"
+
+  # ───────────────────────── Observability ─────────────────────────
+
+  AlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub influ-${Stage}-alerts
+      DisplayName: !Sub INFLU ${Stage} Alerts
+
+  AlertsTopicEmailSub:
+    Condition: HasAlertEmail
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+
+  ApiErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub influ-${Stage}-api-5xx-rate
+      AlarmDescription: API Gateway 5xx > 5 in 5 minutes
+      Namespace: AWS/ApiGateway
+      MetricName: 5xx
+      Dimensions:
+        - { Name: ApiId, Value: !Ref HttpApi }
+        - { Name: Stage, Value: !Ref Stage }
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 5
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertsTopic]
+      OKActions: [!Ref AlertsTopic]
+
+  ApiLatencyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub influ-${Stage}-api-latency-p99
+      AlarmDescription: API Gateway latency p99 > 3s
+      Namespace: AWS/ApiGateway
+      MetricName: Latency
+      Dimensions:
+        - { Name: ApiId, Value: !Ref HttpApi }
+        - { Name: Stage, Value: !Ref Stage }
+      ExtendedStatistic: p99
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 3000
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertsTopic]
+
+  LambdaErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub influ-${Stage}-lambda-errors
+      AlarmDescription: Lambda errors > 5 in 5 minutes
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - { Name: FunctionName, Value: !Ref ApiFunction }
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 5
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertsTopic]
+
+  LambdaThrottlesAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub influ-${Stage}-lambda-throttles
+      AlarmDescription: Lambda throttles > 0
+      Namespace: AWS/Lambda
+      MetricName: Throttles
+      Dimensions:
+        - { Name: FunctionName, Value: !Ref ApiFunction }
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertsTopic]
+
+Outputs:
+  ApiUrl:
+    Description: HTTP API base URL
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com
+    Export:
+      Name: !Sub influ-${Stage}-api-url
+  ApiFunctionName:
+    Description: Lambda function name
+    Value: !Ref ApiFunction
+    Export:
+      Name: !Sub influ-${Stage}-api-fn
+#   WebBucketName:
+#     Description: S3 bucket for static SPA
+#     Value: !Ref WebBucket
+#     Export:
+#       Name: !Sub influ-${Stage}-web-bucket
+  DistributionId:
+    Description: CloudFront distribution ID
+    Value: !Ref WebDistribution
+    Export:
+      Name: !Sub influ-${Stage}-cf-id
+#   WebUrl:
+#     Description: CloudFront URL
+#     Value: !If
+#       - HasCustomDomain
+#       - !Sub https://${DomainName}
+#       - !Sub https://${WebDistribution.DomainName}
+#     Export:
+#       Name: !Sub influ-${Stage}-web-url
+  AlertsTopicArn:
+    Description: SNS alerts topic ARN
+    Value: !Ref AlertsTopic
+    Export:
+      Name: !Sub influ-${Stage}-alerts-topic

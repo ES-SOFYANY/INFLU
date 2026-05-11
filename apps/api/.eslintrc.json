@@ -1,0 +1,14 @@
+{
+  "root": false,
+  "extends": ["../../.eslintrc.json"],
+  "overrides": [
+    {
+      "files": ["src/**/*.ts", "test/**/*.ts"],
+      "parserOptions": {
+        "ecmaVersion": 2020,
+        "project": ["./tsconfig.json"],
+        "sourceType": "module"
+      }
+    }
+  ]
+}
