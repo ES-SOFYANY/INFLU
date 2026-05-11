@@ -286,7 +286,6 @@ Resources:
         AllowOrigins: !Ref CorsAllowedOrigins
         AllowHeaders: ['Authorization', 'Content-Type', 'X-Requested-With']
         AllowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
-        AllowCredentials: true
         MaxAge: 600
       DefaultRouteSettings:
         ThrottlingBurstLimit: 500
