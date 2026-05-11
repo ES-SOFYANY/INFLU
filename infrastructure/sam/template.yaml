@@ -73,7 +73,10 @@ Resources:
     UpdateReplacePolicy: !If [IsProtected, Retain, Delete]
     Properties:
       TableName: !Sub influ_main_${Stage}
-      BillingMode: PAY_PER_REQUEST
+      BillingMode: PROVISIONED
+      ProvisionedThroughputCapacity:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
       DeletionProtectionEnabled: !If [IsProd, true, false]
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
@@ -104,11 +107,17 @@ Resources:
             - { AttributeName: GSI1PK, KeyType: HASH }
             - { AttributeName: GSI1SK, KeyType: RANGE }
           Projection: { ProjectionType: KEYS_ONLY }
+          ProvisionedThroughputCapacity:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
         - IndexName: GSI2
           KeySchema:
             - { AttributeName: GSI2PK, KeyType: HASH }
             - { AttributeName: GSI2SK, KeyType: RANGE }
           Projection: { ProjectionType: ALL }
+          ProvisionedThroughputCapacity:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
         - IndexName: GSI3
           KeySchema:
             - { AttributeName: GSI3PK, KeyType: HASH }
@@ -126,16 +135,25 @@ Resources:
               - country
               - city
               - verified
+          ProvisionedThroughputCapacity:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
         - IndexName: GSI4
           KeySchema:
             - { AttributeName: GSI4PK, KeyType: HASH }
             - { AttributeName: GSI4SK, KeyType: RANGE }
           Projection: { ProjectionType: ALL }
+          ProvisionedThroughputCapacity:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
         - IndexName: GSI5
           KeySchema:
             - { AttributeName: GSI5PK, KeyType: HASH }
             - { AttributeName: GSI5SK, KeyType: RANGE }
           Projection: { ProjectionType: ALL }
+          ProvisionedThroughputCapacity:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
       Tags:
         - { Key: Project, Value: INFLU }
         - { Key: Env, Value: !Ref Stage }
@@ -148,7 +166,10 @@ Resources:
     UpdateReplacePolicy: Retain
     Properties:
       TableName: !Sub influ_audit_${Stage}
-      BillingMode: PAY_PER_REQUEST
+      BillingMode: PROVISIONED
+      ProvisionedThroughputCapacity:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
       DeletionProtectionEnabled: !If [IsProd, true, false]
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
@@ -175,7 +196,10 @@ Resources:
     UpdateReplacePolicy: !If [IsProtected, Retain, Delete]
     Properties:
       TableName: !Sub influ_sessions_${Stage}
-      BillingMode: PAY_PER_REQUEST
+      BillingMode: PROVISIONED
+      ProvisionedThroughputCapacity:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
       DeletionProtectionEnabled: !If [IsProd, true, false]
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true

@@ -440,7 +440,7 @@
           "SK": {"S": "BUSINESS#LEGAL"},
           "entity": {"S": "BusinessLegalEntity"},
           "juridicalForm": {"S": "SARL"},
-          "ice": {"S": "001234567890123"},
+          "ice": {"S": "003"},
           "companyName": {"S": "Yassir SAS"},
           "companyAddress": {"S": "Boulevard d'Anfa, Casablanca"},
           "if": {"S": "12345678"},
@@ -448,7 +448,7 @@
           "tva": {"S": "1234567"},
           "createdAt": {"S": "2025-11-01T09:00:00Z"},
           "updatedAt": {"S": "2025-11-01T09:00:00Z"},
-          "GSI4PK": {"S": "ICE#001234567890123"},
+          "GSI4PK": {"S": "ICE#003"},
           "GSI4SK": {"S": "USER#u_business_yassir_020"}
         }
       }
@@ -633,7 +633,7 @@
           "industry": {"S": "Mobility"},
           "description": {"S": "Super-app de mobilité MENA."},
           "status": {"S": "APPROVED"},
-          "linkedIce": {"S": "001234567890123"},
+          "linkedIce": {"S": "003"},
           "createdAt": {"S": "2025-11-01T09:00:00Z"},
           "updatedAt": {"S": "2025-11-01T09:00:00Z"},
           "GSI4PK": {"S": "BRAND_INDEX"},

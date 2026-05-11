@@ -49,8 +49,8 @@ Output (truncated):
 Paste these values into GitHub repository settings:
 
   Variables → AWS_REGION                       = eu-west-3
-  Variables → AWS_DEPLOY_ROLE_DEV              = arn:aws:iam::123456789012:role/influ-gha-deploy-dev
-  Secrets   → JWT_SECRET_ARN_DEV               = arn:aws:secretsmanager:eu-west-3:123456789012:secret:influ/dev/jwt-AbCdEf
+  Variables → AWS_DEPLOY_ROLE_DEV              = arn:aws:iam:::role/influ-gha-deploy-dev
+  Secrets   → JWT_SECRET_ARN_DEV               = arn:aws:secretsmanager:eu-west-3::secret:influ/dev/jwt-AbCdEf
 ```
 
 ### Step 3 — Repeat for staging and prod

@@ -28,9 +28,9 @@ These are non-secret identifiers committed by the bootstrap script:
 | Name | Example | Used by |
 |---|---|---|
 | `AWS_REGION` | `eu-west-3` | all deploy workflows |
-| `AWS_DEPLOY_ROLE_DEV` | `arn:aws:iam::123456789012:role/influ-gha-deploy-dev` | `deploy-dev.yml` |
-| `AWS_DEPLOY_ROLE_STAGING` | `arn:aws:iam::123456789012:role/influ-gha-deploy-staging` | `deploy-staging.yml` |
-| `AWS_DEPLOY_ROLE_PROD` | `arn:aws:iam::123456789012:role/influ-gha-deploy-prod` | `deploy-prod.yml` |
+| `AWS_DEPLOY_ROLE_DEV` | `arn:aws:iam::447580526137:role/influ-gha-deploy-dev` | `deploy-dev.yml` |
+| `AWS_DEPLOY_ROLE_STAGING` | `arn:aws:iam::447580526137:role/influ-gha-deploy-staging` | `deploy-staging.yml` |
+| `AWS_DEPLOY_ROLE_PROD` | `arn:aws:iam::447580526137:role/influ-gha-deploy-prod` | `deploy-prod.yml` |
 | `ALERT_EMAIL` | `ops@influ.ai` | SNS subscriber |
 | `CORS_ALLOWED_ORIGINS_DEV` | `https://dev.influ.ai,http://localhost:4200` | API CORS |
 | `CORS_ALLOWED_ORIGINS_STAGING` | `https://staging.influ.ai` | API CORS |
